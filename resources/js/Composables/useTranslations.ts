@@ -1,89 +1,90 @@
+import { computed, inject, type App, type ComputedRef, type InjectionKey } from 'vue'
 import { usePage } from '@inertiajs/vue3'
-import type { App } from 'vue'
-import type { SharedProps } from '@/types'
 
 /**
- * Thin bridge to Laravel's translation files.
+ * UI strings.
  *
- * Laravel's `lang/{locale}/*.php` files are compiled into the page props by
- * App\Providers\AppServiceProvider (Inertia::share('translations')), so the
- * frontend reads exactly the same strings as Blade and validation messages.
+ * `lang/{locale}/*.php` is shared into Inertia by
+ * AppServiceProvider::shareTranslations(), so Blade, validation messages and
+ * Vue all resolve the same string from one source. Keys are dot-paths into
+ * that tree, file name first: `common.read_more`, `forms.contact.name`.
  *
- * Usage:
- *   const { t } = useTranslations()
- *   t('common.read_more')
- *   t('validation.required', { attribute: 'email' })
- *   t('blog.reading_time', { minutes: 5 })
+ * Editorial copy does NOT belong here — that lives in the translation tables
+ * and arrives as page props so it stays editable in Filament.
  */
 
-type Replacements = Record<string, string | number>
+type TranslationTree = { [key: string]: string | TranslationTree }
 
-function resolve(
-  translations: Record<string, unknown>,
-  key: string,
-): string | undefined {
-  const value = key
-    .split('.')
-    .reduce<unknown>(
-      (carry, segment) =>
-        carry && typeof carry === 'object'
-          ? (carry as Record<string, unknown>)[segment]
-          : undefined,
-      translations,
-    )
+export type Translator = (key: string, replacements?: Record<string, string | number>) => string
+
+export const TranslatorKey: InjectionKey<Translator> = Symbol('translator')
+
+function resolve(tree: TranslationTree, key: string): string | undefined {
+  const value = key.split('.').reduce<string | TranslationTree | undefined>(
+    (node, segment) =>
+      node !== undefined && typeof node !== 'string' ? node[segment] : undefined,
+    tree,
+  )
 
   return typeof value === 'string' ? value : undefined
 }
 
-function interpolate(line: string, replacements: Replacements): string {
+/**
+ * `:name` style placeholders, matching Laravel's own replacement syntax so a
+ * string can move between a Blade view and a Vue component untouched.
+ */
+function interpolate(line: string, replacements: Record<string, string | number>): string {
   return Object.entries(replacements).reduce(
-    (carry, [token, value]) =>
-      carry
-        .replace(new RegExp(`:${token}\\b`, 'g'), String(value))
-        .replace(new RegExp(`\\{${token}\\}`, 'g'), String(value)),
+    (carry, [token, value]) => carry.replaceAll(`:${token}`, String(value)),
     line,
   )
 }
 
-export function useTranslations() {
-  const page = usePage<SharedProps & { translations: Record<string, unknown> }>()
+export function createTranslator(tree: TranslationTree): Translator {
+  return (key, replacements) => {
+    const line = resolve(tree, key)
 
-  function t(key: string, replacements: Replacements = {}): string {
-    const line = resolve(page.props.translations ?? {}, key)
-
-    // Missing key: return the key itself so the gap is visible rather than
-    // rendering an empty string that looks like a layout bug.
     if (line === undefined) {
-      if (import.meta.env.DEV) {
-        console.warn(`[i18n] Missing translation: ${key}`)
-      }
+      // Fall back to the key so a missing string is visible in review rather
+      // than rendering an empty element.
       return key
     }
 
-    return interpolate(line, replacements)
+    return replacements ? interpolate(line, replacements) : line
   }
-
-  /** Pick "singular|plural" based on count. */
-  function tChoice(key: string, count: number, replacements: Replacements = {}): string {
-    const line = t(key, { ...replacements, count })
-    const [singular, plural] = line.split('|')
-
-    return count === 1 ? singular : (plural ?? singular)
-  }
-
-  return { t, tChoice }
 }
 
-/** Global `$t` so templates can call it without importing. */
+/**
+ * Installs `$t` globally so templates can call it without importing, and
+ * provides the same function for `useTranslations()`.
+ */
 export function installTranslations(app: App): void {
-  app.config.globalProperties.$t = (key: string, replacements: Replacements = {}) => {
-    const { t } = useTranslations()
-    return t(key, replacements)
+  const translator: Translator = (key, replacements) => {
+    const tree = (usePage().props.translations ?? {}) as TranslationTree
+
+    return createTranslator(tree)(key, replacements)
   }
+
+  app.config.globalProperties.$t = translator
+  app.provide(TranslatorKey, translator)
 }
 
-declare module 'vue' {
-  interface ComponentCustomProperties {
-    $t: (key: string, replacements?: Replacements) => string
-  }
+export function useTranslations(): { t: Translator; locale: ComputedRef<string> } {
+  const injected = inject(TranslatorKey, undefined)
+
+  const t: Translator =
+    injected ??
+    ((key, replacements) => {
+      const tree = (usePage().props.translations ?? {}) as TranslationTree
+
+      return createTranslator(tree)(key, replacements)
+    })
+
+  const locale = computed(() => {
+    const page = usePage().props.locale as { current?: string } | undefined
+
+    return page?.current ?? 'fa'
+  })
+
+  return { t, locale }
 }

@@ -96,6 +96,66 @@ export interface SharedProps {
   [key: string]: unknown
 }
 
+/* -------------------------------------------------------- Editorial blocks */
+
+/**
+ * Mirrors `ContentTransformer::cta()` — null when the section has no label.
+ */
+export interface SectionCta {
+  label: string
+  url: string
+}
+
+/**
+ * Mirrors `ContentTransformer::sectionItem()`. One row of a section's repeater:
+ * a KPI, a process step, a why-us card. Every text field is emitted as a string
+ * (never null) by the transformer, so components can render without guards.
+ */
+export interface SectionItem {
+  id: number
+  value: string
+  label: string
+  suffix: string
+  title: string
+  description: string
+  badge: string
+  features: string[]
+  footer: string
+  icon: string | null
+  image: MediaImage | null
+}
+
+/**
+ * Mirrors `ContentTransformer::section()`. Editorial copy for one section —
+ * the eyebrow/title/subtitle plus any repeater items.
+ */
+export interface PageSectionData {
+  type: string
+  eyebrow: string
+  title: string
+  subtitle: string
+  description: string
+  content: string
+  colors: {
+    eyebrow: string | null
+    title: string | null
+    subtitle: string | null
+    description: string | null
+    content: string | null
+  }
+  primaryCta: SectionCta | null
+  secondaryCta: SectionCta | null
+  image: MediaImage | null
+  items: SectionItem[]
+}
+
+/**
+ * `ContentTransformer::sectionMap()` — keyed by `SectionType` value, so a page
+ * reads `sections.hero`. A key is absent when the editor has not created that
+ * section, hence the optional value.
+ */
+export type SectionMap = Record<string, PageSectionData | undefined>
+
 /* ------------------------------------------------------------ Content DTOs */
 
 export interface ProjectSummary {

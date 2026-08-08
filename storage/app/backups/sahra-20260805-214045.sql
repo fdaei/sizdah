@@ -22,7 +22,7 @@
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `sahra` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
 
-USE `sahra`;
+USE `tekjir_sahra`;
 
 --
 -- Table structure for table `cache`

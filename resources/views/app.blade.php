@@ -4,7 +4,7 @@
      *
      * Sets lang/dir from the resolved locale so the very first paint is already
      * correct — no flash of LTR before Vue hydrates. The font class picks the
-     * Poppins (EN) or Doran/Vazirmatn (FA/AR) stack defined in tailwind.config.js.
+     * Poppins (EN) or Vazirmatn (FA/AR) stack defined in tailwind.config.js.
      */
     $locale    = app()->getLocale();
     $config    = config("locales.supported.{$locale}");
@@ -22,13 +22,14 @@
     <link rel="icon" href="/favicon.ico" sizes="32x32">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <meta name="theme-color" content="#231F20">
+    {{-- Figma Black/1000 — the page ground for every frame in the file --}}
+    <meta name="theme-color" content="#141414">
 
-    {{-- Self-hosted fonts: see docs/ASSET-MANIFEST.md §10 --}}
+    {{-- Self-hosted fonts: resources/css/fonts.css --}}
     <link rel="preconnect" href="{{ config('app.url') }}">
     @if ($config['font'] === 'arabic')
-        <link rel="preload" href="/fonts/doran/DoranFaNum-Regular.ttf" as="font" type="font/ttf" crossorigin>
-        <link rel="preload" href="/fonts/doran/DoranFaNum-Medium.ttf" as="font" type="font/ttf" crossorigin>
+        <link rel="preload" href="/fonts/vazirmatn/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/vazirmatn/Vazirmatn-Medium.woff2" as="font" type="font/woff2" crossorigin>
     @else
         <link rel="preload" href="/fonts/poppins/Poppins-Regular.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/fonts/poppins/Poppins-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
@@ -47,11 +48,11 @@
     @vite(['resources/js/app.ts'])
     @inertiaHead
 </head>
-<body class="bg-paper text-neutral-900">
+<body class="bg-ink-1000 text-ink-300">
     {{-- Skip link — first focusable element, revealed on focus --}}
     <a href="#main"
-       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:inline-start-4 focus:z-modal
-              focus:rounded-sm focus:bg-ink focus:px-4 focus:py-3 focus:text-paper">
+       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-menu
+              focus:rounded-sm focus:bg-brand focus:px-4 focus:py-3 focus:text-ink-1000">
         {{ __('common.skip_to_content') }}
     </a>
 

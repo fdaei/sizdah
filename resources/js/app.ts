@@ -9,7 +9,7 @@ import AppLayout from './Layouts/AppLayout.vue'
 import { installTranslations } from './Composables/useTranslations'
 import { initMotion, killPageAnimations } from './lib/motion'
 
-const appName = import.meta.env.VITE_APP_NAME ?? 'Sahra'
+const appName = import.meta.env.VITE_APP_NAME ?? 'Sizdah'
 
 createInertiaApp({
   title: (title) => (title ? `${title} — ${appName}` : appName),
@@ -39,7 +39,7 @@ createInertiaApp({
   },
 
   progress: {
-    color: '#BD933B', // Figma "primary gold"
+    color: '#F8B937', // Figma "Yellow/1000"
     showSpinner: false,
   },
 })

@@ -1,128 +1,113 @@
 <script setup lang="ts">
-/**
- * Site header — rebuilt 1:1 from Figma node 1419:9339 (1440×104).
- *
- * Verified via get_design_context against the live node (not approximated):
- *   container   px-96 py-6 (Figma space96/space24), gap-[262px] logo↔nav
- *   background  backdrop-blur-[15px] bg-white/5 — ALWAYS on, not scroll-gated.
- *               (The Figma frame has no variant for a solid/transparent
- *               state; the blur-over-hero look is the only state in the file,
- *               so the earlier scroll-triggered opaque background was an
- *               invented behaviour and has been removed.)
- *   menu        gap-6 (space24) between items, each item px-1 py-1 (space4)
- *   nav text    18px / regular / #4F4C4D (black/800) inactive,
- *               18px / medium / #231F20 (primary black) active — Title/Small
- *   lang switch gap-2 p-2 rounded-xs, globe+label gap-1, 14px medium — Label/Large
- *   CTA         bg #231F20, px-6 py-3, rounded-sm (radiusSM/8px), 18px regular white
- *
- * Mobile trigger and MobileMenu panel have no dedicated Figma frame beyond
- * the hamburger icon (1530:10879) — their interaction design is derived.
- */
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
-import { Menu as MenuIcon } from 'lucide-vue-next'
+import { Menu } from 'lucide-vue-next'
 import BrandLogo from '@/Components/BrandLogo.vue'
+import CtaButton from '@/Components/CtaButton.vue'
 import LanguageSwitcher from '@/Components/LanguageSwitcher.vue'
-import MobileMenu from '@/Layouts/MobileMenu.vue'
-import { useTranslations } from '@/Composables/useTranslations'
-import type { SharedProps } from '@/types'
+import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
+import doodleUrl from '~img/sizdah/shared/header-doodle.svg'
+import type { NavItem, SharedProps } from '@/types'
+
+/**
+ * Site header. Figma 268:3031 (instanced on every frame, 1440 x 108).
+ *
+ * Layout in the file is RTL: wordmark at the inline start, the menu centred,
+ * and the gold CTA at the inline end. Built with logical properties so the
+ * same markup flips for the LTR locale.
+ */
+defineEmits<{ openMenu: [] }>()
 
 const page = usePage<SharedProps>()
-const { t } = useTranslations()
 
-defineProps<{ minimal?: boolean }>()
+const items = computed<NavItem[]>(() => page.props.navigation.header)
+const settings = computed(() => page.props.settings)
 
-const mobileOpen = ref(false)
+/** The nav item flagged `isCta` in Filament becomes the gold button. */
+const cta = computed(() => items.value.find((item) => item.isCta) ?? null)
+const links = computed(() => items.value.filter((item) => !item.isCta))
 
-const items = computed(() => page.props.navigation.header.filter((i) => !i.isCta))
-const cta = computed(() => page.props.navigation.header.find((i) => i.isCta) ?? null)
+const currentUrl = computed(() => page.url)
 
-function isActive(url: string): boolean {
-  const current = new URL(page.url, window.location.origin).pathname
-  const target = new URL(url, window.location.origin).pathname
+function isActive(item: NavItem): boolean {
+  // page.url includes the locale prefix and any query string.
+  const path = currentUrl.value.split('?')[0].replace(/\/$/, '')
+  const target = new URL(item.url, 'http://x').pathname.replace(/\/$/, '')
 
-  const homePath = `/${page.props.locale.current}`
-  if (target === homePath) return current === homePath
-
-  return current === target || current.startsWith(`${target}/`)
+  return path === target
 }
 </script>
 
 <template>
-  <header class="fixed inset-inline-0 top-0 z-header backdrop-blur-header bg-white/5">
-    <!--
-      The Figma header 1419:9339 is `hug` sizing inside a 1440 frame:
-      96 + logo 140 + gap 262 + objects 846 + 96 = 1440 exactly. Without a
-      frame cap the row starts at the viewport edge, so past 1440 the 1248 of
-      fixed content ends early and the CTA floats mid-header instead of
-      landing on the 96px gutter. Same `mx-auto w-full max-w-frame` the rest
-      of the site gets from `.container-sahra`.
-    -->
+  <header
+    class="fixed inset-x-0 top-0 z-header border-b border-white/5 bg-white/[0.15] backdrop-blur-header"
+  >
     <div
-      class="mx-auto flex w-full max-w-frame items-center px-5 py-6 lg:px-24"
-      :class="minimal ? 'justify-between' : 'lg:gap-[262px]'"
+      class="container-sizdah flex items-center justify-between gap-6 py-6"
     >
-      <Link
-        :href="`/${page.props.locale.current}`"
-        class="w-[120px] shrink-0 rounded-sm focus-visible:ring-2 focus-visible:ring-gold lg:w-[140px]"
-        :aria-label="page.props.settings.siteName"
-      >
-        <BrandLogo
-          variant="full"
-          :height="56"
-          :label="page.props.settings.siteName"
-          class="h-[48px] w-[120px] lg:h-[56px] lg:w-[140px]"
+      <!-- Wordmark — inline start -->
+      <Link :href="`/${page.props.locale.current}`" class="relative shrink-0">
+        <BrandLogo :width="104" :title="settings.siteName" />
+        <img
+          :src="doodleUrl"
+          alt=""
+          aria-hidden="true"
+          width="16"
+          height="20"
+          class="pointer-events-none absolute -top-2 end-[-14px] hidden h-5 w-4 lg:block"
         />
       </Link>
 
-      <div
-        class="hidden items-center lg:flex"
-        :class="minimal ? 'ms-auto' : 'w-[846px] justify-between'"
-      >
-        <!-- menu: gap-24 (space24) — Figma "I1419:9339;159:453" -->
-        <nav v-if="!minimal" :aria-label="t('common.primary_navigation')">
-          <ul class="flex items-center gap-6">
-            <li v-for="item in items" :key="item.id">
-              <Link
-                :href="item.url"
-                :target="item.target"
-                class="flex items-center justify-center px-1 py-1 text-title-sm transition-colors"
-                :class="isActive(item.url) ? 'font-medium text-ink' : 'text-neutral-800 hover:text-ink'"
-                :aria-current="isActive(item.url) ? 'page' : undefined"
-              >
-                {{ item.label }}
-              </Link>
-            </li>
-          </ul>
-        </nav>
+      <!-- Primary navigation -->
+      <nav :aria-label="$t('common.primary_navigation')" class="hidden lg:block">
+        <ul class="flex items-center gap-6">
+          <li v-for="item in links" :key="item.id">
+            <Link
+              :href="item.url"
+              :target="item.target"
+              :aria-current="isActive(item) ? 'page' : undefined"
+              class="group flex flex-col items-center px-1 py-1 text-title-md transition-colors duration-200 ease-brand"
+              :class="isActive(item) ? 'text-paper' : 'text-ink-200 hover:text-paper'"
+            >
+              {{ item.label }}
+              <!--
+                The file draws the active state as a hand-inked rule under the
+                label. Inactive items get the same mark on hover, so the
+                asset is rendered for both and only its opacity changes.
+              -->
+              <img
+                :src="underlineUrl"
+                alt=""
+                aria-hidden="true"
+                width="45"
+                height="5"
+                class="mt-1 h-[5px] w-[45px] transition-opacity duration-200 ease-brand"
+                :class="isActive(item) ? 'opacity-100' : 'opacity-0 group-hover:opacity-60'"
+              />
+            </Link>
+          </li>
+        </ul>
+      </nav>
 
-        <!-- header ctas: gap-16 (space16) — Figma "I1419:9339;173:189" -->
-        <div class="flex items-center justify-center gap-4">
-          <LanguageSwitcher v-if="!minimal" />
+      <div class="flex items-center gap-4">
+        <LanguageSwitcher class="hidden lg:flex" />
 
-          <Link
-            v-if="cta"
-            :href="cta.url"
-            class="flex items-center gap-1 rounded-sm bg-ink px-6 py-3 text-title-sm text-paper transition-opacity hover:opacity-90"
-          >
-            {{ cta.label }}
-          </Link>
-        </div>
+        <CtaButton
+          v-if="cta"
+          :label="cta.label"
+          :href="cta.url"
+          class="hidden lg:inline-flex"
+        />
+
+        <button
+          type="button"
+          class="inline-flex size-11 items-center justify-center rounded-sm text-paper lg:hidden"
+          :aria-label="$t('common.open_menu')"
+          @click="$emit('openMenu')"
+        >
+          <Menu class="size-6" aria-hidden="true" />
+        </button>
       </div>
-
-      <button
-        v-if="!minimal"
-        type="button"
-        class="touch-target ms-auto -me-2 inline-flex size-11 items-center justify-center rounded-sm text-ink lg:hidden"
-        :aria-label="t('common.open_menu')"
-        aria-haspopup="dialog"
-        :aria-expanded="mobileOpen"
-        @click="mobileOpen = true"
-      >
-        <MenuIcon class="size-6" aria-hidden="true" />
-      </button>
     </div>
   </header>
-
-  <MobileMenu v-model:open="mobileOpen" />
 </template>

@@ -1,92 +1,62 @@
 <script setup lang="ts">
-/**
- * Site footer.
- *
- * Figma: 1419:9317 (1440×431). Four columns —
- *   brand + description | Quick Links | Social Links | Info
- * with a large low-contrast "SAHRA" watermark behind the bottom bar and a
- * copyright / legal-links row beneath a hairline rule.
- *
- * The three link columns come from the `footer` menu: each top-level item is a
- * column heading and its children are the links (NavigationBuilder::footer).
- * The Info column renders settings values rather than menu items.
- */
 import { computed } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
-import { MapPin, Phone, Mail } from 'lucide-vue-next'
+import { Mail, MapPin, Phone } from 'lucide-vue-next'
 import BrandLogo from '@/Components/BrandLogo.vue'
-import { useTranslations } from '@/Composables/useTranslations'
-import type { SharedProps } from '@/types'
+import type { NavItem, SharedProps } from '@/types'
 
+/**
+ * Site footer. Figma I279:6327 — brand block + link columns + bottom bar.
+ *
+ * DEVIATION, deliberate: the Footer instance in the Sizdah file was never
+ * rebranded. It still carries the SAHRA logotype, LTR English copy, the old
+ * `black/*` palette and a hardcoded "© 2026 Sahra" line. Shipping it verbatim
+ * would put the previous agency's name on every page of this site, so the
+ * *structure* is taken from the frame (brand + tagline, link columns, rule,
+ * copyright / legal row) while the content comes from `navigation.footer` and
+ * `settings` and the colours come from the Sizdah ramp. Logged in
+ * FIGMA/state.json.
+ */
 const page = usePage<SharedProps>()
-const { t } = useTranslations()
 
-const columns = computed(() => page.props.navigation.footer)
 const settings = computed(() => page.props.settings)
-const year = new Date().getFullYear()
-const privacyUrl = computed(() => `/${page.props.locale.current}/privacy-policy`)
-const termsUrl = computed(() => `/${page.props.locale.current}/terms`)
-const footerFont = computed(() =>
-  page.props.locale.font === 'arabic' ? 'font-arabic' : 'font-sans',
+const columns = computed<NavItem[]>(() => page.props.navigation.footer)
+const locale = computed(() => page.props.locale.current)
+
+const year = computed(() =>
+  new Intl.DateTimeFormat(page.props.locale.htmlLang, { year: 'numeric' }).format(new Date()),
 )
 
-function columnHeading(index: number, fallback: string): string {
-  if (index === 0) return t('footer.quick_links')
-  if (index === 1) return t('footer.social_links')
-
-  return fallback
-}
+const contact = computed(() => settings.value.contact)
 </script>
 
 <template>
-  <footer
-    class="relative overflow-hidden rounded-t-lg border-t border-neutral-100 bg-paper
-           shadow-[0_-5px_10px_rgba(0,0,0,0.05)]"
-    :class="footerFont"
-    :lang="page.props.locale.htmlLang"
-    :dir="page.props.locale.direction"
-  >
-    <div class="container-sahra relative py-6 md:py-12">
-      <div class="relative z-10 flex flex-col gap-2 md:gap-10">
-        <div
-          class="grid gap-10 md:grid-cols-2
-                 lg:grid-cols-[402px_minmax(0,1fr)] lg:justify-between lg:gap-12"
-        >
-        <!-- Brand -->
-        <div class="flex max-w-[402px] flex-col items-start gap-4 md:gap-8">
-          <BrandLogo
-            variant="full"
-            :height="25"
-            :label="settings.siteName"
-            class="h-[25px] w-[87px]"
-          />
-          <p class="text-[12px] font-normal leading-normal text-neutral-600 md:text-[16px]">
-            {{ settings.description }}
-          </p>
-        </div>
+  <footer class="border-t border-ink-800 bg-ink-1000">
+    <div class="container-sizdah py-12">
+      <div class="flex flex-col gap-10">
+        <div class="flex flex-col justify-between gap-10 md:flex-row md:items-start">
+          <!-- Brand + positioning line -->
+          <div class="flex max-w-[402px] flex-col gap-8">
+            <BrandLogo :width="104" :title="settings.siteName" />
+            <p class="text-body-lg text-ink-500">{{ settings.tagline }}</p>
+          </div>
 
-          <div
-            class="grid grid-cols-2 gap-x-10 gap-y-1 md:gap-y-10
-                   lg:grid-cols-[max-content_max-content_minmax(190px,max-content)] lg:gap-[88px]"
-          >
-            <!-- Menu columns -->
+          <!-- Link columns -->
+          <div class="grid grid-cols-2 gap-10 md:flex md:gap-[88px]">
             <nav
-              v-for="(column, columnIndex) in columns"
+              v-for="column in columns"
               :key="column.id"
-              :aria-label="columnHeading(columnIndex, column.label)"
+              :aria-label="column.label"
+              class="flex flex-col gap-4"
             >
-              <h2 class="text-[14px] font-medium leading-normal text-neutral-900 md:text-[16px]">
-                {{ columnHeading(columnIndex, column.label) }}
-              </h2>
+              <h2 class="text-body-lg font-medium text-paper">{{ column.label }}</h2>
 
-              <ul class="mt-3 flex flex-col items-start gap-2 md:mt-4 md:gap-3">
+              <ul class="flex flex-col gap-3">
                 <li v-for="child in column.children" :key="child.id">
                   <Link
                     :href="child.url"
                     :target="child.target"
-                    :rel="child.target === '_blank' ? 'noopener noreferrer' : undefined"
-                    class="text-[14px] font-normal leading-normal text-neutral-600
-                           transition-colors hover:text-gold md:font-medium"
+                    class="text-label-lg text-ink-500 transition-colors duration-200 ease-brand hover:text-brand"
                   >
                     {{ child.label }}
                   </Link>
@@ -94,38 +64,33 @@ function columnHeading(index: number, fallback: string): string {
               </ul>
             </nav>
 
-            <!-- Info -->
-            <div class="col-span-2 lg:col-span-1">
-              <h2 class="text-[14px] font-medium leading-normal text-neutral-900 md:text-[16px]">
-                {{ t('footer.info') }}
-              </h2>
+            <!-- Contact column — from settings, not the menu tree -->
+            <div class="flex flex-col gap-4">
+              <h2 class="text-body-lg font-medium text-paper">{{ $t('footer.info') }}</h2>
 
-              <ul
-                class="mt-3 flex flex-col gap-2 text-[14px] font-normal leading-normal
-                       text-neutral-600 md:mt-4 md:gap-3 md:font-medium"
-              >
-                <li v-if="settings.contact.location" class="flex items-center gap-2">
-                  <MapPin class="size-4 shrink-0 text-neutral-600" aria-hidden="true" />
-                  <span>{{ settings.contact.location }}</span>
+              <ul class="flex flex-col gap-3 text-label-lg text-ink-500">
+                <li v-if="contact.location" class="flex items-center gap-2">
+                  <MapPin class="size-4 shrink-0" aria-hidden="true" />
+                  <span>{{ contact.location }}</span>
                 </li>
-
-                <li v-if="settings.contact.phone" class="flex items-center gap-2">
-                  <Phone class="size-4 shrink-0 text-neutral-600" aria-hidden="true" />
+                <li v-if="contact.phone" class="flex items-center gap-2">
+                  <Phone class="size-4 shrink-0" aria-hidden="true" />
                   <a
-                    :href="`tel:${settings.contact.phone.replace(/\s/g, '')}`"
-                    class="latin-nums transition-colors hover:text-gold"
+                    :href="`tel:${contact.phone.replace(/\s/g, '')}`"
+                    class="latin-nums transition-colors duration-200 ease-brand hover:text-brand"
+                    dir="ltr"
                   >
-                    {{ settings.contact.phone }}
+                    {{ contact.phone }}
                   </a>
                 </li>
-
-                <li v-if="settings.contact.email" class="flex items-center gap-2">
-                  <Mail class="size-4 shrink-0 text-neutral-600" aria-hidden="true" />
+                <li v-if="contact.email" class="flex items-center gap-2">
+                  <Mail class="size-4 shrink-0" aria-hidden="true" />
                   <a
-                    :href="`mailto:${settings.contact.email}`"
-                    class="break-all transition-colors hover:text-gold"
+                    :href="`mailto:${contact.email}`"
+                    class="transition-colors duration-200 ease-brand hover:text-brand"
+                    dir="ltr"
                   >
-                    {{ settings.contact.email }}
+                    {{ contact.email }}
                   </a>
                 </li>
               </ul>
@@ -134,38 +99,28 @@ function columnHeading(index: number, fallback: string): string {
         </div>
 
         <div
-          class="relative z-10 flex flex-col items-start justify-between gap-4
-                 border-t border-neutral-300 py-6 text-[12px] font-medium leading-normal
-                 text-neutral-600 sm:flex-row sm:items-center sm:gap-3 sm:text-[14px]"
+          class="flex flex-col items-start justify-between gap-4 border-t border-ink-800 py-6 sm:flex-row sm:items-center"
         >
-          <p>{{ t('footer.copyright', { year, name: settings.siteName }) }}</p>
+          <p class="text-label-lg text-ink-500">
+            {{ $t('footer.rights', { year, name: settings.siteName }) }}
+          </p>
 
           <div class="flex items-center gap-4">
-            <Link :href="privacyUrl" class="underline transition-colors hover:text-gold">
-              {{ t('footer.privacy_policy') }}
+            <Link
+              :href="`/${locale}/privacy-policy`"
+              class="text-label-lg text-ink-500 underline transition-colors duration-200 ease-brand hover:text-brand"
+            >
+              {{ $t('footer.privacy') }}
             </Link>
-            <Link :href="termsUrl" class="underline transition-colors hover:text-gold">
-              {{ t('footer.terms') }}
+            <Link
+              :href="`/${locale}/terms`"
+              class="text-label-lg text-ink-500 underline transition-colors duration-200 ease-brand hover:text-brand"
+            >
+              {{ $t('footer.terms') }}
             </Link>
           </div>
         </div>
       </div>
-
-      <!--
-        Watermark — Figma 1065:2315. This is the Sahra logotype drawn as
-        vector paths with a built-in linear gradient (#231F20 at 15% fading to
-        transparent), not text: setting "SAHRA" in Poppins gets the wrong
-        letterforms and a flat fill. Exported at its native 1248x305.
-      -->
-      <img
-        src="/icons/sahra/footer-wordmark.svg"
-        alt=""
-        width="1248"
-        height="305"
-        class="pointer-events-none absolute inset-inline-0 bottom-0 w-full select-none"
-        aria-hidden="true"
-        decoding="async"
-      />
     </div>
   </footer>
 </template>

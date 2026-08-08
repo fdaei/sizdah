@@ -6,21 +6,15 @@
 
 @layer base {
   /*
-   | Direction handling.
-   |
-   | `dir` is set server-side on <html> (resources/views/app.blade.php) so the
-   | first paint is already correct. We avoid physical margin utilities in
-   | components; the tailwindcss-logical plugin provides logical margin and
-   | padding utilities that flip
-   | automatically, so one stylesheet serves both directions.
+   | Direction and font family are driven by the active locale. `dir` is set on
+   | <html> by resources/views/app.blade.php; the font class comes from the
+   | shared `locale.font` prop so no component hardcodes a family.
    */
-
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
   }
 
-  /* Respect the OS preference for both CSS and GSAP (see lib/motion.ts). */
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
@@ -32,230 +26,99 @@
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
     }
   }
 
-  /* When JS detects reduced motion it adds this class; marquees stop dead. */
   .reduced-motion .marquee-track {
     animation: none !important;
-    transform: none !important;
   }
 
   body {
-    @apply bg-paper text-body-lg text-neutral-800;
+    @apply bg-ink-1000 text-body-lg text-ink-300;
     text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
   }
 
-  /* Figma display type is Poppins SemiBold / Doran Bold. */
-  h1, h2, h3, h4, h5, h6 {
-    @apply text-neutral-1000;
-    font-weight: 600;
-    text-wrap: balance;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-paper;
   }
 
-  :where(html[dir='rtl']) h1,
-  :where(html[dir='rtl']) h2,
-  :where(html[dir='rtl']) h3 {
-    /* Doran/Vazirmatn read heavier; drop a step to match optical weight. */
-    font-weight: 700;
+  /* Visible focus on every interactive element, on the dark ground. */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    @apply outline-none ring-2 ring-brand ring-offset-2 ring-offset-ink-1000;
   }
 
-  p {
-    text-wrap: pretty;
-  }
-
-  /* Visible, brand-coloured focus for keyboard users on every interactive el. */
-  :focus-visible {
-    @apply outline-none ring-2 ring-gold ring-offset-2 ring-offset-paper;
-    border-radius: 4px;
-  }
-
-  /* Media never overflows its column — a common source of horizontal scroll. */
   img,
-  svg,
   video,
-  canvas {
+  svg {
     @apply block max-w-full;
-    height: auto;
   }
 
   /*
-   | Keeps a numeric run reading as one unit inside RTL copy — "+٧٠ ألف" lays
-   | out with the sign and digits together, the way the frames set "+70K".
-   |
-   | It does NOT force Latin digits, despite the name: fa/ar render their own
-   | digit systems (Persian U+06F0, Arabic U+0660), transliterated server-side
-   | by App\Support\Numerals for generated values and authored directly for CMS
-   | content. `lnum`/`lining-nums` only picks lining over oldstyle figures
-   | within whichever script is in use; CSS cannot convert between digit blocks.
+   | Keeps a numeric run reading as one unit inside RTL copy (e.g. "+۷۰ هزار").
+   | It selects lining figures — it does NOT force Latin digits. Digit system
+   | is a data concern, handled by App\Support\Numerals in the transformer.
    */
   .latin-nums {
-    font-feature-settings: 'lnum' 1;
-    font-variant-numeric: lining-nums;
-    direction: ltr;
-    unicode-bidi: embed;
+    font-variant-numeric: lining-nums tabular-nums;
   }
 }
 
 @layer components {
   /*
-   | Figma container: 1248px content inside a 1440px frame => 96px gutters.
-   | Mobile: 362px content inside 402px => 20px gutters.
+   | Figma content track: 1248px inside a 1440px frame — a 96px gutter each
+   | side. Below 1440 the gutter shrinks rather than the track overflowing.
    */
-  /*
-   | Figma frame is 1440 wide with a 1248 content track — a 96 gutter each
-   | side. The max-width is the *frame*, not the track: the box is
-   | border-box, so `max-w-container` + `px-24` would otherwise leave only
-   | 1056 of content and pull every page in by 192px.
-   */
-  .container-sahra {
+  .container-sizdah {
     @apply mx-auto w-full max-w-frame px-5 md:px-10 lg:px-16 xl:px-24;
   }
 
-  /*
-   | Narrow container. Several Figma sections (KPI 1419:9318, trust proof
-   | 1419:9205, lead magnet 1419:9322) are 1036 wide inside the 1440 frame —
-   | inset 202 each side rather than the 96 gutter of `.container-sahra`.
-   */
-  .container-narrow {
-    @apply mx-auto w-full px-5 md:px-10 lg:px-16 xl:px-24;
-    max-width: calc(1036px + 2 * 96px);
-  }
-
-  /*
-   | 1px gradient hairline used on the KPI cards (1419:9319) and elsewhere:
-   | Figma strokeAlign OUTSIDE, linear-gradient(136deg, gold 30% → 10% → 30%).
-   | padding-box/border-box layering keeps the fill flat and the edge gradient.
-   */
-  .edge-gold {
-    border: 1px solid transparent;
-    background:
-      linear-gradient(#fff, #fff) padding-box,
-      linear-gradient(
-          136deg,
-          rgba(189, 147, 59, 0.3) 0%,
-          rgba(189, 147, 59, 0.1) 50%,
-          rgba(189, 147, 59, 0.3) 100%
-        )
-        border-box;
-  }
-
-  /* Section rhythm. Figma spacing tokens: 96 desktop, 56 mobile. */
+  /* Vertical rhythm between full-bleed sections. */
   .section {
-    @apply py-14 md:py-18 lg:py-24;
+    @apply py-16 md:py-24;
   }
 
-  /*
-   | Top inset for a page's first section. The header is a fixed translucent
-   | overlay (1440×104), so the first block has to clear it itself. Figma puts
-   | the first eyebrow of every inner page at y=192; mobile frames use 136.
-   */
+  /* First section clears the fixed header (108px in the file). */
   .section-first {
-    @apply pt-[136px] md:pt-[192px];
+    @apply pt-[132px] md:pt-[180px];
   }
 
   /*
-   | Eyebrow — Figma "small title" component set 1319:7077 (e.g. 1419:9260):
-   | row, gap 4; an 11.31px gold disc with a symmetric gold glow, then the
-   | label in Idealist 24. Note this differs from the hero badge (1419:9196),
-   | where the same-sized swatch is an unrounded 45°-rotated square.
+   | Figma "small title": a label followed, at the inline start, by an 8px
+   | brand square rotated 45deg (the file stores it as an 11.31px rounded
+   | rect, which is 8 * sqrt(2) — i.e. the diagonal of an 8px square).
    */
   .eyebrow {
-    @apply inline-flex w-fit items-center gap-1 text-gold;
-    font-family: 'Idealist', 'Doran FaNum', Vazirmatn, serif;
-    font-size: 16px;
-    font-weight: 400;
-    /* Idealist renders at a 1.08 intrinsic ratio in the file (24 -> 26). */
-    line-height: 24px;
+    @apply inline-flex w-fit items-center gap-2 text-label-lg text-brand;
   }
 
   .eyebrow::before {
     content: '';
-    @apply inline-block shrink-0 rounded-round bg-gold;
-    width: 8.49px;
-    height: 8.49px;
-    box-shadow:
-      2px 2px 12px 0 rgba(189, 147, 59, 0.5),
-      -2px -2px 12px 0 rgba(189, 147, 59, 0.5);
+    @apply inline-block h-2 w-2 shrink-0 rotate-45 rounded-[1px] bg-brand;
   }
 
-  @media (min-width: 768px) {
-    .eyebrow {
-      font-size: 24px;
-      line-height: 26px;
-    }
-
-    .eyebrow::before {
-      width: 11.31px;
-      height: 11.31px;
-    }
+  /* Card surfaces sit one step off the page ground. */
+  .card-surface {
+    @apply rounded-lg border border-ink-800 bg-ink-900;
   }
 
   /*
-   | Testimonial card — Figma 1419:9251, with the MOUSE_ENTER interaction
-   | stored in the file: CHANGE_TO variant 414:864 "en-hover" via
-   | SMART_ANIMATE / EASE_OUT / 0.3s.
-   |
-   | Default is the light chip (#F8F7F8 on a black/200 hairline); hover swaps
-   | to primary black carrying a top-to-bottom gradient that is transparent
-   | until 50% then gold at 30%, and lifts every text layer to white.
+   | Scroll reveal. The hidden start state is gated behind html.motion-ready,
+   | which lib/motion.ts adds once GSAP is live — so a bundle failure can
+   | never leave content permanently invisible.
    */
-  .testimonial-card {
-    @apply border-neutral-200 bg-[#f8f7f8];
-    transition:
-      background-color 0.3s ease-out,
-      background-image 0.3s ease-out,
-      border-color 0.3s ease-out;
-  }
-
-  .testimonial-card:hover,
-  .testimonial-card:focus-within {
-    @apply border-neutral-100 bg-ink;
-    background-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 50%,
-      rgba(189, 147, 59, 0.3) 100%
-    );
-  }
-
-  .testimonial-card:hover :is(p),
-  .testimonial-card:focus-within :is(p) {
-    @apply text-paper;
-  }
-
-  /*
-   | Marquee track — audit A2 (client logos, 28s) and A6 (testimonials, 40s).
-   |
-   | The markup renders its children twice; the track translates exactly -50%,
-   | so the second copy lands where the first began and the loop is seamless.
-   | Duration comes in per-instance as --marquee-duration. RTL travels the
-   | other way, and hovering pauses it so a reader can stop on a card.
-   |
-   | Reduced motion is already handled above: `.reduced-motion .marquee-track`
-   | kills the animation and the transform, leaving a static row.
-   */
-  /* Declared here, not in tailwind.config.js: Tailwind only emits keyframes
-     that a generated `animation-*` utility references, so a config entry used
-     only by hand-written CSS gets purged from the build. */
-  @keyframes marquee-scroll {
-    from {
-      transform: translateX(0);
-    }
-
-    to {
-      transform: translateX(-50%);
-    }
+  .motion-ready .will-reveal {
+    opacity: 0;
+    transform: translateY(24px);
   }
 
   .marquee-track {
-    display: flex;
-    width: max-content;
-    animation: marquee-scroll var(--marquee-duration, 28s) linear infinite;
-  }
-
-  :where(html[dir='rtl']) .marquee-track {
-    animation-direction: reverse;
+    @apply flex w-max animate-marquee items-center gap-16;
   }
 
   .marquee-mask:hover .marquee-track,
@@ -263,64 +126,43 @@
     animation-play-state: paused;
   }
 
-  /* Edge fade for marquees — Figma "shade" 1419:9215. */
   .marquee-mask {
     -webkit-mask-image: linear-gradient(
       to right,
-      transparent 0%,
-      #000 10%,
-      #000 90%,
-      transparent 100%
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
     );
     mask-image: linear-gradient(
       to right,
-      transparent 0%,
-      #000 10%,
-      #000 90%,
-      transparent 100%
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
     );
   }
 
-  /* Elements animated by GSAP start hidden — but only when motion is allowed,
-     otherwise reduced-motion users would see nothing at all.
-
-     `html.motion-ready` is added by initMotion() once GSAP has loaded and is
-     about to run. Without that gate a bundle failure would leave every
-     `.will-reveal` element hidden forever, so the hidden state is opt-in from
-     JS rather than the default. */
-  @media (prefers-reduced-motion: no-preference) {
-    :where(html.motion-ready) .will-reveal {
-      opacity: 0;
-      transform: translateY(32px);
-    }
+  /*
+   | Decorative grid mesh behind the hero and several section corners
+   | (Figma "Group" > 20 hairline vectors). Drawn in CSS rather than shipping
+   | 20 <vector> nodes per instance.
+   */
+  .grid-mesh {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 4%) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 4%) 1px, transparent 1px);
+    background-size: 80.36px 80.36px;
   }
 }
 
 @layer utilities {
-  /* Mobile browser chrome-aware viewport height. */
   .min-h-screen-safe {
-    min-height: 100vh;
-    min-height: 100dvh;
+    min-height: 100svh;
   }
 
-  /* Notch / home-indicator padding on iOS. */
-  .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-
-  .pt-safe {
-    padding-top: env(safe-area-inset-top, 0px);
-  }
-
-  /* Minimum 44×44 touch target (WCAG 2.5.5). */
-  .touch-target {
-    @apply relative;
-  }
-
-  .touch-target::after {
-    content: '';
-    @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
-    min-width: 44px;
-    min-height: 44px;
+  /* Directional glyphs mirror under RTL. */
+  [dir='rtl'] .flip-rtl {
+    transform: scaleX(-1);
   }
 }

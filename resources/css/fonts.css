@@ -1,20 +1,14 @@
 /*
- | Self-hosted webfonts.
+ | Self-hosted webfonts — Sizdah.
  |
- | EN  -> Poppins       (Google Fonts, OFL — fetched by scripts/fetch-fonts.sh)
- | FA  -> Doran FaNum   (commercial; client-supplied)
- | AR  -> Doran FaNum   (commercial; client-supplied)
+ | EN     -> Poppins    (Google Fonts, OFL — scripts/fetch-fonts.sh)
+ | FA/AR  -> Vazirmatn  (OFL)
  |
- | Doran FaNum is the family named in the Figma variables ("AR-Desktop/*").
- | It is not freely redistributable, so the declarations below point at the
- | paths where the licensed files belong. Until those files exist the browser
- | silently falls through to Vazirmatn (OFL, near-identical metrics), which is
- | declared immediately after and IS shipped.
- |
- | To activate Doran later: drop the three .woff2 files into
- | public/fonts/doran/ and hard-refresh. No code change required.
- |
- | See docs/ASSET-MANIFEST.md §10.
+ | The Figma variables name "Peyda" for every FA-Desktop text style. Peyda is
+ | not licensed here; Vazirmatn is the specified substitute and has near
+ | identical metrics, so the frame heights still hold. Swapping Peyda in later
+ | means dropping the .woff2 files in public/fonts/peyda/ and adding a
+ | @font-face block above Vazirmatn — no component changes.
  */
 
 /* ---------------------------------------------------------------- Poppins */
@@ -53,86 +47,7 @@
   font-display: swap;
 }
 
-/* ------------------------------------------------- Doran FaNum (licensed) */
-/* Client-supplied originals from /home/fdaei/Downloads/Telegram Desktop.   */
-
-@font-face {
-  font-family: 'Doran FaNum';
-  src: url('/fonts/doran/DoranFaNum-Thin.ttf') format('truetype');
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Doran FaNum';
-  src: url('/fonts/doran/DoranFaNum-Light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Doran FaNum';
-  src: url('/fonts/doran/DoranFaNum-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Doran FaNum';
-  src: url('/fonts/doran/DoranFaNum-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Doran FaNum';
-  src: url('/fonts/doran/DoranFaNum-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Doran FaNum';
-  src: url('/fonts/doran/DoranFaNum-ExtraBold.ttf') format('truetype');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* ------------------------------------------------- Idealist (hero accent) */
-/* Figma hero (1419:9194) sets the phrase "marketing systems" in a distinct
- * display face, `idealist:Regular` at 96px with a gold gradient fill. This
- * is a separate typeface from both Poppins and Doran/Vazirmatn and was not
- * discoverable as a Google Fonts match — flagged in docs/ASSET-MANIFEST.md
- * §10 alongside Doran as a client-supplied asset. Falls back to a generic
- * serif so the gradient treatment still reads as a deliberate accent rather
- * than looking like a rendering error. */
-
-@font-face {
-  font-family: 'Idealist';
-  src: url('/fonts/idealist/Idealist-Models.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  /*
-   | Latin-only. Idealist carries no Arabic or Persian glyphs, but without an
-   | explicit range the @font-face claims U+0-10FFFF, so the browser selects it
-   | for fa/ar display text and then falls through glyph-by-glyph to a generic
-   | serif — the eyebrows and hero accents rendered in the wrong face entirely.
-   | Constraining the range lets the `display` stack hand those locales to
-   | Doran FaNum, which is what the AR-Desktop/Display tokens specify.
-   */
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
-    U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193,
-    U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* ------------------------------------------------- Vazirmatn (shipped fallback) */
+/* -------------------------------------------------------------- Vazirmatn */
 
 @font-face {
   font-family: 'Vazirmatn';

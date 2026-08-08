@@ -1,0 +1,187 @@
+{
+  "fileKey": "v1l4ANft5Wtb8wPThyP7P9",
+  "canonicalTheme": "dark",
+  "notes": [
+    "Frame names in the file are unreliable: 268:4158 and 285:4590 are BOTH named 'blog list'. 268:4158 is the listing (featured post + filter chips + card grid); 285:4590 is a single article (hero, body, lead magnet, related posts). Mapped by content.",
+    "13:2766 and 268:2962 are BOTH named 'Home', identical 1440x11273 geometry, inverted palettes. Verified by pixel sampling: services (308:4492) and 404 (266:2825) headers are rgb(73,68,57) — identical to 268:2962 and nothing like 13:2766's rgb(254,254,254). 268:2962 (dark) is canonical; 13:2766 is the light variant.",
+    "No frames exist for About (route 'about'), Work index ('work.index') or Work show ('work.show'). Those three routes have controllers but no Sizdah design."
+  ],
+  "frames": [
+    {
+      "nodeId": "268:2962",
+      "name": "Home",
+      "figmaName": "Home",
+      "route": "home",
+      "component": "resources/js/Pages/Home.vue",
+      "size": "1440x11273",
+      "status": "extracted",
+      "assets": [
+        "resources/images/sizdah/home/hero-journey.png",
+        "resources/images/sizdah/home/kpi-engagement.svg",
+        "resources/images/sizdah/home/kpi-audience.svg",
+        "resources/images/sizdah/home/kpi-retention.svg"
+      ],
+      "notes": "Canonical dark Home. get_design_context on the frame exceeds the token cap and returns sparse metadata only, so it must be walked section by section. Full geometry for all 38 top-level regions has been cached; per-section node IDs are in sectionNodes below. IMPLEMENTED SO FAR: hero (268:2998 headline, 268:2996 paragraph, 268:2988 CTA row, 268:3030 illustration, 268:2966 mesh) and the KPI row (268:3026). Frame content ends at y=9170 of 11273 — the last ~2100px are empty canvas.",
+      "sectionNodes": {
+        "hero.eyebrow": "394:4964 — 221x18 text + 2px underline, NOT yet extracted",
+        "hero.note": "268:2997 — 173x40 handwritten note + 268:3024 arrow doodle, NOT yet extracted",
+        "trustProof": "268:3002 — y1209, logo strip, 6 'logo' instances",
+        "servicesOrbit": "268:3032 — y1522, 1440x1130 dark band",
+        "leadMagnet": "391:4795 — y2780",
+        "projectsHeading": "268:3461 — y3120",
+        "projects": "268:3539 image 530x663 + 268:3540 rows 615x565",
+        "projectsFooter": "268:3468 — y4243, 1250x171",
+        "process": "268:3547 — y4511, 1248x848, six steps",
+        "whyUsHeading": "268:3475 — y5550, plus the connector diagram at 268:3708/3711/3714/3717",
+        "whyUsCards": "268:3676 — y6458, four 312x216 cards",
+        "testimonials": "268:3720 — y6890, 1248x609",
+        "finalCtaHeading": "268:3797 — y7751, 1248x144"
+      }
+    },
+    {
+      "nodeId": "13:2766",
+      "name": "Home (light variant)",
+      "figmaName": "Home",
+      "route": "home",
+      "component": "resources/js/Pages/Home.vue",
+      "size": "1440x11273",
+      "status": "superseded",
+      "assets": [],
+      "notes": "Light-palette twin of 268:2962. Not implemented separately — same layout, inverted colours. Recorded so the pair is not mistaken for two screens."
+    },
+    {
+      "nodeId": "308:4492",
+      "name": "Services",
+      "figmaName": "services",
+      "route": "services",
+      "component": "resources/js/Pages/Services.vue",
+      "size": "1440x5333",
+      "status": "pending",
+      "assets": [],
+      "notes": "Four numbered service blocks (01-04: branding, content, marketing, social support) alternating image side, each with a tag list; final CTA card."
+    },
+    {
+      "nodeId": "268:4158",
+      "name": "Blog listing",
+      "figmaName": "blog list",
+      "route": "insights.index",
+      "component": "resources/js/Pages/Insights/Index.vue",
+      "size": "1440x3713",
+      "status": "pending",
+      "assets": [],
+      "notes": "Hero + 5 filter chips, featured row, then 2-up (612px) and 3-up (400px) blog card grids."
+    },
+    {
+      "nodeId": "285:4590",
+      "name": "Blog article",
+      "figmaName": "blog list",
+      "route": "insights.show",
+      "component": "resources/js/Pages/Insights/Show.vue",
+      "size": "1440x4844",
+      "status": "pending",
+      "assets": [],
+      "notes": "Article hero, 3 meta chips, 1248x624 cover, prose body, inline lead-magnet card, related posts (3 cards), final CTA."
+    },
+    {
+      "nodeId": "279:6325",
+      "name": "Contact",
+      "figmaName": "contact us",
+      "route": "contact",
+      "component": "resources/js/Pages/Contact.vue",
+      "size": "1440x1755",
+      "status": "pending",
+      "assets": [],
+      "notes": "Left info column (423px) + form (801px), social row of 5."
+    },
+    {
+      "nodeId": "279:5924",
+      "name": "Privacy policy",
+      "figmaName": "privacy policy",
+      "route": "legal.privacy",
+      "component": "resources/js/Pages/Legal.vue",
+      "size": "1440x2818",
+      "status": "pending",
+      "assets": [],
+      "notes": "Title + 8 numbered heading/body blocks. Shares the Legal component with terms."
+    },
+    {
+      "nodeId": "281:6773",
+      "name": "Terms of Use",
+      "figmaName": "term of use",
+      "route": "legal.terms",
+      "component": "resources/js/Pages/Legal.vue",
+      "size": "unknown",
+      "status": "pending",
+      "assets": [],
+      "notes": "Same Legal shell as privacy; content differs."
+    },
+    {
+      "nodeId": "266:2825",
+      "name": "404",
+      "figmaName": "404",
+      "route": "(error handler)",
+      "component": "resources/js/Pages/Error.vue",
+      "size": "1440x1024",
+      "size_note": "Header only, no footer in the frame.",
+      "status": "pending",
+      "assets": [],
+      "notes": "Illustration 725x544, heading + body + CTA. Rendered via bootstrap/app.php Inertia Error page for 403/404/500."
+    }
+  ],
+  "sharedComponents": [
+    { "name": "CTA", "figmaNode": "21:2146", "file": "resources/js/Components/CtaButton.vue", "status": "built" },
+    { "name": "small title", "figmaNode": "268:3034", "file": "resources/js/Components/Eyebrow.vue", "status": "built" },
+    { "name": "KPIs", "figmaNode": "71:2145", "file": "resources/js/Components/StatCard.vue", "status": "built" },
+    { "name": "Header", "figmaNode": "268:3031", "file": "resources/js/Layouts/AppHeader.vue", "status": "built" },
+    { "name": "Footer", "figmaNode": "285:4592", "file": "resources/js/Layouts/AppFooter.vue", "status": "built" },
+    { "name": "logo", "figmaNode": "268:3017", "file": "resources/js/Components/ClientLogo.vue", "status": "pending" },
+    { "name": "blog card", "figmaNode": "277:5849", "file": "resources/js/Components/BlogCard.vue", "status": "pending", "notes": "Two widths: 400 (3-up) and 612 (2-up), both 540 tall." },
+    { "name": "why us card", "figmaNode": "268:3679", "file": "resources/js/Components/WhyUsCard.vue", "status": "pending", "notes": "312x216, 4-up." },
+    { "name": "process step card", "figmaNode": "268:3549", "file": "resources/js/Components/ProcessStepCard.vue", "status": "pending" },
+    { "name": "testimonial card", "figmaNode": "391:4899", "file": "resources/js/Components/TestimonialCard.vue", "status": "pending", "notes": "300x334." },
+    { "name": "project cards", "figmaNode": "268:3541", "file": "resources/js/Components/ProjectRow.vue", "status": "pending" },
+    { "name": "final CTA card", "figmaNode": "294:7672", "file": "resources/js/Components/FinalCtaCard.vue", "status": "pending", "notes": "1248x483. On the article and services frames; Home has only the heading." },
+    { "name": "lead magnet", "figmaNode": "303:4455", "file": "resources/js/Components/LeadMagnetBanner.vue", "status": "pending" },
+    { "name": "social", "figmaNode": "279:6487", "file": "resources/js/Components/SocialIcon.vue", "status": "pending" },
+    { "name": "info", "figmaNode": "292:7522", "file": "resources/js/Components/ArticleMeta.vue", "status": "pending" }
+  ],
+  "tokensAdded": [
+    "fontSize.hero-line — clamp(28px,5vw,48px)/1.27/600, measured off 268:2999 (48px text in a 61px box)",
+    "fontSize.hero-accent — clamp(36px,6.5vw,64px)/1.27/600, measured off 268:3000 (64px text in an 81px box)"
+  ],
+  "deviations": [
+    {
+      "frame": "268:2962",
+      "what": "Home renders no insights and no FAQ section.",
+      "why": "Neither exists in the frame. HomeController still passes `posts` and `faqs`; Home.vue accepts them as typed props but does not render them. No controller change made."
+    },
+    {
+      "frame": "268:2962",
+      "what": "Hero headline set with fluid clamp() type rather than fixed 48/64px.",
+      "why": "The file ships 1440px frames only. The clamp maximum equals the Figma value exactly at 1440, so desktop is pixel-faithful and only narrower viewports scale down."
+    },
+    {
+      "frame": "all",
+      "what": "Peyda (the family named by every FA type variable) is replaced by Vazirmatn.",
+      "why": "Peyda is not licensed for this project; Vazirmatn is the stack the brief specifies. NOTE: public/fonts/vazirmatn ships Regular/Medium/Bold only, but the hero headline is SemiBold (600) — Vazirmatn-SemiBold.woff2 needs adding or the browser will synthesise it."
+    }
+  ],
+  "backendChangesRequested": [],
+  "derivedScreens": [
+    {
+      "route": "about",
+      "component": "resources/js/Pages/About.vue",
+      "reason": "No Sizdah frame exists. Controller and AboutController props remain live; page must render or /about 500s."
+    },
+    {
+      "route": "work.index",
+      "component": "resources/js/Pages/Work/Index.vue",
+      "reason": "No Sizdah frame exists."
+    },
+    {
+      "route": "work.show",
+      "component": "resources/js/Pages/Work/Show.vue",
+      "reason": "No Sizdah frame exists."
+    }
+  ]
+}
