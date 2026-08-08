@@ -203,3 +203,4 @@ assets are a manifest pending manual export, and the Vue page components
 (`resources/js/Pages/*.vue`) are the next concrete unit of work — the full
 data layer they'll consume (routes, controllers, transformers, seeded
 content, TypeScript contracts) is complete and covered by tests today.
+# sizdah
