@@ -253,3 +253,10 @@ export interface KpiItem {
   value: string
   label: string
 }
+
+/** A pill in a FilterChips row — Figma 268:5241. `value: null` is the "all" pill. */
+export interface FilterOption {
+  value: string | null
+  label: string
+  href: string
+}

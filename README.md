@@ -1,4 +1,4 @@
-# Sahra Marketing
+# Sizdah Marketing
 
 Multilingual (EN/FA/AR) marketing website — Laravel 11 · Inertia 2 · Vue 3 ·
 TypeScript · Tailwind · Filament 3.
@@ -50,7 +50,7 @@ Export the real images/logos/icons from Figma per `docs/ASSET-MANIFEST.md`,
 then verify nothing is missing:
 
 ```bash
-php artisan sahra:verify-assets
+php artisan sizdah:verify-assets
 ```
 
 ## 3. Running locally
@@ -132,7 +132,7 @@ Environment checklist for production:
 - [ ] Doran FaNum licensed files placed in `public/fonts/doran/` (optional but
       recommended for design fidelity)
 - [ ] All 44 assets in `docs/ASSET-MANIFEST.md` exported and
-      `php artisan sahra:verify-assets` passes
+      `php artisan sizdah:verify-assets` passes
 - [ ] `storage:link` run so `public/storage` resolves
 
 ## 6. Project structure

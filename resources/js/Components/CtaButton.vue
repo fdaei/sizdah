@@ -17,7 +17,11 @@ const props = withDefaults(
     label: string
     /** Inertia link target. Omit to render a <button>. */
     href?: string
-    variant?: 'solid' | 'outline'
+    /**
+     * `light` is the white-filled button on the final CTA card. The frame gives
+     * it a white label on a white fill — unreadable — so it takes an ink label.
+     */
+    variant?: 'solid' | 'outline' | 'light'
     /**
      * `md` is the hero/inline size (space24 / space12, 18px label). `lg` is the
      * standalone size the 404 and final-CTA frames use (space32 / space16,
@@ -59,9 +63,10 @@ const classes = computed(() => [
     :rel="external ? 'noopener noreferrer' : undefined"
     :class="[
       classes,
-      variant === 'solid'
-        ? 'bg-brand text-ink-1000 hover:bg-brand-900'
-        : 'border border-ink-600 text-paper hover:border-brand hover:text-brand',
+      variant === 'solid' && 'bg-brand text-ink-1000 hover:bg-brand-900',
+      variant === 'light' && 'bg-white text-ink-1000 hover:bg-ink-50',
+      variant === 'outline' &&
+        'border border-ink-600 text-paper hover:border-brand hover:text-brand',
       disabled && 'pointer-events-none opacity-50',
     ]"
     @click="$emit('click', $event)"

@@ -21,7 +21,7 @@
         "resources/images/sizdah/home/kpi-audience.svg",
         "resources/images/sizdah/home/kpi-retention.svg"
       ],
-      "notes": "Canonical dark Home. get_design_context on the frame exceeds the token cap and returns sparse metadata only, so it must be walked section by section. Full geometry for all 38 top-level regions has been cached; per-section node IDs are in sectionNodes below. IMPLEMENTED SO FAR: hero (268:2998 headline, 268:2996 paragraph, 268:2988 CTA row, 268:3030 illustration, 268:2966 mesh) and the KPI row (268:3026). Frame content ends at y=9170 of 11273 — the last ~2100px are empty canvas.",
+      "notes": "Canonical dark Home. get_design_context on the frame exceeds the token cap and returns sparse metadata only, so it must be walked section by section. Full geometry for all 38 top-level regions has been cached; per-section node IDs are in sectionNodes below. IMPLEMENTED SO FAR: hero (268:2998 headline, 268:2996 paragraph, 268:2988 CTA row, 268:3030 illustration, 268:2966 mesh) and the KPI row (268:3026). Frame content ends at y=9170 of 11273 — the last ~2100px are empty canvas. REMAINING: trust-proof logo strip (268:3002), services orbit band (268:3032), lead magnet (391:4795 — component built, not wired), projects showcase (268:3539/3540), 6-step process (268:3547 — ProcessStepCard built, not wired), why-us cards (268:3676), testimonials (268:3720), insights row (reuses BlogCard), final CTA heading (268:3797).",
       "sectionNodes": {
         "hero.eyebrow": "394:4964 — 221x18 text + 2px underline, NOT yet extracted",
         "hero.note": "268:2997 — 173x40 handwritten note + 268:3024 arrow doodle, NOT yet extracted",
@@ -56,9 +56,9 @@
       "route": "services",
       "component": "resources/js/Pages/Services.vue",
       "size": "1440x5333",
-      "status": "pending",
+      "status": "implemented",
       "assets": [],
-      "notes": "Four numbered service blocks (01-04: branding, content, marketing, social support) alternating image side, each with a tag list; final CTA card."
+      "notes": "Four numbered blocks alternating image side, each: 64px numeral, underlined 36px title, 20px paragraph, and the service's feature bullets as 'small title' rows with a glowing brand dot. Ends with the shared final CTA card. Numbering is positional and generated, so reordering services in Filament renumbers them. Images come from Service.image (CMS), not from the frame. DEVIATIONS: numerals are set in Maneli in the frame — not licensed, so they fall back to the display stack at 64px; the hand-drawn flourishes (322:5207) and the 'Group 21' badge (315:4998, 'جایی که هویت مسیر می‌سازد') are not placed."
     },
     {
       "nodeId": "268:4158",
@@ -67,9 +67,11 @@
       "route": "insights.index",
       "component": "resources/js/Pages/Insights/Index.vue",
       "size": "1440x3713",
-      "status": "pending",
-      "assets": [],
-      "notes": "Hero + 5 filter chips, featured row, then 2-up (612px) and 3-up (400px) blog card grids."
+      "status": "implemented",
+      "assets": [
+        "resources/images/sizdah/shared/calendar.svg"
+      ],
+      "notes": "Centred hero + filter pills, featured row (270:5253), then a 2-up row of 612 cards and two 3-up rows of 400 cards. Card counts are not pinned: the first two posts of a page render wide and the rest 3-up, so the rhythm survives any page size. DEVIATIONS: (a) pagination controls added — the frame has none but the listing is paginated server-side, so later pages would be unreachable; (b) the active pill is 17px in the frame vs 16px inactive, treated as a slip and both use the 16px body token; (c) the hero's small book doodle (299:7730) is not placed."
     },
     {
       "nodeId": "285:4590",
@@ -78,9 +80,14 @@
       "route": "insights.show",
       "component": "resources/js/Pages/Insights/Show.vue",
       "size": "1440x4844",
-      "status": "pending",
-      "assets": [],
-      "notes": "Article hero, 3 meta chips, 1248x624 cover, prose body, inline lead-magnet card, related posts (3 cards), final CTA."
+      "status": "implemented",
+      "assets": [
+        "resources/images/sizdah/blog/article-subject.svg",
+        "resources/images/sizdah/blog/article-author.svg",
+        "resources/images/sizdah/shared/final-cta-bg.png",
+        "resources/images/sizdah/shared/checklist-doodle.svg"
+      ],
+      "notes": "Centred title + 3 meta chips, 1248x624 cover, prose body, lead-magnet strip, related posts, final CTA. DEVIATION: the frame interleaves the lead magnet partway down the copy column (303:4455 at y=792); the body is one rich-text field, so splitting it there would mean parsing HTML — the strip is placed after the body instead. The date chip reuses the blog card's calendar export rather than composing the 10-fragment variant."
     },
     {
       "nodeId": "279:6325",
@@ -89,9 +96,25 @@
       "route": "contact",
       "component": "resources/js/Pages/Contact.vue",
       "size": "1440x1755",
-      "status": "pending",
-      "assets": [],
-      "notes": "Left info column (423px) + form (801px), social row of 5."
+      "status": "implemented",
+      "assets": [
+        "resources/images/sizdah/contact/contact-phone.svg",
+        "resources/images/sizdah/contact/contact-location.svg",
+        "resources/images/sizdah/contact/contact-email.svg",
+        "resources/images/sizdah/contact/field-brand.svg",
+        "resources/images/sizdah/contact/field-user.svg",
+        "resources/images/sizdah/contact/field-service.svg",
+        "resources/images/sizdah/contact/field-caret.svg",
+        "resources/images/sizdah/contact/flag-oman.svg",
+        "resources/images/sizdah/social/instagram.svg",
+        "resources/images/sizdah/social/linkedin.svg",
+        "resources/images/sizdah/social/whatsapp.svg",
+        "resources/images/sizdah/social/telegram.svg",
+        "resources/images/sizdah/social/x.svg",
+        "resources/images/sizdah/shared/wordmark-inline.svg",
+        "resources/images/sizdah/shared/up-right-arrow.svg"
+      ],
+      "notes": "Details card (423) + form card (801), then a 5-icon social row. Form field names match ContactSubmissionRequest 1:1 (brand_name, name, service_ids, phone, message + website / form_started_at traps) so no backend change was needed. `email` is in the request rules but absent from the frame and is not rendered. The services multi-select is a disclosure of checkboxes, not a native <select multiple>, which cannot be styled to the frame. The 'working with' icon is byte-identical to the Home KPI retention icon and is reused from there."
     },
     {
       "nodeId": "279:5924",
@@ -100,9 +123,9 @@
       "route": "legal.privacy",
       "component": "resources/js/Pages/Legal.vue",
       "size": "1440x2818",
-      "status": "pending",
+      "status": "implemented",
       "assets": [],
-      "notes": "Title + 8 numbered heading/body blocks. Shares the Legal component with terms."
+      "notes": "Title 48/Bold ink-50 + intro 20/Medium ink-200 in a 612 column, then 8 heading/body blocks on a 64px gap in the 1250 track. Body is the Page `content` rich text, so the blocks are authored in Filament — the frame's rhythm lives in .legal-prose (app.css). Frame copy still reads 'صحرا مارکتینگ' (Sahra), i.e. the legal text was not rebranded in Figma; the seeded copy must be."
     },
     {
       "nodeId": "281:6773",
@@ -110,10 +133,10 @@
       "figmaName": "term of use",
       "route": "legal.terms",
       "component": "resources/js/Pages/Legal.vue",
-      "size": "unknown",
-      "status": "pending",
+      "size": "1440x2443",
+      "status": "implemented",
       "assets": [],
-      "notes": "Same Legal shell as privacy; content differs."
+      "notes": "Verified by get_metadata: structurally identical to 279:5924 — same 612 header column at x=638, same 8 blocks at a 176px pitch (112 + 64 gap). No separate component needed; content differs only."
     },
     {
       "nodeId": "266:2825",
@@ -123,31 +146,166 @@
       "component": "resources/js/Pages/Error.vue",
       "size": "1440x1024",
       "size_note": "Header only, no footer in the frame.",
-      "status": "pending",
-      "assets": [],
-      "notes": "Illustration 725x544, heading + body + CTA. Rendered via bootstrap/app.php Inertia Error page for 403/404/500."
+      "status": "implemented",
+      "assets": [
+        "resources/images/sizdah/errors/lost-map.png"
+      ],
+      "notes": "Illustration 725x544 (exported 2x), heading + body + CTA. Rendered via bootstrap/app.php for 403/404/429/500/503; copy is keyed by status in lang/{locale}/errors.php. The art has the numerals ۴۰۴ drawn in, so it is shown for status 404 only — other statuses get the same layout without it. fa copy updated from the frame; en/ar flagged in TRANSLATIONS_TODO.md."
     }
   ],
   "sharedComponents": [
-    { "name": "CTA", "figmaNode": "21:2146", "file": "resources/js/Components/CtaButton.vue", "status": "built" },
-    { "name": "small title", "figmaNode": "268:3034", "file": "resources/js/Components/Eyebrow.vue", "status": "built" },
-    { "name": "KPIs", "figmaNode": "71:2145", "file": "resources/js/Components/StatCard.vue", "status": "built" },
-    { "name": "Header", "figmaNode": "268:3031", "file": "resources/js/Layouts/AppHeader.vue", "status": "built" },
-    { "name": "Footer", "figmaNode": "285:4592", "file": "resources/js/Layouts/AppFooter.vue", "status": "built" },
-    { "name": "logo", "figmaNode": "268:3017", "file": "resources/js/Components/ClientLogo.vue", "status": "pending" },
-    { "name": "blog card", "figmaNode": "277:5849", "file": "resources/js/Components/BlogCard.vue", "status": "pending", "notes": "Two widths: 400 (3-up) and 612 (2-up), both 540 tall." },
-    { "name": "why us card", "figmaNode": "268:3679", "file": "resources/js/Components/WhyUsCard.vue", "status": "pending", "notes": "312x216, 4-up." },
-    { "name": "process step card", "figmaNode": "268:3549", "file": "resources/js/Components/ProcessStepCard.vue", "status": "pending" },
-    { "name": "testimonial card", "figmaNode": "391:4899", "file": "resources/js/Components/TestimonialCard.vue", "status": "pending", "notes": "300x334." },
-    { "name": "project cards", "figmaNode": "268:3541", "file": "resources/js/Components/ProjectRow.vue", "status": "pending" },
-    { "name": "final CTA card", "figmaNode": "294:7672", "file": "resources/js/Components/FinalCtaCard.vue", "status": "pending", "notes": "1248x483. On the article and services frames; Home has only the heading." },
-    { "name": "lead magnet", "figmaNode": "303:4455", "file": "resources/js/Components/LeadMagnetBanner.vue", "status": "pending" },
-    { "name": "social", "figmaNode": "279:6487", "file": "resources/js/Components/SocialIcon.vue", "status": "pending" },
-    { "name": "info", "figmaNode": "292:7522", "file": "resources/js/Components/ArticleMeta.vue", "status": "pending" }
+    {
+      "name": "CTA",
+      "figmaNode": "21:2146",
+      "file": "resources/js/Components/CtaButton.vue",
+      "status": "built"
+    },
+    {
+      "name": "small title",
+      "figmaNode": "268:3034",
+      "file": "resources/js/Components/Eyebrow.vue",
+      "status": "built",
+      "notes": "Extended rather than duplicated: `size` (sm 14px brand kicker / lg 20px ink-50) and `marker` (square / glowing dot) props cover both uses in the file — 268:3034 and 315:4859."
+    },
+    {
+      "name": "KPIs",
+      "figmaNode": "71:2145",
+      "file": "resources/js/Components/StatCard.vue",
+      "status": "built"
+    },
+    {
+      "name": "Header",
+      "figmaNode": "268:3031",
+      "file": "resources/js/Layouts/AppHeader.vue",
+      "status": "built"
+    },
+    {
+      "name": "Footer",
+      "figmaNode": "285:4592",
+      "file": "resources/js/Layouts/AppFooter.vue",
+      "status": "built"
+    },
+    {
+      "name": "logo",
+      "figmaNode": "268:3017",
+      "file": "resources/js/Components/ClientLogo.vue",
+      "status": "pending"
+    },
+    {
+      "name": "why us card",
+      "figmaNode": "268:3679",
+      "file": "resources/js/Components/WhyUsCard.vue",
+      "status": "pending",
+      "notes": "312x216, 4-up."
+    },
+    {
+      "name": "process step card",
+      "figmaNode": "268:3549",
+      "file": "resources/js/Components/ProcessStepCard.vue",
+      "status": "pending"
+    },
+    {
+      "name": "testimonial card",
+      "figmaNode": "391:4899",
+      "file": "resources/js/Components/TestimonialCard.vue",
+      "status": "pending",
+      "notes": "300x334."
+    },
+    {
+      "name": "project cards",
+      "figmaNode": "268:3541",
+      "file": "resources/js/Components/ProjectRow.vue",
+      "status": "pending"
+    },
+    {
+      "name": "info",
+      "figmaNode": "292:7522",
+      "file": "resources/js/Components/ArticleMeta.vue",
+      "status": "pending"
+    },
+    {
+      "name": "social",
+      "figmaNode": "279:6487",
+      "file": "resources/js/Components/SocialIcon.vue",
+      "status": "built",
+      "notes": "56px chip, platform->glyph map over settings.socialLinks; five glyphs shipped."
+    },
+    {
+      "name": "blog card",
+      "figmaNode": "277:5849",
+      "file": "resources/js/Components/BlogCard.vue",
+      "status": "built",
+      "notes": "Image is 400px tall in both widths, so aspect-square (3-up) / aspect-[612/400] (wide)."
+    },
+    {
+      "name": "featured post",
+      "figmaNode": "270:5253",
+      "file": "resources/js/Components/FeaturedPostCard.vue",
+      "status": "built",
+      "notes": "1248x491 row, category pill + copy column + 612x459 image."
+    },
+    {
+      "name": "post meta",
+      "figmaNode": "276:5728",
+      "file": "resources/js/Components/PostMeta.vue",
+      "status": "built",
+      "notes": "Date + dot + reading time; shared by blog card and featured row."
+    },
+    {
+      "name": "filter chips",
+      "figmaNode": "268:5241",
+      "file": "resources/js/Components/FilterChips.vue",
+      "status": "built",
+      "notes": "Real links so filtered listings stay shareable."
+    },
+    {
+      "name": "info (article meta)",
+      "figmaNode": "292:7522",
+      "file": "resources/js/Components/ArticleMeta.vue",
+      "status": "built",
+      "notes": "Subject / author / date chips; drops a chip when the post lacks the value."
+    },
+    {
+      "name": "final CTA card",
+      "figmaNode": "294:7672",
+      "file": "resources/js/Components/FinalCtaCard.vue",
+      "status": "built",
+      "notes": "NOT REBRANDED IN FIGMA: still Sahra English Poppins copy, Sahra gold #BD933B, and a white label on a white fill. Layout and artwork reproduced; copy comes from the CMS section, eyebrow takes Sizdah brand, button gets an ink label so it is readable."
+    },
+    {
+      "name": "lead magnet",
+      "figmaNode": "303:4455",
+      "file": "resources/js/Components/LeadMagnetBanner.vue",
+      "status": "built",
+      "notes": "The one cream surface in the design. Frame has a button but no email field, so it links to the section CTA rather than posting inline."
+    },
+    {
+      "name": "project card",
+      "figmaNode": null,
+      "file": "resources/js/Components/ProjectCard.vue",
+      "status": "derived",
+      "notes": "No frame exists; built from the blog card geometry and the established surface/hover treatment."
+    },
+    {
+      "name": "process step card",
+      "figmaNode": "268:3549",
+      "file": "resources/js/Components/ProcessStepCard.vue",
+      "status": "built-not-wired",
+      "notes": "Hand-drawn notched outline shipped as an SVG behind the content; per-step glyph comes from SectionItem.icon since the six differ."
+    }
   ],
   "tokensAdded": [
     "fontSize.hero-line — clamp(28px,5vw,48px)/1.27/600, measured off 268:2999 (48px text in a 61px box)",
-    "fontSize.hero-accent — clamp(36px,6.5vw,64px)/1.27/600, measured off 268:3000 (64px text in an 81px box)"
+    "fontSize.hero-accent — clamp(36px,6.5vw,64px)/1.27/600, measured off 268:3000 (64px text in an 81px box)",
+    "fontSize heading-lg 32px/1.27/500 (404 title 266:2831)",
+    "borderRadius md 12px (form submit) and xl 24px (contact cards)",
+    "borderWidth 3px (contact cards and every form control)",
+    "CtaButton gained a size variant: md (space24/12, 18px) and lg (space32/16, 20px)",
+    "fontSize heading-lg retuned to 30px (legal h2) and heading-xl added at 32px (404 title)",
+    ".surface-glow (app.css) — the 3-layer fill shared by both contact cards and the featured row; angle via --glow-angle",
+    "CtaButton gained a `light` variant (white fill, ink label) for the final CTA card",
+    ".rich-prose (app.css) — long-form body rhythm shared by legal pages and article copy",
+    "fontSize display-xl 64px (service numerals); .eyebrow--lg / .eyebrow--dot modifiers"
   ],
   "deviations": [
     {
@@ -171,17 +329,28 @@
     {
       "route": "about",
       "component": "resources/js/Pages/About.vue",
-      "reason": "No Sizdah frame exists. Controller and AboutController props remain live; page must render or /about 500s."
+      "reason": "No Sizdah frame exists. Controller and AboutController props remain live; page must render or /about 500s.",
+      "status": "implemented",
+      "notes": "Built from the design system the real frames establish, not invented: Work index reuses the blog listing hero + pill + grid rhythm; Work show renders every field the controller already returns using the same card treatments; About renders the `about` Page sections generically in authored order so editors keep control. All three are clearly marked DERIVED in their docblocks and should be replaced when frames are designed."
     },
     {
       "route": "work.index",
       "component": "resources/js/Pages/Work/Index.vue",
-      "reason": "No Sizdah frame exists."
+      "reason": "No Sizdah frame exists.",
+      "status": "implemented",
+      "notes": "Built from the design system the real frames establish, not invented: Work index reuses the blog listing hero + pill + grid rhythm; Work show renders every field the controller already returns using the same card treatments; About renders the `about` Page sections generically in authored order so editors keep control. All three are clearly marked DERIVED in their docblocks and should be replaced when frames are designed."
     },
     {
       "route": "work.show",
       "component": "resources/js/Pages/Work/Show.vue",
-      "reason": "No Sizdah frame exists."
+      "reason": "No Sizdah frame exists.",
+      "status": "implemented",
+      "notes": "Built from the design system the real frames establish, not invented: Work index reuses the blog listing hero + pill + grid rhythm; Work show renders every field the controller already returns using the same card treatments; About renders the `about` Page sections generically in authored order so editors keep control. All three are clearly marked DERIVED in their docblocks and should be replaced when frames are designed."
     }
+  ],
+  "nextUp": [
+    "Wire Home sections: trust proof, services orbit, lead magnet, projects, process, why-us, testimonials, insights, final CTA heading",
+    "Extract why-us card (268:3676) and testimonial card (391:4899) — node ids for the card bodies still need locating",
+    "Seeder for Sizdah editorial copy (home sections, services + features, legal bodies) across fa/en/ar"
   ]
 }

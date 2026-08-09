@@ -19,6 +19,7 @@ return [
     'previous'            => 'قبلی',
     'pagination'          => 'صفحه‌بندی',
     'all'                 => 'همه',
+    'team'              => 'تیم ما',
     'search'              => 'جستجو',
     'loading'             => 'در حال بارگذاری…',
     'sending'             => 'در حال ارسال…',

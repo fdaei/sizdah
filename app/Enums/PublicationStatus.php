@@ -11,7 +11,7 @@ use Filament\Support\Contracts\HasLabel;
 /**
  * Publication state for Post, Project and Page.
  *
- * `Scheduled` rows carry a future `published_at`. The sahra:publish-scheduled
+ * `Scheduled` rows carry a future `published_at`. The sizdah:publish-scheduled
  * command (routes/console.php, every five minutes) promotes them to Published
  * once that timestamp passes, so the public scopes only ever need to check
  * status = published AND published_at <= now().

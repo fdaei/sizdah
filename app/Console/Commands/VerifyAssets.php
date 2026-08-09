@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\File;
  */
 final class VerifyAssets extends Command
 {
-    protected $signature = 'sahra:verify-assets';
+    protected $signature = 'sizdah:verify-assets';
 
     protected $description = 'Check that every asset listed in the manifest exists on disk';
 

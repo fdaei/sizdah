@@ -10,6 +10,7 @@ return [
         'brand'            => 'Brand Name',
         'brand_placeholder' => 'Your brand name',
         'phone'            => 'Phone Number',
+        'phone_placeholder'      => '123 456 78',
         'services'         => 'Services',
         'services_placeholder' => 'Select one or more services',
         'message'          => 'Short Message',
@@ -26,7 +27,7 @@ return [
         'location'     => 'Location',
         'email'        => 'Email',
         'working_with' => 'Working With',
-        'follow'       => 'Follow Sahra for ideas, projects, and brand insights',
+        'follow'       => 'را برای ایده‌های خلاقانه و نگاه‌های تازه به برند در شبکه‌های اجتماعی دنبال کنید:',
     ],
 
     'newsletter' => [

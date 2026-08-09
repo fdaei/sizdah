@@ -88,12 +88,23 @@ export default {
         24: '96px',
       },
 
-      // Figma radiusXS / radiusSM / radiusLG / radiusROUND
+      // Figma radiusXS / radiusSM / radiusMD / radiusLG / radiusROUND.
+      // `xl` is not a Figma radius token — the contact cards (279:6409,
+      // 279:6439) round on space24 instead, which is the only 24px corner in
+      // the file. Kept named so it reads as deliberate.
       borderRadius: {
         xs: '4px',
         sm: '8px',
+        md: '12px',
         lg: '16px',
+        xl: '24px',
         round: '1000px',
+      },
+
+      // The contact cards and every form control outline on 3px, which is not
+      // one of Tailwind's defaults.
+      borderWidth: {
+        3: '3px',
       },
 
       fontFamily: {
@@ -128,12 +139,16 @@ export default {
         'title-lg': ['22px', { lineHeight: '1.5', fontWeight: '500' }],
         'heading-sm': ['24px', { lineHeight: '1.5', fontWeight: '500' }],
         'heading-md': ['28px', { lineHeight: '1.5', fontWeight: '500' }],
-        // Standalone page headings — 404 (266:2831) and the section titles that
-        // sit above a centred copy block. Medium, set at leading-normal.
-        'heading-lg': ['32px', { lineHeight: '1.27', fontWeight: '500' }],
+        // Standalone headings, set at leading-normal rather than 1.5:
+        // `lg` is the legal-page h2 (279:6728), `xl` the 404 title (266:2831).
+        'heading-lg': ['30px', { lineHeight: '1.27', fontWeight: '500' }],
+        'heading-xl': ['32px', { lineHeight: '1.27', fontWeight: '500' }],
         'display-sm': ['36px', { lineHeight: '1.5', fontWeight: '700' }],
         'display-md': ['40px', { lineHeight: '1.5', fontWeight: '700' }],
         'display-lg': ['48px', { lineHeight: '1.5', fontWeight: '700' }],
+        // Service block numerals (315:4854). The frame sets these in Maneli,
+        // which is not licensed here, so they take the display stack.
+        'display-xl': ['64px', { lineHeight: '1', fontWeight: '400' }],
 
         /*
          | Page headlines are a separate style from the scale above: SemiBold,

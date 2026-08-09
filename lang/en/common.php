@@ -19,6 +19,7 @@ return [
     'previous'            => 'Previous',
     'pagination'          => 'Pagination',
     'all'                 => 'All',
+    'team'              => 'Our team',
     'search'              => 'Search',
     'loading'             => 'Loading…',
     'sending'             => 'Sending…',

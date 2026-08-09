@@ -221,5 +221,5 @@ through `/v1/files/$FILE_KEY/images` using the fill's `imageRef` rather than
 - [ ] Poppins woff2 (script)
 - [ ] Doran FaNum woff2 (licensed — client-supplied)
 
-Run `php artisan sahra:verify-assets` after exporting; it walks this manifest and reports
+Run `php artisan sizdah:verify-assets` after exporting; it walks this manifest and reports
 anything missing.

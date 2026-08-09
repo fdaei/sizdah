@@ -14,5 +14,5 @@ Artisan::command('inspire', function (): void {
 | Publishes posts and projects whose scheduled publish_at has passed.
 | Run via: php artisan schedule:work  (local)  /  cron (production)
 */
-Schedule::command('sahra:publish-scheduled')->everyFiveMinutes();
+Schedule::command('sizdah:publish-scheduled')->everyFiveMinutes();
 Schedule::command('sitemap:generate')->dailyAt('03:00');

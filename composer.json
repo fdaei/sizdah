@@ -1,7 +1,7 @@
 {
-    "name": "sahra/marketing",
+    "name": "sizdah/marketing",
     "type": "project",
-    "description": "Sahra Marketing — multilingual marketing site (Laravel + Inertia + Vue 3 + Filament).",
+    "description": "Sizdah Marketing — multilingual marketing site (Laravel + Inertia + Vue 3 + Filament).",
     "keywords": ["laravel", "inertia", "vue", "filament", "multilingual"],
     "license": "proprietary",
     "require": {

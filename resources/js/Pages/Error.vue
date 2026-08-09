@@ -49,7 +49,7 @@ const message = computed(() => t(`errors.${key.value}.message`))
 
       <div class="flex w-full max-w-[506px] flex-col items-center gap-8">
         <div class="flex flex-col items-center gap-4">
-          <h1 class="text-heading-lg text-brand-50">
+          <h1 class="text-heading-xl text-brand-50">
             {{ title }}
           </h1>
           <p class="text-title-sm leading-[normal] text-ink-200">

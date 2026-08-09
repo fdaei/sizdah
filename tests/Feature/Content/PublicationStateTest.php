@@ -50,7 +50,7 @@ it('promotes a due scheduled project via the publish command', function (): void
     ]);
     $project->setTranslations(['en' => ['title' => 'Due', 'slug' => 'due-project', 'excerpt' => 'x']]);
 
-    $this->artisan('sahra:publish-scheduled')->assertSuccessful();
+    $this->artisan('sizdah:publish-scheduled')->assertSuccessful();
 
     expect($project->fresh()->status)->toBe(\App\Enums\PublicationStatus::Published);
 });

@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 
 return [
 
-    'name' => env('APP_NAME', 'Sahra'),
+    'name' => env('APP_NAME', 'Sizdah'),
 
     'env' => env('APP_ENV', 'production'),
 

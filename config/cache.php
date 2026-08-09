@@ -35,6 +35,6 @@ return [
 
     ],
 
-    'prefix' => env('CACHE_PREFIX', Illuminate\Support\Str::slug((string) env('APP_NAME', 'sahra'), '_').'_cache_'),
+    'prefix' => env('CACHE_PREFIX', Illuminate\Support\Str::slug((string) env('APP_NAME', 'sizdah'), '_').'_cache_'),
 
 ];

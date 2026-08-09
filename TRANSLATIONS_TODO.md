@@ -32,3 +32,10 @@ The 404 illustration (`resources/images/sizdah/errors/lost-map.png`) has the
 numerals ۴۰۴ drawn into the artwork, so it reads as Persian digits in every
 locale. Replacing it for en/ar needs a new export from design — it cannot be
 fixed in code.
+
+## Added during the Contact frame
+
+| Key | Action taken | Needs |
+| --- | --- | --- |
+| `forms.details.follow` | The sentence changed structure — the wordmark is now a separate image placed before the text, so the string must no longer contain the brand name. The old en/ar copy still said "Sahra" / "صحراء", which is both the wrong brand and now duplicated. Both locales were set to the Persian value rather than machine translated. | en, ar |
+| `forms.contact.phone_placeholder` | New key. en/ar received Latin and Arabic-Indic digits respectively — a numeral-system choice, not a translation. | review only |

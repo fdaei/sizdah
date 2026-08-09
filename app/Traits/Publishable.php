@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
  * Draft / Scheduled / Published lifecycle.
  *
  * A row is publicly visible only when status = published AND published_at is
- * in the past. Scheduled rows are promoted by `sahra:publish-scheduled`
+ * in the past. Scheduled rows are promoted by `sizdah:publish-scheduled`
  * (routes/console.php), but the `published()` scope also checks the timestamp
  * so a missed cron run can never leak future content.
  *

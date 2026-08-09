@@ -102,9 +102,42 @@
     @apply inline-block h-2 w-2 shrink-0 rotate-45 rounded-[1px] bg-brand;
   }
 
+  /* Service feature bullets — 20px ink copy, gap4 to the marker (315:4859). */
+  .eyebrow--lg {
+    @apply gap-1 text-title-md text-ink-50;
+  }
+
+  /*
+   | The same 8px marker as a glowing disc: brand fill, 2px ink-800 rim and a
+   | symmetric Yellow/1000 bloom. Border-box, so it stays 8px overall.
+   */
+  .eyebrow--dot::before {
+    @apply rotate-0 rounded-round border-2 border-ink-800 bg-brand;
+    box-shadow:
+      -2px -2px 12px 0 rgb(245 185 64 / 70%),
+      2px 2px 12px 0 rgb(245 185 64 / 70%);
+  }
+
   /* Card surfaces sit one step off the page ground. */
   .card-surface {
     @apply rounded-lg border border-ink-800 bg-ink-900;
+  }
+
+  /*
+   | The large outlined cards (contact details 279:6409, contact form 279:6439,
+   | featured post 270:5253) all stack the same three fills: a 20% black wash, a
+   | raking brand glow, and an 80% ink-1000 ground. Only the glow's angle
+   | differs per card, so it is a custom property set at the call site.
+   */
+  .surface-glow {
+    background-image:
+      linear-gradient(0deg, rgb(0 0 0 / 20%), rgb(0 0 0 / 20%)),
+      linear-gradient(
+        var(--glow-angle, -20.03deg),
+        rgb(248 185 55 / 0) 2.32%,
+        rgb(248 185 55 / 10%) 100%
+      ),
+      linear-gradient(0deg, rgb(20 20 20 / 80%), rgb(20 20 20 / 80%));
   }
 
   /*
@@ -115,6 +148,56 @@
   .motion-ready .will-reveal {
     opacity: 0;
     transform: translateY(24px);
+  }
+
+  /*
+   | Long-form bodies: legal pages (279:5924, 281:6773) and article copy
+   | (294:7566). All are admin-authored rich text, so
+   | the frame's rhythm is expressed as element rules rather than per-block
+   | markup: 64px between blocks, 24px from a heading to its copy, 32px between
+   | paragraphs inside one block.
+   */
+  .rich-prose > h2 {
+    @apply text-heading-lg text-ink-50;
+    margin-block-start: 64px;
+    margin-block-end: 24px;
+  }
+
+  .rich-prose > :first-child {
+    margin-block-start: 0;
+  }
+
+  .rich-prose > h3 {
+    @apply text-heading-sm text-ink-50;
+    margin-block-start: 32px;
+    margin-block-end: 16px;
+  }
+
+  .rich-prose p,
+  .rich-prose li {
+    @apply text-title-md text-ink-200;
+  }
+
+  .rich-prose p + p {
+    margin-block-start: 32px;
+  }
+
+  .rich-prose ul,
+  .rich-prose ol {
+    @apply flex list-inside flex-col gap-2;
+    margin-block-start: 24px;
+  }
+
+  .rich-prose ul {
+    @apply list-disc;
+  }
+
+  .rich-prose ol {
+    @apply list-decimal;
+  }
+
+  .rich-prose a {
+    @apply text-brand underline underline-offset-4;
   }
 
   .marquee-track {

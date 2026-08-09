@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\DB;
  */
 final class PublishScheduledContent extends Command
 {
-    protected $signature = 'sahra:publish-scheduled';
+    protected $signature = 'sizdah:publish-scheduled';
 
     protected $description = 'Publish scheduled pages, projects, services and posts whose time has come';
 
