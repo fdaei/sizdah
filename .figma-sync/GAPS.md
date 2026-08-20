@@ -15,7 +15,13 @@ the *old* structure. This rebuild targets the *current* frames only; the old
 audit's node IDs are not reused. `docs/` should be regenerated or archived at
 end of run.
 
-## G2 — Duplicate page frames; canonical not yet resolved  (severity: med)
+## G2 — Duplicate page frames  [RESOLVED via FIGMA/state.json + live re-read]  (severity: med)
+Home canonical = `268:2962` (DARK; `canonicalTheme:dark`); `13:2766` is the
+light twin (superseded). blog: `268:4158` = Insights index, `285:4590` =
+Insights show (single article, despite both named "blog list"). Remaining
+projects/blog 1024h frames still to confirm at Phase 5. Original note below.
+
+### (original) Duplicate page frames; canonical not yet resolved
 The single page carries multiple same-named page frames. Canonical pick is
 deferred to Phase 5 (resolved by screenshot at build time, cheapest point):
 - Home ×4: `13:2766` (11273h), `268:2962` (9919h), `504:7399` (11273h), `450:4908` (11273h)
@@ -37,10 +43,29 @@ PROJECT_ROOT / STACK / LOCALES / TARGET_BREAKPOINTS were empty in the template.
 Filled from detection: root `/home/fdaei/project/my/sizdah`; stack per
 PROGRESS.md; locales en(LTR)/fa(RTL)/ar(RTL); breakpoints per G3.
 
-## G5 — Single-blog (Insights/Show) & single-project source frames unconfirmed  (severity: med)
-"case study" `336:5374` is the likely Single-project (Work/Show) source.
-Single-blog (Insights/Show) has no obviously-named frame — candidates are the
-tall blog frames or one of the 1024h `blog list` frames. Confirm at Phase 5.
+## G5 — Single-blog (Insights/Show) source  [RESOLVED]  (severity: med)
+Insights/Show = `285:4590` ("blog list" by name, single-article by content, per
+FIGMA/state.json). Single-project (Work/Show) = "case study" `336:5374` — NEW,
+see G7.
+
+## G7 — NEW frames for About / Work / case study (previously undesigned)  (severity: HIGH — primary rebuild value)
+FIGMA/state.json (last sync) records: *"No frames exist for About, Work index,
+Work show — those routes have controllers but no Sizdah design."* The current
+live file now DOES contain them:
+- about `336:5623` (1440×4021)
+- projects / Work index `222:1989` and `261:2545` (1440×4656) + `226:3080` (short)
+- case study / Work show `336:5374` (1440×7403)
+These pages were previously built *blind* (from controller data, no frame). They
+are the highest-value targets of this rebuild — real designs now exist. Verify
+which projects frame is canonical at Phase 5.
+
+## G8 — FA/AR font: design specifies "Peyda", not self-hosted  (severity: med)
+Figma binds every FA text style to **Peyda**. Self-hosted faces are poppins,
+vazirmatn, doran, idealist — no Peyda. Existing config maps arabic→Vazirmatn
+(near-identical metrics). CLAUDE.md separately claims a Doran/Idealist display
+stack. Keeping Vazirmatn fallback (working, licensed). Human decision: license
+Peyda, or confirm Vazirmatn/Doran as the intended FA face. Line-height: raw
+variable says 100% but laid-out nodes measure ~1.5 — 1.5 retained (evidence-based).
 
 ## G6 — i18n: file is English-only  (severity: low)
 Frames render English copy. fa/ar strings are NOT in the design; they come from

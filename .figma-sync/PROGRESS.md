@@ -1,10 +1,16 @@
 # Figma Sync — Progress
 
-## Current phase: 2 — Design tokens
-## Last completed unit: Phase 1 inventory / MANIFEST (page 0:1)
-## Next unit: get_variable_defs on 0:1 + representative frames → Tailwind token layer
-## Stack: Laravel 12.61 + Inertia 2 + Vue 3.5 (TS, strict) + Tailwind 3.4 + Vite 6; Filament 3 admin. Locales: en (LTR), fa (RTL), ar (RTL). Assets → public/. Fonts self-hosted in resources/css/fonts.css.
-## Blockers: none
+## Current phase: 2 — Design tokens (token values done; awaiting scope confirmation before Phase 3+)
+## Last completed unit: token layer enrichment — added gold/*, warm/* (lowercase black/*), primary-black, space0 (tailwind.config.js), verified against live variables (13:2766/308:4492/336:5623)
+## Next unit: AWAIT USER STEER on refined scope (see report). Then: /design-tokens swatch route + font decision (G8), or pivot to About/Work/case-study new-frame builds (G7)
+## Stack: Laravel 12.61 + Inertia 2 + Vue 3.5 (TS, strict) + Tailwind 3.4 + Vite 6; Filament 3 admin. Locales: en (LTR), fa (RTL), ar (RTL). Assets → public/. Fonts self-hosted (public/fonts: poppins, vazirmatn, doran, idealist).
+## Blockers: scope re-evaluation — existing pages are largely faithful to CURRENT canonical frames; real new work is G7 (About/Work/case-study now designed). Reported to user 2026-08-20.
+
+## Key facts locked
+- Home canonical: 268:2962 (dark). Light twin 13:2766 superseded.
+- Insights: index 268:4158, show 285:4590. Services 308:4492.
+- NEW live frames (were undesigned): about 336:5623, projects 222:1989/261:2545, case study (Work/show) 336:5374.
+- Token line-height = 1.5 (measured), NOT raw variable 100%.
 
 ---
 

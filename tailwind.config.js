@@ -72,10 +72,42 @@ export default {
 
         // Figma "White" — an off-white, not #FFF. Body copy on dark.
         paper: '#F1F1F1',
+
+        /*
+         | Figma "gold/*" + "primary gold" — a WARM gold, distinct from the
+         | "Yellow/*" (brand) ramp. #bd933b is used for hairline rules, small
+         | accents and the price/eyebrow display colour; gold/100 and /200 are
+         | the two cream surfaces. Missing from the earlier config; present in
+         | live variables (13:2766, 308:4492).
+         */
+        gold: {
+          DEFAULT: '#bd933b',
+          100: '#F9F5EC',
+          200: '#F2E9D8',
+        },
+
+        /*
+         | Figma lowercase "black/*" — a WARM neutral ramp (green-tinted greys),
+         | separate from the cool "Black/*" → `ink` ramp. The service/404 section
+         | grounds sample as rgb(73,68,57), i.e. this warm family, not `ink`.
+         | 1000 = Figma "primary black" #231f20 (warm near-black ground).
+         */
+        warm: {
+          100: '#E9E9E9',
+          200: '#D3D2D2',
+          300: '#BDBCBD',
+          500: '#918F90',
+          600: '#7B7979',
+          700: '#656363',
+          800: '#4F4C4D',
+          900: '#393637',
+          1000: '#231f20',
+        },
       },
 
-      // Figma space4 … space96
+      // Figma space0 … space96
       spacing: {
+        0: '0px',
         1: '4px',
         2: '8px',
         3: '12px',
