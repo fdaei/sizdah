@@ -136,19 +136,19 @@ return new class extends Migration
         return [
             [
                 'en' => [
-                    'title' => 'Sahra Essential', 'label' => 'Starts From', 'value' => '199',
+                    'title' => 'Sizdah Essential', 'label' => 'Starts From', 'value' => '199',
                     'suffix' => 'OMR / 1 Month', 'description' => 'A clear foundation for your brand presence',
                     'features' => ['Content Planning', 'Visual Direction', 'Social Media Support', 'Monthly Execution'],
                     'footer' => 'Best for small businesses',
                 ],
                 'fa' => [
-                    'title' => 'صحرا اسنشال', 'label' => 'شروع از', 'value' => '۱۹۹',
+                    'title' => 'سیزده اسنشال', 'label' => 'شروع از', 'value' => '۱۹۹',
                     'suffix' => 'ریال عمان / ۱ ماه', 'description' => 'پایه‌ای شفاف برای حضور برند شما',
                     'features' => ['برنامه‌ریزی محتوا', 'جهت‌گیری بصری', 'پشتیبانی شبکه‌های اجتماعی', 'اجرای ماهانه'],
                     'footer' => 'مناسب کسب‌وکارهای کوچک',
                 ],
                 'ar' => [
-                    'title' => 'صحراء الأساسية', 'label' => 'تبدأ من', 'value' => '199',
+                    'title' => 'سيزده الأساسية', 'label' => 'تبدأ من', 'value' => '199',
                     'suffix' => 'ر.ع / شهر واحد', 'description' => 'أساس واضح لحضور علامتك',
                     'features' => ['تخطيط المحتوى', 'التوجيه البصري', 'دعم وسائل التواصل', 'التنفيذ الشهري'],
                     'footer' => 'الأفضل للشركات الصغيرة',
@@ -156,21 +156,21 @@ return new class extends Migration
             ],
             [
                 'en' => [
-                    'title' => 'Sahra Growth', 'label' => 'Starts From', 'value' => '499',
+                    'title' => 'Sizdah Growth', 'label' => 'Starts From', 'value' => '499',
                     'suffix' => 'OMR / 1 Month', 'description' => 'A structured approach to build and grow your presence',
                     'badge' => 'Most Popular',
                     'features' => ['Content Strategy', 'Brand-Aligned Content', 'Campaign Support', 'Performance Optimization'],
                     'footer' => 'Best for growing brands',
                 ],
                 'fa' => [
-                    'title' => 'صحرا گروث', 'label' => 'شروع از', 'value' => '۴۹۹',
+                    'title' => 'سیزده گروث', 'label' => 'شروع از', 'value' => '۴۹۹',
                     'suffix' => 'ریال عمان / ۱ ماه', 'description' => 'رویکردی ساختاریافته برای ساخت و رشد حضور برند',
                     'badge' => 'محبوب‌ترین',
                     'features' => ['استراتژی محتوا', 'محتوای هم‌راستا با برند', 'پشتیبانی کمپین', 'بهینه‌سازی عملکرد'],
                     'footer' => 'مناسب برندهای در حال رشد',
                 ],
                 'ar' => [
-                    'title' => 'صحراء للنمو', 'label' => 'تبدأ من', 'value' => '499',
+                    'title' => 'سيزده للنمو', 'label' => 'تبدأ من', 'value' => '499',
                     'suffix' => 'ر.ع / شهر واحد', 'description' => 'نهج منظم لبناء حضورك وتنميته',
                     'badge' => 'الأكثر شعبية',
                     'features' => ['استراتيجية المحتوى', 'محتوى متوافق مع العلامة', 'دعم الحملات', 'تحسين الأداء'],
@@ -179,19 +179,19 @@ return new class extends Migration
             ],
             [
                 'en' => [
-                    'title' => 'Sahra Horizon', 'label' => 'Starts From', 'value' => '749',
+                    'title' => 'Sizdah Horizon', 'label' => 'Starts From', 'value' => '749',
                     'suffix' => 'OMR / 1 Month', 'description' => 'A complete partnership for brand growth',
                     'features' => ['Full Marketing Strategy', 'Brand Development', 'Campaign Planning', 'Continuous Optimization'],
                     'footer' => 'Best for scaling brands',
                 ],
                 'fa' => [
-                    'title' => 'صحرا هورایزن', 'label' => 'شروع از', 'value' => '۷۴۹',
+                    'title' => 'سیزده هورایزن', 'label' => 'شروع از', 'value' => '۷۴۹',
                     'suffix' => 'ریال عمان / ۱ ماه', 'description' => 'همکاری کامل برای رشد برند',
                     'features' => ['استراتژی کامل بازاریابی', 'توسعه برند', 'برنامه‌ریزی کمپین', 'بهینه‌سازی مستمر'],
                     'footer' => 'مناسب برندهای مقیاس‌پذیر',
                 ],
                 'ar' => [
-                    'title' => 'صحراء الأفق', 'label' => 'تبدأ من', 'value' => '749',
+                    'title' => 'سيزده الأفق', 'label' => 'تبدأ من', 'value' => '749',
                     'suffix' => 'ر.ع / شهر واحد', 'description' => 'شراكة متكاملة لنمو العلامة',
                     'features' => ['استراتيجية تسويق كاملة', 'تطوير العلامة', 'تخطيط الحملات', 'تحسين مستمر'],
                     'footer' => 'الأفضل للعلامات المتوسعة',

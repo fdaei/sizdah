@@ -42,7 +42,7 @@ final class SiteSettingsSeeder extends Seeder
         $values = [
             'site_name' => [
                 'translatable' => true,
-                'value' => ['en' => 'Sahra', 'fa' => 'صحرا', 'ar' => 'صحراء'],
+                'value' => ['en' => 'Sizdah', 'fa' => 'سیزده', 'ar' => 'سيزده'],
             ],
             'tagline' => [
                 'translatable' => true,
@@ -60,6 +60,12 @@ final class SiteSettingsSeeder extends Seeder
                     'ar' => 'نساعد العلامات التجارية على الانتقال من المحتوى المبعثر إلى اتجاه منظم.',
                 ],
             ],
+            /*
+             | TODO(sizdah): the three contact facts below and `contact_location`
+             | are still Sahra's Oman details. They are real-world values, not
+             | design copy, so they are left as-is rather than guessed — replace
+             | them with Sizdah's own number, address and inbox.
+             */
             'contact_whatsapp' => ['translatable' => false, 'value' => '+96 7781 1213'],
             'contact_phone' => ['translatable' => false, 'value' => '+96 7781 1213'],
             'contact_email' => ['translatable' => false, 'value' => 'Sahramarketing@gmail.com'],
@@ -70,31 +76,31 @@ final class SiteSettingsSeeder extends Seeder
             'contact_working_with' => [
                 'translatable' => true,
                 'value' => [
-                    'en' => 'Brands in Oman and Beyond',
-                    'fa' => 'برندهایی در عمان و فراتر از آن',
-                    'ar' => 'علامات تجارية في عُمان وخارجها',
+                    'en' => 'Brands ready to grow',
+                    'fa' => 'برندهایی که آماده رشدند',
+                    'ar' => 'علامات مستعدة للنمو',
                 ],
             ],
             'seo_default_title' => [
                 'translatable' => true,
                 'value' => [
-                    'en' => 'Sahra — Digital Marketing Agency in Muscat',
-                    'fa' => 'صحرا — آژانس بازاریابی دیجیتال در مسقط',
-                    'ar' => 'صحراء — وكالة تسويق رقمي في مسقط',
+                    'en' => 'Sizdah — Branding & Digital Marketing Agency',
+                    'fa' => 'سیزده — آژانس دیجیتال مارکتینگ و برندینگ',
+                    'ar' => 'سيزده — وكالة الهوية والتسويق الرقمي',
                 ],
             ],
             'seo_default_description' => [
                 'translatable' => true,
                 'value' => [
-                    'en' => 'Sahra helps businesses in Oman create stronger brand presence through strategy, content, branding, video, and digital marketing.',
-                    'fa' => 'صحرا به کسب‌وکارها در عمان کمک می‌کند تا از طریق استراتژی، محتوا، برندینگ و بازاریابی دیجیتال حضور برند قوی‌تری بسازند.',
-                    'ar' => 'تساعد صحراء الشركات في عُمان على بناء حضور أقوى لعلامتها التجارية من خلال الاستراتيجية والمحتوى والهوية والتسويق الرقمي.',
+                    'en' => 'By combining strategy, design, content and advertising, Sizdah helps your brand get seen, win more customers and grow.',
+                    'fa' => 'با ترکیب استراتژی، طراحی، محتوا و تبلیغات، کمک می‌کنیم برند شما بهتر دیده شود، مشتریان بیشتری جذب کند و رشد کند.',
+                    'ar' => 'بمزج الاستراتيجية والتصميم والمحتوى والإعلانات، نساعد علامتك على الظهور واكتساب عملاء أكثر والنمو.',
                 ],
             ],
             'seo_default_image' => ['translatable' => false, 'value' => null],
             'seo_organization_name' => [
                 'translatable' => true,
-                'value' => ['en' => 'Sahra', 'fa' => 'صحرا', 'ar' => 'صحراء'],
+                'value' => ['en' => 'Sizdah', 'fa' => 'سیزده', 'ar' => 'سيزده'],
             ],
         ];
 
@@ -115,11 +121,11 @@ final class SiteSettingsSeeder extends Seeder
     private function socialLinks(): void
     {
         $links = [
-            ['instagram', 'Instagram', 'https://instagram.com/sahramarketing', 'instagram', 1],
-            ['linkedin', 'LinkedIn', 'https://linkedin.com/company/sahramarketing', 'linkedin', 2],
+            ['instagram', 'Instagram', 'https://instagram.com/sizdahmarketing', 'instagram', 1],
+            ['linkedin', 'LinkedIn', 'https://linkedin.com/company/sizdahmarketing', 'linkedin', 2],
             ['whatsapp', 'WhatsApp', 'https://wa.me/96777811213', 'message-circle', 3],
-            ['x', 'X', 'https://x.com/sahramarketing', 'twitter', 4],
-            ['youtube', 'YouTube', 'https://youtube.com/@sahramarketing', 'youtube', 5],
+            ['x', 'X', 'https://x.com/sizdahmarketing', 'twitter', 4],
+            ['youtube', 'YouTube', 'https://youtube.com/@sizdahmarketing', 'youtube', 5],
         ];
 
         foreach ($links as [$platform, $label, $url, $icon, $order]) {

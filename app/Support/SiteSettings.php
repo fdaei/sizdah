@@ -31,7 +31,7 @@ final class SiteSettings
     public static function forFrontend(string $locale): array
     {
         return [
-            'siteName'    => self::get('site_name', $locale, 'Sahra'),
+            'siteName'    => self::get('site_name', $locale, 'Sizdah'),
             'tagline'     => self::get('tagline', $locale, ''),
             'description' => self::get('footer_description', $locale, ''),
 
@@ -46,10 +46,10 @@ final class SiteSettings
             'socialLinks' => self::socialLinks(),
 
             'seo' => [
-                'defaultTitle'       => self::get('seo_default_title', $locale, 'Sahra'),
+                'defaultTitle'       => self::get('seo_default_title', $locale, 'Sizdah'),
                 'defaultDescription' => self::get('seo_default_description', $locale, ''),
                 'defaultImage'       => self::mediaUrl(self::get('seo_default_image', $locale, null)),
-                'organizationName'   => self::get('seo_organization_name', $locale, 'Sahra'),
+                'organizationName'   => self::get('seo_organization_name', $locale, 'Sizdah'),
             ],
         ];
     }

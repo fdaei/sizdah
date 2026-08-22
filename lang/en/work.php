@@ -9,18 +9,19 @@ declare(strict_types=1);
  */
 return [
 
+    'eyebrow' => 'Projects',
     'industry'        => 'Industry',
-    'year'            => 'Year',
+    'year'            => 'Years working together',
     'instagram'       => 'Instagram',
     'services'        => 'Services',
-    'challenge'       => 'The Challenge',
-    'goals'           => 'Goals',
-    'strategy'        => 'Strategy',
-    'deliverables'    => 'Deliverables',
-    'showcase'        => 'Content Showcase',
+    'challenge'       => 'Where the real challenge was',
+    'goals'           => 'Project goals',
+    'strategy'        => 'The path we took',
+    'deliverables'    => 'What we delivered',
+    'showcase'        => 'Selected content',
     'before'          => 'Before',
     'after'           => 'After',
     'results'         => 'Results',
-    'next_case_study' => 'Next Case Study',
+    'next_case_study' => 'Next project',
 
 ];

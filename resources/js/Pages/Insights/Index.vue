@@ -56,36 +56,61 @@ const rest = computed(() => props.posts.data.slice(2))
   <SeoHead :seo="props.seo" />
 
   <section class="section-first pb-24">
-    <div class="container-sizdah flex flex-col gap-12">
-      <header class="mx-auto flex max-w-measure flex-col items-center gap-4 text-center">
-        <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
-        <h1 class="text-display-md text-ink-50">{{ props.heading.title }}</h1>
-        <p v-if="props.heading.description" class="text-title-sm text-ink-200">
-          {{ props.heading.description }}
-        </p>
-      </header>
+    <!-- Header sits 96 above the content block; 270:5252 then runs on 144. -->
+    <div class="container-sizdah flex flex-col gap-16 lg:gap-24">
+      <!-- 268:5233 — 670 track, 64 to the chip row; 268:5234 is the 612 column. -->
+      <header class="mx-auto flex max-w-[670px] flex-col items-center gap-16 text-center">
+        <div class="flex w-full max-w-measure flex-col items-center gap-10">
+          <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
-      <div class="flex justify-center">
-        <FilterChips
-          :options="filterOptions"
-          :active="props.filters.category"
-          :label="t('blog.categories')"
-        />
-      </div>
-
-      <FeaturedPostCard v-if="props.featured" :post="props.featured" />
-
-      <p v-if="!props.posts.data.length" class="py-16 text-center text-title-sm text-ink-300">
-        {{ props.filters.category || props.filters.q ? t('common.empty_results') : t('common.empty_posts') }}
-      </p>
-
-      <div v-else class="flex flex-col gap-24">
-        <div v-if="wide.length" class="grid gap-6 md:grid-cols-2">
-          <BlogCard v-for="post in wide" :key="post.slug" :post="post" variant="wide" headingLevel="h2" />
+          <div class="flex flex-col items-center gap-6">
+            <h1 class="text-display-lg text-ink-50">{{ props.heading.title }}</h1>
+            <p v-if="props.heading.description" class="text-title-sm text-ink-200">
+              {{ props.heading.description }}
+            </p>
+          </div>
         </div>
 
-        <div v-if="rest.length" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <BlogCard v-for="post in rest" :key="post.slug" :post="post" headingLevel="h2" />
+        <div class="flex w-full justify-center">
+          <FilterChips
+            :options="filterOptions"
+            :active="props.filters.category"
+            :label="t('blog.categories')"
+          />
+        </div>
+      </header>
+
+      <!--
+        270:5252 runs 144 between the featured card, the 2-up row and the 3-up
+        block; inside the 3-up block (270:5286) the two rows sit 96 apart while
+        columns stay 24. Hence the split gap on the last grid.
+      -->
+      <div class="flex flex-col gap-16 lg:gap-[144px]">
+        <FeaturedPostCard v-if="props.featured" :post="props.featured" />
+
+        <p v-if="!props.posts.data.length" class="py-16 text-center text-title-sm text-ink-300">
+          {{
+            props.filters.category || props.filters.q
+              ? t('common.empty_results')
+              : t('common.empty_posts')
+          }}
+        </p>
+
+        <div v-if="wide.length" class="grid gap-6 md:grid-cols-2">
+          <BlogCard
+            v-for="post in wide"
+            :key="post.slug"
+            :post="post"
+            variant="wide"
+            heading-level="h2"
+          />
+        </div>
+
+        <div
+          v-if="rest.length"
+          class="grid gap-x-6 gap-y-16 sm:grid-cols-2 lg:grid-cols-3 lg:gap-y-24"
+        >
+          <BlogCard v-for="post in rest" :key="post.slug" :post="post" heading-level="h2" />
         </div>
       </div>
 

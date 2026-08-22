@@ -103,13 +103,28 @@ const fieldClass =
   <SeoHead :seo="props.seo" />
 
   <section class="section-first pb-24">
-    <div class="container-sizdah">
-      <header class="mx-auto flex max-w-measure flex-col items-center gap-4 text-center">
+    <div class="container-sizdah relative isolate">
+      <!-- 279:6376 — the same 109px mesh the other frames use, 872 tall, from y=212. -->
+      <div
+        class="grid-mesh pointer-events-none absolute inset-inline-start-0 inset-block-start-[32px] -z-10 hidden h-[872px] w-full max-w-container lg:block"
+        style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
+        aria-hidden="true"
+      />
+
+      <!--
+        279:6399 — a 612 column on gap 40; the title block (279:6403) is gap 24.
+        The headline is Display/Large (48/700) and the lede is tite/Medium
+        (20/500), not the 40/18 pair this header carried.
+      -->
+      <header class="mx-auto flex max-w-measure flex-col items-center gap-10 text-center">
         <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
-        <h1 class="text-display-md text-brand-50">{{ props.heading.title }}</h1>
-        <p v-if="props.heading.description" class="text-title-sm text-ink-200">
-          {{ props.heading.description }}
-        </p>
+
+        <div class="flex flex-col items-center gap-6">
+          <h1 class="text-display-lg text-ink-50">{{ props.heading.title }}</h1>
+          <p v-if="props.heading.description" class="text-title-md text-ink-200">
+            {{ props.heading.description }}
+          </p>
+        </div>
       </header>
 
       <div class="mt-12 grid gap-6 lg:grid-cols-[423fr_801fr]">
@@ -120,11 +135,7 @@ const fieldClass =
           <h2 class="text-title-lg text-brand-50">{{ t('forms.details.title') }}</h2>
 
           <ul class="flex flex-col gap-6">
-            <li
-              v-for="(detail, index) in details"
-              :key="detail.key"
-              class="flex flex-col gap-6"
-            >
+            <li v-for="(detail, index) in details" :key="detail.key" class="flex flex-col gap-6">
               <div class="flex items-center gap-4">
                 <span
                   class="inline-flex size-12 shrink-0 items-center justify-center rounded-round border border-ink-700"
@@ -159,7 +170,13 @@ const fieldClass =
           <!-- Honeypot: never shown, never announced; bots fill it, people cannot. -->
           <div class="hidden" aria-hidden="true">
             <label for="website">Website</label>
-            <input id="website" v-model="form.website" type="text" tabindex="-1" autocomplete="off" />
+            <input
+              id="website"
+              v-model="form.website"
+              type="text"
+              tabindex="-1"
+              autocomplete="off"
+            />
           </div>
 
           <div class="grid gap-6 md:grid-cols-2">

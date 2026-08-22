@@ -19,32 +19,38 @@ declare(strict_types=1);
 |   fa -> "AR-Desktop/*" tokens  -> Doran FaNum (fallback Vazirmatn)
 |   ar -> "AR-Desktop/*" tokens  -> Doran FaNum (fallback Vazirmatn)
 |
+| FA-ONLY, 2026-08-21 (user decision). The site ships Persian only, and the
+| Figma file backs that up — it contains no English or Arabic frame anywhere
+| (.figma-sync/GAPS.md G6). Only `fa` is listed under `supported`, so the
+| language switcher collapses, `/en/*` and `/ar/*` stop resolving, and Filament
+| renders a single tab per translatable field.
+|
+| The multilingual machinery itself is deliberately untouched — the
+| `{entity}_translations` tables, HasTranslations, the `{locale}` route prefix
+| and lang/{en,ar} all stay. Restoring a locale is a one-line move: cut its
+| block out of `inactive` below and paste it back into `supported`.
 */
 
 return [
 
-    'default' => env('APP_LOCALE', 'en'),
+    'default' => env('APP_LOCALE', 'fa'),
 
-    'fallback' => env('APP_FALLBACK_LOCALE', 'en'),
+    'fallback' => env('APP_FALLBACK_LOCALE', 'fa'),
+
+    /*
+     | Languages the Filament panel chrome can be shown in. Separate from
+     | `supported` on purpose: that list is the public CONTENT locales, this one
+     | is the admin UI, and the two move independently — the site is fa-only
+     | while the panel still offers English. Read by routes/web.php and
+     | AdminLocaleController, which each used to hardcode their own copy.
+     */
+    'admin' => ['en', 'fa'],
 
     /*
      | Ordered map. Key = URL segment + DB translation key.
      | Order controls the language-switcher rendering order.
      */
     'supported' => [
-
-        'en' => [
-            'name'        => 'English',
-            'native'      => 'English',
-            'direction'   => 'ltr',
-            'font'        => 'sans',
-            'html_lang'   => 'en',
-            'locale'      => 'en_US',
-            'flag'        => 'GB',
-            'date_format' => 'M d, Y',
-            // Western Arabic (ASCII) digits — no transliteration needed.
-            'digits'      => null,
-        ],
 
         'fa' => [
             'name'        => 'Persian',
@@ -61,6 +67,28 @@ return [
              | the two look similar for some digits but must not be swapped.
              */
             'digits'      => '۰۱۲۳۴۵۶۷۸۹',
+        ],
+
+    ],
+
+    /*
+     | Parked, not deleted. Same shape as `supported`; nothing reads this key.
+     | Move a block back up to bring the locale online again — every consumer
+     | listed at the top of this file picks it up with no further change.
+     */
+    'inactive' => [
+
+        'en' => [
+            'name'        => 'English',
+            'native'      => 'English',
+            'direction'   => 'ltr',
+            'font'        => 'sans',
+            'html_lang'   => 'en',
+            'locale'      => 'en_US',
+            'flag'        => 'GB',
+            'date_format' => 'M d, Y',
+            // Western Arabic (ASCII) digits — no transliteration needed.
+            'digits'      => null,
         ],
 
         'ar' => [

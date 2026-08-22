@@ -4,11 +4,17 @@ import PostMeta from '@/Components/PostMeta.vue'
 import type { PostSummary } from '@/types'
 
 /**
- * Blog card — Figma "blog card" (277:5849).
+ * Blog card — Figma component set "blog card" 276:5724.
  *
- * The file ships two widths, 400 (3-up) and 612 (2-up), both 540 tall — which
- * means the image is 400px tall in each and only its aspect changes. That is
- * expressed as an aspect ratio so the card scales instead of pinning heights.
+ * The file ships two widths, 400 (3-up, Property 1=Variant2) and 612 (2-up,
+ * Property 1=Default), both 540 tall — which means the image is 400px tall in
+ * each and only its aspect changes. That is expressed as an aspect ratio so the
+ * card scales instead of pinning heights.
+ *
+ * The two variants also differ in TITLE SIZE, which is easy to miss: 28px on the
+ * 612 card (275:5577) against 24px on the 400 card (276:5746). Both are Peyda
+ * Medium in Black/50. The image hairline is black/100 #E9E9E9 — the warm ramp,
+ * not the cool ink-100 #E8E8E8 it was set to.
  */
 const props = withDefaults(
   defineProps<{
@@ -26,7 +32,7 @@ const props = withDefaults(
   <article class="flex flex-col gap-4">
     <Link :href="props.post.url" class="group flex flex-col gap-4">
       <div
-        class="overflow-hidden rounded-lg border border-ink-100 shadow-card"
+        class="overflow-hidden rounded-lg border border-warm-100 shadow-card"
         :class="props.variant === 'wide' ? 'aspect-[612/400]' : 'aspect-square'"
       >
         <img
@@ -47,7 +53,8 @@ const props = withDefaults(
 
         <component
           :is="props.headingLevel"
-          class="text-heading-sm text-ink-50 transition-colors duration-200 ease-brand group-hover:text-brand"
+          class="text-ink-50 transition-colors duration-200 ease-brand group-hover:text-brand"
+          :class="props.variant === 'wide' ? 'text-heading-md' : 'text-heading-sm'"
         >
           {{ props.post.title }}
         </component>

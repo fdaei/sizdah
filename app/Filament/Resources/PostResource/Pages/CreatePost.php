@@ -7,7 +7,6 @@ namespace App\Filament\Resources\PostResource\Pages;
 use App\Filament\Concerns\HandlesTranslations;
 use App\Filament\Resources\PostResource;
 use Filament\Resources\Pages\CreateRecord;
-use Illuminate\Database\Eloquent\Model;
 
 final class CreatePost extends CreateRecord
 {

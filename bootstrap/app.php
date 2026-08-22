@@ -51,7 +51,10 @@ return Application::configure(basePath: dirname(__DIR__))
          | Render 404/403/419/500 through Inertia so error pages keep the site
          | chrome, the active locale, and the RTL/LTR direction.
          |
-         | Figma: 404 desktop 1027:2061, mobile 1567:13563.
+         | Figma: 404 = 266:2825 (dark, Persian numerals — canonical). 82:2059
+         | is its Latin-numeral light twin and 88:2490 (named "405" in the file,
+         | but drawn as ۴۰۴) is its Persian light twin; both are superseded.
+         | The file carries no 405 design, so 405 is not in the list below.
          */
         $exceptions->respond(function ($response, Throwable $e, Request $request) {
             if ($request->is('admin*') || $request->expectsJson()) {

@@ -52,9 +52,9 @@ final class ContentSeeder extends Seeder
             );
 
             $member->setTranslations([
-                'en' => ['name' => $enName, 'role' => $enRole, 'photo_alt' => "{$enName}, {$enRole} at Sahra"],
-                'fa' => ['name' => $faName, 'role' => $faRole, 'photo_alt' => "{$faName}، {$faRole} در صحرا"],
-                'ar' => ['name' => $arName, 'role' => $arRole, 'photo_alt' => "{$arName}، {$arRole} في صحراء"],
+                'en' => ['name' => $enName, 'role' => $enRole, 'photo_alt' => "{$enName}, {$enRole} at Sizdah"],
+                'fa' => ['name' => $faName, 'role' => $faRole, 'photo_alt' => "{$faName}، {$faRole} در سیزده"],
+                'ar' => ['name' => $arName, 'role' => $arRole, 'photo_alt' => "{$arName}، {$arRole} في سيزده"],
             ]);
         }
     }
@@ -74,19 +74,19 @@ final class ContentSeeder extends Seeder
             'en' => [
                 'author_name' => 'Sara Amiri',
                 'author_role' => 'All Digital manager',
-                'quote' => 'Sahra helped us turn our scattered marketing into a clear and structured system. For the first time, our content, campaigns, and brand messaging all feel aligned both online and in-store.',
+                'quote' => 'Sizdah helped us turn our scattered marketing into a clear and structured system. For the first time, our content, campaigns, and brand messaging all feel aligned both online and in-store.',
                 'avatar_alt' => 'Portrait of Sara Amiri',
             ],
             'fa' => [
                 'author_name' => 'سارا امیری',
                 'author_role' => 'مدیر All Digital',
-                'quote' => 'صحرا به ما کمک کرد بازاریابی پراکنده‌مان را به سیستمی شفاف و ساختارمند تبدیل کنیم. برای نخستین بار محتوا، کمپین‌ها و پیام برند ما هم آنلاین و هم در فروشگاه هم‌راستا شده‌اند.',
+                'quote' => 'سیزده به ما کمک کرد بازاریابی پراکنده‌مان را به سیستمی شفاف و ساختارمند تبدیل کنیم. برای نخستین بار محتوا، کمپین‌ها و پیام برند ما هم آنلاین و هم در فروشگاه هم‌راستا شده‌اند.',
                 'avatar_alt' => 'تصویر سارا امیری',
             ],
             'ar' => [
                 'author_name' => 'سارة أميري',
                 'author_role' => 'مديرة All Digital',
-                'quote' => 'ساعدتنا صحراء في تحويل تسويقنا المبعثر إلى نظام واضح ومنظم. لأول مرة يبدو المحتوى والحملات ورسائل العلامة متوائمة عبر الإنترنت وفي المتجر.',
+                'quote' => 'ساعدتنا سيزده في تحويل تسويقنا المبعثر إلى نظام واضح ومنظم. لأول مرة يبدو المحتوى والحملات ورسائل العلامة متوائمة عبر الإنترنت وفي المتجر.',
                 'avatar_alt' => 'صورة سارة أميري',
             ],
         ]);

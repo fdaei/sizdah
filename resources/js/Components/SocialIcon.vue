@@ -25,9 +25,7 @@ const glyphs: Record<string, string> = {
   twitter: xUrl,
 }
 
-const glyph = computed<string | undefined>(
-  () => glyphs[props.link.platform.toLowerCase()],
-)
+const glyph = computed<string | undefined>(() => glyphs[props.link.platform.toLowerCase()])
 </script>
 
 <template>

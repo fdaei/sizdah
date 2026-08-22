@@ -89,12 +89,35 @@
   }
 
   /*
+   | The warm corner wash every dark page frame paints over the ink-1000
+   | ground as a second fill. Transparent for the first 80% of its run, so it
+   | reads as a faint glow in one corner rather than a tint.
+   |
+   | Angle and peak opacity drift per frame (222:1989 and 266:2825 are
+   | -42deg/10%; 336:5623 is -11deg/7%) — the dominant value stands in for all.
+   */
+  .page-wash {
+    background-image: linear-gradient(
+      -42deg,
+      rgba(248, 185, 55, 0) 80%,
+      rgba(248, 185, 55, 0.1) 100%
+    );
+  }
+
+  /*
    | Figma "small title": a label followed, at the inline start, by an 8px
    | brand square rotated 45deg (the file stores it as an 11.31px rounded
    | rect, which is 8 * sqrt(2) — i.e. the diagonal of an 8px square).
    */
   .eyebrow {
-    @apply inline-flex w-fit items-center gap-2 text-label-lg text-brand;
+    @apply inline-flex w-fit items-center gap-2 font-display text-[20px] font-normal text-brand;
+    /*
+     | 268:3035 is Maneli 400 at 20px in a 45px line box (2.25). Maneli is not
+     | licensed here so the `font-display` stack stands in, but the box is kept
+     | — the frame's eyebrow blocks measure 45px tall and the sections below
+     | them are positioned off that.
+     */
+    line-height: 2.25;
   }
 
   .eyebrow::before {
@@ -102,9 +125,17 @@
     @apply inline-block h-2 w-2 shrink-0 rotate-45 rounded-[1px] bg-brand;
   }
 
-  /* Service feature bullets — 20px ink copy, gap4 to the marker (315:4859). */
+  /*
+   | Service feature bullets — 20px ink copy, gap4 to the marker (315:4859).
+   | Despite sharing the marker, 315:4860 is Peyda 500 at 20/25, i.e. the body
+   | font on normal leading — NOT the Maneli eyebrow above. Both the display
+   | family and the 2.25 box are reset here; `inherit` picks up whichever of
+   | font-sans / font-arabic the locale put on <html> (app.blade.php).
+   */
   .eyebrow--lg {
     @apply gap-1 text-title-md text-ink-50;
+    font-family: inherit;
+    line-height: 1.25;
   }
 
   /*
@@ -138,6 +169,39 @@
         rgb(248 185 55 / 10%) 100%
       ),
       linear-gradient(0deg, rgb(20 20 20 / 80%), rgb(20 20 20 / 80%));
+  }
+
+  /*
+   | Process / why-us cell ground (523:5646): a raking Yellow/1000 wash from 0 to
+   | 20% at -31.68deg over a flat Black/900 #2C2C2C fill. Lives here rather than
+   | as an inline style so the `hover` variant (537:5511) can switch it off — an
+   | inline background-image cannot be overridden by a utility class.
+   */
+  .process-wash {
+    background-image:
+      linear-gradient(-31.68deg, rgb(248 185 55 / 0) 2.32%, rgb(248 185 55 / 20%) 100%),
+      linear-gradient(0deg, rgb(44 44 44), rgb(44 44 44));
+  }
+
+  /*
+   | Testimonial ground (546:7527). A raking Yellow/1000 wash running 0 -> 10%
+   | at -45.9deg over a vertical hairline texture the frame carries as a 442px
+   | image fill whose lines repeat every 54.4px (40.6px once object-cover scales
+   | it into the 300-wide card). The lines are a plain repeat, so they are drawn
+   | in CSS like every other mesh in this file — see .grid-mesh and GAPS G22 —
+   | rather than shipping the bitmap.
+   |
+   | NOT .surface-glow: that treatment lays a 20% black wash and an 80% ink-1000
+   | base under the raking gradient, which puts the card BELOW the page ground.
+   | This card sits above it — the frame samples #28251e against a #1e1e1e sheet.
+   */
+  .testimonial-wash {
+    background-image:
+      linear-gradient(-45.897deg, rgb(248 185 55 / 0) 2.32%, rgb(248 185 55 / 10%) 100%),
+      linear-gradient(to right, rgb(255 255 255 / 4%) 1px, transparent 1px);
+    background-size:
+      auto,
+      40.6px 100%;
   }
 
   /*
@@ -210,32 +274,26 @@
   }
 
   .marquee-mask {
-    -webkit-mask-image: linear-gradient(
-      to right,
-      transparent,
-      #000 8%,
-      #000 92%,
-      transparent
-    );
-    mask-image: linear-gradient(
-      to right,
-      transparent,
-      #000 8%,
-      #000 92%,
-      transparent
-    );
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   }
 
   /*
    | Decorative grid mesh behind the hero and several section corners
    | (Figma "Group" > 20 hairline vectors). Drawn in CSS rather than shipping
    | 20 <vector> nodes per instance.
+   |
+   | The cell size and hairline colour differ per placement — Home's mesh is
+   | square at 80.36px, About's is 109x118 (359:9560), and the About CTA card
+   | carries the same mesh as an ink wash on cream (577:10889). They are custom
+   | properties rather than modifier classes so a call site can set both inline;
+   | the defaults reproduce the original Home values unchanged.
    */
   .grid-mesh {
     background-image:
-      linear-gradient(to right, rgb(255 255 255 / 4%) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(255 255 255 / 4%) 1px, transparent 1px);
-    background-size: 80.36px 80.36px;
+      linear-gradient(to right, var(--mesh-color, rgb(255 255 255 / 4%)) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--mesh-color, rgb(255 255 255 / 4%)) 1px, transparent 1px);
+    background-size: var(--mesh-cell-x, 80.36px) var(--mesh-cell-y, 80.36px);
   }
 }
 

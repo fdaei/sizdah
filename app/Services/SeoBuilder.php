@@ -84,7 +84,7 @@ final class SeoBuilder
         $locale = app()->getLocale();
 
         return [
-            'title' => $title ?: SiteSettings::get('seo_default_title', $locale, 'Sahra'),
+            'title' => $title ?: SiteSettings::get('seo_default_title', $locale, 'Sizdah'),
             'description' => $description
                 ?: SiteSettings::get('seo_default_description', $locale, ''),
             'image' => $image,

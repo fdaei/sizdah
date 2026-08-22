@@ -20,11 +20,13 @@ export type Translator = (key: string, replacements?: Record<string, string | nu
 export const TranslatorKey: InjectionKey<Translator> = Symbol('translator')
 
 function resolve(tree: TranslationTree, key: string): string | undefined {
-  const value = key.split('.').reduce<string | TranslationTree | undefined>(
-    (node, segment) =>
-      node !== undefined && typeof node !== 'string' ? node[segment] : undefined,
-    tree,
-  )
+  const value = key
+    .split('.')
+    .reduce<string | TranslationTree | undefined>(
+      (node, segment) =>
+        node !== undefined && typeof node !== 'string' ? node[segment] : undefined,
+      tree,
+    )
 
   return typeof value === 'string' ? value : undefined
 }

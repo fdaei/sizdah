@@ -3,7 +3,8 @@
   "canonicalTheme": "dark",
   "notes": [
     "Frame names in the file are unreliable: 268:4158 and 285:4590 are BOTH named 'blog list'. 268:4158 is the listing (featured post + filter chips + card grid); 285:4590 is a single article (hero, body, lead magnet, related posts). Mapped by content.",
-    "13:2766 and 268:2962 are BOTH named 'Home', identical 1440x11273 geometry, inverted palettes. Verified by pixel sampling: services (308:4492) and 404 (266:2825) headers are rgb(73,68,57) — identical to 268:2962 and nothing like 13:2766's rgb(254,254,254). 268:2962 (dark) is canonical; 13:2766 is the light variant.",
+    "13:2766 and 268:2962 are BOTH named 'Home', identical geometry, inverted palettes. 268:2962 (dark) is canonical; 13:2766 is the light variant.",
+    "REDRAWN 2026-08-21: 268:2962 is now 1440x9919 (was 11273). The six-step process is a bordered dark grid at 523:5798 (was the hand-drawn notched cards at 268:3547), and the frame GAINED an insights row (430:5247) and an FAQ band (434:5512) that earlier notes recorded as 'not in this frame'. The final CTA is now the cream 553:7779 card, not the dark 294:7672 one.",
     "No frames exist for About (route 'about'), Work index ('work.index') or Work show ('work.show'). Those three routes have controllers but no Sizdah design."
   ],
   "frames": [
@@ -13,29 +14,42 @@
       "figmaName": "Home",
       "route": "home",
       "component": "resources/js/Pages/Home.vue",
-      "size": "1440x11273",
-      "status": "extracted",
+      "size": "1440x9919",
+      "status": "implemented",
       "assets": [
-        "resources/images/sizdah/home/hero-journey.png",
+        "resources/images/sizdah/home/hero/hero-strategy.svg",
+        "resources/images/sizdah/home/hero/hero-identity.svg",
+        "resources/images/sizdah/home/hero/hero-content.svg",
+        "resources/images/sizdah/home/hero/hero-growth.svg",
+        "resources/images/sizdah/home/hero/hero-arc.svg",
         "resources/images/sizdah/home/kpi-engagement.svg",
         "resources/images/sizdah/home/kpi-audience.svg",
-        "resources/images/sizdah/home/kpi-retention.svg"
+        "resources/images/sizdah/home/kpi-retention.svg",
+        "resources/images/sizdah/clients/*.svg (6 marks + trust-divider.svg)",
+        "resources/images/sizdah/home/orbit-*.svg (12)",
+        "resources/images/sizdah/home/step-*.svg (6)",
+        "resources/images/sizdah/home/why-*.svg (4 glyphs + 3 rules)",
+        "resources/images/sizdah/home/quote-mark.svg, quote-scribble.svg",
+        "resources/images/sizdah/home/faq-illustration.svg, faq-plus.svg, faq-minus.svg",
+        "resources/images/sizdah/home/insight-divider.svg, project-industry.svg"
       ],
-      "notes": "Canonical dark Home. get_design_context on the frame exceeds the token cap and returns sparse metadata only, so it must be walked section by section. Full geometry for all 38 top-level regions has been cached; per-section node IDs are in sectionNodes below. IMPLEMENTED SO FAR: hero (268:2998 headline, 268:2996 paragraph, 268:2988 CTA row, 268:3030 illustration, 268:2966 mesh) and the KPI row (268:3026). Frame content ends at y=9170 of 11273 — the last ~2100px are empty canvas. REMAINING: trust-proof logo strip (268:3002), services orbit band (268:3032), lead magnet (391:4795 — component built, not wired), projects showcase (268:3539/3540), 6-step process (268:3547 — ProcessStepCard built, not wired), why-us cards (268:3676), testimonials (268:3720), insights row (reuses BlogCard), final CTA heading (268:3797).",
+      "notes": "Canonical dark Home, FULLY BUILT as of 2026-08-21. The frame was redrawn since the first pass: it is now 9919px tall (was 11273), the six-step process grid moved to 523:5798 as a bordered dark grid (the hand-drawn notched card 268:3549 is gone), and it gained the insights (430:5247) and FAQ (434:5512) bands that this file previously recorded as absent. get_design_context on the frame still exceeds the token cap, so it must be walked section by section. Every band is now implemented: hero (incl. eyebrow 394:4964 and the 268:2997 note), KPI row, trust strip, services orbit, lead magnet, projects showcase, process grid, why-us quartered claims, testimonials, insights, FAQ and the cream final CTA (553:7779, via StartTogetherCard). Motion hooks (data-reveal / data-reveal-group / data-counter) are wired on every band.",
       "sectionNodes": {
-        "hero.eyebrow": "394:4964 — 221x18 text + 2px underline, NOT yet extracted",
-        "hero.note": "268:2997 — 173x40 handwritten note + 268:3024 arrow doodle, NOT yet extracted",
-        "trustProof": "268:3002 — y1209, logo strip, 6 'logo' instances",
-        "servicesOrbit": "268:3032 — y1522, 1440x1130 dark band",
-        "leadMagnet": "391:4795 — y2780",
+        "hero.eyebrow": "394:4964 — 221x18 label over a 2px brand rule",
+        "hero.note": "268:2997 note + 268:3024 up-right doodle",
+        "hero.art": "411:7714/7715/7716/7717 + labels 416:4525-4528 — loose vectors, NOT a raster. hero-journey.png was a stale, near-black export and is no longer used; see HeroJourney.vue",
+        "trustProof": "268:3002 — y1209, sentence split around the 268:3005 script mark, then 6 logos",
+        "servicesOrbit": "268:3032 — y1526, 1440x1130 cream band; heading 502:5424",
+        "leadMagnet": "391:4795 — y2780, the large (p64/radius24/border3) variant",
         "projectsHeading": "268:3461 — y3120",
-        "projects": "268:3539 image 530x663 + 268:3540 rows 615x565",
-        "projectsFooter": "268:3468 — y4243, 1250x171",
-        "process": "268:3547 — y4511, 1248x848, six steps",
-        "whyUsHeading": "268:3475 — y5550, plus the connector diagram at 268:3708/3711/3714/3717",
-        "whyUsCards": "268:3676 — y6458, four 312x216 cards",
-        "testimonials": "268:3720 — y6890, 1248x609",
-        "finalCtaHeading": "268:3797 — y7751, 1248x144"
+        "projects": "268:3539 image 530x663 + 268:3540 rows 615x565 (open/close set 138:2356/138:2358)",
+        "process": "523:5798 — y4586, 3x2 grid of 523:5646 cells, 2px ink-300 edges collapsing",
+        "whyUsHeading": "268:3475 — y5440, plus claims 268:3708/3711/3714/3717 and rules 268:2993/2994/2995",
+        "testimonials": "268:3720 — y6080",
+        "insightsHeading": "268:3797 — y6889",
+        "insights": "430:5247 — y7157, cream lead card + two compact rows",
+        "faq": "434:5512 boxes + 434:5470 title + 434:5584 subtitle + 561:7806 art — y7874",
+        "finalCta": "553:7779 — y8554, the cream 'شروع همکاری' card"
       }
     },
     {
@@ -189,7 +203,8 @@
       "name": "logo",
       "figmaNode": "268:3017",
       "file": "resources/js/Components/ClientLogo.vue",
-      "status": "pending"
+      "status": "built",
+      "notes": "128px box, mix-blend-luminosity. Every Client.logo_path is null, so the six frame exports carry it, keyed on Client.name with the CMS upload taking precedence."
     },
     {
       "name": "why us card",
@@ -200,22 +215,24 @@
     },
     {
       "name": "process step card",
-      "figmaNode": "268:3549",
+      "figmaNode": "523:5646",
       "file": "resources/js/Components/ProcessStepCard.vue",
-      "status": "pending"
+      "status": "built",
+      "notes": "REDRAWN. Was the hand-drawn notched card on Yellow/50 (268:3549); the frame now draws a dark cell — ink-900 under a -31.68deg 20% brand wash, flat 2px ink-300 edge, square corners. Cells butt together so their edges collapse to one 2px rule, which the grid in Home.vue paints as its gap rather than each card bordering itself. The frame shows '01' on all six (per-instance override never set) so the numeral is generated positionally. `approval` has no glyph in the frame and borrows the why-us check badge (268:3670); `campaign` is drawn but unused by current copy."
     },
     {
       "name": "testimonial card",
       "figmaNode": "391:4899",
       "file": "resources/js/Components/TestimonialCard.vue",
-      "status": "pending",
-      "notes": "300x334."
+      "status": "built",
+      "notes": "300x334. Fill is the shared .surface-glow rather than tokens re-read off 391:4899 — the Figma connection dropped before that node was verified. Worth a check."
     },
     {
       "name": "project cards",
       "figmaNode": "268:3541",
-      "file": "resources/js/Components/ProjectRow.vue",
-      "status": "pending"
+      "file": "resources/js/Components/ProjectShowcase.vue",
+      "status": "built",
+      "notes": "Heading + 530x663 image + the row disclosure, in one component. Open row follows pointer/focus and cross-fades the image."
     },
     {
       "name": "info",
@@ -288,10 +305,51 @@
     },
     {
       "name": "process step card",
-      "figmaNode": "268:3549",
+      "figmaNode": "523:5646",
       "file": "resources/js/Components/ProcessStepCard.vue",
-      "status": "built-not-wired",
-      "notes": "Hand-drawn notched outline shipped as an SVG behind the content; per-step glyph comes from SectionItem.icon since the six differ."
+      "status": "built",
+      "notes": "REDRAWN. Was the hand-drawn notched card on Yellow/50 (268:3549); the frame now draws a dark cell — ink-900 under a -31.68deg 20% brand wash, flat 2px ink-300 edge, square corners. Cells butt together so their edges collapse to one 2px rule, which the grid in Home.vue paints as its gap rather than each card bordering itself. The frame shows '01' on all six (per-instance override never set) so the numeral is generated positionally. `approval` has no glyph in the frame and borrows the why-us check badge (268:3670); `campaign` is drawn but unused by current copy."
+    },
+    {
+      "name": "section heading",
+      "figmaNode": "268:3461 / 268:3468 / 268:3797 / 268:3037",
+      "file": "resources/js/Components/SectionHeading.vue",
+      "status": "built",
+      "notes": "eyebrow + 40px Bold headline + muted subtitle, `split` or `stacked`, dark or light ground. Shared by seven Home sections."
+    },
+    {
+      "name": "hero journey art",
+      "figmaNode": "411:7714-7717",
+      "file": "resources/js/Components/HeroJourney.vue",
+      "status": "built",
+      "notes": "Replaces hero-journey.png, a stale export of an older draft flattened onto opaque #141414 and so dark that 99% of pixels sat below luminance 44 — it rendered as an empty black box."
+    },
+    {
+      "name": "services orbit",
+      "figmaNode": "268:3032",
+      "file": "resources/js/Components/ServiceOrbit.vue",
+      "status": "built",
+      "notes": "Percentage offsets in an aspect-[1440/760] box; physical left/top so the diagram never mirrors. Artwork keyed on the new non-translatable ServiceItem.icon."
+    },
+    {
+      "name": "why us grid",
+      "figmaNode": "268:3475",
+      "file": "resources/js/Components/WhyUsGrid.vue",
+      "status": "built",
+      "notes": "Real 2x2 grid with the hand-drawn rules laid over as decoration; glyphs matched positionally since why_us items carry no icon."
+    },
+    {
+      "name": "insights row",
+      "figmaNode": "430:5247",
+      "file": "resources/js/Components/InsightsShowcase.vue",
+      "status": "built"
+    },
+    {
+      "name": "FAQ",
+      "figmaNode": "434:5512",
+      "file": "resources/js/Components/FaqAccordion.vue",
+      "status": "built",
+      "notes": "Native <details>; first item open, as the frame draws it."
     }
   ],
   "tokensAdded": [
@@ -305,14 +363,11 @@
     ".surface-glow (app.css) — the 3-layer fill shared by both contact cards and the featured row; angle via --glow-angle",
     "CtaButton gained a `light` variant (white fill, ink label) for the final CTA card",
     ".rich-prose (app.css) — long-form body rhythm shared by legal pages and article copy",
-    "fontSize display-xl 64px (service numerals); .eyebrow--lg / .eyebrow--dot modifiers"
+    "fontSize display-xl 64px (service numerals); .eyebrow--lg / .eyebrow--dot modifiers",
+    "CtaButton gained a `brand-outline` variant (no fill, 1px brand rule, brand label) for the Home lead magnet on cream (391:4796)",
+    "LeadMagnetBanner gained `size`: sm = 303:4455 (article), lg = 391:4795 (Home, p64 / radius24 / 3px brand rule)"
   ],
   "deviations": [
-    {
-      "frame": "268:2962",
-      "what": "Home renders no insights and no FAQ section.",
-      "why": "Neither exists in the frame. HomeController still passes `posts` and `faqs`; Home.vue accepts them as typed props but does not render them. No controller change made."
-    },
     {
       "frame": "268:2962",
       "what": "Hero headline set with fluid clamp() type rather than fixed 48/64px.",
@@ -321,36 +376,78 @@
     {
       "frame": "all",
       "what": "Peyda (the family named by every FA type variable) is replaced by Vazirmatn.",
-      "why": "Peyda is not licensed for this project; Vazirmatn is the stack the brief specifies. NOTE: public/fonts/vazirmatn ships Regular/Medium/Bold only, but the hero headline is SemiBold (600) — Vazirmatn-SemiBold.woff2 needs adding or the browser will synthesise it."
+      "why": "CONFIRMED 2026-08-21 — Peyda and Maneli are both paid fontiran.com products with no redistributable cut, so the substitutes are the intended faces, not a stopgap: Vazirmatn for FA body text, Idealist → Doran FaNum → Vazirmatn (the font-display token) for eyebrows and display accents. Vazirmatn-SemiBold.woff2 (v33.003, SIL OFL) was added the same day so the weight-600 hero headline no longer renders as a synthesised bold. See GAPS.md G8."
+    },
+    {
+      "frame": "268:2962",
+      "what": "The open project row's 'مشاهده جزئیات پروژه' link is brand, not Black/1000.",
+      "why": "The frame sets it #141414 on the near-black page ground, i.e. invisible. Read as a slip."
+    },
+    {
+      "frame": "523:5798",
+      "what": "Step numerals are generated 01..06.",
+      "why": "All six instances in the frame read '01' — the per-instance override was never set."
+    },
+    {
+      "frame": "268:2962",
+      "what": "Section headlines all use ink-50.",
+      "why": "The frame alternates Black/50 and Yellow/50 across sections with no pattern; both read as the same off-white at 40px."
+    },
+    {
+      "frame": "434:5512",
+      "what": "The dotted hero trail is drawn as three SVG paths.",
+      "why": "The frame stores it as ~50 loose 5-17px vector fragments — a drawing-tool artefact, not a design decision."
+    },
+    {
+      "frame": "523:5798",
+      "what": "Step numerals are generated 01..06 rather than read from the frame.",
+      "why": "All six cells in the frame read '01' — the component default was never overridden per instance."
+    },
+    {
+      "frame": "268:3468 / 268:3461",
+      "what": "The process band keeps its own heading instead of the frame's.",
+      "why": "The frame repeats the projects heading ('هر برند / داستان خودش را دارد') verbatim on the process band, which is a copy-paste slip; shipping it would print the same headline twice on one page."
+    },
+    {
+      "frame": "268:3540",
+      "what": "The open project row's 'view details' link is brand-coloured.",
+      "why": "The frame sets it in Black/1000 on the near-black page ground, i.e. invisible."
     }
   ],
-  "backendChangesRequested": [],
+  "backendChangesRequested": [
+    {
+      "what": "ContentTransformer::service() now emits `icon`; ServiceItem in resources/js/types/index.ts matches.",
+      "why": "`slug` is per-locale so it cannot key artwork across en/fa/ar. `Service.icon` is a plain column and is stable, so the services orbit matches its four illustrations on it."
+    }
+  ],
   "derivedScreens": [
     {
       "route": "about",
       "component": "resources/js/Pages/About.vue",
-      "reason": "No Sizdah frame exists. Controller and AboutController props remain live; page must render or /about 500s.",
-      "status": "implemented",
-      "notes": "Built from the design system the real frames establish, not invented: Work index reuses the blog listing hero + pill + grid rhythm; Work show renders every field the controller already returns using the same card treatments; About renders the `about` Page sections generically in authored order so editors keep control. All three are clearly marked DERIVED in their docblocks and should be replaced when frames are designed."
+      "reason": "RESOLVED 2026-08-21. A frame now exists (336:5623) and About.vue was rebuilt against it: hero / story / how-we-think / team / cream CTA, all fed by the `about` Page sections. No longer derived.",
+      "status": "superseded",
+      "notes": "See .figma-sync/MANIFEST.md and PROGRESS.md for the live status."
     },
     {
       "route": "work.index",
       "component": "resources/js/Pages/Work/Index.vue",
-      "reason": "No Sizdah frame exists.",
+      "reason": "Frame now EXISTS but the component has not been rebuilt against it yet — work.index -> 222:1989, work.show -> 336:5374. Still the derived layout; still marked DERIVED in the docblock.",
       "status": "implemented",
       "notes": "Built from the design system the real frames establish, not invented: Work index reuses the blog listing hero + pill + grid rhythm; Work show renders every field the controller already returns using the same card treatments; About renders the `about` Page sections generically in authored order so editors keep control. All three are clearly marked DERIVED in their docblocks and should be replaced when frames are designed."
     },
     {
       "route": "work.show",
       "component": "resources/js/Pages/Work/Show.vue",
-      "reason": "No Sizdah frame exists.",
+      "reason": "Frame now EXISTS but the component has not been rebuilt against it yet — work.index -> 222:1989, work.show -> 336:5374. Still the derived layout; still marked DERIVED in the docblock.",
       "status": "implemented",
       "notes": "Built from the design system the real frames establish, not invented: Work index reuses the blog listing hero + pill + grid rhythm; Work show renders every field the controller already returns using the same card treatments; About renders the `about` Page sections generically in authored order so editors keep control. All three are clearly marked DERIVED in their docblocks and should be replaced when frames are designed."
     }
   ],
   "nextUp": [
-    "Wire Home sections: trust proof, services orbit, lead magnet, projects, process, why-us, testimonials, insights, final CTA heading",
-    "Extract why-us card (268:3676) and testimonial card (391:4899) — node ids for the card bodies still need locating",
-    "Seeder for Sizdah editorial copy (home sections, services + features, legal bodies) across fa/en/ar"
+    "Contact facts are still Sahra's: contact_email (Sahramarketing@gmail.com), contact_location (Muscat, Oman), contact_phone/whatsapp (+96 7781 1213). Real-world values — must be supplied, not guessed.",
+    "Packages section prices are denominated in ریال عمان (Omani rial); the packages band is not in the Home frame but is live in the CMS.",
+    "Only one testimonial exists; the frame draws four.",
+    "Post dates render Gregorian in Persian digits (۲۰۲۴/۰۵/۰۹); the frame shows Jalali (۲۰ اردیبهشت ۱۴۰۳).",
+    "Align About / Services / Contact / Work / Insights copy against their own frames — this pass only removed brand residue there."
   ]
 }

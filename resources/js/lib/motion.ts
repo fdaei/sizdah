@@ -92,7 +92,8 @@ function buildCounters(): void {
     // Normalise Persian (U+06Fx) and Arabic-Indic (U+066x) digits to ASCII so
     // the tween has a real number to count, then map back on render.
     const toAscii = (input: string): string =>
-      input.replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 0x06f0))
+      input
+        .replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 0x06f0))
         .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 0x0660))
 
     const sample = digits[0]

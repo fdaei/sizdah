@@ -59,16 +59,529 @@ These pages were previously built *blind* (from controller data, no frame). They
 are the highest-value targets of this rebuild — real designs now exist. Verify
 which projects frame is canonical at Phase 5.
 
-## G8 — FA/AR font: design specifies "Peyda", not self-hosted  (severity: med)
-Figma binds every FA text style to **Peyda**. Self-hosted faces are poppins,
-vazirmatn, doran, idealist — no Peyda. Existing config maps arabic→Vazirmatn
-(near-identical metrics). CLAUDE.md separately claims a Doran/Idealist display
-stack. Keeping Vazirmatn fallback (working, licensed). Human decision: license
-Peyda, or confirm Vazirmatn/Doran as the intended FA face. Line-height: raw
-variable says 100% but laid-out nodes measure ~1.5 — 1.5 retained (evidence-based).
+## G8 — FA/AR font: design specifies "Peyda"  [CLOSED 2026-08-21]  (severity: med)
+Figma binds every FA text style to **Peyda** and every eyebrow / display accent
+to **Maneli**. Self-hosted faces are poppins, vazirmatn, doran, idealist — neither
+Peyda nor Maneli.
 
-## G6 — i18n: file is English-only  (severity: low)
+**Resolved: the substitutes are the intended faces.** Both Peyda and Maneli are
+paid fontiran.com products (Peyda 398–698k تومان desktop + a separate web licence
+from 350k; Maneli 3,980,000 ریال) and no free/redistributable cut exists — the
+only "free" sources are unlicensed re-uploads the publisher asks people to report.
+Human decision 2026-08-21: **keep Vazirmatn for FA body text and
+Idealist → Doran FaNum → Vazirmatn (the `font-display` token) for eyebrows and
+display accents.** Do not reopen this without a purchased licence; if one is
+bought, drop the woff2 files into `public/fonts/peyda/` and `public/fonts/maneli/`
+and rewire `fontFamily` in tailwind.config.js — every consumer already goes
+through the tokens, so nothing else changes.
+
+Consequence handled the same day: `hero-line` / `hero-accent` are weight **600**
+and `public/fonts/vazirmatn` shipped 400/500/700 only, so the hero rendered with a
+browser-synthesised bold. `Vazirmatn-SemiBold.woff2` (v33.003, matching the cut
+already in the repo by checksum; SIL OFL) is now installed and declared in
+`resources/css/fonts.css`.
+
+Line-height: raw variable says 100% but laid-out nodes measure ~1.5 — superseded,
+see the 1.25 re-measurement in CLAUDE.md.
+
+## G6 — i18n: file is PERSIAN-only  [CORRECTED 2026-08-21]  (severity: med)
+The original entry below had this exactly backwards. A full-file text scan
+(every TEXT node on all three pages, classified by script) shows **no English
+and no Arabic variant of any page frame exists**. Every page frame is Persian:
+
+| frame | arabic-script chars | latin chars | latin content |
+|---|---|---|---|
+| about `336:5623` | 1257 | 251 | footer only |
+| Home `268:2962` | 4191 | 460 | footer + logo |
+| services `308:4492` | 969 | 251 | footer only |
+| projects `222:1989` | 1286 | 251 | footer only |
+| case study `336:5374` | 1860 | 290 | footer only |
+
+The Latin counts are **entirely the un-rebranded Sahra footer** — verified on
+336:5623, where all 24 Latin-bearing nodes are "Quick Links" / "Social Links" /
+"Info" / "Muscat, Oman" / "Sahramarketing@gmail.com" / "© 2026 Sahra. All rights
+reserved." — plus the SAHRA logo. Not a localisation. The `ar-only` letter count
+is 0-2 across every frame, i.e. no Arabic frame anywhere. The Style page names
+its type sheet `Farsi-Typography` (1:232); its only Latin-only frames are the
+gold/black/white colour swatch sheets.
+
+Consequence, and it inverts the rebuild's i18n direction: **fa is the source
+copy**, transcribed verbatim from node text. en/ar are derived and must be
+reviewed by a native speaker — see G10.
+
+### (original, wrong) i18n: file is English-only
 Frames render English copy. fa/ar strings are NOT in the design; they come from
 `lang/{fa,ar}/*.php` (existing) or must be authored. Rebuild extracts EN strings
 to locale keys; fa/ar translation is out of scope of a pixel rebuild and flagged
 where a page needs it.
+
+
+## G9 — The file has THREE pages, not one  (severity: med)
+`CLAUDE.md` and PROGRESS.md both state the file is "a single page `0:1` User
+Interface". `GET /v1/files/{key}?depth=1` returns three:
+
+- `0:1` "User Interface" — 98 top-level nodes, all the page frames (canonical)
+- `1:2` "Style & Component" — swatch sheets (`1:43` gold, `1:99` black, `1:38`
+  white) and `1:232` "Farsi-Typography", the type sheet
+- `163:1428` "thinking" — 79 nodes of exploration: alternate "چطور فکر می‌کنیم"
+  wordings, package-content drafts, loose frames
+
+`1:2` is a genuine token source and should be read before any further token
+work; `163:1428` is scratch and must not be built from. Fix the claim in
+CLAUDE.md.
+
+## G10 — About en/ar copy is derived, not designed  (severity: med)
+`PageSeeder::about()` now carries the frame's Persian copy verbatim (336:5623
+text runs). The `en` and `ar` arrays in that method were rendered from the
+Persian and have **no design or human source** — they need a native review
+before launch. Affects: page title/SEO, about_hero, story, how_we_think (4
+items), team, final_cta. The same will be true of every page rebuilt from this
+file — see G6.
+
+## G11 — Idealist / Doran were never wired up  [FIXED 2026-08-21]  (severity: med)
+`CLAUDE.md` claims Idealist "is wired up in `resources/css/fonts.css` and
+consumed via the `.eyebrow` component class", and `Services.vue` documents its
+Maneli numerals as falling back to "the display stack". Neither was true:
+`fonts.css` carried only Poppins and Vazirmatn, `tailwind.config.js` had no
+`display` family, and `.eyebrow` sets no font-family at all — so every eyebrow
+in the site has been rendering in the body font.
+
+Fixed additively: `Idealist-Models`, `DoranFaNum-Regular/Medium/Bold` compressed
+to woff2 and given `@font-face` blocks (Idealist carries a Latin `unicode-range`
+so fa/ar fall through to Doran), plus a `display` fontFamily token.
+
+STILL OPEN, deliberately not changed: `.eyebrow` and `Services.vue`'s numerals
+do not yet use `font-display` — switching them changes the appearance of every
+eyebrow on every page, which is a visual decision, not a bug fix. About's CTA
+eyebrow (577:11228) uses the token explicitly.
+
+## G12 — Final CTA services line never rendered  [FIXED 2026-08-21]  (severity: med)
+`PageSeeder::finalCta()` writes the services list ("برندینگ · تولید محتوا · …")
+to the section's `subtitle` column; `FinalCtaCard.vue` read `section.content`,
+which nothing fills. The line was silently missing from every page using the
+shared card (services, article). The component now reads `subtitle`.
+
+## G13 — Git root claim in CLAUDE.md is wrong  (severity: low)
+CLAUDE.md warns "The git repository root is `$HOME`, not this directory. Scope
+every git command to paths under this project; a bare `git add -A` stages the
+user's home dir." `git rev-parse --show-toplevel` returns
+`/home/fdaei/project/my/sizdah` and `git ls-files --full-name` reports
+project-relative paths. The warning is stale and should be removed.
+
+
+## G14 — The type scale was set on the wrong line-height  [FIXED 2026-08-21]  (severity: HIGH)
+`tailwind.config.js` documented its scale as "1.5 is what the frames are
+actually built on, and the section heights depend on it". Re-measuring every
+TEXT node on the canonical Home frame `268:2962` (162 nodes) shows the opposite:
+
+```
+ 12/15  14/17  14/18  16/20  18/22  20/25  22/28  24/30  28/35  32/40   = 1.25
+ 36/46  40/51  48/61  64/81                                             = 1.27
+ 14/21  16/24                                                           = 1.5
+```
+
+**146 of 162 nodes (90%) sit at 1.25-1.27.** The 16 at 1.5 are all 14px or 16px
+running copy. Cross-checked against `336:5623` (about: 18/22, 20/25, 24/30,
+22/28, 40/51, 48/61) and `279:5924` (privacy: 30/38, 20/25) — same result.
+
+Every size in the scale was re-pinned to its measured ratio. This is a
+site-wide visual change and it tightens copy on pages not yet rebuilt (Home,
+Contact, Insights, Services, Work) — they are all scheduled for rebuild from
+these same frames, so they converge rather than diverge. 1.5 survives where the
+frames really use it: long-form body copy in `.rich-prose`.
+
+Knock-on: `.rich-prose` now matches `279:5924` exactly with no further change,
+so Legal needed only a 612px header column.
+
+## G15 — Site is Persian-only  (user decision 2026-08-21)  (severity: n/a — decided)
+The user confirmed "کل سایت فقط فارسی هست". Chosen scope: **content fa-only,
+i18n infrastructure retained**.
+
+Applied:
+- `config/locales.php` — `supported` holds `fa` alone; the `en` and `ar` blocks
+  moved verbatim to a new `inactive` key that nothing reads. Restoring a locale
+  is a cut-and-paste back into `supported`.
+- `default` / `fallback` → `fa`; `config/app.php` and `.env` / `.env.example`
+  follow (`APP_LOCALE`, `APP_FALLBACK_LOCALE`).
+- `LanguageSwitcher.vue` renders nothing at one locale, so it collapses
+  site-wide instead of drawing a single un-switchable option.
+
+Deliberately NOT touched, so this stays reversible: the `{entity}_translations`
+tables, `HasTranslations`, the `{locale}` route prefix, `lang/en` and `lang/ar`,
+and the Filament translatable tab machinery. Existing en/ar rows in the database
+are inert, not deleted.
+
+Consequence for G10: the en/ar copy in `PageSeeder::about()` is parked rather
+than pending review. It stays as the starting point if a locale is ever
+reactivated, but nothing renders it and it does not block launch.
+
+
+## G16 — Lead-magnet copy diverges from the frame  [CORRECTED 2026-08-21]  (severity: low)
+This entry first claimed the section had been **cut from the design**. That was
+wrong, and the mistake was in the search, not the file: the node is
+`391:4795` on Home `268:2962` (1036x194) and it was missed because the search
+terms were taken from the seeded copy, which the frame rewords.
+
+| | seeded (`PageSeeder::leadMagnet`) | frame `391:4795` |
+| --- | --- | --- |
+| title | آیا محتوای شما واقعاً جهت‌مند است یا فقط منظم؟ | آیا محتوای شما مسیر مشخصی دارد یا فقط ادامه پیدا می‌کند؟ |
+| description | چک‌لیست جهت‌گیری محتوا را دریافت و سیستم برند خود را ارزیابی کنید. | سیستم محتوای برند خود را بررسی کنید و ببینید چقدر با اهداف شما هماهنگ … |
+| CTA | دریافت چک‌لیست | شروع گفتگو |
+
+Same intent, different wording — and the CTA changes meaning (download a
+checklist vs. start a conversation). The frame is the Persian authority, but
+this is authored marketing copy an editor owns, so it was not overwritten
+silently.
+
+**Decision 2026-08-21 (user): adopt the frame wording** — "هرچی توی فیگما هست
+شبیه فیگما بشه". `PageSeeder::leadMagnet` now carries 391:4798 / 391:4799 and
+the CTA label off 391:4796 verbatim, so the button reads «شروع گفتگو» and points
+at contact. The checklist framing is gone from the seed; en/ar were re-derived
+and stay parked per G15. Re-seed to pick it up — an existing database row keeps
+whatever an editor has since typed.
+
+`LeadMagnetBanner.vue` already cites 391:4795 and reads the section generically,
+so it renders whichever copy the seeder holds.
+
+## G17 — Tooling gates were never wired  [FIXED 2026-08-21]  (severity: med)
+Three of the four frontend gates did not work:
+
+- `npm run lint` — `eslint.config.js` was never committed and the script still
+  passed `--ext`, removed in ESLint 9. Added the flat config; ESLint 10 +
+  eslint-plugin-vue 10 + @vue/eslint-config-typescript 14. The three
+  Prettier-owned line-break rules (`max-attributes-per-line`,
+  `singleline-html-element-content-newline`, `html-self-closing`) are off — they
+  were 318 of the 321 initial findings and every one was a disagreement with
+  Prettier, not a defect. The 3 real findings were fixed. Lint is now clean.
+- `npm run format` — no `.prettierrc`, so Prettier's defaults (semicolons,
+  double quotes) fought the codebase's actual style and reported 37 files. Added
+  a config matching the tree: no semicolons, single quotes, printWidth 100,
+  trailing commas. Tree formatted; clean.
+- `./vendor/bin/pint` — 69 files fail the default Laravel preset, stock framework
+  config among them, i.e. it has never been run. NOT fixed wholesale: that is a
+  formatting sweep, not a bug fix, and it would bury real diffs. Only the genuine
+  dead code was removed (`no_unused_imports` in `ServiceSeeder`, `CreatePost`,
+  `HasTranslations`). Left as a known state, not a gate.
+
+## G18 — `.eyebrow` did not match its own source node  [FIXED 2026-08-21]  (severity: med)
+`Eyebrow.vue` names `268:3034` as its source. That node is **Maneli 400 at 20px
+in a 45px line box**; the class implemented `text-label-lg` — 14px, weight 500,
+in the body font. Wrong family, size and weight, on every eyebrow site-wide.
+
+Now: `font-display` at 20px/400 with the 45px box preserved (the frames position
+the sections below off that height).
+
+`.eyebrow--lg` needed the opposite treatment and would have been broken by the
+same change: its source `315:4860` is **Peyda 500 at 20/25**, the body font on
+normal leading, not Maneli. It resets `font-family: inherit` and `line-height`.
+The Services numerals (`315:4854`, Maneli 400 64px) take `font-display` too, but
+stay on leading-1 — the frame's 145px box is a Maneli metric artefact.
+
+
+## G19 — Integrator review of the three rebuilt pages  (2026-08-21)
+Reviewed Work index, Work show and Home after they were rebuilt, against the
+frames rather than against the docblocks. Verdict: **faithful**. Spot checks
+that passed on `ProjectPostCard` (226:2818) — image 612 square at radius 24 with
+the 2px `#a1a1a1` (ink-400) hairline, gap 40 to the detail block, detail gap 24,
+caption gap 16, title 36/600 on 1.27, excerpt 16/400 on 1.25 in ink-100, service
+dots 4px brand, and `Layer_1` correctly skipped because the file marks it
+`visible: false`. Work index vertical rhythm (40 / 24 / 64 / 110 / 96 / 259) and
+Home's twelve-section order both match the frames exactly.
+
+Two measurement notes worth keeping:
+
+- The title underline `502:5759` has a **2px path box but a 4.7px render box**
+  (4px stroke). Build from `absoluteRenderBounds`, not `absoluteBoundingBox`, for
+  anything stroked — the bounding box alone would have shipped it 2px tall.
+- Searching a frame for seeded copy finds nothing when the frame rewords it.
+  That is what produced the wrong first version of G16. Search by node and
+  geometry, then compare copy.
+
+### Defects found and fixed during review
+
+1. **`FilterChips` rendered stadium pills.** Both frames put chips at
+   `cornerRadius: 16` (insights 268:5242-268:5250, projects 222:2472-222:2480);
+   the component used `rounded-round`. Wrong on two pages, including one marked
+   "verified". Now `rounded-lg`.
+2. **The footer called two translation keys that do not exist.**
+   `$t('footer.rights')` and `$t('footer.privacy')` against a `lang/fa/footer.php`
+   that defines `copyright` and `privacy_policy`. The translator falls back to
+   the key, so every page rendered the literal strings "footer.rights" and
+   "footer.privacy" in the bottom bar. Fixed; a full sweep of all 47 `$t()` calls
+   now resolves.
+3. **Footer legal links bypassed Ziggy**, building `/${locale}/privacy-policy`
+   by hand. Now `route('legal.privacy')` / `route('legal.terms')`, matching every
+   other link on the site.
+
+### Open, left for the owners
+
+- `resources/js/Components/ProjectCard.vue` is **orphaned** — nothing imports it
+  since `ProjectPostCard` replaced it. It still carries the old "DERIVED — no
+  Sizdah frame exists" docblock. Delete it once the Work listing is signed off.
+- `ProjectPostCard` uses `rounded-[24px]` where the `rounded-xl` token is exactly
+  24px. Cosmetic, no visual difference, but it is the kind of literal the token
+  layer exists to prevent.
+
+## G20 — There is no 405 design; the frame named "405" is a Persian 404  [RESOLVED 2026-08-21]  (severity: low)
+MANIFEST listed three error frames and carried `88:2490` as a pending **405**
+page. It is not one. Exporting all three illustrations settles it:
+
+| frame | ground | illustration | numerals |
+|---|---|---|---|
+| `82:2059` "404" | `#FFFFFF` | `af541b51…` | Latin **404** |
+| `88:2490` "405" | `#FFFFFF` | `c74e80b5…` | Persian **۴۰۴** |
+| `266:2825` "404" | `#141414` + wash | `1ca9f92d…` | Persian **۴۰۴** |
+
+All three carry byte-identical copy (heading «مسیر را گم کردید؟», the same
+two-clause body, CTA «بازگشت به خانه»). `88:2490` is the *light twin of the
+Persian 404*, misnamed in the file — not a Method Not Allowed design. So the
+canonical error page is `266:2825` (dark + Persian, matching a Persian-only site
+on the ink-1000 ground) and the other two are superseded exactly as the light
+Home/projects twins are.
+
+Consequences applied:
+- `Error.vue` needed no rebuild — it was already built against `266:2825`.
+- `bootstrap/app.php`'s Figma comment cited two dead node IDs (`1027:2061`,
+  `1567:13563`) from the stale `docs/` audit; replaced with the three real ones
+  plus a note that 405 is deliberately absent from the status allowlist.
+- The frame draws the body as **two lines** (a hard break after «پیدا نشد،»).
+  `lang/fa/errors.php` had flattened it to one; the newline is restored and the
+  paragraph renders `whitespace-pre-line`.
+- `Error.vue`'s body carried `leading-[normal]`, overriding the measured
+  `text-title-sm` leading (18/22, G14) for no stated reason. Removed.
+
+Still open, and **not** a design question: a real HTTP 405 currently renders
+Laravel's default error page, because `bootstrap/app.php` only routes
+`[403, 404, 419, 429, 500, 503]` through Inertia. Adding 405 would be inventing
+a page the file does not contain, so it is left alone and recorded here instead.
+
+## G21 — The dark-page corner wash was never implemented  [FIXED 2026-08-21]  (severity: med)
+Every dark page frame paints a **second fill** over the `#141414` ground: a
+brand-yellow linear gradient that is fully transparent for most of its run and
+reaches ~10% in one corner. Nothing in the codebase drew it — `AppLayout` was a
+flat `bg-ink-1000`, so every page was missing the wash.
+
+Angle and peak opacity drift per frame, which reads as authoring noise rather
+than intent:
+
+| frame | gradient |
+|---|---|
+| projects `222:1989` | `-42deg`, 0% → 10% |
+| 404 `266:2825` | `-42deg`, 0% → 10% |
+| about `336:5623` | `-11deg`, 0% → 7% |
+| Home `268:2962` | `71deg`, 0% → 10% |
+| case study `336:5374` | **none** — flat `Black/1000` |
+
+Implemented as one shared `.page-wash` at the dominant `-42deg`/10%, applied as
+a `background-image` on the same element that carries `bg-ink-1000` — the file
+models it as a second fill on one frame, so no overlay node and no stacking
+order to manage. **Deviation:** the case study gets the wash too, though its
+frame has none; at 10% peak in a single corner the difference is not worth a
+per-page prop.
+
+## G22 — Decorative hairline meshes were missing on two frames  [FIXED 2026-08-21]  (severity: med)
+`About.vue` already drew its mesh (`359:9560`) with the shared `.grid-mesh`
+background and per-axis cell variables. Two other frames carry the same device
+and neither was implemented — G19's review missed them because it compared
+content blocks, not backdrops:
+
+| frame | node | size | cells | placement |
+|---|---|---|---|---|
+| projects `222:1989` | `266:2771` | 1200x1200 | 109.095 x 109.095 | x=120 (centred), y=180 |
+| case study `336:5374` | `511:9519` | 1200x872 | 109.095 x 109.095 | x=120 (centred), y=202 |
+| about `336:5623` | `359:9560` | 1200x944 | 109 x 118 | behind the story block |
+
+Both new ones were first exported as SVG (~700 bytes gzipped each) and then
+**discarded** in favour of `.grid-mesh`: the lines are a plain repeating grid
+with white strokes, so a CSS background reproduces them exactly, costs no
+request, and matches how About already does it. Drawn from `lg` up only, since
+the geometry is canvas px.
+
+Also corrected while here: Home's mesh (`268:2966`) is **884x778**, not square.
+`Home.vue` drew it `size-[884px]`, overshooting the frame by 106px.
+
+## G23 — "verified" was not the same as "built to the frame"  [FIXED 2026-08-21]  (severity: HIGH)
+The user reported `/fa/insights` and `/fa/contact` as visibly wrong. Both were
+marked **verified** in MANIFEST. That status turned out to mean *"already built
+against this node ID and structurally re-checked"* — it never included measuring
+the header block. Re-diffing every page header against its frame found the same
+defect on four pages, plus two more type errors.
+
+**The standard page header, measured off five frames.** Every listing/detail
+page uses one device: an outer **670** track on **gap 64**, wrapping a **612**
+column on **gap 40** (eyebrow → title block), whose title block is **gap 24**.
+Everything is centred.
+
+| page | frame | header node | headline |
+|---|---|---|---|
+| Work index | 222:1989 | 266:2793 | Display/Large 48/700 |
+| Insights index | 268:4158 | 268:5233 | Display/Large 48/700 |
+| Contact | 279:6325 | 279:6398 → 279:6399 | Display/Large 48/700 |
+| Insights show | 285:4590 | 285:5060 | Display/Medium 40/700 |
+| case study | 336:5374 | 411:8560 | Display/Medium 40/700 |
+
+**What was actually wrong:**
+
+1. **Insights index** — `gap-4` (16) everywhere instead of 40/24, no 670 track,
+   and the headline was `display-md` (40) where 268:5239 is **48**. The section
+   rhythm was also flat: 270:5252 runs **144** between the featured card, the
+   2-up row and the 3-up block, and inside the 3-up block (270:5286) the two
+   rows sit **96** apart while columns stay 24. The page had 48/96/24.
+2. **Contact** — same `gap-4` header; headline `display-md` where 279:6404 is
+   **48**; lede `title-sm` (18/400) where 279:6406 is **tite/Medium (20/500)`;
+   and the headline was `brand-50` where the frame fills Black/50 (`ink-50`).
+3. **Insights show** — headline `display-sm` (36) where 285:5066 is **40**.
+4. **case study** — header was left-aligned with an eyebrow. 411:8560 is
+   **centred**, both text runs are `CENTER`, and the frame draws **no eyebrow**
+   there. Now centred, kicker dropped, `Eyebrow` import removed.
+
+**The mesh again (see G22).** Three more frames carry the 1200x872 / 109px
+hairline mesh at y≈202 and none of them drew it: Contact `279:6376`,
+Insights show `299:7865`, Services `511:9147`. All three now use `.grid-mesh`.
+
+5. **Services** — header `gap-6` throughout where 309:4754 is **gap 40** to the
+   title block (309:4758, gap 24), and the lede was `title-sm` (18/400) where
+   309:4760 is **tite/Large (22/500)**.
+
+**Legal was the one that held up.** 279:5998 has a single child, so its gap 40
+is inert and 279:6002's gap 24 is the real one — which is what `Legal.vue`
+already had. Its header is also `flex-end` (inline start), not centred, unlike
+every listing page; that is correct and deliberate.
+
+**Lesson for the ledger:** "verified" is not a build status. A page can cite the
+right node ID in its docblock, render the right blocks in the right order, and
+still be wrong in every gap and type size — which is exactly what a user sees
+first. Re-measure the header and the section gaps, not just the block order.
+
+
+## G24 — Footer's giant outlined wordmark is not shipped  (severity: low)
+`279:6327` carries a 1248x304 outlined wordmark (`1065:2315`) positioned at
+x=99 / y=264 so that it bleeds 137px past the footer's own bottom edge and is
+clipped. It spells **SAHRA**, and it is drawn as five gradient-filled letterforms
+running `#231F20` at 15% -> transparent by 34.7%.
+
+Not implemented, on two independent grounds:
+1. It is the previous agency's name, which the footer already refuses to ship
+   (see the component's own DEVIATION note).
+2. It is invisible. `#231F20` at 15% over the `#141414` ground composites to
+   `#171717` — sampled off the rendered frame at exactly that. A 3/255 tonal
+   shift is below the threshold of perception on any real display.
+
+Redrawing it with the Sizdah letterforms would be inventing artwork to produce
+an effect nobody can see. If it is ever wanted, it is a single absolutely
+positioned SVG at `inset-block-start: 61.25%` with `overflow-hidden` on the
+footer.
+
+## G25 — Phase 4 was never done: the component sheet had never been read  [FIXED 2026-08-21]  (severity: HIGH)
+MANIFEST listed `21:2152` "Components" and every card frame under it as
+**pending**, and PROGRESS listed Phase 4 (shared layout & components) unchecked,
+while Phase 5 was marked complete. The pages had been measured; the components
+they are built from never had been. Reading the sheet turned up defects in every
+shared component on the site.
+
+**The sheet's real contents** (it is worth knowing these exist):
+`20:2087` header item (selected / default) · `21:2164` CTA (sm-BW / lg-BW /
+sm-WB / lg-WB) · `21:2159` Header · `91:2580` logo · `71:2145` KPIs ·
+`138:2357` project cards (open / close) · `537:5510` card (Default / **hover**) ·
+`546:7528` testimonial (Default / **hover**) · `598:5732` member card ·
+`276:5724` blog card (612 / 400).
+
+**The pattern worth remembering: this file ships hover and state variants for
+most cards, and none of them had been implemented.** A component that renders
+its default state correctly was still only half-built.
+
+### Fixed
+
+1. **`CtaButton` forced every button to 57px.** It carried `min-h-[57px]` and a
+   docblock claiming "every instance in the file measures 57px tall". False: the
+   set is sm 48 (46 with no arrow) and lg 57. Height falls out of padding plus
+   the label's line box with no min-height at all — 12+22+12=46, 16+25+16=57 —
+   so the pin is now gone. The header CTA had been rendering 11px too tall.
+2. **The header doodle was on the wrong element.** `Layer_1` (`I268:3031;56:2399`)
+   sits at x=98.148 / y=12.948; the CTA occupies x=96..223. It decorates the
+   CTA's top corner, mirrored on X. It had been pinned beside the wordmark.
+3. **Nav underlines were one asset at two opacities.** The two states are
+   different nodes: selected `54:2219` is a full-width rule on a 2px layout box
+   that renders 4.71px (`preserveAspectRatio="none"`, so it stretches); default
+   `27:2357` is a 45.276x9.676 squiggle exported with `opacity="0"` baked in —
+   a deliberate spacer, and load-bearing, since it is what makes an unselected
+   item 42.676 tall against the selected item's 35. Both assets were already in
+   the repo, correctly exported, and wired up wrong.
+4. **Nav weight** — default is Regular 400, selected Medium 500. `text-title-md`
+   carries 500, so every item rendered selected-weight.
+5. **Header bottom border** — the frame paints none; the 15% white fill and the
+   15px blur are the whole treatment.
+6. **Footer colours were inverted.** Column titles are black/900 `#393637` (a
+   deliberately recessive label, *darker* than the links) and links, tagline and
+   bottom bar are black/600 `#7B7979`. Titles had been `paper` #F1F1F1. Both
+   hairlines are light, not dark: the footer's top rule is black/100 `#E9E9E9`
+   and the bottom bar's is black/300 `#BDBCBD`; both had been ink-800 `#434343`.
+   All four sampled off the rendered frame, not inferred.
+   **-> Flagged for a human:** `#393637` on `#141414` is a contrast ratio of
+   about **1.5:1**. It is what the file draws, and it is what now ships, but it
+   fails WCAG AA (4.5:1) by a wide margin and the column headings are close to
+   unreadable. If accessibility outranks fidelity here, `warm-600` #7B7979 —
+   the links' own colour — is the smallest change that clears AA.
+7. **Footer geometry** — the frame rounds the footer 16px and casts an upward
+   `0 -5px 10px rgba(0,0,0,0.05)` shadow (new `shadow-footer` token). Its type
+   runs on **1.5**, not the 1.25 scale default: the Quick Links column is
+   24 + 16 + 6x21 + 5x12 = 226, the frame's height exactly.
+8. **`BlogCard` used one title size for both variants.** 612 card is 28px
+   (`275:5577`), 400 card is 24px (`276:5746`). The image hairline is black/100
+   `#E9E9E9` (warm), not ink-100 `#E8E8E8` (cool).
+9. **`StatCard` border was half width** — `71:2145` is `border-4` at
+   Yellow/1000 40%, not 2px; and its value row sits on space8, not space16.
+10. **`TestimonialCard` had been built without the frame.** Its own docblock
+    admitted this and asked for a re-check. Every guess was wrong: border
+    ink-800 -> Black/300 `#B9B9B9`; quote Black/200 -> Black/50; name 16 Medium
+    White -> **14** Medium Black/100; role 14 Regular Black/300 -> **12** Medium
+    Black/200; rhythm 24/40 -> **40/48**; avatar gap 12 -> 8; name/role gap 0 -> 4.
+    Its ground was `.surface-glow`, which lays a 20% black wash and an 80%
+    ink-1000 base *under* the raking gradient and so sinks the card below the
+    page ground — the frame lifts it above (`#28251e` against a `#1e1e1e` sheet).
+    Now `.testimonial-wash`: the single -45.9deg wash plus the vertical hairline
+    texture the frame carries as a 442px image whose lines repeat every 54.4px,
+    drawn in CSS on the G22 precedent rather than shipped as a bitmap.
+11. **Two hover variants implemented** — testimonial `546:7529` (solid
+    Yellow/1000, copy inverted to the dark ramp) and process card `537:5511`
+    (flat `#f3b435`, the file's only use of that yellow). The process numeral is
+    also Maneli **Regular**, not Medium.
+
+### Deviations taken, deliberately
+- The process hover variant re-aligns its numeral row from `center` to `start`,
+  which would jog the numeral ~12px on pointer-enter. Held steady; only the
+  colour inverts.
+- Both hover variants swap in separately-inked dark glyphs. The marks are
+  single-colour, so they are driven to black with `brightness-0` rather than
+  shipping a second pair of near-identical SVGs.
+- The header's logo is not flush to the 96 gutter in the frame — a fixed 262px
+  gap leaves it 36px short on the inline-end side, against a 96px gutter on the
+  other. `justify-between` is kept: a hardcoded 262 would not survive a resize,
+  and the asymmetry reads as authoring slack.
+
+### Still pending on the sheet
+`598:5732` member card (Default / Variant2) and `138:2357` project cards
+(open / close) were inventoried but not yet diffed against their implementations
+(`Pages/About.vue` team block, `ProjectPostCard` / `ProjectShowcase`). The
+`21:2159` Header and `91:2580` logo masters are covered by the instance read.
+
+## G26 — Post-G25 re-walk of the pages that embed the fixed components  (2026-08-21)  (severity: n/a — verified clean)
+PROGRESS flagged a risk after G25: several page layouts might have been sized
+around the *old*, wrong component metrics — "notably any layout that assumed a
+57px CTA". Walked every consumer. **Nothing was compensating; the G25 fixes were
+self-contained inside the components.** Recorded so it is not re-investigated.
+
+| component fixed in G25 | consumers | verdict |
+|---|---|---|
+| `CtaButton` (57px pin removed) | Home, Contact, Services, Error, `LeadMagnetBanner`, `FinalCtaCard`, `StartTogetherCard`, `AppHeader` | no `h-[57px]` / `min-h-[57px]` anywhere outside CtaButton's own docblock; `AppHeader` sets `py-6` and lets height fall out of content, which is what the removal requires |
+| `BlogCard` (per-variant title size) | Insights index, `InsightsShowcase` | Insights index passes `variant="wide"` for the first two cards and the default for the rest, so 28px/24px land on the right rows |
+| `StatCard` (border 2→4, row 16→8) | Home KPI row | passes props only; grid `gap-4` is track spacing, not compensation |
+| `TestimonialCard` (rebuilt end-to-end) | Home reviews row | passes props only |
+
+One thing deliberately **not** changed: `FeaturedPostCard` still uses
+`.surface-glow`. G25 removed that treatment from `TestimonialCard` because it
+sinks a card below the page ground — but the class was *sampled from* the
+featured-post node `270:5253` in the first place, alongside the two contact
+cards (`279:6409`, `279:6439`). It is correct there. Removing it by analogy with
+the testimonial fix would be a regression.
+

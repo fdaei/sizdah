@@ -23,9 +23,9 @@ return [
      | Kept in sync with locales.default so validation strings load correctly
      | before SetLocale middleware runs (e.g. during console commands).
      */
-    'locale' => env('APP_LOCALE', 'en'),
+    'locale' => env('APP_LOCALE', 'fa'),
 
-    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
+    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'fa'),
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 

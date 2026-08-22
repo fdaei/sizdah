@@ -200,6 +200,8 @@ export interface ServiceItem {
   title: string
   description: string
   features: string[]
+  /** Stable across locales, unlike `slug` — keys the Home orbit artwork. */
+  icon: string | null
   image: MediaImage | null
 }
 

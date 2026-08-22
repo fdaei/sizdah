@@ -11,7 +11,7 @@ final class AdminLocaleController extends Controller
 {
     public function __invoke(Request $request, string $locale): RedirectResponse
     {
-        abort_unless(in_array($locale, ['en', 'fa'], true), 404);
+        abort_unless(in_array($locale, config('locales.admin'), true), 404);
 
         $request->session()->put('admin_locale', $locale);
 

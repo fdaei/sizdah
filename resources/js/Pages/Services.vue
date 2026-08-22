@@ -15,8 +15,10 @@ import type { PageSectionData, SectionMap, SeoMeta, ServiceItem } from '@/types'
  * The numbering is positional (01…04) and generated here rather than stored, so
  * reordering services in Filament renumbers them automatically.
  *
- * DEVIATIONS: the frame sets the numerals in Maneli, which is not licensed for
- * this project — they fall back to the display stack at the same 64px. The
+ * DEVIATIONS: the frame sets the numerals in Maneli (315:4854, 64px in a 145px
+ * box), which is not licensed for this project — they take the `font-display`
+ * stack at the same 64px. The 2.27 line box is a Maneli metric artefact rather
+ * than a layout intent, so the numerals stay on leading-1. The
  * hand-drawn flourishes (322:5207 and the "Group 21" badge at 315:4998) are not
  * placed. Both recorded in FIGMA/state.json.
  */
@@ -34,13 +36,27 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
   <SeoHead :seo="props.seo" />
 
   <div class="section-first pb-24">
-    <div class="container-sizdah flex flex-col gap-24">
-      <header class="flex flex-col items-center gap-6 text-center">
+    <div class="container-sizdah relative isolate flex flex-col gap-24">
+      <!-- 511:9147 — the shared 109px mesh, 872 tall, from frame y=202. -->
+      <div
+        class="grid-mesh pointer-events-none absolute inset-inline-start-0 inset-block-start-[22px] -z-10 hidden h-[872px] w-full max-w-container lg:block"
+        style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
+        aria-hidden="true"
+      />
+
+      <!--
+        309:4754 — gap 40 to the title block (309:4758), which is gap 24. The
+        lede is tite/Large (22/500), not the 18/400 this carried.
+      -->
+      <header class="flex flex-col items-center gap-10 text-center">
         <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
-        <h1 class="max-w-measure text-display-lg text-ink-50">{{ props.heading.title }}</h1>
-        <p v-if="props.heading.description" class="max-w-measure text-title-sm text-ink-200">
-          {{ props.heading.description }}
-        </p>
+
+        <div class="flex flex-col items-center gap-6">
+          <h1 class="max-w-measure text-display-lg text-ink-50">{{ props.heading.title }}</h1>
+          <p v-if="props.heading.description" class="max-w-measure text-title-lg text-ink-200">
+            {{ props.heading.description }}
+          </p>
+        </div>
       </header>
 
       <section
@@ -70,7 +86,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
         </div>
 
         <div class="flex flex-col gap-2">
-          <p class="text-display-xl text-paper latin-nums" aria-hidden="true">
+          <p class="font-display text-display-xl text-paper latin-nums" aria-hidden="true">
             {{ String(index + 1).padStart(2, '0') }}
           </p>
 

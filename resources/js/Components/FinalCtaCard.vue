@@ -15,7 +15,10 @@ import backgroundUrl from '~img/sizdah/shared/final-cta-bg.png'
  * takes the Sizdah brand colour, and the button gets an ink label so it can be
  * read. Recorded in FIGMA/state.json.
  *
- * `section.content` holds the service list printed under the button.
+ * `section.subtitle` holds the service list printed under the button — that is
+ * the column PageSeeder::finalCta() writes it to. This read used to be
+ * `section.content`, which no seeded or authored CTA ever fills, so the line
+ * silently never rendered.
  */
 const props = defineProps<{ section: PageSectionData }>()
 </script>
@@ -52,8 +55,8 @@ const props = defineProps<{ section: PageSectionData }>()
         />
       </div>
 
-      <p v-if="props.section.content" class="text-title-sm text-ink-100">
-        {{ props.section.content }}
+      <p v-if="props.section.subtitle" class="text-title-sm text-ink-100">
+        {{ props.section.subtitle }}
       </p>
     </div>
   </section>

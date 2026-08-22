@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 return [
 
+    'eyebrow' => 'المشاريع',
     'industry'        => 'المجال',
-    'year'            => 'السنة',
+    'year'            => 'سنوات التعاون',
     'instagram'       => 'إنستغرام',
     'services'        => 'الخدمات',
-    'challenge'       => 'التحدي',
-    'goals'           => 'الأهداف',
-    'strategy'        => 'الاستراتيجية',
-    'deliverables'    => 'المخرجات',
-    'showcase'        => 'عرض المحتوى',
+    'challenge'       => 'أين كان التحدي الحقيقي',
+    'goals'           => 'أهداف المشروع',
+    'strategy'        => 'المسار الذي سلكناه',
+    'deliverables'    => 'ما قدمناه',
+    'showcase'        => 'محتوى مختار',
     'before'          => 'قبل',
     'after'           => 'بعد',
     'results'         => 'النتائج',
-    'next_case_study' => 'دراسة الحالة التالية',
+    'next_case_study' => 'المشروع التالي',
 
 ];

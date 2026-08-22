@@ -7,7 +7,7 @@ import retentionUrl from '~img/sizdah/home/kpi-retention.svg'
 /**
  * The file's "KPIs" component (71:2145) — three across on Home (268:3026).
  *
- * Figma: 2px border at Yellow/1000 40%, radiusSM, space12 inline / space24
+ * Figma: 4px border at Yellow/1000 40%, radiusSM, space12 inline / space24
  * block padding, over a 117.4deg wash that fades the same yellow from 6% to 0.
  * Value is Display/Small on Yellow/50, label is title/Medium on Yellow/1000,
  * caption is title/Small on Black/300.
@@ -39,7 +39,7 @@ const iconUrl = computed(() => (props.icon ? ICONS[props.icon] : undefined))
 
 <template>
   <div
-    class="flex flex-col items-center justify-center gap-2 rounded-sm border-2 border-brand/40 px-3 py-6 text-center"
+    class="flex flex-col items-center justify-center gap-2 rounded-sm border-4 border-brand/40 px-3 py-6 text-center"
     style="
       background-image: linear-gradient(
         117.4deg,
@@ -48,8 +48,9 @@ const iconUrl = computed(() => (props.icon ? ICONS[props.icon] : undefined))
       );
     "
   >
-    <div class="flex items-center justify-center gap-4">
-      <p class="latin-nums text-display-sm text-brand-50">{{ value }}</p>
+    <!-- 71:2135 sits the value and its glyph on space8, not space16. -->
+    <div class="flex items-center justify-center gap-2">
+      <p class="latin-nums text-display-sm text-brand-50" :data-counter="value">{{ value }}</p>
       <img
         v-if="iconUrl"
         :src="iconUrl"

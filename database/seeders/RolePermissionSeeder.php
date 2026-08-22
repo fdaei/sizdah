@@ -126,11 +126,11 @@ final class RolePermissionSeeder extends Seeder
             return;
         }
 
-        $email = env('ADMIN_EMAIL', 'admin@sahra.example');
+        $email = env('ADMIN_EMAIL', 'admin@sizdah.example');
         $password = env('ADMIN_PASSWORD', 'ChangeMe!2026');
 
         $user = User::create([
-            'name' => env('ADMIN_NAME', 'Sahra Admin'),
+            'name' => env('ADMIN_NAME', 'Sizdah Admin'),
             'email' => $email,
             'password' => Hash::make($password),
             'email_verified_at' => now(),

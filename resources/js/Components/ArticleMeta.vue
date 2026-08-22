@@ -23,13 +23,25 @@ const { t } = useTranslations()
 const chips = computed(() =>
   [
     props.post.category
-      ? { key: 'subject', icon: subjectUrl, label: t('blog.subject'), value: props.post.category.name }
+      ? {
+          key: 'subject',
+          icon: subjectUrl,
+          label: t('blog.subject'),
+          value: props.post.category.name,
+        }
       : null,
     props.post.author
-      ? { key: 'author', icon: authorUrl, label: t('blog.written_by'), value: props.post.author.name }
+      ? {
+          key: 'author',
+          icon: authorUrl,
+          label: t('blog.written_by'),
+          value: props.post.author.name,
+        }
       : null,
     { key: 'date', icon: calendarUrl, label: t('blog.date'), value: props.post.publishedAt },
-  ].filter((chip): chip is { key: string; icon: string; label: string; value: string } => chip !== null),
+  ].filter(
+    (chip): chip is { key: string; icon: string; label: string; value: string } => chip !== null,
+  ),
 )
 </script>
 

@@ -24,7 +24,11 @@ use Illuminate\Support\Facades\Route;
 | URL::defaults() in App\Http\Middleware\SetLocale, so route('work.show', $p)
 | stays inside the visitor's current language without extra arguments.
 |
-| Figma traceability lives in docs/TRACEABILITY.md.
+| Figma node IDs below are the LIVE ones, re-read 2026-08-21. The IDs that
+| used to sit here (1419:*, 1362:*, 908:1576, …) belong to a two-page version
+| of the file that no longer exists — docs/TRACEABILITY.md and
+| docs/FIGMA-AUDIT.md still cite that generation and are stale. The current
+| map is .figma-sync/MANIFEST.md.
 |
 */
 
@@ -32,7 +36,7 @@ $localePattern = implode('|', array_keys(config('locales.supported')));
 
 Route::get('admin/language/{locale}', AdminLocaleController::class)
     ->middleware('auth')
-    ->whereIn('locale', ['en', 'fa'])
+    ->whereIn('locale', config('locales.admin'))
     ->name('admin.locale');
 
 // SEO endpoints — not locale-prefixed.
@@ -46,46 +50,47 @@ Route::prefix('{locale}')
     ->middleware('locale')
     ->group(function (): void {
 
-        // 1 — Home                       Figma 1419:9192 / 1419:9191
+        // 1 — Home                       Figma 268:2962 (canonical dark)
         Route::get('/', HomeController::class)->name('home');
 
-        // 2 — Projects listing           Figma 1362:7198 / 1498:10840
+        // 2 — Projects listing           Figma 222:1989
         Route::get('work', [ProjectController::class, 'index'])->name('work.index');
 
-        // 3 — Single project             Figma 1323:7541 / 1555:10866
+        // 3 — Single project             Figma 336:5374 ("case study")
         Route::get('work/{project}', [ProjectController::class, 'show'])->name('work.show');
 
-        // 4 — Services                   Figma 1323:7189 / 1626:12562
+        // 4 — Services                   Figma 308:4492
         // Single page, four sections. No detail routes — see FIGMA-AUDIT §4.
         Route::get('services', ServiceController::class)->name('services');
 
-        // 5 — About                      Figma 908:1576 / 1557:12225
+        // 5 — About                      Figma 336:5623
         Route::get('about', AboutController::class)->name('about');
 
-        // 6 — Blog listing               Figma 1353:7935 / 1530:10875
+        // 6 — Blog listing               Figma 268:4158
         Route::get('insights', [PostController::class, 'index'])->name('insights.index');
 
-        // 7 — Single blog                Figma 1352:7391 / 1543:11175
+        // 7 — Single blog                Figma 285:4590
         Route::get('insights/{post}', [PostController::class, 'show'])->name('insights.show');
 
-        // 8 — Contact                    Figma 1363:8934 / 1494:9544
+        // 8 — Contact                    Figma 279:6325
         Route::get('contact', [ContactController::class, 'create'])->name('contact');
         Route::post('contact', [ContactController::class, 'store'])
             ->middleware('throttle:6,1')
             ->name('contact.store');
 
-        // Lead magnet / newsletter       Figma 1419:9322, 93:55
+        // Lead magnet / newsletter       Figma 391:4795 (on Home 268:2962).
+        // The frame's wording differs from the seeded copy — see GAPS G16.
         Route::post('newsletter', NewsletterController::class)
             ->middleware('throttle:6,1')
             ->name('newsletter.store');
 
-        // 9/10 — Legal                   Figma 1031:2101, 1309:4891
+        // 9/10 — Legal                   Figma 279:5924, 281:6773
         Route::get('privacy-policy', [LegalController::class, 'privacy'])->name('legal.privacy');
         Route::get('terms', [LegalController::class, 'terms'])->name('legal.terms');
     });
 
 /*
-| Bare-path fallback: /about -> /en/about, / -> /en
+| Bare-path fallback: /about -> /fa/about, / -> /fa (config locales.default)
 | Registered last so it never shadows a real localised route.
 */
 Route::middleware('locale.redirect')->group(function (): void {

@@ -7,7 +7,6 @@ namespace Database\Seeders;
 use App\Enums\PublicationStatus;
 use App\Models\Service;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * The four services. Copy from Figma 1323:7189.

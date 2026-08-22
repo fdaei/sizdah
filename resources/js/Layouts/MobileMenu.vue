@@ -46,10 +46,7 @@ watch(
     leave-to-class="opacity-0"
   >
     <div v-if="open" class="fixed inset-0 z-menu lg:hidden">
-      <div
-        class="absolute inset-0 bg-ink-1000/80 backdrop-blur-sm"
-        @click="emit('close')"
-      />
+      <div class="absolute inset-0 bg-ink-1000/80 backdrop-blur-sm" @click="emit('close')" />
 
       <div
         ref="panel"

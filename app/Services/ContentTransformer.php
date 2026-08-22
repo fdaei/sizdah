@@ -136,6 +136,12 @@ final class ContentTransformer
             'title' => (string) $service->getTranslation('title'),
             'description' => (string) $service->getTranslation('description'),
             'features' => (array) ($service->getTranslation('features') ?? []),
+            /*
+             | Non-translatable, unlike `slug` — so it is the only stable key a
+             | component can match artwork on across en/fa/ar. Home's services
+             | band (268:3032) picks each orbit illustration this way.
+             */
+            'icon' => $service->icon,
             'image' => MediaTransformer::make(
                 $service->image_path,
                 $service->getTranslation('image_alt'),

@@ -39,19 +39,19 @@ final class PageSeeder extends Seeder
     {
         $page = $this->page('home', [
             'en' => [
-                'title' => 'We build content systems for brands ready to grow',
-                'seo_title' => 'Sahra — Digital Marketing Agency in Muscat',
-                'seo_description' => 'Sahra helps businesses in Oman create stronger brand presence through strategy, content, branding, video, and digital marketing.',
+                'title' => 'We help your business grow and sell',
+                'seo_title' => 'Sizdah — Branding & Digital Marketing Agency',
+                'seo_description' => 'By combining strategy, design, content and advertising, Sizdah helps your brand get seen, win more customers and grow.',
             ],
             'fa' => [
-                'title' => 'ما سیستم‌های محتوایی می‌سازیم برای برندهایی که آماده رشدند',
-                'seo_title' => 'صحرا — آژانس بازاریابی دیجیتال در مسقط',
-                'seo_description' => 'صحرا به کسب‌وکارها در عمان کمک می‌کند حضور برند قوی‌تری بسازند.',
+                'title' => 'ما به مسیر رشد و فروش کسب و کار شما کمک می‌کنیم',
+                'seo_title' => 'سیزده — آژانس دیجیتال مارکتینگ و برندینگ',
+                'seo_description' => 'با ترکیب استراتژی، طراحی، محتوا و تبلیغات، کمک می‌کنیم برند شما بهتر دیده شود، مشتریان بیشتری جذب کند و رشد کند.',
             ],
             'ar' => [
-                'title' => 'نبني أنظمة محتوى للعلامات التجارية المستعدة للنمو',
-                'seo_title' => 'صحراء — وكالة تسويق رقمي في مسقط',
-                'seo_description' => 'تساعد صحراء الشركات في عُمان على بناء حضور أقوى لعلامتها التجارية.',
+                'title' => 'نساعد أعمالك على النمو والمبيعات',
+                'seo_title' => 'سيزده — وكالة الهوية والتسويق الرقمي',
+                'seo_description' => 'بمزج الاستراتيجية والتصميم والمحتوى والإعلانات، نساعد علامتك على الظهور واكتساب عملاء أكثر والنمو.',
             ],
         ]);
 
@@ -63,40 +63,40 @@ final class PageSeeder extends Seeder
         // and "marketing systems" is a distinct gradient-styled phrase).
         $this->section($page, SectionType::Hero, 0, [
             'en' => [
-                'eyebrow' => 'Digital Marketing Agency in Muscat',
-                'title' => 'We build',
-                'subtitle' => 'Sahra connects strategy, identity, content, and campaigns into one clear direction for business growth',
-                'primary_cta_label' => 'Explore Projects',
-                'primary_cta_url' => '/work',
-                'secondary_cta_label' => 'Start a Conversation',
-                'secondary_cta_url' => '/contact',
-                'image_alt' => 'Golden desert dunes meeting the horizon at sunrise',
-                'content' => 'marketing systems',
-                'description' => 'for brands ready to grow',
+                'eyebrow' => 'Sizdah Branding & Digital Marketing Agency',
+                'title' => 'We help your',
+                'subtitle' => 'growth and sales',
+                'primary_cta_label' => 'Start a Conversation',
+                'primary_cta_url' => '/contact',
+                'secondary_cta_label' => 'See Projects',
+                'secondary_cta_url' => '/work',
+                'image_alt' => 'Four hand-drawn marks — notebook, bulb, laptop and rocket — linked by a dotted trail',
+                'content' => 'By combining strategy, design, content and advertising, we help your brand get seen, win more customers and grow.',
+                'description' => 'business move forward',
             ],
             'fa' => [
-                'eyebrow' => 'آژانس بازاریابی دیجیتال در مسقط',
-                'title' => 'ما می‌سازیم',
-                'subtitle' => 'صحرا استراتژی، هویت، محتوا و کمپین را در یک مسیر شفاف برای رشد کسب‌وکار به‌هم متصل می‌کند.',
-                'primary_cta_label' => 'مشاهده پروژه‌ها',
-                'primary_cta_url' => '/work',
-                'secondary_cta_label' => 'شروع گفتگو',
-                'secondary_cta_url' => '/contact',
-                'image_alt' => 'تپه‌های طلایی کویر در افق هنگام طلوع',
-                'content' => 'سیستم‌های بازاریابی',
-                'description' => 'برای برندهای آماده رشد',
+                'eyebrow' => 'آژانس دیجیتال مارکتینگ و برندینگ سیزده',
+                'title' => 'ما به مسیر',
+                'subtitle' => 'رشد و فروش',
+                'primary_cta_label' => 'شروع گفتگو',
+                'primary_cta_url' => '/contact',
+                'secondary_cta_label' => 'دیدن پروژه ها',
+                'secondary_cta_url' => '/work',
+                'image_alt' => 'چهار نشانه دست‌کشیده: دفترچه، لامپ، لپ‌تاپ و موشک، روی مسیری نقطه‌چین',
+                'content' => 'با ترکیب استراتژی، طراحی، محتوا و تبلیغات، کمک می‌کنیم برند شما بهتر دیده شود، مشتریان بیشتری جذب کند و رشد کند.',
+                'description' => 'کسب و کار شما کمک می‌کنیم',
             ],
             'ar' => [
-                'eyebrow' => 'وكالة تسويق رقمي في مسقط',
-                'title' => 'نبني',
-                'subtitle' => 'تربط صحراء الاستراتيجية والهوية والمحتوى والحملات في اتجاه واحد واضح لنمو الأعمال.',
-                'primary_cta_label' => 'شاهد المشاريع',
-                'primary_cta_url' => '/work',
-                'secondary_cta_label' => 'ابدأ محادثة',
-                'secondary_cta_url' => '/contact',
-                'image_alt' => 'كثبان رملية ذهبية عند الأفق وقت الشروق',
-                'content' => 'أنظمة التسويق',
-                'description' => 'للعلامات المستعدة للنمو',
+                'eyebrow' => 'وكالة سيزده للهوية والتسويق الرقمي',
+                'title' => 'نساعد على',
+                'subtitle' => 'النمو والمبيعات',
+                'primary_cta_label' => 'ابدأ محادثة',
+                'primary_cta_url' => '/contact',
+                'secondary_cta_label' => 'شاهد المشاريع',
+                'secondary_cta_url' => '/work',
+                'image_alt' => 'أربع رسومات يدوية: دفتر ومصباح وحاسوب وصاروخ على مسار منقّط',
+                'content' => 'بمزج الاستراتيجية والتصميم والمحتوى والإعلانات، نساعد علامتك على الظهور واكتساب عملاء أكثر والنمو.',
+                'description' => 'أعمالك',
             ],
         ]);
 
@@ -175,9 +175,9 @@ final class PageSeeder extends Seeder
                 'subtitle' => 'brands',
             ],
             'fa' => [
-                'title' => 'مورد اعتماد',
+                'title' => 'بیش از ۵۰ برند',
                 'content' => '+۵۰',
-                'subtitle' => 'برند',
+                'subtitle' => 'را انتخاب کرده‌اند',
             ],
             'ar' => [
                 'title' => 'موضع ثقة',
@@ -191,12 +191,12 @@ final class PageSeeder extends Seeder
             'en' => [
                 'eyebrow' => 'Our Services',
                 'title' => 'A Connected System for Brand Growth',
-                'description' => 'From strategy and identity to content and campaigns, Sahra brings every part of your marketing into one clear direction',
+                'description' => 'From strategy and identity to content and campaigns, Sizdah brings every part of your marketing into one clear direction',
             ],
             'fa' => [
                 'eyebrow' => 'خدمات ما',
-                'title' => 'چهار سیستم، یک مسیر',
-                'description' => 'هر آنچه انجام می‌دهیم برای ایجاد شفافیت، ساختار و مسیر بلندمدت برند شماست.',
+                'title' => 'یک مسیر یکپارچه برای رشد برند',
+                'description' => 'از استراتژی و هویت برند تا محتوا و کمپین‌ها، سیزده همه‌چیز را در بازاریابی برندت هم‌راستا و هدفمند پیش می‌برد',
             ],
             'ar' => [
                 'eyebrow' => 'خدماتنا',
@@ -205,24 +205,33 @@ final class PageSeeder extends Seeder
             ],
         ]);
 
-        // Lead magnet — 1419:9322
+        /*
+         | Lead magnet — 391:4795 on the canonical Home frame.
+         |
+         | The fa copy is the frame's three text runs verbatim (391:4798,
+         | 391:4799 and the CTA label on 391:4796). It reads as a diagnostic
+         | prompt, not a download offer, and the button is "شروع گفتگو" rather
+         | than "get the checklist" — the frame draws no email field, so the
+         | section points at contact. en/ar are derived from it and parked
+         | (locales are inactive per GAPS G15).
+         */
         $this->section($page, SectionType::LeadMagnet, 4, [
             'en' => [
-                'title' => 'Is your content really directed or just consistent?',
-                'description' => 'Get the Content Direction Checklist and evaluate your brand system.',
-                'primary_cta_label' => 'Get checklist',
+                'title' => 'Does your content follow a clear path, or does it just keep going?',
+                'description' => 'Review your brand content system and see how well it lines up with your goals.',
+                'primary_cta_label' => 'Start a conversation',
                 'primary_cta_url' => '/contact',
             ],
             'fa' => [
-                'title' => 'آیا محتوای شما واقعاً جهت‌مند است یا فقط منظم؟',
-                'description' => 'چک‌لیست جهت‌گیری محتوا را دریافت و سیستم برند خود را ارزیابی کنید.',
-                'primary_cta_label' => 'دریافت چک‌لیست',
+                'title' => 'آیا محتوای شما مسیر مشخصی دارد یا فقط ادامه پیدا می‌کند؟',
+                'description' => 'سیستم محتوای برند خود را بررسی کنید و ببینید چقدر با اهداف شما هماهنگ است.',
+                'primary_cta_label' => 'شروع گفتگو',
                 'primary_cta_url' => '/contact',
             ],
             'ar' => [
-                'title' => 'هل محتواك موجّه فعلاً أم أنه منتظم فقط؟',
-                'description' => 'احصل على قائمة توجيه المحتوى وقيّم نظام علامتك التجارية.',
-                'primary_cta_label' => 'احصل على القائمة',
+                'title' => 'هل لمحتواك مسار واضح أم أنه يستمر فحسب؟',
+                'description' => 'راجع نظام محتوى علامتك التجارية وانظر مدى انسجامه مع أهدافك.',
+                'primary_cta_label' => 'ابدأ محادثة',
                 'primary_cta_url' => '/contact',
             ],
         ]);
@@ -238,8 +247,8 @@ final class PageSeeder extends Seeder
             ],
             'fa' => [
                 'eyebrow' => 'پروژه‌های ما',
-                'title' => 'جایی که استراتژی دیده می‌شود',
-                'subtitle' => 'مجموعه‌ای از پروژه‌های برند، محتوا و طراحی بازاریابی برای کمک به کسب‌وکارها تا شفاف‌تر ارتباط برقرار کنند و هدفمند رشد کنند.',
+                'title' => "هر برند\nداستان خودش را دارد",
+                'subtitle' => 'نمونه‌ای از برندهایی که در این مسیر همراهشان بوده‌ایم',
                 'primary_cta_label' => 'مشاهده همه نمونه‌کارها',
                 'primary_cta_url' => '/work',
             ],
@@ -260,7 +269,7 @@ final class PageSeeder extends Seeder
                 'subtitle' => 'Our process keeps every project clear, structured, and aligned with your brand’s real needs.',
             ],
             'fa' => [
-                'eyebrow' => 'فرایند ما',
+                'eyebrow' => 'مسیر همکاری',
                 'title' => 'مسیری روشن برای رشد برند',
                 'subtitle' => 'فرایند ما هر پروژه را شفاف، ساختاریافته و هم‌راستا با نیازهای واقعی برند شما نگه می‌دارد.',
             ],
@@ -275,32 +284,32 @@ final class PageSeeder extends Seeder
             [
                 '_icon' => 'discovery',
                 'en' => ['value' => '01', 'title' => 'Discovery & Brand Review', 'description' => 'Deep analysis of your brand, audience, and market position'],
-                'fa' => ['value' => '۰۱', 'title' => 'کشف و بررسی برند', 'description' => 'تحلیل عمیق برند، مخاطب و جایگاه شما در بازار'],
+                'fa' => ['value' => '۰۱', 'title' => 'شناخت و بررسی برند', 'description' => 'تحلیل وضعیت برند، بازار، مخاطب و رقبا برای کشف فرصت‌ها و چالش‌ها'],
                 'ar' => ['value' => '٠١', 'title' => 'اكتشاف ومراجعة العلامة', 'description' => 'تحليل عميق لعلامتك وجمهورك وموقعك في السوق'],
             ],
             [
                 '_icon' => 'strategy',
                 'en' => ['value' => '02', 'title' => 'Strategy & Content Plan', 'description' => 'Custom content plans focused on consistency and growth'],
-                'fa' => ['value' => '۰۲', 'title' => 'استراتژی و برنامه محتوا', 'description' => 'برنامه‌های محتوایی اختصاصی با تمرکز بر ثبات و رشد'],
+                'fa' => ['value' => '۰۲', 'title' => 'استراتژی و مسیر محتوا', 'description' => 'تعیین استراتژی برند و تدوین نقشه محتوایی متناسب با اهداف و مخاطبان'],
                 'ar' => ['value' => '٠٢', 'title' => 'الاستراتيجية وخطة المحتوى', 'description' => 'خطط محتوى مخصصة تركز على الاتساق والنمو'],
             ],
             [
                 '_icon' => 'production',
                 'en' => ['value' => '03', 'title' => 'Design & Production', 'description' => 'High-quality visuals aligned with your brand'],
-                'fa' => ['value' => '۰۳', 'title' => 'طراحی و تولید', 'description' => 'تصاویر باکیفیت و هم‌راستا با برند شما'],
+                'fa' => ['value' => '۰۳', 'title' => 'طراحی و تولید', 'description' => 'طراحی هویت بصری، تولید محتوا و آماده‌سازی تمام ابزارهای ارتباطی برند'],
                 'ar' => ['value' => '٠٣', 'title' => 'التصميم والإنتاج', 'description' => 'مرئيات عالية الجودة ومتوافقة مع علامتك'],
             ],
             [
-                '_icon' => 'approval',
-                'en' => ['value' => '04', 'title' => 'Review & Approval', 'description' => 'Review and refine all content before it goes live'],
-                'fa' => ['value' => '۰۴', 'title' => 'بازبینی و تأیید', 'description' => 'بازبینی و اصلاح تمام محتوا پیش از انتشار'],
-                'ar' => ['value' => '٠٤', 'title' => 'المراجعة والموافقة', 'description' => 'مراجعة وتحسين كل المحتوى قبل نشره'],
+                '_icon' => 'publishing',
+                'en' => ['value' => '04', 'title' => 'Publishing & Management', 'description' => 'Publishing content and running the social channels with a planned, consistent voice'],
+                'fa' => ['value' => '۰۴', 'title' => 'انتشار و مدیریت', 'description' => 'انتشار محتوا و مدیریت شبکه‌های اجتماعی با برنامه‌ریزی و انسجام در ارتباط با مخاطب'],
+                'ar' => ['value' => '٠٤', 'title' => 'النشر والإدارة', 'description' => 'نشر المحتوى وإدارة قنوات التواصل بتخطيط واتساق في التواصل مع الجمهور'],
             ],
             [
-                '_icon' => 'publishing',
-                'en' => ['value' => '05', 'title' => 'Publishing & Management', 'description' => 'Professional scheduling and active platform management'],
-                'fa' => ['value' => '۰۵', 'title' => 'انتشار و مدیریت', 'description' => 'زمان‌بندی حرفه‌ای و مدیریت فعال پلتفرم‌ها'],
-                'ar' => ['value' => '٠٥', 'title' => 'النشر والإدارة', 'description' => 'جدولة احترافية وإدارة فعالة للمنصات'],
+                '_icon' => 'campaign',
+                'en' => ['value' => '05', 'title' => 'Campaigns & Advertising', 'description' => 'Designing and running targeted campaigns to raise visibility and win new audiences'],
+                'fa' => ['value' => '۰۵', 'title' => 'کمپین و تبلیغات', 'description' => 'طراحی و اجرای کمپین‌های هدفمند برای افزایش دیده شدن و جذب مخاطب جدید'],
+                'ar' => ['value' => '٠٥', 'title' => 'الحملات والإعلانات', 'description' => 'تصميم وتنفيذ حملات موجهة لزيادة الظهور وجذب جمهور جديد'],
             ],
             [
                 '_icon' => 'optimization',
@@ -344,19 +353,19 @@ final class PageSeeder extends Seeder
         $this->items($packages, [
             [
                 'en' => [
-                    'title' => 'Sahra Essential', 'label' => 'Starts From', 'value' => '199',
+                    'title' => 'Sizdah Essential', 'label' => 'Starts From', 'value' => '199',
                     'suffix' => 'OMR / 1 Month', 'description' => 'A clear foundation for your brand presence',
                     'features' => ['Content Planning', 'Visual Direction', 'Social Media Support', 'Monthly Execution'],
                     'footer' => 'Best for small businesses',
                 ],
                 'fa' => [
-                    'title' => 'صحرا اسنشال', 'label' => 'شروع از', 'value' => '۱۹۹',
+                    'title' => 'سیزده اسنشال', 'label' => 'شروع از', 'value' => '۱۹۹',
                     'suffix' => 'ریال عمان / ۱ ماه', 'description' => 'پایه‌ای شفاف برای حضور برند شما',
                     'features' => ['برنامه‌ریزی محتوا', 'جهت‌گیری بصری', 'پشتیبانی شبکه‌های اجتماعی', 'اجرای ماهانه'],
                     'footer' => 'مناسب کسب‌وکارهای کوچک',
                 ],
                 'ar' => [
-                    'title' => 'صحراء الأساسية', 'label' => 'تبدأ من', 'value' => '١٩٩',
+                    'title' => 'سيزده الأساسية', 'label' => 'تبدأ من', 'value' => '١٩٩',
                     'suffix' => 'ر.ع / شهر واحد', 'description' => 'أساس واضح لحضور علامتك',
                     'features' => ['تخطيط المحتوى', 'التوجيه البصري', 'دعم وسائل التواصل', 'التنفيذ الشهري'],
                     'footer' => 'الأفضل للشركات الصغيرة',
@@ -364,21 +373,21 @@ final class PageSeeder extends Seeder
             ],
             [
                 'en' => [
-                    'title' => 'Sahra Growth', 'label' => 'Starts From', 'value' => '499',
+                    'title' => 'Sizdah Growth', 'label' => 'Starts From', 'value' => '499',
                     'suffix' => 'OMR / 1 Month', 'description' => 'A structured approach to build and grow your presence',
                     'badge' => 'Most Popular',
                     'features' => ['Content Strategy', 'Brand-Aligned Content', 'Campaign Support', 'Performance Optimization'],
                     'footer' => 'Best for growing brands',
                 ],
                 'fa' => [
-                    'title' => 'صحرا گروث', 'label' => 'شروع از', 'value' => '۴۹۹',
+                    'title' => 'سیزده گروث', 'label' => 'شروع از', 'value' => '۴۹۹',
                     'suffix' => 'ریال عمان / ۱ ماه', 'description' => 'رویکردی ساختاریافته برای ساخت و رشد حضور برند',
                     'badge' => 'محبوب‌ترین',
                     'features' => ['استراتژی محتوا', 'محتوای هم‌راستا با برند', 'پشتیبانی کمپین', 'بهینه‌سازی عملکرد'],
                     'footer' => 'مناسب برندهای در حال رشد',
                 ],
                 'ar' => [
-                    'title' => 'صحراء للنمو', 'label' => 'تبدأ من', 'value' => '٤٩٩',
+                    'title' => 'سيزده للنمو', 'label' => 'تبدأ من', 'value' => '٤٩٩',
                     'suffix' => 'ر.ع / شهر واحد', 'description' => 'نهج منظم لبناء حضورك وتنميته',
                     'badge' => 'الأكثر شعبية',
                     'features' => ['استراتيجية المحتوى', 'محتوى متوافق مع العلامة', 'دعم الحملات', 'تحسين الأداء'],
@@ -387,19 +396,19 @@ final class PageSeeder extends Seeder
             ],
             [
                 'en' => [
-                    'title' => 'Sahra Horizon', 'label' => 'Starts From', 'value' => '749',
+                    'title' => 'Sizdah Horizon', 'label' => 'Starts From', 'value' => '749',
                     'suffix' => 'OMR / 1 Month', 'description' => 'A complete partnership for brand growth',
                     'features' => ['Full Marketing Strategy', 'Brand Development', 'Campaign Planning', 'Continuous Optimization'],
                     'footer' => 'Best for scaling brands',
                 ],
                 'fa' => [
-                    'title' => 'صحرا هورایزن', 'label' => 'شروع از', 'value' => '۷۴۹',
+                    'title' => 'سیزده هورایزن', 'label' => 'شروع از', 'value' => '۷۴۹',
                     'suffix' => 'ریال عمان / ۱ ماه', 'description' => 'همکاری کامل برای رشد برند',
                     'features' => ['استراتژی کامل بازاریابی', 'توسعه برند', 'برنامه‌ریزی کمپین', 'بهینه‌سازی مستمر'],
                     'footer' => 'مناسب برندهای مقیاس‌پذیر',
                 ],
                 'ar' => [
-                    'title' => 'صحراء الأفق', 'label' => 'تبدأ من', 'value' => '٧٤٩',
+                    'title' => 'سيزده الأفق', 'label' => 'تبدأ من', 'value' => '٧٤٩',
                     'suffix' => 'ر.ع / شهر واحد', 'description' => 'شراكة متكاملة لنمو العلامة',
                     'features' => ['استراتيجية تسويق كاملة', 'تطوير العلامة', 'تخطيط الحملات', 'تحسين مستمر'],
                     'footer' => 'الأفضل للعلامات المتوسعة',
@@ -411,40 +420,40 @@ final class PageSeeder extends Seeder
         $why = $this->section($page, SectionType::WhyUs, 8, [
             'en' => [
                 'eyebrow' => 'Why us',
-                'title' => 'Why brands choose Sahra',
+                'title' => 'Why brands choose Sizdah',
                 'subtitle' => 'Because every creative decision is built around brand clarity, consistency, and growth.',
             ],
             'fa' => [
-                'eyebrow' => 'چرا ما',
-                'title' => 'چرا برندها صحرا را انتخاب می‌کنند',
+                'eyebrow' => 'چرا سیزده',
+                'title' => 'مسیرهای مشخص برای رشد برند',
                 'subtitle' => 'زیرا هر تصمیم خلاقانه بر پایه شفافیت برند، انسجام و رشد شکل می‌گیرد.',
             ],
             'ar' => [
                 'eyebrow' => 'لماذا نحن',
-                'title' => 'لماذا تختار العلامات التجارية صحراء',
+                'title' => 'لماذا تختار العلامات التجارية سيزده',
                 'subtitle' => 'لأن كل قرار إبداعي يُبنى حول وضوح العلامة واتساقها ونموها.',
             ],
         ]);
 
         $this->items($why, [
             [
-                'en' => ['title' => 'Creativity', 'description' => 'Ideas grounded in strategy, not decoration.'],
-                'fa' => ['title' => 'خلاقیت', 'description' => 'ایده‌هایی مبتنی بر استراتژی، نه تزئین.'],
-                'ar' => ['title' => 'الإبداع', 'description' => 'أفكار مبنية على الاستراتيجية لا الزخرفة.'],
+                'en' => ['title' => 'Defined deliverables', 'description' => 'Scope, process and expectations are completely clear.'],
+                'fa' => ['title' => 'خروجی‌های مشخص', 'description' => 'دامنه کار، فرایند و انتظارات کاملاً شفاف'],
+                'ar' => ['title' => 'مخرجات محددة', 'description' => 'نطاق العمل والعملية والتوقعات واضحة تمامًا'],
             ],
             [
-                'en' => ['title' => 'Reliability', 'description' => 'Consistent delivery on an agreed rhythm.'],
-                'fa' => ['title' => 'اتکاپذیری', 'description' => 'تحویل منظم بر اساس ریتم توافق‌شده.'],
-                'ar' => ['title' => 'الموثوقية', 'description' => 'تسليم منتظم وفق إيقاع متفق عليه.'],
+                'en' => ['title' => 'Brand-led thinking', 'description' => 'Beyond producing content — decisions aligned with the brand identity.'],
+                'fa' => ['title' => 'نگاه برندمحور', 'description' => 'فراتر از تولید محتوا؛ تصمیم‌هایی هماهنگ با هویت برند'],
+                'ar' => ['title' => 'تفكير قائم على العلامة', 'description' => 'أبعد من إنتاج المحتوى؛ قرارات منسجمة مع هوية العلامة'],
             ],
             [
-                'en' => ['title' => 'Innovation', 'description' => 'New formats tested against real business goals.'],
-                'fa' => ['title' => 'نوآوری', 'description' => 'قالب‌های تازه، سنجیده با اهداف واقعی کسب‌وکار.'],
-                'ar' => ['title' => 'الابتكار', 'description' => 'صيغ جديدة تُختبر مقابل أهداف عمل حقيقية.'],
+                'en' => ['title' => 'End-to-end partnership', 'description' => 'From strategy and design through to publishing and reporting.'],
+                'fa' => ['title' => 'همراهی از ابتدا تا انتها', 'description' => 'از استراتژی و طراحی تا انتشار و گزارش‌دهی'],
+                'ar' => ['title' => 'مرافقة من البداية للنهاية', 'description' => 'من الاستراتيجية والتصميم حتى النشر والتقارير'],
             ],
             [
-                'en' => ['title' => 'Clarity', 'description' => 'One connected story instead of scattered posts.'],
-                'fa' => ['title' => 'شفافیت', 'description' => 'یک روایت پیوسته به‌جای پست‌های پراکنده.'],
+                'en' => ['title' => 'Quality output', 'description' => 'Precise, professional design that meets production standards.'],
+                'fa' => ['title' => 'خروجی باکیفیت', 'description' => 'طراحی‌های دقیق و حرفه‌ای، مطابق استانداردهای اجرایی'],
                 'ar' => ['title' => 'الوضوح', 'description' => 'قصة واحدة مترابطة بدل منشورات مبعثرة.'],
             ],
         ]);
@@ -452,7 +461,7 @@ final class PageSeeder extends Seeder
         // Reviews — 1419:9243
         $this->section($page, SectionType::Reviews, 9, [
             'en' => ['eyebrow' => 'Testimonials', 'title' => 'What our customers tell about us'],
-            'fa' => ['eyebrow' => 'نظرات مشتریان', 'title' => 'مشتریان درباره ما چه می‌گویند'],
+            'fa' => ['eyebrow' => 'نظرات مشتریان', 'title' => "برندهای واقعی\nنتایج واقعی", 'subtitle' => 'نتیجه‌ی تصمیم‌های خلاقانه‌ای که با وضوح، انسجام و رشد برند هم‌راستا بوده‌اند'],
             'ar' => ['eyebrow' => 'آراء العملاء', 'title' => 'ماذا يقول عملاؤنا عنا'],
         ]);
 
@@ -466,8 +475,9 @@ final class PageSeeder extends Seeder
                 'primary_cta_url' => '/insights',
             ],
             'fa' => [
-                'eyebrow' => 'بینش',
-                'title' => 'بینش برای برندهایی که آماده رشدند',
+                'eyebrow' => 'نوشته ها',
+                'title' => 'نوشته هایی برای برندهایی که آماده‌ی رشدند',
+                'subtitle' => 'نتیجه‌ی تصمیم‌های خلاقانه‌ای که با وضوح، انسجام و رشد برند هم‌راستا بوده‌اند',
                 'description' => 'چون هر تصمیم خلاقانه بر شفافیت، انسجام و رشد برند استوار است.',
                 'primary_cta_label' => 'خواندن همه مقالات',
                 'primary_cta_url' => '/insights',
@@ -484,7 +494,7 @@ final class PageSeeder extends Seeder
         // FAQ — 1419:9272
         $this->section($page, SectionType::Faq, 11, [
             'en' => ['eyebrow' => 'FAQ', 'title' => 'Questions we hear often'],
-            'fa' => ['eyebrow' => 'پرسش‌های متداول', 'title' => 'پرسش‌هایی که زیاد می‌شنویم'],
+            'fa' => ['eyebrow' => 'سوالات متداول', 'title' => 'سؤالات متداول مشتریان', 'subtitle' => 'چون هر تصمیم خلاقانه باید به شفافیت، انسجام و رشد برند کمک کند'],
             'ar' => ['eyebrow' => 'الأسئلة الشائعة', 'title' => 'أسئلة نسمعها كثيراً'],
         ]);
 
@@ -493,129 +503,185 @@ final class PageSeeder extends Seeder
     }
 
     /**
-     * About — Figma 908:1576.
+     * About — Figma 336:5623.
+     *
+     * The frame is authored in Persian, so `fa` is the source copy here and is
+     * transcribed verbatim from the node text runs; `en` and `ar` are rendered
+     * from it and are flagged in .figma-sync/GAPS.md (G10) for a native review.
+     *
+     * The headline is three runs in the file (354:9301) — "ما تیم", the
+     * hand-drawn brand word, then "ایم" — so `title` and `subtitle` carry the
+     * two text runs and About.vue places the script between them. A locale
+     * whose grammar does not split that way leaves `subtitle` empty and gets a
+     * single-run headline.
      */
     private function about(): void
     {
         $page = $this->page('about', [
             'en' => [
-                'title' => 'We are Sahra',
+                'title' => 'We are team Sizdah',
                 'subtitle' => 'About us',
-                'seo_title' => 'About Sahra — A strategy-led agency in Oman',
+                'seo_title' => 'About Sizdah — A strategy-led creative team in Kerman',
+                'seo_description' => 'Sizdah is a creative and strategic team in Kerman helping brands build a clearer identity, move more coherently, and grow with purpose.',
             ],
             'fa' => [
-                'title' => 'ما صحرا هستیم',
+                'title' => 'ما تیم سیزده‌ایم',
                 'subtitle' => 'درباره ما',
-                'seo_title' => 'درباره صحرا — آژانسی استراتژی‌محور در عمان',
+                'seo_title' => 'درباره سیزده — تیم خلاق و استراتژیک در کرمان',
+                'seo_description' => 'سیزده یک تیم خلاق و استراتژیک در کرمان است که به برندها کمک می‌کند هویت روشن‌تری بسازند، منسجم‌تر حرکت کنند و هدفمندتر رشد کنند.',
             ],
             'ar' => [
-                'title' => 'نحن صحراء',
+                'title' => 'نحن فريق سيزده',
                 'subtitle' => 'من نحن',
-                'seo_title' => 'عن صحراء — وكالة قائمة على الاستراتيجية في عُمان',
+                'seo_title' => 'عن سيزده — فريق إبداعي واستراتيجي في كرمان',
+                'seo_description' => 'سيزده فريق إبداعي واستراتيجي في كرمان يساعد العلامات التجارية على بناء هوية أوضح والتحرك بانسجام والنمو بهدف.',
             ],
         ]);
 
         $page->sections()->delete();
 
+        // Hero — 336:5703. `eyebrow` is intentionally absent: the frame's
+        // "small title" layer (336:5705) is hidden, so About.vue never renders
+        // one. `content` is the 28px lede, `description` the 18px paragraph.
         $this->section($page, SectionType::AboutHero, 0, [
-            // Title is two runs in the file (1288:4165) — the gold Idealist
-            // line and the dark Poppins line are separate fields so a locale
-            // can re-split the sentence where its grammar needs to.
             'en' => [
-                'eyebrow' => 'About us',
-                'title' => 'We are Sahra',
-                'content' => 'A digital marketing agency rooted in Oman',
-                'description' => 'We help brands build stronger digital presence through content, branding, social media, and creative direction.',
-                'image_alt' => 'Glass arch sculpture holding golden sand dunes and a sun disc',
+                'title' => 'We are team',
+                'subtitle' => '',
+                'content' => 'We think, we give direction, and we build',
+                'description' => 'A creative and strategic team in Kerman helping brands build a clearer identity, move more coherently, and grow with purpose.',
+                'image_alt' => 'The Sizdah team sketching ideas together at their desks',
             ],
             'fa' => [
-                'eyebrow' => 'درباره ما',
-                'title' => 'ما صحرا هستیم',
-                'content' => 'آژانس بازاریابی دیجیتال با ریشه در عمان',
-                'description' => 'ما به برندها کمک می‌کنیم از طریق محتوا، برندینگ، شبکه‌های اجتماعی و جهت‌گیری خلاق حضور دیجیتال قوی‌تری بسازند.',
-                'image_alt' => 'مجسمه شیشه‌ای قوسی با تپه‌های شنی طلایی و قرص خورشید',
+                'title' => 'ما تیم',
+                'subtitle' => 'ایم',
+                'content' => 'فکر می‌کنیم، جهت می‌دهیم و می‌سازیم',
+                'description' => 'یک تیم خلاق و استراتژیک در کرمان که به برندها کمک می‌کنیم هویت روشن‌تری بسازند، منسجم‌تر حرکت کنند و هدفمندتر رشد کنند.',
+                'image_alt' => 'تیم سیزده در حال طراحی و ایده‌پردازی پشت میز کار',
             ],
             'ar' => [
-                'eyebrow' => 'من نحن',
-                'title' => 'نحن صحراء',
-                'content' => 'وكالة تسويق رقمي متجذّرة في عُمان',
-                'description' => 'نساعد العلامات التجارية على بناء حضور رقمي أقوى عبر المحتوى والهوية ووسائل التواصل والتوجيه الإبداعي.',
-                'image_alt' => 'منحوتة زجاجية مقوسة تحتضن كثباناً رملية ذهبية وقرص شمس',
+                'title' => 'نحن فريق سيزده',
+                'subtitle' => '',
+                'content' => 'نفكّر، ونرسم الاتجاه، ونبني',
+                'description' => 'فريق إبداعي واستراتيجي في كرمان يساعد العلامات التجارية على بناء هوية أوضح والتحرك بانسجام والنمو بهدف.',
+                'image_alt' => 'فريق سيزده يرسم الأفكار معاً على مكاتبهم',
             ],
         ]);
 
+        // Story — 357:9335. Three paragraphs in the frame: the first is the
+        // lede (`description`), the rest are rich text so an editor can add or
+        // split paragraphs without a schema change.
         $this->section($page, SectionType::Story, 1, [
             'en' => [
-                'title' => 'The Story Behind Sahra',
-                'description' => 'Sahra began with a simple belief: brands deserve more than scattered content and short-term visuals.',
-                'content' => 'We help businesses present themselves with more quality, clarity, and consistency — bringing content production, visual direction, branding, and social media management together to build a stronger digital presence.',
+                'title' => 'Where Sizdah started',
+                'description' => 'Sizdah grew out of one simple belief: plenty of businesses are genuinely good, they just do not know how to be seen properly. In a crowded market brands have come to look alike; everyone is talking, but few sound like themselves.',
+                'content' => '<p>We built Sizdah to turn that scatter into one clear path — a path that starts from understanding each brand’s identity and continues through strategy, design, and coherent execution.</p><p>For us marketing is not only producing content or running campaigns. We help brands speak more clearly, earn trust, and grow with intent.</p>',
             ],
             'fa' => [
-                'title' => 'داستان صحرا',
-                'description' => 'صحرا با باوری ساده آغاز شد: برندها شایسته چیزی بیش از محتوای پراکنده و تصاویر کوتاه‌مدت هستند.',
-                'content' => 'ما به کسب‌وکارها کمک می‌کنیم خود را با کیفیت، شفافیت و ثبات بیشتری معرفی کنند — با گردآوردن تولید محتوا، جهت‌گیری بصری، برندینگ و مدیریت شبکه‌های اجتماعی.',
+                'title' => 'سیزده از کجا شروع شد',
+                'description' => 'سیزده از یک باور ساده شکل گرفت: خیلی از کسب‌وکارها واقعاً خوب‌اند، اما نمی‌دانند چطور درست دیده شوند. در شلوغی بازار، برندها شبیه یکدیگر شده‌اند؛ همه حرف می‌زنند، اما کمتر برندی صدای واقعی خودش را دارد.',
+                'content' => '<p>ما سیزده را ساختیم تا این پراکندگی را به یک مسیر روشن تبدیل کنیم؛ مسیری که از شناخت هویت هر برند شروع می‌شود و با استراتژی، طراحی و اجرای منسجم ادامه پیدا می‌کند.</p><p>برای ما مارکتینگ فقط تولید محتوا یا اجرای کمپین نیست. ما به برندها کمک می‌کنیم واضح‌تر حرف بزنند، اعتماد بسازند و هدفمندتر رشد کنند.</p>',
             ],
             'ar' => [
-                'title' => 'قصة صحراء',
-                'description' => 'بدأت صحراء بقناعة بسيطة: العلامات التجارية تستحق أكثر من محتوى مبعثر ومرئيات قصيرة الأمد.',
-                'content' => 'نساعد الشركات على تقديم نفسها بجودة ووضوح واتساق أكبر — بجمع إنتاج المحتوى والتوجيه البصري والهوية وإدارة وسائل التواصل.',
+                'title' => 'من أين بدأت سيزده',
+                'description' => 'بدأت سيزده من قناعة بسيطة: كثير من الأعمال جيدة فعلاً، لكنها لا تعرف كيف تُرى كما ينبغي. في زحمة السوق صارت العلامات تشبه بعضها؛ الجميع يتكلم، وقليل منها يملك صوته الحقيقي.',
+                'content' => '<p>بنينا سيزده لنحوّل هذا التشتت إلى مسار واحد واضح؛ مسار يبدأ من فهم هوية كل علامة ويستمر بالاستراتيجية والتصميم والتنفيذ المتسق.</p><p>التسويق عندنا ليس إنتاج محتوى أو تنفيذ حملات فحسب. نساعد العلامات على أن تتحدث بوضوح أكبر، وتبني الثقة، وتنمو بهدف.</p>',
             ],
         ]);
 
+        // How we think — 411:7908. Items run in reading order (right to left on
+        // the frame), which is the reverse of the canvas order; `_icon` names
+        // the Streamline Freehand glyph About.vue places on each card.
         $think = $this->section($page, SectionType::HowWeThink, 2, [
             'en' => [
-                'title' => 'How We Think',
-                'description' => 'We believe strong digital presence starts with clarity, consistency, and brand-aligned execution — not random content or short-term visuals.',
+                'title' => 'How we think',
+                'description' => 'Before we build, we look for meaning and direction; a strong brand is not made from more content, it is made from better decisions',
             ],
             'fa' => [
-                'title' => 'چگونه فکر می‌کنیم',
-                'description' => 'باور داریم حضور دیجیتال قوی با شفافیت، ثبات و اجرای هم‌راستا با برند آغاز می‌شود — نه محتوای تصادفی.',
+                'title' => 'ما چطور فکر میکنیم',
+                'description' => 'ما قبل از ساختن، دنبال معنا و مسیر می‌گردیم؛ برند قوی با محتوای بیشتر ساخته نمی‌شود، با تصمیم‌های درست ساخته می‌شود',
             ],
             'ar' => [
-                'title' => 'كيف نفكر',
-                'description' => 'نؤمن أن الحضور الرقمي القوي يبدأ بالوضوح والاتساق والتنفيذ المتوائم مع العلامة — لا بمحتوى عشوائي.',
+                'title' => 'كيف نفكّر',
+                'description' => 'قبل أن نبني، نبحث عن المعنى والاتجاه؛ العلامة القوية لا تُصنع بمحتوى أكثر بل بقرارات أصح',
             ],
         ]);
 
         $this->items($think, [
             [
-                'en' => ['title' => 'Quality Before Quantity', 'description' => 'Intentional work over endless output'],
-                'fa' => ['title' => 'کیفیت پیش از کمیت', 'description' => 'کار هدفمند به‌جای خروجی بی‌پایان'],
-                'ar' => ['title' => 'الجودة قبل الكمية', 'description' => 'عمل مقصود بدل إنتاج لا ينتهي'],
+                '_icon' => 'discovery',
+                'en' => ['title' => 'Understanding, before execution', 'description' => 'First we understand the problem and the audience, then we start building'],
+                'fa' => ['title' => 'شناخت، قبل از اجرا', 'description' => 'اول مسئله و مخاطب را می‌فهمیم، بعد وارد اجرا می‌شویم'],
+                'ar' => ['title' => 'الفهم قبل التنفيذ', 'description' => 'نفهم المسألة والجمهور أولاً، ثم نبدأ التنفيذ'],
             ],
             [
-                'en' => ['title' => 'Brand Alignment Before Decoration', 'description' => 'Every visual should serve the brand'],
-                'fa' => ['title' => 'هم‌راستایی با برند پیش از تزئین', 'description' => 'هر عنصر بصری باید در خدمت برند باشد'],
-                'ar' => ['title' => 'التوافق مع العلامة قبل الزخرفة', 'description' => 'كل عنصر بصري يجب أن يخدم العلامة'],
+                '_icon' => 'identity',
+                'en' => ['title' => 'Identity, before resemblance', 'description' => 'Every brand should have its own character and voice.'],
+                'fa' => ['title' => 'هویت، قبل از شباهت', 'description' => 'هر برند باید شخصیت و صدای خودش را داشته باشد.'],
+                'ar' => ['title' => 'الهوية قبل التشابه', 'description' => 'لكل علامة شخصيتها وصوتها الخاص.'],
             ],
             [
-                'en' => ['title' => 'Consistency Before Noise', 'description' => 'Structure creates stronger presence'],
-                'fa' => ['title' => 'ثبات پیش از هیاهو', 'description' => 'ساختار، حضور قوی‌تری می‌سازد'],
-                'ar' => ['title' => 'الاتساق قبل الضجيج', 'description' => 'البنية تصنع حضوراً أقوى'],
+                '_icon' => 'impact',
+                'en' => ['title' => 'Impact, before beauty', 'description' => 'Every idea should do more for the brand than just look good'],
+                'fa' => ['title' => 'اثرگذاری، قبل از زیبایی', 'description' => 'هر ایده باید بیشتر از زیبایی، برای برند اثر داشته باشد'],
+                'ar' => ['title' => 'الأثر قبل الجمال', 'description' => 'كل فكرة يجب أن تترك أثراً للعلامة لا أن تبدو جميلة فقط'],
             ],
             [
-                'en' => ['title' => 'Growth Before Trends', 'description' => 'Long-term value over short-term attention'],
-                'fa' => ['title' => 'رشد پیش از ترندها', 'description' => 'ارزش بلندمدت به‌جای توجه کوتاه‌مدت'],
-                'ar' => ['title' => 'النمو قبل الرائج', 'description' => 'قيمة طويلة الأمد بدل انتباه عابر'],
+                '_icon' => 'path',
+                'en' => ['title' => 'Direction, before scatter', 'description' => 'Every output should be part of one defined path to growth'],
+                'fa' => ['title' => 'مسیر، قبل از پراکندگی', 'description' => 'هر خروجی باید بخشی از یک مسیر مشخص برای رشد باشد'],
+                'ar' => ['title' => 'المسار قبل التشتت', 'description' => 'كل مخرج يجب أن يكون جزءاً من مسار واضح للنمو'],
             ],
         ]);
 
+        // Team — 411:7906. The cards themselves come from TeamMember rows.
         $this->section($page, SectionType::Team, 3, [
             'en' => [
-                'title' => 'Small Team, Big Standards',
-                'description' => 'A focused team building stronger digital presence through strategy, design, content, and execution.',
+                'title' => 'The Sizdah team',
+                'description' => 'A focused team building a stronger presence in digital space; with strategy, design, content, and the right execution',
             ],
             'fa' => [
-                'title' => 'تیمی کوچک، استانداردهایی بزرگ',
-                'description' => 'تیمی متمرکز که با استراتژی، طراحی، محتوا و اجرا حضور دیجیتال قوی‌تری می‌سازد.',
+                'title' => 'تیم سیزده',
+                'description' => 'یک تیم متمرکز برای ساخت حضوری قوی‌تر در فضای دیجیتال؛ با استراتژی، طراحی، محتوا و اجرای درست',
             ],
             'ar' => [
-                'title' => 'فريق صغير، معايير كبيرة',
-                'description' => 'فريق مركّز يبني حضوراً رقمياً أقوى عبر الاستراتيجية والتصميم والمحتوى والتنفيذ.',
+                'title' => 'فريق سيزده',
+                'description' => 'فريق مركّز لبناء حضور أقوى في الفضاء الرقمي؛ بالاستراتيجية والتصميم والمحتوى والتنفيذ الصحيح',
             ],
         ]);
 
-        $this->finalCta($page, 4);
+        /*
+         | Final CTA — 577:10889. About carries its own copy rather than the
+         | shared finalCta() helper: the frame words it differently, and the
+         | card is a cream one-off rather than the dark 294:7672 component.
+         | `subtitle` is the services line under the button, matching the
+         | column the shared helper writes to.
+         */
+        $this->section($page, SectionType::FinalCta, 4, [
+            'en' => [
+                'eyebrow' => 'Start working together',
+                'title' => 'Ready to steer your brand onto the right path?',
+                'description' => 'Talk to us about your goals, your challenges, and the road ahead for your brand, and we will find the best next step together.',
+                'primary_cta_label' => 'Start a conversation',
+                'primary_cta_url' => '/contact',
+                'subtitle' => 'Branding · Marketing design · Content production · Social media support',
+            ],
+            'fa' => [
+                'eyebrow' => 'شروع همکاری',
+                'title' => 'آماده‌اید برندتان را به مسیر درست هدایت کنید؟',
+                'description' => 'با ما درباره هدف‌ها، چالش‌ها و مسیر پیش روی برندتان صحبت کنید تا بهترین قدم بعدی را پیدا کنیم.',
+                'primary_cta_label' => 'شروع گفتگو',
+                'primary_cta_url' => '/contact',
+                'subtitle' => 'برندینگ · مارکتینگ دیزاین · تولید محتوا · پشتیبانی شبکه‌های اجتماعی',
+            ],
+            'ar' => [
+                'eyebrow' => 'ابدأ التعاون',
+                'title' => 'هل أنت مستعد لتوجيه علامتك إلى المسار الصحيح؟',
+                'description' => 'تحدث معنا عن أهدافك وتحدياتك والطريق أمام علامتك، لنجد معاً الخطوة التالية الأفضل.',
+                'primary_cta_label' => 'ابدأ محادثة',
+                'primary_cta_url' => '/contact',
+                'subtitle' => 'الهوية · تصميم التسويق · إنتاج المحتوى · دعم وسائل التواصل',
+            ],
+        ]);
     }
 
     /**
@@ -629,10 +695,12 @@ final class PageSeeder extends Seeder
                 'subtitle' => 'Our Projects',
                 'description' => 'A collection of brand, content, and marketing design projects created to help businesses communicate with clarity and grow with direction.',
             ],
+            // Copy transcribed from the frame: eyebrow 450:6712, title 222:2466,
+            // description 222:2467.
             'fa' => [
-                'title' => 'جایی که استراتژی دیده می‌شود',
-                'subtitle' => 'پروژه‌های ما',
-                'description' => 'مجموعه‌ای از پروژه‌های برند، محتوا و طراحی بازاریابی که به کسب‌وکارها کمک می‌کند شفاف ارتباط بگیرند و هدفمند رشد کنند.',
+                'title' => 'جایی که استراتژی شکل می‌گیرد',
+                'subtitle' => 'پروژه ها',
+                'description' => 'مجموعه‌ای از پروژه‌های برندینگ، محتوا و طراحی مارکتینگ که به کسب‌وکارها کمک کرده‌اند واضح‌تر دیده شوند و هدفمندتر رشد کنند',
             ],
             'ar' => [
                 'title' => 'حيث تصبح الاستراتيجية مرئية',
@@ -733,17 +801,17 @@ final class PageSeeder extends Seeder
         $this->page('privacy-policy', [
             'en' => [
                 'title' => 'Privacy Policy',
-                'subtitle' => 'At Sahra Marketing, we respect your privacy and are committed to protecting the personal information you share with us through our website',
+                'subtitle' => 'At Sizdah Marketing, we respect your privacy and are committed to protecting the personal information you share with us through our website',
                 'content' => $this->privacyBody('en'),
             ],
             'fa' => [
                 'title' => 'حریم خصوصی',
-                'subtitle' => 'در صحرا مارکتینگ به حریم خصوصی شما احترام می‌گذاریم و متعهد به حفاظت از اطلاعات شخصی‌ای هستیم که از طریق وب‌سایت با ما به اشتراک می‌گذارید.',
+                'subtitle' => 'در سیزده مارکتینگ به حریم خصوصی شما احترام می‌گذاریم و متعهد به حفاظت از اطلاعات شخصی‌ای هستیم که از طریق وب‌سایت با ما به اشتراک می‌گذارید.',
                 'content' => $this->privacyBody('fa'),
             ],
             'ar' => [
                 'title' => 'سياسة الخصوصية',
-                'subtitle' => 'في صحراء ماركتينغ نحترم خصوصيتك ونلتزم بحماية المعلومات الشخصية التي تشاركها معنا عبر موقعنا.',
+                'subtitle' => 'في سيزده ماركتينغ نحترم خصوصيتك ونلتزم بحماية المعلومات الشخصية التي تشاركها معنا عبر موقعنا.',
                 'content' => $this->privacyBody('ar'),
             ],
         ]);
@@ -751,22 +819,21 @@ final class PageSeeder extends Seeder
         $this->page('terms', [
             'en' => [
                 'title' => 'Terms & Conditions',
-                'subtitle' => 'At Sahra Marketing, we provide clear guidelines for using our website and services to ensure a reliable and respectful experience for all users.',
+                'subtitle' => 'At Sizdah Marketing, we provide clear guidelines for using our website and services to ensure a reliable and respectful experience for all users.',
                 'content' => $this->termsBody('en'),
             ],
             'fa' => [
                 'title' => 'شرایط و قوانین',
-                'subtitle' => 'در صحرا مارکتینگ دستورالعمل‌های شفافی برای استفاده از وب‌سایت و خدمات ارائه می‌کنیم تا تجربه‌ای قابل‌اعتماد و محترمانه برای همه کاربران فراهم شود.',
+                'subtitle' => 'در سیزده مارکتینگ دستورالعمل‌های شفافی برای استفاده از وب‌سایت و خدمات ارائه می‌کنیم تا تجربه‌ای قابل‌اعتماد و محترمانه برای همه کاربران فراهم شود.',
                 'content' => $this->termsBody('fa'),
             ],
             'ar' => [
                 'title' => 'الشروط والأحكام',
-                'subtitle' => 'في صحراء ماركتينغ نقدم إرشادات واضحة لاستخدام موقعنا وخدماتنا لضمان تجربة موثوقة ومحترمة لجميع المستخدمين.',
+                'subtitle' => 'في سيزده ماركتينغ نقدم إرشادات واضحة لاستخدام موقعنا وخدماتنا لضمان تجربة موثوقة ومحترمة لجميع المستخدمين.',
                 'content' => $this->termsBody('ar'),
             ],
         ]);
     }
-
 
     /**
      * Privacy Policy body — the literal section text of Figma 1031:2101.
@@ -803,7 +870,7 @@ final class PageSeeder extends Seeder
                 ]],
                 ['Contact Us', [
                     'If you have any questions about this Privacy Policy or how we handle your information, please contact us at:',
-                    ['__address__', 'Sahra Marketing', 'Muscat, Oman', 'Email: Sahramarketing@gmail.com'],
+                    ['__address__', 'Sizdah Marketing', 'Muscat, Oman', 'Email: Sahramarketing@gmail.com'],
                 ]],
             ],
             'fa' => [
@@ -834,7 +901,7 @@ final class PageSeeder extends Seeder
                 ]],
                 ['تماس با ما', [
                     'اگر درباره این سیاست حریم خصوصی یا نحوه مدیریت اطلاعاتتان پرسشی دارید، با ما تماس بگیرید:',
-                    ['__address__', 'صحرا مارکتینگ', 'مسقط، عمان', 'ایمیل: Sahramarketing@gmail.com'],
+                    ['__address__', 'سیزده مارکتینگ', 'مسقط، عمان', 'ایمیل: Sahramarketing@gmail.com'],
                 ]],
             ],
             'ar' => [
@@ -865,7 +932,7 @@ final class PageSeeder extends Seeder
                 ]],
                 ['اتصل بنا', [
                     'إذا كان لديك أي أسئلة حول سياسة الخصوصية هذه أو كيفية تعاملنا مع معلوماتك، يرجى التواصل معنا على:',
-                    ['__address__', 'صحراء ماركتينغ', 'مسقط، عُمان', 'البريد الإلكتروني: Sahramarketing@gmail.com'],
+                    ['__address__', 'سيزده ماركتينغ', 'مسقط، عُمان', 'البريد الإلكتروني: Sahramarketing@gmail.com'],
                 ]],
             ],
         ];
@@ -881,41 +948,41 @@ final class PageSeeder extends Seeder
         $sections = [
             'en' => [
                 ['Use of Website', ['By accessing this website, you agree to use it only for lawful purposes and in a way that does not harm the experience, content, or functionality of the platform.']],
-                ['Services', ['Sahra provides branding, marketing design, content production, and social media support services. All services are delivered based on agreed project scope and timelines defined during collaboration.']],
-                ['Intellectual Property', ['All content, designs, visuals, and materials created by Sahra remain the intellectual property of Sahra unless otherwise agreed in writing. Unauthorized use or reproduction is not allowed.']],
+                ['Services', ['Sizdah provides branding, marketing design, content production, and social media support services. All services are delivered based on agreed project scope and timelines defined during collaboration.']],
+                ['Intellectual Property', ['All content, designs, visuals, and materials created by Sizdah remain the intellectual property of Sizdah unless otherwise agreed in writing. Unauthorized use or reproduction is not allowed.']],
                 ['Client Responsibilities', ['Clients are responsible for providing accurate information, timely feedback, and required materials needed for project execution. Delays in communication may affect delivery timelines.']],
                 ['Payments', ['All project costs, pricing structures, and payment terms are agreed upon before starting any work. Work may be paused in case of delayed payments.']],
-                ['Limitation of Liability', ['Sahra is not responsible for any indirect, incidental, or consequential damages arising from the use of this website or services.']],
-                ['Changes to Terms', ['Sahra reserves the right to update these Terms &amp; Conditions at any time. Continued use of the website means acceptance of any updated terms.']],
+                ['Limitation of Liability', ['Sizdah is not responsible for any indirect, incidental, or consequential damages arising from the use of this website or services.']],
+                ['Changes to Terms', ['Sizdah reserves the right to update these Terms &amp; Conditions at any time. Continued use of the website means acceptance of any updated terms.']],
                 ['Contact Us', [
                     'For any questions regarding these terms, you can contact us at:',
-                    ['__address__', 'Sahra Marketing', 'Muscat, Oman', 'Email: Sahramarketing@gmail.com'],
+                    ['__address__', 'Sizdah Marketing', 'Muscat, Oman', 'Email: Sahramarketing@gmail.com'],
                 ]],
             ],
             'fa' => [
                 ['استفاده از وب‌سایت', ['با دسترسی به این وب‌سایت می‌پذیرید که تنها برای مقاصد قانونی و به‌گونه‌ای از آن استفاده کنید که به تجربه، محتوا یا عملکرد پلتفرم آسیب نرساند.']],
-                ['خدمات', ['صحرا خدمات برندینگ، طراحی بازاریابی، تولید محتوا و پشتیبانی شبکه‌های اجتماعی ارائه می‌کند. همه خدمات بر اساس دامنه و زمان‌بندی توافق‌شده در جریان همکاری تحویل می‌شوند.']],
-                ['مالکیت فکری', ['تمام محتوا، طرح‌ها، تصاویر و موادی که صحرا خلق می‌کند، مگر در صورت توافق کتبی دیگر، متعلق به صحرا باقی می‌ماند. استفاده یا بازتولید غیرمجاز مجاز نیست.']],
+                ['خدمات', ['سیزده خدمات برندینگ، طراحی بازاریابی، تولید محتوا و پشتیبانی شبکه‌های اجتماعی ارائه می‌کند. همه خدمات بر اساس دامنه و زمان‌بندی توافق‌شده در جریان همکاری تحویل می‌شوند.']],
+                ['مالکیت فکری', ['تمام محتوا، طرح‌ها، تصاویر و موادی که سیزده خلق می‌کند، مگر در صورت توافق کتبی دیگر، متعلق به سیزده باقی می‌ماند. استفاده یا بازتولید غیرمجاز مجاز نیست.']],
                 ['مسئولیت‌های مشتری', ['مشتریان مسئول ارائه اطلاعات دقیق، بازخورد به‌موقع و موادی هستند که برای اجرای پروژه لازم است. تأخیر در ارتباط ممکن است بر زمان‌بندی تحویل اثر بگذارد.']],
                 ['پرداخت‌ها', ['تمام هزینه‌های پروژه، ساختار قیمت‌گذاری و شرایط پرداخت پیش از آغاز کار توافق می‌شود. در صورت تأخیر در پرداخت، کار ممکن است متوقف شود.']],
-                ['محدودیت مسئولیت', ['صحرا مسئول هیچ خسارت غیرمستقیم، تبعی یا اتفاقی ناشی از استفاده از این وب‌سایت یا خدمات نیست.']],
-                ['تغییر شرایط', ['صحرا حق به‌روزرسانی این شرایط و قوانین را در هر زمان محفوظ می‌دارد. ادامه استفاده از وب‌سایت به معنای پذیرش شرایط به‌روزشده است.']],
+                ['محدودیت مسئولیت', ['سیزده مسئول هیچ خسارت غیرمستقیم، تبعی یا اتفاقی ناشی از استفاده از این وب‌سایت یا خدمات نیست.']],
+                ['تغییر شرایط', ['سیزده حق به‌روزرسانی این شرایط و قوانین را در هر زمان محفوظ می‌دارد. ادامه استفاده از وب‌سایت به معنای پذیرش شرایط به‌روزشده است.']],
                 ['تماس با ما', [
                     'برای هر پرسشی درباره این شرایط می‌توانید با ما تماس بگیرید:',
-                    ['__address__', 'صحرا مارکتینگ', 'مسقط، عمان', 'ایمیل: Sahramarketing@gmail.com'],
+                    ['__address__', 'سیزده مارکتینگ', 'مسقط، عمان', 'ایمیل: Sahramarketing@gmail.com'],
                 ]],
             ],
             'ar' => [
                 ['استخدام الموقع', ['بدخولك هذا الموقع، فإنك توافق على استخدامه للأغراض المشروعة فقط وبطريقة لا تضر بتجربة المنصة أو محتواها أو أدائها.']],
-                ['الخدمات', ['تقدم صحراء خدمات الهوية التجارية وتصميم التسويق وإنتاج المحتوى ودعم وسائل التواصل. تُقدَّم جميع الخدمات وفق نطاق المشروع والجداول الزمنية المتفق عليها أثناء التعاون.']],
-                ['الملكية الفكرية', ['يبقى كل محتوى وتصميم ومواد تنشئها صحراء ملكية فكرية لصحراء ما لم يُتفق على خلاف ذلك كتابةً. الاستخدام أو النسخ غير المصرح به غير مسموح.']],
+                ['الخدمات', ['تقدم سيزده خدمات الهوية التجارية وتصميم التسويق وإنتاج المحتوى ودعم وسائل التواصل. تُقدَّم جميع الخدمات وفق نطاق المشروع والجداول الزمنية المتفق عليها أثناء التعاون.']],
+                ['الملكية الفكرية', ['يبقى كل محتوى وتصميم ومواد تنشئها سيزده ملكية فكرية لسيزده ما لم يُتفق على خلاف ذلك كتابةً. الاستخدام أو النسخ غير المصرح به غير مسموح.']],
                 ['مسؤوليات العميل', ['العملاء مسؤولون عن تقديم معلومات دقيقة وملاحظات في وقتها والمواد المطلوبة لتنفيذ المشروع. قد تؤثر التأخيرات في التواصل على مواعيد التسليم.']],
                 ['المدفوعات', ['يُتفق على جميع تكاليف المشروع وهياكل التسعير وشروط الدفع قبل بدء أي عمل. وقد يتوقف العمل في حال تأخر المدفوعات.']],
-                ['حدود المسؤولية', ['صحراء غير مسؤولة عن أي أضرار غير مباشرة أو عرضية أو تبعية تنشأ عن استخدام هذا الموقع أو الخدمات.']],
-                ['تغييرات الشروط', ['تحتفظ صحراء بحق تحديث هذه الشروط والأحكام في أي وقت. استمرار استخدام الموقع يعني قبول أي شروط محدثة.']],
+                ['حدود المسؤولية', ['سيزده غير مسؤولة عن أي أضرار غير مباشرة أو عرضية أو تبعية تنشأ عن استخدام هذا الموقع أو الخدمات.']],
+                ['تغييرات الشروط', ['تحتفظ سيزده بحق تحديث هذه الشروط والأحكام في أي وقت. استمرار استخدام الموقع يعني قبول أي شروط محدثة.']],
                 ['اتصل بنا', [
                     'لأي أسئلة بخصوص هذه الشروط، يمكنك التواصل معنا على:',
-                    ['__address__', 'صحراء ماركتينغ', 'مسقط، عُمان', 'البريد الإلكتروني: Sahramarketing@gmail.com'],
+                    ['__address__', 'سيزده ماركتينغ', 'مسقط، عُمان', 'البريد الإلكتروني: Sahramarketing@gmail.com'],
                 ]],
             ],
         ];
@@ -1032,23 +1099,23 @@ final class PageSeeder extends Seeder
             'en' => [
                 'eyebrow' => 'Start with clarity',
                 'title' => 'Ready to build your brand with direction?',
-                'description' => "Share your goals with Sahra, and let's define the right next step for your brand.",
+                'description' => "Share your goals with Sizdah, and let's define the right next step for your brand.",
                 'primary_cta_label' => 'Start a Conversation',
                 'primary_cta_url' => '/contact',
                 'subtitle' => 'Branding · Content Production · Social Media Support · Marketing Design',
             ],
             'fa' => [
-                'eyebrow' => 'با شفافیت آغاز کنید',
-                'title' => 'آماده‌اید برندتان را با جهت بسازید؟',
-                'description' => 'اهدافتان را با صحرا در میان بگذارید تا گام درست بعدی را مشخص کنیم.',
+                'eyebrow' => 'شروع همکاری',
+                'title' => 'آماده‌اید برندتان را به مسیر درست هدایت کنید؟',
+                'description' => 'با ما درباره هدف‌ها، چالش‌ها و مسیر پیش روی برندتان صحبت کنید تا بهترین قدم بعدی را پیدا کنیم.',
                 'primary_cta_label' => 'شروع گفتگو',
                 'primary_cta_url' => '/contact',
-                'subtitle' => 'برندینگ · تولید محتوا · پشتیبانی شبکه‌های اجتماعی · طراحی بازاریابی',
+                'subtitle' => 'برندینگ · مارکتینگ دیزاین · تولید محتوا · پشتیبانی شبکه‌های اجتماعی',
             ],
             'ar' => [
                 'eyebrow' => 'ابدأ بالوضوح',
                 'title' => 'هل أنت مستعد لبناء علامتك باتجاه واضح؟',
-                'description' => 'شارك أهدافك مع صحراء، ولنحدد الخطوة التالية الصحيحة لعلامتك.',
+                'description' => 'شارك أهدافك مع سيزده، ولنحدد الخطوة التالية الصحيحة لعلامتك.',
                 'primary_cta_label' => 'ابدأ محادثة',
                 'primary_cta_url' => '/contact',
                 'subtitle' => 'الهوية · إنتاج المحتوى · دعم وسائل التواصل · تصميم التسويق',

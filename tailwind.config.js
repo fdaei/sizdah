@@ -151,33 +151,49 @@ export default {
          */
         sans: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         arabic: ['Vazirmatn', 'Tahoma', 'sans-serif'],
+
+        /*
+         | Eyebrows and display accents. The frames set these in "Maneli" /
+         | "Idealist"; Idealist is licensed and self-hosted but Latin-only, so
+         | Doran FaNum carries fa/ar and Vazirmatn is the last resort. Always
+         | reach for this token rather than naming Idealist directly — a bare
+         | `Idealist, serif` drops fa/ar onto a generic serif.
+         */
+        display: ['Idealist', 'Doran FaNum', 'Vazirmatn', 'serif'],
       },
 
       fontSize: {
         /*
          | Figma "FA-Desktop/*" type scale. The variables report
-         | `lineHeight: 100`, but every laid-out text node in the file
-         | contradicts that: a 20px title node measures 30px tall (268:3562,
-         | 268:3681), a 14px body line measures ~22px (268:3682). 1.5 is what
-         | the frames are actually built on, and the section heights depend
-         | on it, so 1.5 is the token.
+         | `lineHeight: 100`; the laid-out nodes are what count, and they were
+         | mis-measured when this file was first written. Every TEXT node on
+         | the canonical Home frame (268:2962, 162 nodes) was re-measured on
+         | 2026-08-21 and the scale is built on **1.25**, not 1.5:
+         |
+         |   12/15  14/17-18  16/20  18/22  20/25  22/28  24/30  28/35  32/40
+         |   = 1.25 across the board; 36/46, 40/51, 48/61 and 64/81 = 1.27.
+         |
+         | Only 17 of the 162 nodes (10%) sit at 1.5, all of them 14px or 16px
+         | running copy — so 1.5 survives as the deliberate looser leading for
+         | long-form body text (`.rich-prose`), not as the scale default.
+         | Cross-checked on 336:5623 (about) and 279:5924 (privacy).
          */
-        'label-md': ['12px', { lineHeight: '1.5', fontWeight: '500' }],
-        'label-lg': ['14px', { lineHeight: '1.5', fontWeight: '500' }],
-        'body-md': ['14px', { lineHeight: '1.5', fontWeight: '400' }],
-        'body-lg': ['16px', { lineHeight: '1.5', fontWeight: '400' }],
-        'title-sm': ['18px', { lineHeight: '1.5', fontWeight: '400' }],
-        'title-md': ['20px', { lineHeight: '1.5', fontWeight: '500' }],
-        'title-lg': ['22px', { lineHeight: '1.5', fontWeight: '500' }],
-        'heading-sm': ['24px', { lineHeight: '1.5', fontWeight: '500' }],
-        'heading-md': ['28px', { lineHeight: '1.5', fontWeight: '500' }],
+        'label-md': ['12px', { lineHeight: '1.25', fontWeight: '500' }],
+        'label-lg': ['14px', { lineHeight: '1.25', fontWeight: '500' }],
+        'body-md': ['14px', { lineHeight: '1.25', fontWeight: '400' }],
+        'body-lg': ['16px', { lineHeight: '1.25', fontWeight: '400' }],
+        'title-sm': ['18px', { lineHeight: '1.22', fontWeight: '400' }],
+        'title-md': ['20px', { lineHeight: '1.25', fontWeight: '500' }],
+        'title-lg': ['22px', { lineHeight: '1.27', fontWeight: '500' }],
+        'heading-sm': ['24px', { lineHeight: '1.25', fontWeight: '500' }],
+        'heading-md': ['28px', { lineHeight: '1.25', fontWeight: '500' }],
         // Standalone headings, set at leading-normal rather than 1.5:
         // `lg` is the legal-page h2 (279:6728), `xl` the 404 title (266:2831).
         'heading-lg': ['30px', { lineHeight: '1.27', fontWeight: '500' }],
-        'heading-xl': ['32px', { lineHeight: '1.27', fontWeight: '500' }],
-        'display-sm': ['36px', { lineHeight: '1.5', fontWeight: '700' }],
-        'display-md': ['40px', { lineHeight: '1.5', fontWeight: '700' }],
-        'display-lg': ['48px', { lineHeight: '1.5', fontWeight: '700' }],
+        'heading-xl': ['32px', { lineHeight: '1.25', fontWeight: '500' }],
+        'display-sm': ['36px', { lineHeight: '1.27', fontWeight: '700' }],
+        'display-md': ['40px', { lineHeight: '1.27', fontWeight: '700' }],
+        'display-lg': ['48px', { lineHeight: '1.27', fontWeight: '700' }],
         // Service block numerals (315:4854). The frame sets these in Maneli,
         // which is not licensed here, so they take the display stack.
         'display-xl': ['64px', { lineHeight: '1', fontWeight: '400' }],
@@ -195,6 +211,15 @@ export default {
          */
         'hero-line': ['clamp(28px, 5vw, 48px)', { lineHeight: '1.27', fontWeight: '600' }],
         'hero-accent': ['clamp(36px, 6.5vw, 64px)', { lineHeight: '1.27', fontWeight: '600' }],
+
+        /*
+         | Section headline, the tier below `hero-line`: SemiBold 40px on the
+         | same 1.27 leading (a 40px line box measures 51px on 336:5623's
+         | "ما چطور فکر میکنیم", "تیم سیزده" and "سیزده از کجا شروع شد", and on
+         | the About CTA card 577:11230). `display-md` is the same size but a
+         | different style — Bold on 1.5 — so it cannot stand in.
+         */
+        'section-line': ['clamp(28px, 3.4vw, 40px)', { lineHeight: '1.27', fontWeight: '600' }],
       },
 
       maxWidth: {
@@ -207,6 +232,8 @@ export default {
 
       boxShadow: {
         card: '4px 4px 12px 0px rgba(0, 0, 0, 0.05)',
+        // Footer 279:6327 lifts off the page with an upward-cast shadow.
+        footer: '0px -5px 10px 0px rgba(0, 0, 0, 0.05)',
       },
 
       backdropBlur: {

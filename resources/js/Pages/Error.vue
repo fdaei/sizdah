@@ -52,17 +52,17 @@ const message = computed(() => t(`errors.${key.value}.message`))
           <h1 class="text-heading-xl text-brand-50">
             {{ title }}
           </h1>
-          <p class="text-title-sm leading-[normal] text-ink-200">
+          <!--
+            `whitespace-pre-line` honours the hard line break 266:2832 draws
+            between the two clauses; the other statuses are single-line, so it
+            is inert for them.
+          -->
+          <p class="whitespace-pre-line text-title-sm text-ink-200">
             {{ message }}
           </p>
         </div>
 
-        <CtaButton
-          :label="t('errors.back_home')"
-          :href="route('home')"
-          size="lg"
-          with-arrow
-        />
+        <CtaButton :label="t('errors.back_home')" :href="route('home')" size="lg" with-arrow />
       </div>
     </div>
   </section>

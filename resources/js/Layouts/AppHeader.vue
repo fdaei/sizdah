@@ -15,6 +15,14 @@ import type { NavItem, SharedProps } from '@/types'
  * Layout in the file is RTL: wordmark at the inline start, the menu centred,
  * and the gold CTA at the inline end. Built with logical properties so the
  * same markup flips for the LTR locale.
+ *
+ * Measured off the frame (1440 x 107.568): px space96 / py space24, the logo
+ * 104 x 59.568 at y=24 (it is what sets the header height), the menu on gap 24,
+ * and the ink doodle `Layer_1` (I268:3031;56:2399) at x=98.148 / y=12.948 —
+ * i.e. over the CTA's top corner, NOT beside the wordmark, where it used to sit.
+ *
+ * The frame paints no bottom border; the 15% white fill plus the 15px backdrop
+ * blur are the whole treatment.
  */
 defineEmits<{ openMenu: [] }>()
 
@@ -39,23 +47,11 @@ function isActive(item: NavItem): boolean {
 </script>
 
 <template>
-  <header
-    class="fixed inset-x-0 top-0 z-header border-b border-white/5 bg-white/[0.15] backdrop-blur-header"
-  >
-    <div
-      class="container-sizdah flex items-center justify-between gap-6 py-6"
-    >
+  <header class="fixed inset-x-0 top-0 z-header bg-white/[0.15] backdrop-blur-header">
+    <div class="container-sizdah flex items-center justify-between gap-6 py-6">
       <!-- Wordmark — inline start -->
-      <Link :href="`/${page.props.locale.current}`" class="relative shrink-0">
+      <Link :href="`/${page.props.locale.current}`" class="shrink-0">
         <BrandLogo :width="104" :title="settings.siteName" />
-        <img
-          :src="doodleUrl"
-          alt=""
-          aria-hidden="true"
-          width="16"
-          height="20"
-          class="pointer-events-none absolute -top-2 end-[-14px] hidden h-5 w-4 lg:block"
-        />
       </Link>
 
       <!-- Primary navigation -->
@@ -66,24 +62,38 @@ function isActive(item: NavItem): boolean {
               :href="item.url"
               :target="item.target"
               :aria-current="isActive(item) ? 'page' : undefined"
-              class="group flex flex-col items-center px-1 py-1 text-title-md transition-colors duration-200 ease-brand"
-              :class="isActive(item) ? 'text-paper' : 'text-ink-200 hover:text-paper'"
+              class="flex flex-col items-center justify-center px-1 py-1 text-title-md transition-colors duration-200 ease-brand"
+              :class="
+                isActive(item)
+                  ? 'font-medium text-paper'
+                  : 'font-normal text-ink-200 hover:text-paper'
+              "
             >
               {{ item.label }}
               <!--
-                The file draws the active state as a hand-inked rule under the
-                label. Inactive items get the same mark on hover, so the
-                asset is rendered for both and only its opacity changes.
+                The two states use different nodes, not one asset at two
+                opacities (header item 20:2087):
+                  selected 54:2219 — a hand-inked rule on a 2px layout box that
+                    renders 4.71px, stretched to the label width. The SVG carries
+                    preserveAspectRatio="none", so w-full is how it is meant to
+                    scale. Item height: 4 + 25 + 2 + 4 = 35, the master exactly.
+                  default 27:2357 — a 45.276 x 9.676 squiggle exported with
+                    opacity="0" baked in, i.e. deliberately invisible. It is a
+                    spacer, and it is load-bearing: it is what makes an unselected
+                    item 42.676 tall against the selected item's 35, which the
+                    menu's items-center then offsets. Rendering nothing here would
+                    shift every inactive label down ~3.8px.
+                The file ships no hover variant, so hover stays a colour change.
               -->
-              <img
-                :src="underlineUrl"
-                alt=""
-                aria-hidden="true"
-                width="45"
-                height="5"
-                class="mt-1 h-[5px] w-[45px] transition-opacity duration-200 ease-brand"
-                :class="isActive(item) ? 'opacity-100' : 'opacity-0 group-hover:opacity-60'"
-              />
+              <span v-if="isActive(item)" class="relative block h-[2px] w-full">
+                <img
+                  :src="underlineUrl"
+                  alt=""
+                  aria-hidden="true"
+                  class="absolute inset-x-0 -top-[1.7px] h-[4.71px] w-full max-w-none"
+                />
+              </span>
+              <span v-else class="block h-[9.676px] w-[45.276px]" aria-hidden="true" />
             </Link>
           </li>
         </ul>
@@ -92,12 +102,21 @@ function isActive(item: NavItem): boolean {
       <div class="flex items-center gap-4">
         <LanguageSwitcher class="hidden lg:flex" />
 
-        <CtaButton
-          v-if="cta"
-          :label="cta.label"
-          :href="cta.url"
-          class="hidden lg:inline-flex"
-        />
+        <!--
+          Layer_1 sits 17.8px above the CTA's top edge and 2.1px in from its
+          inline-end edge, mirrored on X. It decorates the button, not the logo.
+        -->
+        <div v-if="cta" class="relative hidden lg:block">
+          <CtaButton :label="cta.label" :href="cta.url" />
+          <img
+            :src="doodleUrl"
+            alt=""
+            aria-hidden="true"
+            width="16"
+            height="20"
+            class="pointer-events-none absolute -top-[18px] end-[2px] h-5 w-4 -scale-x-100"
+          />
+        </div>
 
         <button
           type="button"

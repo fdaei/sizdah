@@ -12,10 +12,14 @@ return [
         'message' => 'شما اجازه مشاهده این صفحه را ندارید.',
     ],
 
-    // Copy is set verbatim from Figma 266:2831 / 266:2832.
+    /*
+     | Copy is set verbatim from Figma 266:2831 / 266:2832, including the hard
+     | line break the frame draws between the two clauses (rendered by the
+     | `whitespace-pre-line` on the Error page's paragraph).
+     */
     '404' => [
         'title'   => 'مسیر را گم کردید؟',
-        'message' => 'صفحه‌ای که دنبال آن بودید پیدا نشد، اما با هم می‌توانیم مسیر درست را پیدا کنیم.',
+        'message' => "صفحه‌ای که دنبال آن بودید پیدا نشد،\nاما با هم می‌توانیم مسیر درست را پیدا کنیم.",
     ],
 
     '429' => [

@@ -33,10 +33,22 @@ const { t } = useTranslations()
   <SeoHead :seo="props.seo" />
 
   <article class="section-first pb-24">
-    <div class="container-sizdah flex flex-col gap-12">
-      <header class="flex flex-col items-center gap-8">
-        <div class="flex max-w-[670px] flex-col items-center gap-6 text-center">
-          <h1 class="text-display-sm text-ink-50">{{ props.post.title }}</h1>
+    <div class="container-sizdah relative isolate flex flex-col gap-12">
+      <!-- 299:7865 — the shared 109px mesh, 872 tall, from frame y=202. -->
+      <div
+        class="grid-mesh pointer-events-none absolute inset-inline-start-0 inset-block-start-[22px] -z-10 hidden h-[872px] w-full max-w-container lg:block"
+        style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
+        aria-hidden="true"
+      />
+
+      <!--
+        285:5060 — a 670 track on gap 64, wrapping the 612 column (285:5061)
+        whose title block (285:5065) is gap 24. The headline is Display/Medium
+        (40/700), not the 36 this carried.
+      -->
+      <header class="mx-auto flex max-w-[670px] flex-col items-center gap-16">
+        <div class="flex w-full max-w-measure flex-col items-center gap-6 text-center">
+          <h1 class="text-display-md text-ink-50">{{ props.post.title }}</h1>
           <p v-if="props.post.subtitle" class="text-title-sm text-ink-200">
             {{ props.post.subtitle }}
           </p>

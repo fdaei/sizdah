@@ -43,7 +43,7 @@ final class AdminPanelProvider extends PanelProvider
             ->login()
             ->passwordReset()
             ->profile(isSimple: false)
-            ->brandName('Sahra')
+            ->brandName('Sizdah')
             ->favicon(asset('favicon.ico'))
             ->colors([
                 // Figma "primary gold" #BD933B

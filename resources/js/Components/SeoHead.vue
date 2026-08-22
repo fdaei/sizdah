@@ -39,8 +39,16 @@ const ogLocale = computed(() => page.props.locale.htmlLang.replace('-', '_'))
     <meta v-if="props.seo.image" name="twitter:image" :content="props.seo.image" />
 
     <template v-if="props.seo.type === 'article'">
-      <meta v-if="props.seo.publishedAt" property="article:published_time" :content="props.seo.publishedAt" />
-      <meta v-if="props.seo.modifiedAt" property="article:modified_time" :content="props.seo.modifiedAt" />
+      <meta
+        v-if="props.seo.publishedAt"
+        property="article:published_time"
+        :content="props.seo.publishedAt"
+      />
+      <meta
+        v-if="props.seo.modifiedAt"
+        property="article:modified_time"
+        :content="props.seo.modifiedAt"
+      />
       <meta v-if="props.seo.author" property="article:author" :content="props.seo.author" />
     </template>
   </Head>

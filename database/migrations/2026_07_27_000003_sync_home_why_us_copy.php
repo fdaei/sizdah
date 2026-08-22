@@ -32,17 +32,17 @@ return new class extends Migration
         $translations = [
             'en' => [
                 'eyebrow' => 'Why us',
-                'title' => 'Why brands choose Sahra',
+                'title' => 'Why brands choose Sizdah',
                 'subtitle' => 'Because every creative decision is built around brand clarity, consistency, and growth.',
             ],
             'fa' => [
                 'eyebrow' => 'چرا ما',
-                'title' => 'چرا برندها صحرا را انتخاب می‌کنند',
+                'title' => 'چرا برندها سیزده را انتخاب می‌کنند',
                 'subtitle' => 'زیرا هر تصمیم خلاقانه بر پایه شفافیت برند، انسجام و رشد شکل می‌گیرد.',
             ],
             'ar' => [
                 'eyebrow' => 'لماذا نحن',
-                'title' => 'لماذا تختار العلامات التجارية صحراء',
+                'title' => 'لماذا تختار العلامات التجارية سيزده',
                 'subtitle' => 'لأن كل قرار إبداعي يُبنى حول وضوح العلامة واتساقها ونموها.',
             ],
         ];
