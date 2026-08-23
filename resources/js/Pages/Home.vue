@@ -122,18 +122,23 @@ const finalCta = computed(() => props.sections.final_cta)
               v-if="hero.primaryCta"
               :label="hero.primaryCta.label"
               :href="hero.primaryCta.url"
+              size="lg"
               with-arrow
             />
             <!--
               268:2989 is a white fill with a 1px brand rule and an ink label —
               not the dark outline the other pages use, so it takes `light`
-              plus the frame's border rather than `outline`.
+              plus the frame's border rather than `outline`. Both hero CTAs
+              measure 57px (268:2990, 268:2989 are both lg-BW/lg-WB instances,
+              32/16 padding + 20px Medium) — `size` was missing, so this was
+              silently rendering at the smaller default (24/12, 18px).
             -->
             <CtaButton
               v-if="hero.secondaryCta"
               :label="hero.secondaryCta.label"
               :href="hero.secondaryCta.url"
               variant="light"
+              size="lg"
               class="border border-brand"
             />
           </div>

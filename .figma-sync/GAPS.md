@@ -889,3 +889,20 @@ measurement passes, which this session spot-checked structurally rather than
 re-measuring from scratch. See PROGRESS for the itemised confidence level per
 page.
 
+## G33 — Home's two hero CTAs were rendering at the wrong size  (2026-08-23)  (severity: medium)
+Started the pixel-level pass proper (per-node `get_design_context`, not just
+`get_metadata`) on Home's hero. Both hero buttons — `268:2990` (primary,
+"شروع گفتگو", brand fill) and `268:2989` (secondary, "دیدن پروژه‌ها", white
+fill + brand border) — are 57px-tall **`lg`** instances in the frame
+(32/16 padding, 20px Medium label; `CtaButton`'s own docblock already
+documents this exact 16+25+16=57 math). `Home.vue` passed no `size` prop to
+either, so both defaulted to `md` (24/12 padding, 18px label) — visibly
+smaller and less padded than the frame. Fixed: both now pass `size="lg"`.
+
+Every other `CtaButton` call site was checked for the same miss:
+`AppHeader.vue` and `MobileMenu.vue` correctly omit `size` (the header CTA is
+`CtaButton`'s own cited example of the default/`md` size); `StartTogetherCard.vue`
+already passes `size="lg"`; `Error.vue` already passes `size="lg"`.
+`FinalCtaCard.vue` passes no size — not yet checked against its frame
+(294:7672); flagged, not fixed, pending that check.
+
