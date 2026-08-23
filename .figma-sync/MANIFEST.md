@@ -19,17 +19,17 @@ Canonical picks among duplicates resolved at Phase 5 (see GAPS G2/G5).
 | 2 | projects (Work index) | `261:2545` | page (variant) | 1440×4656 | `/{locale}/work` | pending |
 | 2 | projects (short/state) | `226:3080` | page? state | 1440×1762 | `/{locale}/work` | pending |
 | 3 | case study (Work show) | `336:5374` | page | 1440×7403 | `/{locale}/work/{slug}` | **done** |
-| 4 | services | `308:4492` | page | 1440×5333 | `/{locale}/services` | **verified** |
+| 4 | services | `308:4492` | page | 1440×5333 | `/{locale}/services` | **done** |
 | 5 | about | `336:5623` | page | 1440×4021 | `/{locale}/about` | **done** |
-| 6 | blog list (Insights index) | `268:4158` | page (variant) | 1440×4277 | `/{locale}/insights` | **verified** |
-| 6 | blog list (Insights show) | `285:4590` | page (variant) | 1440×4844 | `/{locale}/insights/{slug}` | **verified** |
+| 6 | blog list (Insights index) | `268:4158` | page (variant) | 1440×4277 | `/{locale}/insights` | **done** |
+| 6 | blog list (Insights show) | `285:4590` | page (variant) | 1440×4844 | `/{locale}/insights/{slug}` | **done** |
 | 6 | blog list (state) | `416:4959` | page? state | 1440×1024 | `/{locale}/insights` | pending |
 | 6 | blog list (state) | `416:5834` | page? state | 1440×1024 | `/{locale}/insights` | pending |
-| 7 | contact us | `279:6325` | page | 1440×1755 | `/{locale}/contact` | **verified** |
+| 7 | contact us | `279:6325` | page | 1440×1755 | `/{locale}/contact` | **done** |
 | 8 | privacy policy | `279:5924` | page | 1440×2818 | `/{locale}/privacy-policy` | **done** |
 | 9 | term of use | `281:6773` | page | 1440×2443 | `/{locale}/terms` | **done** |
 | 10 | 404 (Latin, light) | `82:2059` | error state | 1440×1024 | fallback | superseded |
-| 10 | 404 (Persian, dark) | `266:2825` | error state | 1440×1024 | fallback | **verified** |
+| 10 | 404 (Persian, dark) | `266:2825` | error state | 1440×1024 | fallback | **done** |
 | 10 | "405" = 404 (Persian, light) | `88:2490` | error state | 1440×1024 | fallback | superseded (G20) |
 
 ## Component sheets & card frames
@@ -42,14 +42,14 @@ Canonical picks among duplicates resolved at Phase 5 (see GAPS G2/G5).
 | KPIs | `71:2145` | component | 334×153 | → `StatCard` | **done** |
 | blog card | `276:5724` | component set | 652×1140 | 612 / 400 → `BlogCard` | **done** |
 | card | `537:5510` | component set | 435×570 | Default / **hover** → `ProcessStepCard` | **done** |
-| Frame 96449 | `537:5561` | component | 509×759 | card variant | pending |
+| Frame 96449 | `537:5561` | component | 509×759 | off-canvas icon-tint reference for `ProcessStepCard`'s hover glyphs (G28) | superseded |
 | testimonial | `546:7528` | component set | 340×728 | Default / **hover** → `TestimonialCard` | **done** |
-| member card | `598:5732` | component set | 269×701 | Default / Variant2 — inventoried, not diffed | pending |
-| Frame 96468 | `598:5751` | component grid | 738×2703 | member/card grid | pending |
-| Frame 96420 | `411:7564` | component | 1174×1837 | TBD | pending |
-| Frame 96312 | `149:2691` | component | 951×798 | TBD | pending |
-| Frame 96396 | `299:7811` | component | 64×48 | small ui | pending |
-| Frame 96389 | `615:6178` | component | 741×67 | bar/row | pending |
+| member card | `598:5732` | component set | 269×701 | Default / Variant2 → `About.vue` team block | **done** |
+| Frame 96468 | `598:5751` | component grid | 738×2703 | photo-crop reference for the 8 member cards (G28) | superseded |
+| Frame 96420 | `411:7564` | component | 1174×1837 | off-canvas mood-board, not built (G28) | superseded |
+| Frame 96312 | `149:2691` | component | 951×798 | off-canvas icon-sprite sheet, not built (G28) | superseded |
+| Frame 96396 | `299:7811` | component | 64×48 | off-canvas icon combo, not built (G28) | superseded |
+| Frame 96389 | `615:6178` | component | 741×67 | discarded meta-row draft; canonical is `411:8568` (G28) | superseded |
 
 ## Decorative / vector artboards (export as assets, not pages)
 

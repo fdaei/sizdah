@@ -271,7 +271,7 @@ function iconFor(item: SectionItem, index: number): string | undefined {
               :width="member.image.width"
               :height="member.image.height"
               loading="lazy"
-              class="aspect-square w-full rounded-lg object-cover"
+              class="aspect-square w-full rounded-lg object-cover object-bottom"
             />
             <div v-else class="aspect-square w-full rounded-lg bg-warm-200" aria-hidden="true" />
 

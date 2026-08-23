@@ -17,6 +17,7 @@ import StartTogetherCard from '@/Components/StartTogetherCard.vue'
 import HeroJourney from '@/Components/HeroJourney.vue'
 import trustMarkUrl from '~img/sizdah/clients/trust-divider.svg'
 import heroNoteArrowUrl from '~img/sizdah/shared/up-right-arrow.svg'
+import testimonialRuleUrl from '~img/sizdah/home/testimonial-rule.svg'
 import type {
   ClientItem,
   PostSummary,
@@ -276,11 +277,22 @@ const finalCta = computed(() => props.sections.final_cta)
   <!-- Testimonials — 268:3720 heading over the 268:3729 card row. -->
   <section v-if="reviews && props.testimonials.length" class="section">
     <div class="container-sizdah">
-      <SectionHeading
-        :eyebrow="reviews.eyebrow"
-        :title="reviews.title"
-        :subtitle="reviews.subtitle || reviews.description"
-      />
+      <div class="relative">
+        <SectionHeading
+          :eyebrow="reviews.eyebrow"
+          :title="reviews.title"
+          :subtitle="reviews.subtitle || reviews.description"
+        />
+        <!-- 268:3728 — a hand-drawn rule tucked under the subtitle's end. -->
+        <img
+          :src="testimonialRuleUrl"
+          alt=""
+          aria-hidden="true"
+          width="81"
+          height="4"
+          class="pointer-events-none absolute inset-inline-end-0 top-full mt-1 hidden w-20 md:block"
+        />
+      </div>
 
       <!--
         The frame draws four cards. The CMS currently holds one, and stretching

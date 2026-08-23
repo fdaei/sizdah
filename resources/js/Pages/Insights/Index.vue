@@ -9,6 +9,9 @@ import FilterChips from '@/Components/FilterChips.vue'
 import SeoHead from '@/Components/SeoHead.vue'
 import { useTranslations } from '@/Composables/useTranslations'
 import type { FilterOption, PostSummary, SeoMeta } from '@/types'
+import bookIconUrl from '~img/sizdah/insights/book.svg'
+import bookMarkUrl from '~img/sizdah/insights/book-arrow.svg'
+import paperclipUrl from '~img/sizdah/insights/paperclip.svg'
 
 /**
  * Blog listing — Figma 268:4158.
@@ -17,6 +20,13 @@ import type { FilterOption, PostSummary, SeoMeta } from '@/types'
  * 3-up rows of 400px cards. Rather than pin those counts, the first two posts of
  * a page render wide and the rest render 3-up, so the rhythm holds for any page
  * size the backend paginates to.
+ *
+ * Two hand-drawn flourishes the original build missed (299:7730, 456:6721):
+ * a book-and-mark accent (298:7715 + 299:7724) sits at the header column's
+ * corner in the frame — but at the exact top of the headline's own text box,
+ * which would overlap real copy of any length, so it is pinned just above the
+ * eyebrow pill instead, not at the frame's literal y=0. A paperclip
+ * (456:6721) sits centred in the gap between the header and the card grid.
  */
 interface PostsPage {
   data: PostSummary[]
@@ -59,7 +69,16 @@ const rest = computed(() => props.posts.data.slice(2))
     <!-- Header sits 96 above the content block; 270:5252 then runs on 144. -->
     <div class="container-sizdah flex flex-col gap-16 lg:gap-24">
       <!-- 268:5233 — 670 track, 64 to the chip row; 268:5234 is the 612 column. -->
-      <header class="mx-auto flex max-w-[670px] flex-col items-center gap-16 text-center">
+      <header class="relative mx-auto flex max-w-[670px] flex-col items-center gap-16 text-center">
+        <!-- 298:7715 + 299:7724 — book-and-mark corner accent; see docblock. -->
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-inline-start-0 inset-block-end-full mb-2 hidden items-center gap-1 lg:flex"
+        >
+          <img :src="bookMarkUrl" alt="" width="16" height="20" />
+          <img :src="bookIconUrl" alt="" width="48" height="39" />
+        </div>
+
         <div class="flex w-full max-w-measure flex-col items-center gap-10">
           <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
@@ -79,6 +98,9 @@ const rest = computed(() => props.posts.data.slice(2))
           />
         </div>
       </header>
+
+      <!-- 456:6721 — a hand-drawn paperclip between the header and the grid. -->
+      <img :src="paperclipUrl" alt="" aria-hidden="true" width="64" height="64" class="mx-auto hidden lg:block" />
 
       <!--
         270:5252 runs 144 between the featured card, the 2-up row and the 3-up

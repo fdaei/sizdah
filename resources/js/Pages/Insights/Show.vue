@@ -6,6 +6,7 @@ import LeadMagnetBanner from '@/Components/LeadMagnetBanner.vue'
 import SeoHead from '@/Components/SeoHead.vue'
 import { useTranslations } from '@/Composables/useTranslations'
 import type { PageSectionData, PostDetail, SeoMeta } from '@/types'
+import relatedRuleUrl from '~img/sizdah/insights/related-rule.svg'
 
 /**
  * Article — Figma 285:4590 (the frame is named "blog list"; its content is a
@@ -77,7 +78,18 @@ const { t } = useTranslations()
       />
 
       <section v-if="props.post.related.length" class="mt-12 flex flex-col gap-6">
-        <h2 class="text-display-sm text-ink-50">{{ t('blog.related') }}</h2>
+        <h2 class="relative w-fit text-display-sm text-ink-50">
+          {{ t('blog.related') }}
+          <!-- 294:7700 — a hand-drawn rule under the heading. -->
+          <img
+            :src="relatedRuleUrl"
+            alt=""
+            aria-hidden="true"
+            width="188"
+            height="5"
+            class="pointer-events-none absolute inset-inline-end-0 top-full mt-1 hidden w-32 sm:block"
+          />
+        </h2>
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <BlogCard v-for="related in props.post.related" :key="related.slug" :post="related" />
         </div>

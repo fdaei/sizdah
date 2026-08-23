@@ -15,6 +15,13 @@ placed under `public/`. Flag any file >300 KB after optimization in GAPS.md.
 | `598:5718` | `resources/images/sizdah/about/principle-impact.svg` | About principle card 3 | 40x40 | 1.9 kB | SVG |
 | `598:5713` | `resources/images/sizdah/about/principle-path.svg` | About principle card 4 | 40x40 | 2.2 kB | SVG |
 | `577:10891` | `resources/images/sizdah/about/cta-journey.svg` | About final CTA | 592x417 | 84 kB | SVG |
+| `511:9188` (+3 instances) | `resources/images/sizdah/services/ring.svg` | Services numeral flourish (all 4 blocks) | 163x109 | 62 kB | SVG |
+| `511:9195` (+2 instances) | `resources/images/sizdah/services/spark.svg` | Services between-block divider (all 3 gaps) | 20x25 | 1.5 kB | SVG |
+| `298:7715` | `resources/images/sizdah/insights/book.svg` | Insights index header accent | 48x38.5 | 2.6 kB | SVG |
+| `299:7724` | `resources/images/sizdah/insights/book-arrow.svg` | Insights index header accent (paired w/ book) | 16x20 | 1.5 kB | SVG |
+| `456:6721` | `resources/images/sizdah/insights/paperclip.svg` | Insights index, header/grid gap | 64x64 | 1.6 kB | SVG |
+| `268:3728` | `resources/images/sizdah/home/testimonial-rule.svg` | Home testimonials heading | 81x4 | 1.5 kB | SVG |
+| `294:7700` | `resources/images/sizdah/insights/related-rule.svg` | Insights show, "related articles" heading | 188x5 | 1.6 kB | SVG |
 | — | `public/fonts/idealist/Idealist-Models.woff2` | `font-display` token | — | 36 kB | woff2 |
 | — | `public/fonts/doran/DoranFaNum-{Regular,Medium,Bold}.woff2` | `font-display` token | — | 49-50 kB ea. | woff2 |
 

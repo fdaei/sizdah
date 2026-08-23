@@ -585,3 +585,307 @@ featured-post node `270:5253` in the first place, alongside the two contact
 cards (`279:6409`, `279:6439`). It is correct there. Removing it by analogy with
 the testimonial fix would be a regression.
 
+## G27 — G25's last two sheet diffs, closed  (2026-08-23)  (severity: low)
+Figma MCP reconnected. Both diffs PROGRESS left BLOCKED on 2026-08-21 are done.
+
+**`598:5732` member card vs `About.vue` team block.** Close to right already —
+card fill/border (Yellow/200 default, Yellow/1000 hover), radius 16, border 4,
+and both text colours/sizes (name 24 Medium warm-900→ink-1000 on hover, role 20
+Medium ink-700→ink-800 on hover) all matched. One real miss: the photo
+(`598:5761`/`598:5770`, 229.4x229.4) is `object-bottom` in the frame — the crop
+anchors to the chin/shoulders, not centre. `About.vue`'s `<img>` had plain
+`object-cover`; added `object-bottom`. The card's fixed 229.4 width is not
+carried over — the grid is responsive (`grid-cols-2 sm:3 lg:5`, no tablet frame
+exists to measure against) and that adaptation predates this pass.
+
+**`138:2357` project cards (open/close) vs `ProjectShowcase.vue`.** Typography,
+the CTA-link colour override (frame sets it Black/1000 on Black/1000, already
+flagged as invisible-in-file and overridden to brand — correct, left alone),
+and the gold title rule all matched. One real miss: the row divider
+(`143:2403` open / `143:2484` close) is not one weight — the open (active)
+rule renders from a 2px image (`inset-[-2px...]`), the collapsed one from a 1px
+image (`inset-[-1px...]`). The component had both at a flat `h-px`. Now `h-0.5`
+on the active row, `h-px` on the rest.
+
+**Considered, not changed:**
+
+- The close state's CTA row is a real node (`138:2360`) drawn at `opacity-0`,
+  not omitted — in the nav-item case (G25 #3) that kind of spacer was
+  load-bearing for row height. Here it isn't: the row's height is set by the
+  title line-box (40px active / 32px collapsed), which is taller than the CTA
+  link in every state, so `v-show`ing it away costs nothing. Left as `v-show`.
+- The dot-and-line colour on the collapsed divider samples close to ink-600
+  border / ink-1000 fill in the rendered frame, which is what the component
+  already had; the sheet's own style list also carries Yellow/600 `#FBD587`
+  and Yellow/800 `#F9C75F` for this node pair, but neither the JSX (both dots
+  are opaque image assets, not inline fills) nor the screenshot resolve which
+  state they belong to. Not confident enough to change; flagged here rather
+  than guessed.
+
+**Phase 4 is now fully closed** — every row the component sheet (`21:2152`)
+carries has been mined and diffed. What remained was the five MANIFEST rows
+below; see G28 for why all five turned out to need no code.
+
+## G28 — The five remaining MANIFEST rows are off-canvas scratch, not unbuilt work  (2026-08-23)  (severity: n/a — verified, no code change)
+Every one of `598:5751`, `411:7564`, `149:2691`, `299:7811` and `615:6178`
+read as ordinary "component" rows in MANIFEST with vague notes ("TBD", "small
+ui", "bar/row"). `get_metadata` on each (not `get_design_context` — this was
+an orientation check, per the design-to-code skill's own carve-out) shows why
+none of them were ever finished: **all five sit at absurd canvas coordinates**
+— x = `-792`, `13700`, `13384`, `-4267`, alongside one (`598:5751`) whose
+frame itself is at x=`-4267`. Real page frames in this file sit in the
+low-to-mid thousands at most (Home tops out under x≈2000 across its four
+variants). This is the same authoring habit MANIFEST already flagged for
+`163:1428` "thinking" (G9) — parking non-shipping content far off the visible
+canvas — just not previously checked for these five.
+
+Confirmed per node, so nothing here is a guess:
+
+- **`598:5751`** (member/card grid, x=-4267) — eight symbols, one per team
+  member (`razieh hover` … `amin hover`), each the person's photo at 294×294
+  / `radius-sm` (8px). This is the **source crop** each member card's photo
+  was pulled from, not a second component — the live card (`598:5732`, fixed
+  in G27) uses the same photos at 229.4×294 / `radius-lg` (16px) via the
+  `object-bottom` crop already applied. No separate frame to build.
+- **`411:7564`** (x=-792) — two copies of the same "ChatGPT Image Jul 28…"
+  generated photo plus a "branding" wordmark, one child already marked
+  `hidden` in the file itself. A mood-board, not a section.
+- **`149:2691`** (x=-792) — forty-plus Streamline Freehand icon exports in a
+  grid (thought bubbles, arrows, quote marks, an Instagram glyph, a calendar).
+  It is the **icon library** the file's actual glyphs were pulled from
+  (several are already in the repo under individually-exported SVGs), not a
+  page component.
+- **`299:7811`** (x=13384) — a chevron plus a "paper-and-pencil" glyph
+  combined at 64×48. A single icon composite with no page reference found;
+  left unbuilt as it has no known destination, not because it was skipped.
+- **`615:6178`** (x=13700, "bar/row") — four pill cards (services / Instagram
+  / collaboration year / industry) with a gold hairline border and gradient
+  fill. This looked like a real hit at first — its four fields exactly match
+  the case-study meta row — until position and `Work/Show.vue`'s own docblock
+  (`grep` for `meta-industry` etc.) showed the *actual* shipped meta row cites
+  a different node, **`411:8568`** (label-over-value, no card chrome), inside
+  the real page frame. `615:6178` is a discarded pill-card draft of the same
+  content, parked off-canvas rather than deleted. Building it would have
+  replaced a correct, already-shipped treatment with an abandoned one.
+
+A sixth row turned out to be the same thing: **`537:5561`** "Frame 96449"
+(x=-1842) is six icon-tint pairs (white/black, Default/Variant2, yellow/black,
+64×64 each) — the asset reference for exactly the icon-recolour trick G25
+already implemented in `ProcessStepCard`'s hover state (`brightness-0` on the
+default glyph rather than a second shipped SVG). Not a seventh component.
+
+**Lesson for the ledger:** a MANIFEST row with a vague note ("TBD", "card
+variant") is not evidence of unfinished work — `get_metadata`'s x/y is a
+two-second check that would have closed all six of these without ever calling
+`get_design_context` in earnest. Worth running on any future "pending" row
+before diffing it.
+
+No page frame, component, or asset is outstanding anywhere in the file as of
+this pass.
+
+## G29 — Services was missing its hand-drawn flourishes; the "arc-rings" note explained  (2026-08-23)  (severity: medium — visible, brand-coloured, previously undocumented as a real gap)
+The user asked for a full re-comparison against the live Figma file, not just
+the MANIFEST tail. `get_metadata` on the full `services` frame (`308:4492`)
+surfaced two families of visible, non-hidden decorative marks that
+`Services.vue` never rendered — the same ones PROGRESS's "standing gaps" note
+called "Services clip-path layers, arc-rings-*" without pinning down node IDs.
+(The note's "clip-path layers" turned out to be four *hidden* mesh groups —
+`322:5248/5270/5293/5315`, one per service block, same internal structure as
+the already-shipped `.grid-mesh` — correctly never built, since Figma itself
+marks them `hidden="true"`.)
+
+**The rings** — `511:9188`, `511:9193`, `511:9518`, `607:5917`, one per
+service block (163×109, hand-drawn, Yellow/1000 `#F8B937`) — sit behind each
+big numeral. Confirmed by position, not guessed: each ring's y-range falls
+inside its block's numeral text-frame, and its x-range falls inside whichever
+side (left/right) that block's text column occupies — the same alternation
+`Services.vue` already drives off `index % 2` for the image. First downloaded
+all four raw exports, which hashed differently — but a byte diff showed the
+*only* difference across all 134,861 bytes was the embedded `id="Vector NN"`
+label; the path data itself is identical. One master ring, instanced four
+times, not four hand-drawn strokes — shipped as one shared asset
+(`services/ring.svg`, `svgo --multipass`'d from 132 kB to 62 kB).
+
+**The sparks** — `511:9195`, `511:9200`, `322:5242` (~20×25, same yellow) —
+sit in the gaps *between* consecutive blocks, horizontally centred (x≈699-741
+against a 1440 canvas). Three gaps for four blocks, one spark each, and these
+three exports were byte-identical from the first `md5sum` (no id-attribute
+noise to explain it away). One shared asset, `services/spark.svg` (2.6 kB
+raw, 1.5 kB optimized).
+
+**Lesson for the ledger, again:** a raw-export file hash is not proof of
+distinct artwork — Figma bakes the node's own `id` into the exported SVG, so
+four instances of one master vector hash as four different files until the
+id is stripped. `svgo` (or a plain byte-diff) settles it; don't conclude
+"four unique hand-drawn strokes" from `md5sum` alone.
+
+**Not placed**, both deliberately:
+- The `315:4998` "Group 21" badge ("جایی که هویت مسیر می‌سازد") — this predates
+  this pass (already noted in `Services.vue`'s DEVIATIONS and
+  `FIGMA/state.json`) and was out of scope here; still open.
+- A fifth small mark, `322:5230` (~17×25) — its y is `-18.6`, meaning ~19 of
+  its 25px sit above the frame's own top edge (y=0). Figma frames clip their
+  contents by default, so at most a 6px sliver would ever be visible. Treated
+  as not-meant-to-render, the same call made on the footer's SAHRA wordmark
+  (G24) for the same reason: authored past a clipping edge, not a design
+  intent to reproduce.
+
+**Approximation taken, and why:** the rings' Figma coordinates are expressed
+against a 505×145 *invisible text frame* around the numeral — a leading-2.27
+Maneli metric artefact the project already treats as non-load-bearing (the
+numeral itself renders at `leading-1`). Copying those coordinates literally
+would position each ring against empty space the live layout doesn't have,
+since the live numeral has no fixed-width box to anchor against and the grid
+column itself is fluid, not 1248px fixed. Centred each ring behind its
+numeral's actual rendered box instead, sized at `w-40` (≈160px, close to the
+163px source) — reproducing the "hand-drawn circle around the number" effect
+the frame clearly intends, without inheriting a text-frame artefact or a
+fixed-canvas coordinate that has no live equivalent. Flagged here rather than
+silently approximated, per this ledger's own standing rule.
+
+**Services' MANIFEST status moves from "verified" to "done"** — this is a
+real content difference fixed, not a re-confirmation.
+
+## G30 — Same pattern on Insights index; a site-wide category emerging  (2026-08-23)  (severity: medium)
+Continuing the re-comparison pass (per G29) onto the other "verified" pages.
+`get_metadata` on `268:4158` (Insights index) turned up two more non-hidden
+flourishes `Insights/Index.vue` never rendered: a book-and-mark accent
+(`298:7715` book icon + `299:7724` a small white/brand squiggle) at the
+header column's corner, and a hand-drawn paperclip (`456:6721`, 64×64,
+brand yellow) in the gap between the header and the card grid — the exact
+same "flourish in the transition zone" placement as Services' sparks (G29).
+Both added (`resources/images/sizdah/insights/{book,book-arrow,paperclip}.svg`).
+
+**Deviation taken:** the book+mark's Figma position is the literal top of the
+headline's own text box (y=0 of both). Copying that would overlap real copy —
+this headline's length varies per page (CMS-driven), unlike Services' fixed
+two-digit numeral where sitting behind the text was safe. Pinned the accent
+just above the eyebrow pill instead (outside the text flow, `hidden lg:flex`
+like the rest of this class of accent), not at the frame's literal y=0.
+
+**Contact (`279:6325`) re-checked against this same pattern and mostly holds
+up** — `Contact.vue` already renders the frame's `up-right-arrow` corner
+accent (`279:6519`) next to the follow line, which is exactly this class of
+element done right. Two loose threads left open, not chased further this
+pass:
+- `279:6521`, a 40×50 "Group" sitting just above the seam between the details
+  and form cards — same footprint as the other small accent marks, not
+  identified precisely enough to place with confidence.
+- `image 127` / `image 127 [Vectorized]` (24×24) recurs at the identical
+  absolute canvas position (x=944, y=1446) on Contact, both Insights frames
+  and (hidden-only) Services — a fixed offset regardless of each frame's very
+  different total height, which is the signature of a leftover pasted
+  reference rather than a per-page design element. Its own screenshot renders
+  as a plain dark square with no discernible shape. Treated the same as the
+  footer's invisible SAHRA wordmark (G24): not chased as a real gap without
+  stronger evidence it is meant to render.
+
+**The pattern worth naming:** this file scatters small hand-drawn accent
+marks (rings, sparks, a paperclip, a book+squiggle, an up-right arrow) at
+section seams and corners throughout, on top of its structural content. The
+original page-by-page build clearly focused on structural fidelity — layout,
+type, colour — and passed over these consistently. Two pages checked, two
+pages had misses; the other seven page frames have not yet had this specific
+check run against them. Flagging as a real, site-wide, still-open category
+rather than closing it here — see PROGRESS for what's left to check.
+
+## G31 — Remaining pages swept; category closed except Home  (2026-08-23)  (severity: low — nothing new found)
+Finished the sweep G30 left open. `get_metadata` on every remaining page frame:
+
+- **Insights show (`285:4590`)** — the lead-magnet's own small icon (`303:4482`)
+  is already shipped (`LeadMagnetBanner.vue`'s `checklist-doodle.svg`). One
+  unconfirmed loose end: `294:7700` "Vector 4", a 188×2 hairline right under
+  the "مقالات مرتبط" (related articles) heading — position lines up with an
+  underline rule, but `get_design_context` was not run on it to confirm colour
+  or intent, so it is logged, not built.
+- **About (`336:5623`)** — every non-hidden node cross-checked against
+  `ASSETS.md`/the page's own docblock (hero photo `343:9292`, hero-script
+  `354:9302`, story mark `583:5905`, all four principle icons, all five member
+  cards). Nothing unaccounted for.
+- **Legal — privacy (`279:5924`) and terms (`281:6773`)** — both are a flat
+  repeating heading+paragraph structure with no icons or decorative nodes at
+  all beyond the recurring `image 127` (see below). Genuinely simple; no
+  flourish category to miss here.
+- **Work index (`222:1989`)** — clean. One odd node, a bare `header item`
+  component instance (`261:2935`) floating directly on the page outside the
+  actual `Header` instance — read as the file's own way of marking "this nav
+  item is the active one" for reference, not a second element to render
+  (`AppHeader` already drives its active state from the real route).
+- **Work show / case study (`336:5374`)** — metadata suggested a much bigger
+  page than `Work/Show.vue` looked like it covered (a 4-pillar strategy
+  collage, an Instagram gallery, a 5-tile KPI row, a before/after block, a
+  next-project link) — but reading the actual file end to end showed every
+  one of those is already implemented (`challenge`, `goals`/`deliverables`,
+  `strategy`, `showcase`, `results`, `beforeAfter`, `next`), with its own
+  honestly-documented deviations (no per-result icons — schema has no icon
+  field; the stray Services-page copy at `428:5044` correctly excluded, see
+  G19). This page is more complete than the metadata skim alone suggested;
+  worth remembering that a rich metadata tree is not evidence of a gap by
+  itself.
+- **404 (`266:2825`)** — small, simple frame (illustration + title + subtitle
+  + CTA), no stray non-hidden nodes beyond the illustration/copy/CTA
+  `Error.vue` already renders.
+- **Home (`268:2962`)** — `get_metadata` returned the frame with **no
+  children** twice in a row; the page is large enough (9919px, twelve
+  sections) that the tool could not enumerate its tree at this scope. Not
+  swept the same way as the rest. This is also the page with the deepest
+  prior fix history in this ledger (G14 type scale, G16 lead-magnet copy
+  pulled verbatim from the live frame, G21/G22 mesh fixes) and already reuses
+  the `up-right-arrow` accent seen correctly done on Contact — some signal
+  that this specific "scattered flourish" class was not universally missed.
+  Left as a genuine unknown rather than claimed either "clean" or "checked."
+
+**Net for this category:** two real misses found and fixed (Services G29,
+Insights index G30) out of nine pages actually inspectable; About, Legal x2,
+Work index, Work show, 404 held up clean; Home could not be swept by this
+method and remains unverified against this specific gap class.
+
+## G32 — Home swept section-by-section; one more real miss, one confirmed non-issue  (2026-08-23)  (severity: low)
+`get_metadata` on the whole Home frame (`268:2962`) returns no children —
+confirmed a third time, so this is a real tool limit at this page's size
+(9919px / 12 sections), not a fluke. Worked around it by pulling each
+section's own node ID straight from `Home.vue`'s docblock and querying those
+individually — every one of the twelve resolved cleanly:
+
+- **Hero, KPI, trust proof, lead magnet, why-us, insights, FAQ, final CTA** —
+  all clean against their own component's docblock and node citations.
+  `WhyUsGrid.vue` in particular is worth noting as thorough (4 claims + both
+  hand-drawn quartering rules + the icon-matching logic, all cited correctly).
+  The FAQ frame's boxes 2-4 carry hidden text nodes with stale English
+  "Sahra" placeholder copy — leftover template noise, not a rendering gap
+  (real answers are CMS `props.faqs`, and the accordion only shows one answer
+  open at a time, which is exactly what those `hidden` nodes represent).
+- **Services band (`268:3032`)** — a huge, vector-dense "Lost Level" orbit
+  illustration. Did not pull full `get_design_context` on it (would have been
+  very expensive); `ServiceOrbit.vue` was read directly instead and is
+  thorough — every doodle, connector line and the responsive mobile fallback
+  is accounted for with its own node citation. No gap.
+- **Testimonials (`268:3720`)** — one real miss, same family as Insights
+  show's G30 hairline: a hand-drawn brand-yellow rule (`268:3728`, 81×4) tucked
+  under the subtitle, not rendered. Added to `Home.vue` directly (not
+  `SectionHeading.vue`, since none of the other six sections using that shared
+  component carry this rule — it is unique to testimonials, confirmed by
+  checking KPI/trust-proof/why-us/insights headings for the same sibling node
+  and finding none).
+
+**Insights show's G30 loose end resolved as the same thing.** `294:7700`
+"Vector 4" turned out to be the identical hand-drawn-rule pattern (also
+Yellow/1000, also tucked under a heading) — fetched its `get_design_context`
+to confirm rather than leave it unconfirmed, and added it under the "related
+articles" heading in `Insights/Show.vue`. Both rules downloaded as
+`home/testimonial-rule.svg` and `insights/related-rule.svg` — genuinely
+different hand-drawn paths (not the ring/spark situation from G29), so kept
+as two separate files.
+
+**Answering "is everything identical to Figma now":** no page frame or
+component in this file has unread children left — every node this session
+could reach has been checked at least at the metadata level, and every real
+mismatch found was fixed (G27-G32: 6 concrete fixes across Services, Insights
+index x2, Home, About's member card, ProjectShowcase). What is **not**
+claimed: pixel-for-pixel re-measurement of every spacing/colour/type value on
+every page this session — that level of rigor was applied fresh to Services
+and the two heading-rule fixes; the rest rely on prior sessions' G14/G20-G26
+measurement passes, which this session spot-checked structurally rather than
+re-measuring from scratch. See PROGRESS for the itemised confidence level per
+page.
+

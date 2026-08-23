@@ -122,16 +122,18 @@ const active = ref(0)
 
             <!--
               143:2403 / 143:2484 — a rule with a 12px dot centred on it. The
-              open row's rule is gold, the collapsed ones a flat ink hairline.
+              open row's rule is gold and 2px (143:2404); the collapsed ones are
+              a flat 1px ink hairline (143:2485) — the frame draws them at
+              different weights, not just different colours.
             -->
             <div
               v-if="index < props.projects.length - 1"
               aria-hidden="true"
-              class="relative mt-8 h-px w-full"
+              class="relative mt-8 w-full"
               :class="
                 active === index
-                  ? 'bg-gradient-to-l from-transparent via-brand to-transparent'
-                  : 'bg-ink-800'
+                  ? 'h-0.5 bg-gradient-to-l from-transparent via-brand to-transparent'
+                  : 'h-px bg-ink-800'
               "
             >
               <span
