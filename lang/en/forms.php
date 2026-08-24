@@ -11,6 +11,8 @@ return [
         'brand_placeholder' => 'Your brand name',
         'phone'            => 'Phone Number',
         'phone_placeholder'      => '123 456 78',
+        'country_search'   => 'Search country...',
+        'country_not_found' => 'No country found',
         'services'         => 'Services',
         'services_placeholder' => 'Select one or more services',
         'message'          => 'Short Message',

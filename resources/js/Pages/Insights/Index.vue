@@ -73,7 +73,7 @@ const rest = computed(() => props.posts.data.slice(2))
         <!-- 298:7715 + 299:7724 — book-and-mark corner accent; see docblock. -->
         <div
           aria-hidden="true"
-          class="pointer-events-none absolute inset-inline-start-0 inset-block-end-full mb-2 hidden items-center gap-1 lg:flex"
+          class="pointer-events-none absolute inline-start-0 block-end-full mb-2 hidden items-center gap-1 lg:flex"
         >
           <img :src="bookMarkUrl" alt="" width="16" height="20" />
           <img :src="bookIconUrl" alt="" width="48" height="39" />

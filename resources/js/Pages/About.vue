@@ -158,7 +158,7 @@ function iconFor(item: SectionItem, index: number): string | undefined {
       -->
       <section v-if="story" class="relative isolate">
         <div
-          class="grid-mesh pointer-events-none absolute inset-inline-start-0 inset-block-start-[-170px] -z-10 hidden h-[944px] w-full max-w-container lg:block"
+          class="grid-mesh pointer-events-none absolute inline-start-0 block-start-[-170px] -z-10 hidden h-[944px] w-full max-w-container lg:block"
           style="--mesh-cell-x: 109px; --mesh-cell-y: 118px"
           aria-hidden="true"
         />
@@ -169,7 +169,7 @@ function iconFor(item: SectionItem, index: number): string | undefined {
           aria-hidden="true"
           width="144"
           height="144"
-          class="pointer-events-none absolute inset-inline-end-[24%] inset-block-start-[-52px] -z-10 hidden size-36 lg:block"
+          class="pointer-events-none absolute inline-end-[24%] block-start-[-52px] -z-10 hidden size-36 lg:block"
         />
 
         <div class="mx-auto flex max-w-[824px] flex-col items-center gap-10 text-center lg:gap-20">

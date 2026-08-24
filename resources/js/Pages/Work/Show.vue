@@ -80,7 +80,7 @@ function ordinal(index: number): string {
         tall here and starting 22px below the content top (frame y=202 vs 180).
       -->
       <div
-        class="grid-mesh pointer-events-none absolute inset-inline-start-0 inset-block-start-[22px] -z-10 hidden h-[872px] w-full max-w-container lg:block"
+        class="grid-mesh pointer-events-none absolute inline-start-0 block-start-[22px] -z-10 hidden h-[872px] w-full max-w-container lg:block"
         style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
         aria-hidden="true"
       />

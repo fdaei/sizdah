@@ -87,7 +87,7 @@ const finalCta = computed(() => props.sections.final_cta)
   <section class="section-first relative overflow-hidden pb-16">
     <!-- Decorative hairline mesh, Figma "Group" 268:2966 — 884x778, not square. -->
     <div
-      class="grid-mesh pointer-events-none absolute inset-block-start-[122px] inset-inline-start-16 hidden h-[778px] w-[884px] lg:block"
+      class="grid-mesh pointer-events-none absolute block-start-[122px] inline-start-16 hidden h-[778px] w-[884px] lg:block"
       aria-hidden="true"
     />
 
@@ -295,7 +295,7 @@ const finalCta = computed(() => props.sections.final_cta)
           aria-hidden="true"
           width="81"
           height="4"
-          class="pointer-events-none absolute inset-inline-end-0 top-full mt-1 hidden w-20 md:block"
+          class="pointer-events-none absolute inline-end-0 top-full mt-1 hidden w-20 md:block"
         />
       </div>
 

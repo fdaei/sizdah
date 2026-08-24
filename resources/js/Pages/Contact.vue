@@ -5,7 +5,9 @@ import { route } from 'ziggy-js'
 import Eyebrow from '@/Components/Eyebrow.vue'
 import SeoHead from '@/Components/SeoHead.vue'
 import SocialIcon from '@/Components/SocialIcon.vue'
+import CountrySelect from '@/Components/CountrySelect.vue'
 import { useTranslations } from '@/Composables/useTranslations'
+import { defaultCountry, type Country } from '@/lib/countries'
 import type { SeoMeta, SharedProps } from '@/types'
 import phoneIconUrl from '~img/sizdah/contact/contact-phone.svg'
 import locationIconUrl from '~img/sizdah/contact/contact-location.svg'
@@ -15,7 +17,6 @@ import brandFieldUrl from '~img/sizdah/contact/field-brand.svg'
 import userFieldUrl from '~img/sizdah/contact/field-user.svg'
 import serviceFieldUrl from '~img/sizdah/contact/field-service.svg'
 import caretUrl from '~img/sizdah/contact/field-caret.svg'
-import omanFlagUrl from '~img/sizdah/contact/flag-oman.svg'
 import wordmarkUrl from '~img/sizdah/shared/wordmark-inline.svg'
 import upRightUrl from '~img/sizdah/shared/up-right-arrow.svg'
 
@@ -82,13 +83,26 @@ const selectedServices = computed(() =>
     .map((service) => service.title),
 )
 
+// Kept apart from `form.phone`: the input only ever holds the local number,
+// so the dial code can't be edited/deleted by hand. Combined into
+// `form.phone` right before posting — the backend validates it as one loose
+// string (see ContactSubmissionRequest) and was already built for a picker.
+const selectedCountry = ref<Country>(defaultCountry)
+const phoneNumber = ref('')
+
 function submit(): void {
+  form.phone = phoneNumber.value.trim()
+    ? `${selectedCountry.value.dialCode} ${phoneNumber.value.trim()}`
+    : ''
+
   form.post(route('contact.store'), {
     preserveScroll: true,
     onSuccess: () => {
       form.reset()
       form.form_started_at = Math.floor(Date.now() / 1000)
       servicesOpen.value = false
+      selectedCountry.value = defaultCountry
+      phoneNumber.value = ''
     },
   })
 }
@@ -106,7 +120,7 @@ const fieldClass =
     <div class="container-sizdah relative isolate">
       <!-- 279:6376 — the same 109px mesh the other frames use, 872 tall, from y=212. -->
       <div
-        class="grid-mesh pointer-events-none absolute inset-inline-start-0 inset-block-start-[32px] -z-10 hidden h-[872px] w-full max-w-container lg:block"
+        class="grid-mesh pointer-events-none absolute inline-start-0 block-start-[32px] -z-10 hidden h-[872px] w-full max-w-container lg:block"
         style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
         aria-hidden="true"
       />
@@ -127,40 +141,14 @@ const fieldClass =
         </div>
       </header>
 
-      <div class="mt-12 grid gap-6 lg:grid-cols-[423fr_801fr]">
-        <!-- Details card — 279:6409 -->
-        <div
-          class="flex flex-col gap-10 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tl from-brand/10 to-transparent p-8"
-        >
-          <h2 class="text-title-lg text-brand-50">{{ t('forms.details.title') }}</h2>
-
-          <ul class="flex flex-col gap-6">
-            <li v-for="(detail, index) in details" :key="detail.key" class="flex flex-col gap-6">
-              <div class="flex items-center gap-4">
-                <span
-                  class="inline-flex size-12 shrink-0 items-center justify-center rounded-round border border-ink-700"
-                >
-                  <img
-                    :src="detail.icon"
-                    alt=""
-                    aria-hidden="true"
-                    width="24"
-                    height="24"
-                    class="size-6"
-                  />
-                </span>
-                <span class="flex flex-col gap-1">
-                  <span class="text-label-lg text-brand-50">
-                    {{ t(`forms.details.${detail.key}`) }}
-                  </span>
-                  <span class="text-body-md text-ink-200 latin-nums">{{ detail.value }}</span>
-                </span>
-              </div>
-              <hr v-if="index < details.length - 1" class="border-0 border-t-2 border-ink-800" />
-            </li>
-          </ul>
-        </div>
-
+      <!--
+        279:6409/279:6439 — physically LEFT=details(423)/RIGHT=form(801) in the
+        frame. Grid track 1 sits at the inline-start edge, which under this
+        page's dir="rtl" is the physical right, so the form (track 1) has to
+        come first in the DOM for track 1 to land on the right where the
+        frame puts it — details (track 2, 423fr) follows and lands left.
+      -->
+      <div class="mt-12 grid gap-6 lg:grid-cols-[801fr_423fr]">
         <!-- Form card — 279:6439 -->
         <form
           class="flex flex-col gap-6 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tr from-brand/10 to-transparent p-8"
@@ -179,7 +167,34 @@ const fieldClass =
             />
           </div>
 
+          <!-- 279:6404's field pair is RIGHT=name/LEFT=brand; name has to be the first DOM child (see the card-row note above). -->
           <div class="grid gap-6 md:grid-cols-2">
+            <div class="flex flex-col gap-2">
+              <label for="name" class="text-label-lg text-brand-50">
+                {{ t('forms.contact.name') }}
+              </label>
+              <div class="relative">
+                <img
+                  :src="userFieldUrl"
+                  alt=""
+                  aria-hidden="true"
+                  width="24"
+                  height="24"
+                  class="pointer-events-none absolute block-start-1/2 inline-start-3 size-6 -translate-y-1/2"
+                />
+                <input
+                  id="name"
+                  v-model="form.name"
+                  type="text"
+                  required
+                  :class="[fieldClass, 'ps-12']"
+                  :placeholder="t('forms.contact.name_placeholder')"
+                  autocomplete="name"
+                />
+              </div>
+              <p v-if="form.errors.name" class="text-label-md text-brand">{{ form.errors.name }}</p>
+            </div>
+
             <div class="flex flex-col gap-2">
               <label for="brand_name" class="text-label-lg text-brand-50">
                 {{ t('forms.contact.brand') }}
@@ -191,7 +206,7 @@ const fieldClass =
                   aria-hidden="true"
                   width="24"
                   height="24"
-                  class="pointer-events-none absolute inset-block-start-1/2 inline-start-3 size-6 -translate-y-1/2"
+                  class="pointer-events-none absolute block-start-1/2 inline-start-3 size-6 -translate-y-1/2"
                 />
                 <input
                   id="brand_name"
@@ -206,35 +221,45 @@ const fieldClass =
                 {{ form.errors.brand_name }}
               </p>
             </div>
-
-            <div class="flex flex-col gap-2">
-              <label for="name" class="text-label-lg text-brand-50">
-                {{ t('forms.contact.name') }}
-              </label>
-              <div class="relative">
-                <img
-                  :src="userFieldUrl"
-                  alt=""
-                  aria-hidden="true"
-                  width="24"
-                  height="24"
-                  class="pointer-events-none absolute inset-block-start-1/2 inline-start-3 size-6 -translate-y-1/2"
-                />
-                <input
-                  id="name"
-                  v-model="form.name"
-                  type="text"
-                  required
-                  :class="[fieldClass, 'ps-12']"
-                  :placeholder="t('forms.contact.name_placeholder')"
-                  autocomplete="name"
-                />
-              </div>
-              <p v-if="form.errors.name" class="text-label-md text-brand">{{ form.errors.name }}</p>
-            </div>
           </div>
 
+          <!-- 279:6406's field pair is RIGHT=phone/LEFT=service; phone has to be the first DOM child (see the card-row note above). -->
           <div class="grid gap-6 md:grid-cols-2">
+            <div class="flex flex-col gap-2">
+              <label for="phone" class="text-label-lg text-brand-50">
+                {{ t('forms.contact.phone') }}
+              </label>
+              <!--
+                279:6406 draws this as one pill with an internal divider: dial
+                code + digits on the (wider) start side, a bordered flag+caret
+                trigger on the end side. A flex row sizes itself to whatever
+                dial code is picked instead of guessing a fixed padding for
+                every one of CountrySelect's ~250 codes.
+              -->
+              <div
+                class="flex items-stretch rounded-lg border-3 border-brand-200 bg-white/80 focus-within:border-brand"
+              >
+                <span class="flex shrink-0 items-center gap-2 ps-3">
+                  <CountrySelect v-model="selectedCountry" />
+                  <span class="text-body-md text-ink-1000 latin-nums" dir="ltr">
+                    {{ selectedCountry.dialCode }}
+                  </span>
+                </span>
+                <input
+                  id="phone"
+                  v-model="phoneNumber"
+                  type="tel"
+                  dir="ltr"
+                  class="w-full min-w-0 bg-transparent p-3 text-body-md text-ink-1000 placeholder:text-ink-600 focus:outline-none focus:ring-0"
+                  :placeholder="t('forms.contact.phone_placeholder')"
+                  autocomplete="tel"
+                />
+              </div>
+              <p v-if="form.errors.phone" class="text-label-md text-brand">
+                {{ form.errors.phone }}
+              </p>
+            </div>
+
             <!--
               Multi-select rendered as a disclosure of checkboxes rather than a
               native <select multiple>, which cannot be styled to the frame and
@@ -304,39 +329,6 @@ const fieldClass =
                 {{ form.errors.service_ids }}
               </p>
             </div>
-
-            <div class="flex flex-col gap-2">
-              <label for="phone" class="text-label-lg text-brand-50">
-                {{ t('forms.contact.phone') }}
-              </label>
-              <div class="relative">
-                <span
-                  class="pointer-events-none absolute inset-block-start-1/2 inline-start-3 flex -translate-y-1/2 items-center gap-1"
-                >
-                  <img
-                    :src="omanFlagUrl"
-                    alt=""
-                    aria-hidden="true"
-                    width="20"
-                    height="20"
-                    class="h-5 w-5"
-                  />
-                  <span class="text-body-md text-ink-1000 latin-nums" dir="ltr">+968</span>
-                </span>
-                <input
-                  id="phone"
-                  v-model="form.phone"
-                  type="tel"
-                  dir="ltr"
-                  :class="[fieldClass, 'ps-[92px] text-start']"
-                  :placeholder="t('forms.contact.phone_placeholder')"
-                  autocomplete="tel"
-                />
-              </div>
-              <p v-if="form.errors.phone" class="text-label-md text-brand">
-                {{ form.errors.phone }}
-              </p>
-            </div>
           </div>
 
           <div class="flex flex-col gap-2">
@@ -363,16 +355,47 @@ const fieldClass =
             {{ form.processing ? t('common.sending') : t('forms.contact.submit') }}
           </button>
         </form>
+
+        <!-- Details card — 279:6409 -->
+        <div
+          class="flex flex-col gap-10 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tl from-brand/10 to-transparent p-8"
+        >
+          <h2 class="text-title-lg text-brand-50">{{ t('forms.details.title') }}</h2>
+
+          <ul class="flex flex-col gap-6">
+            <li v-for="(detail, index) in details" :key="detail.key" class="flex flex-col gap-6">
+              <div class="flex items-center gap-4">
+                <span
+                  class="inline-flex size-12 shrink-0 items-center justify-center rounded-round border border-ink-700"
+                >
+                  <img
+                    :src="detail.icon"
+                    alt=""
+                    aria-hidden="true"
+                    width="24"
+                    height="24"
+                    class="size-6"
+                  />
+                </span>
+                <span class="flex flex-col gap-1">
+                  <span class="text-label-lg text-brand-50">
+                    {{ t(`forms.details.${detail.key}`) }}
+                  </span>
+                  <span class="text-body-md text-ink-200 latin-nums">{{ detail.value }}</span>
+                </span>
+              </div>
+              <hr v-if="index < details.length - 1" class="border-0 border-t-2 border-ink-800" />
+            </li>
+          </ul>
+        </div>
       </div>
 
-      <!-- Social row — 279:6485 -->
+      <!--
+        Social row — 279:6485. Physically LEFT=icons/RIGHT=follow-text in the
+        frame; the follow-text <p> has to be the first DOM child so it lands
+        on the right (see the card-row note above).
+      -->
       <div class="mt-14 flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
-        <ul class="flex flex-wrap items-center gap-6">
-          <li v-for="link in socialLinks" :key="link.platform">
-            <SocialIcon :link="link" />
-          </li>
-        </ul>
-
         <p class="relative flex items-center gap-2 text-body-lg font-medium text-ink-100">
           <img
             :src="wordmarkUrl"
@@ -389,9 +412,15 @@ const fieldClass =
             aria-hidden="true"
             width="91"
             height="87"
-            class="pointer-events-none absolute inset-block-end-full inline-end-0 hidden h-auto w-[91px] flip-rtl lg:block"
+            class="pointer-events-none absolute block-end-full inline-end-0 hidden h-auto w-[91px] flip-rtl lg:block"
           />
         </p>
+
+        <ul class="flex flex-wrap items-center gap-6">
+          <li v-for="link in socialLinks" :key="link.platform">
+            <SocialIcon :link="link" />
+          </li>
+        </ul>
       </div>
     </div>
   </section>

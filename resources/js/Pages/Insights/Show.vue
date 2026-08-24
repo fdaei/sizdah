@@ -43,7 +43,7 @@ const { t } = useTranslations()
     <div class="container-sizdah relative isolate flex flex-col gap-12">
       <!-- 299:7865 — the shared 109px mesh, 872 tall, from frame y=202. -->
       <div
-        class="grid-mesh pointer-events-none absolute inset-inline-start-0 inset-block-start-[22px] -z-10 hidden h-[872px] w-full max-w-container lg:block"
+        class="grid-mesh pointer-events-none absolute inline-start-0 block-start-[22px] -z-10 hidden h-[872px] w-full max-w-container lg:block"
         style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
         aria-hidden="true"
       />
@@ -93,7 +93,7 @@ const { t } = useTranslations()
             aria-hidden="true"
             width="188"
             height="5"
-            class="pointer-events-none absolute inset-inline-end-0 top-full mt-1 hidden w-32 sm:block"
+            class="pointer-events-none absolute inline-end-0 top-full mt-1 hidden w-32 sm:block"
           />
         </h2>
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

@@ -137,7 +137,7 @@ const active = ref(0)
               "
             >
               <span
-                class="absolute inset-inline-start-1/2 top-1/2 size-3 -translate-y-1/2 rounded-round border"
+                class="absolute inline-start-1/2 top-1/2 size-3 -translate-y-1/2 rounded-round border"
                 :class="active === index ? 'border-brand bg-brand' : 'border-ink-600 bg-ink-1000'"
               />
             </div>

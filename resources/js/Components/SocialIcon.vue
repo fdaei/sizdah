@@ -6,6 +6,7 @@ import linkedinUrl from '~img/sizdah/social/linkedin.svg'
 import whatsappUrl from '~img/sizdah/social/whatsapp.svg'
 import telegramUrl from '~img/sizdah/social/telegram.svg'
 import xUrl from '~img/sizdah/social/x.svg'
+import youtubeUrl from '~img/sizdah/social/youtube.svg'
 
 /**
  * Social link chip — Figma "social" (279:6487).
@@ -23,6 +24,7 @@ const glyphs: Record<string, string> = {
   telegram: telegramUrl,
   x: xUrl,
   twitter: xUrl,
+  youtube: youtubeUrl,
 }
 
 const glyph = computed<string | undefined>(() => glyphs[props.link.platform.toLowerCase()])

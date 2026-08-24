@@ -60,7 +60,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
     <div class="container-sizdah relative isolate flex flex-col gap-24">
       <!-- 511:9147 — the shared 109px mesh, 872 tall, from frame y=202. -->
       <div
-        class="grid-mesh pointer-events-none absolute inset-inline-start-0 inset-block-start-[22px] -z-10 hidden h-[872px] w-full max-w-container lg:block"
+        class="grid-mesh pointer-events-none absolute inline-start-0 block-start-[22px] -z-10 hidden h-[872px] w-full max-w-container lg:block"
         style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
         aria-hidden="true"
       />
@@ -109,7 +109,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
                 :src="ringUrl"
                 alt=""
                 aria-hidden="true"
-                class="pointer-events-none absolute inset-inline-start-1/2 inset-block-start-1/2 -z-10 w-40 max-w-none -translate-x-1/2 -translate-y-1/2"
+                class="pointer-events-none absolute inline-start-1/2 block-start-1/2 -z-10 w-40 max-w-none -translate-x-1/2 -translate-y-1/2"
               />
               <span class="font-display text-display-xl text-paper latin-nums" aria-hidden="true">
                 {{ String(index + 1).padStart(2, '0') }}

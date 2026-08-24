@@ -11,6 +11,8 @@ return [
         'brand_placeholder'    => 'نام برند شما',
         'phone'                => 'شماره تماس',
         'phone_placeholder'    => '۱۲۳ ۴۵۶ ۷۸',
+        'country_search'       => 'جستجوی کشور...',
+        'country_not_found'    => 'کشوری یافت نشد',
         'services'             => 'خدمات',
         'services_placeholder' => 'یک یا چند خدمت را انتخاب کنید',
         'message'              => 'پیام کوتاه',

@@ -11,6 +11,8 @@ return [
         'brand_placeholder'    => 'اسم علامتك التجارية',
         'phone'                => 'رقم الهاتف',
         'phone_placeholder'          => '١٢٣ ٤٥٦ ٧٨',
+        'country_search'       => 'ابحث عن دولة...',
+        'country_not_found'    => 'لم يتم العثور على دولة',
         'services'             => 'الخدمات',
         'services_placeholder' => 'اختر خدمة أو أكثر',
         'message'              => 'رسالة قصيرة',

@@ -1109,3 +1109,95 @@ Three real fixes now found in every Work-show sub-block checked this pass
 whole file — worth treating as close to certain on any remaining unchecked
 card with a cream/gold ground, not just a pattern to watch for.
 
+
+## G40 — Contact's whole grid layout was mirrored left-right vs the frame  (2026-08-24)  (severity: high)
+User reported `/fa/contact` as visibly wrong. Screenshot diff (live Playwright
+render vs. a fresh `get_screenshot`/`get_metadata` pull of `279:6325`) found a
+single root cause hitting four separate rows on the page: this page's
+`dir="rtl"` puts CSS Grid/flex track 1 at the physical **right**, but every
+two-up row on this page had its first DOM child authored as whatever sits on
+the frame's physical **left** — the opposite assumption. Confirmed empirically
+(cropped screenshots of the live render vs. the frame, field-label by
+field-label) before touching code, not just reasoned from the CSS spec.
+
+Four spots fixed, all the same pattern — reorder DOM children so the one the
+frame places physically right renders first:
+- Cards row (`279:6409` details / `279:6439` form): frame is LEFT=details(423)/
+  RIGHT=form(801); form now comes first in the DOM, `grid-cols-[423fr_801fr]`
+  flipped to `[801fr_423fr]`.
+- Name/brand field pair (`279:6404`): frame is RIGHT=name/LEFT=brand; name now
+  first.
+- Phone/service field pair (`279:6406`): frame is RIGHT=phone/LEFT=service;
+  phone now first.
+- Social row (`279:6485`): frame is LEFT=icons/RIGHT=follow-text; the
+  follow-text `<p>` now first.
+
+Not touched: field/card *content* (icon set, i18n copy) differs from the raw
+Figma placeholder text in places — that's seeded/translated content via
+`HasTranslations`, not a layout defect, and out of scope here.
+
+Worth a pass on other pages for the same pattern: any `grid-cols-[Xfr_Yfr]` or
+plain `flex-row` two-up layout authored by transcribing the frame's left-to-
+right layer order verbatim is a candidate, since that's exactly what produced
+all four misses here.
+
+## G41 — SocialIcon: missing YouTube glyph, and all five glyphs were the wrong colour  (2026-08-24)  (severity: medium)
+Follow-up on G40 — user flagged the social icon row specifically after the
+layout fix. Two real defects in `SocialIcon.vue` (`279:6487`–`279:6504`),
+never previously audited (no prior GAPS/MANIFEST entry references it):
+
+1. `youtube` was never a key in the component's `glyphs` map, so it fell
+   through to the "unmapped platform" fallback and rendered a bare letter
+   "Y" instead of an icon — visible in the live screenshot as a plain glyph
+   where a play-button icon belongs. Pulled the actual glyph via
+   `download_assets` on `279:6504`, stripped the baked-in chip-border path
+   (the component redraws its own 56px/border-ink-400 chip in CSS — keeping
+   the export's border path would have doubled it), kept just the two
+   `Vector`/`Vector_2` paths, and added `resources/images/sizdah/social/
+   youtube.svg` + the `youtube` map entry.
+2. All five glyphs (`instagram`, `linkedin`, `whatsapp`, `x`, `telegram`)
+   were `fill="#D0D0D0"` (`ink-200`) where the frame draws every glyph in
+   `brand`/`#F8B937` — confirmed by cropping the same pixel region from both
+   the Figma screenshot and the live render and comparing (live crop came
+   back pure grayscale via `identify`, Figma crop didn't). Recoloured all
+   five existing SVGs plus the new youtube one to `#F8B937`. Chip border
+   stays `ink-400` — only the glyph fill was wrong.
+
+`SocialIcon` is only consumed by `Contact.vue`, so no other page was
+affected.
+
+## G42 — `inset-block-start/end` and `inset-inline-start/end` were never real classes; sitewide  (2026-08-24)  (severity: high)
+Follow-up on G40/G41 — user pointed at the phone field's flag prefix on
+Contact specifically ("پرچم‌ها... این input"). Inspecting computed styles
+with Playwright (not just screenshots) showed the flag/+968 prefix had
+`top: 0px` plus a `-translate-y(-10px)` — i.e. it was floating 10px *above*
+its own container, overlapping the label above, not merely off-center.
+
+Root cause: `tailwindcss-logical` (`node_modules/tailwindcss-logical/
+plugins/inset.js`) registers `block-start-*` / `block-end-*` / `inline-
+start-*` / `inline-end-*` (and the shorthands `inset-block`/`inset-inline`).
+It does **not** register `inset-block-start-*` or `inset-inline-start/end-*`
+— those read like the literal CSS logical property names but aren't classes
+this plugin (or core Tailwind) generates. Every usage silently compiled to
+no rule at all, so the browser fell back to each element's static position.
+For a 24px field icon in a 47.5px input this reads as "a bit high but still
+inside the pill," which is why it survived every earlier per-value GAPS
+pass; for the phone field's 20px-tall flag+code span the same math pushes
+it far enough to visibly clear the input's top edge.
+
+Grepped the whole `resources/js` tree — this typo was in **every** instance
+across the codebase (13 for `inset-inline-*`, 12 for `inset-block-*`, 0
+correct usages found anywhere), not just Contact:
+`About.vue`, `Contact.vue`, `Home.vue`, `Services.vue`, `Work/Index.vue`,
+`Work/Show.vue`, `Insights/Index.vue`, `Insights/Show.vue`, and
+`Components/ProjectShowcase.vue`. Fixed by dropping the erroneous `inset-`
+prefix everywhere (`inset-block-start-1/2` → `block-start-1/2`, etc.) —
+a pure rename to the plugin's actual utility names, no geometry changed.
+Confirmed via Playwright computed-style check that Contact's phone-flag and
+field-icon spans now center correctly; spot-screenshotted Home, About and
+Services (the grid-mesh background usages) and saw no regressions — those
+meshes are subtle/dark-on-dark so the fix mostly restores an intended small
+offset rather than changing anything dramatic.
+
+Legitimate, unaffected: `inset-inline-0` (Contact's services dropdown) and
+plain `top-full`/`top-1/2` pairings — those aren't this typo.
