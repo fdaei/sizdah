@@ -1065,3 +1065,47 @@ proof, not by trusting the citation. Worth doing that whenever a docblock's
 claim and a fresh fetch disagree, rather than assuming the fresh fetch is the
 one-off exception.
 
+## G39 — Work/Show.vue's three remaining card treatments; three real misses  (2026-08-24)  (severity: medium)
+Continuing the per-value pass onto Work show's case-study page — the three
+pieces its own docblock had described but this pass had not yet re-measured.
+
+**Goals/deliverables cards (`423:4973`)** — three misses at once: padding was
+uniform `p-6` (24px all sides) where the frame draws `px-24/py-56` (asymmetric,
+56px top/bottom); the gap between the numeral and the title/body block was
+`gap-6` (24px) where the frame draws `gap-40`; the title/body gap itself was
+`gap-2` (8px) where the frame draws `gap-24`. The background was also flat
+`bg-black` where the frame draws the same "20% black wash + raking brand glow"
+treatment used elsewhere in the file (here `-42.92deg`, 0→8%) — not `.surface-
+glow` (that class also bakes in an 80% ink-1000 base this card doesn't have),
+so it's inline styles on top of `bg-black`. All four fixed. Caught one own
+mistake making this edit: first pass swapped `items-start` for `items-end` to
+chase the frame's raw (RTL-unaware) `items-end` label, which would have
+flipped the card's alignment — this codebase's convention is exactly the
+opposite (logical `items-start` = inline-start = right under RTL), confirmed
+by the identical pattern in the sibling strategy-quadrant `<li>` two sections
+down. Reverted before committing.
+
+**Strategy quadrant (`428:5058` etc.)** — checked clean: title 24/500 `ink-50`,
+body 18/400 `ink-200`, internal gap-8, all matched. (`428:5044`, the "چرا
+سیزده" node near it, is confirmed stray Services-page content per the
+existing G19 note — not part of this section, re-verified not to be a
+component in disguise.)
+
+**Results tiles (`615:6133` etc.)** — two misses: padding was `p-6` (24px)
+where the frame draws `px-32/py-16`; the label/value gap was `gap-3` (12px)
+where the frame draws `gap-8`. The label colour was also `ink-900` (#2C2C2C)
+where the frame draws `#393637` — `warm-900`, the same cool/warm ramp
+confusion as G35, now a fourth occurrence, on a fourth different gold/cream
+surface. All three fixed.
+
+**Next-project link (`430:5212`)** — one miss: the gap between the "پروژه
+بعدی" label and the arrow+title row was `gap-3` (12px) where the frame draws
+`gap-32`. Fixed. Arrow size, inter-icon gap, and both text styles already
+matched.
+
+Three real fixes now found in every Work-show sub-block checked this pass
+(goals/deliverables, results, next-project) against one clean one (strategy).
+`warm-*`/`ink-*` confusion is now 4 for 4 on gold/cream surfaces across the
+whole file — worth treating as close to certain on any remaining unchecked
+card with a cream/gold ground, not just a pattern to watch for.
+

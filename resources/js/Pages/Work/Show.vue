@@ -21,8 +21,11 @@ import nextArrowUrl from '~img/sizdah/work/next-arrow.svg'
  * would not survive a project with a different number of goals or results.
  *
  * Two distinct card treatments, deliberately kept apart:
- *   - goals / deliverables (423:4973) — black fill, 3px ink-200 border, r16,
- *     brand number at 36/600, brand-50 title, ink-200 body.
+ *   - goals / deliverables (423:4973) — black base under a 20% black wash and
+ *     a raking brand glow (-42.92deg, 0->8%; re-measured 2026-08-24, was flat
+ *     `bg-black` with px-24/py-24 and gap-24/gap-8 where the frame draws
+ *     px-24/py-56 and gap-40/gap-24), 3px ink-200 border, r16, brand number
+ *     at 36/600, brand-50 title, ink-200 body.
  *   - strategy (428:5058) — no fill or border; the number sits outside the copy
  *     at 32/500 brand and the quadrant is divided by 3px brand-200 rules.
  *
@@ -152,13 +155,18 @@ function ordinal(index: number): string {
           <li
             v-for="(item, index) in block.items"
             :key="item.title"
-            class="flex flex-col items-start gap-6 rounded-lg border-3 border-ink-200 bg-black p-6"
+            class="flex flex-col items-start gap-10 rounded-lg border-3 border-ink-200 bg-black px-6 py-14"
+            style="
+              background-image:
+                linear-gradient(-42.92deg, rgb(248 185 55 / 0) 2.3248%, rgb(248 185 55 / 8%) 100%),
+                linear-gradient(0deg, rgb(0 0 0 / 20%), rgb(0 0 0 / 20%));
+            "
             data-reveal
           >
             <span class="text-display-sm font-semibold text-brand latin-nums" aria-hidden="true">
               {{ ordinal(index) }}
             </span>
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-6">
               <h3 class="text-heading-sm text-brand-50">{{ item.title }}</h3>
               <p class="text-title-sm text-ink-200">{{ item.description }}</p>
             </div>
@@ -213,7 +221,12 @@ function ordinal(index: number): string {
         </ul>
       </section>
 
-      <!-- Results 430:5141 — cream tiles, brand value, then the summary line. -->
+      <!--
+        Results 430:5141 — cream tiles, brand value, then the summary line.
+        Re-measured 2026-08-24: px-32/py-16 (was p-6), gap-8 (was gap-3), and
+        the label is warm-900 #393637 (was ink-900 #2C2C2C — the cool/warm
+        ramp mixup again, see GAPS G35/G39) since the tile sits on gold-100.
+      -->
       <section
         v-if="props.project.results.length || props.project.resultsSummary"
         class="flex flex-col gap-8"
@@ -228,10 +241,10 @@ function ordinal(index: number): string {
           <li
             v-for="result in props.project.results"
             :key="result.label"
-            class="flex flex-col gap-3 rounded-sm bg-gold-100 p-6"
+            class="flex flex-col gap-2 rounded-sm bg-gold-100 px-8 py-4"
             data-reveal
           >
-            <span class="text-title-lg text-ink-900">{{ result.label }}</span>
+            <span class="text-title-lg text-warm-900">{{ result.label }}</span>
             <span class="text-heading-lg text-brand latin-nums">{{ result.value }}</span>
           </li>
         </ul>
@@ -264,7 +277,7 @@ function ordinal(index: number): string {
       </section>
 
       <!-- Next project 430:5212 — label, then arrow + title as one link. -->
-      <section v-if="props.project.next" class="flex flex-col items-end gap-3 text-end">
+      <section v-if="props.project.next" class="flex flex-col items-end gap-8 text-end">
         <p class="text-heading-sm text-ink-200">{{ t('work.next_case_study') }}</p>
         <Link
           :href="props.project.next.url"
