@@ -1010,3 +1010,22 @@ not touched:
   CMS/locale value instead, same as every other stale-placeholder case in this
   file (G24 footer wordmark, G31 FAQ boxes).
 
+## G37 — About + BlogCard/PostMeta confirmed clean; one missing shadow on ProjectPostCard  (2026-08-24)  (severity: low)
+`About.vue` checked value-by-value end to end: hero (`336:5704`, the `font-bold`
+override on `text-hero-line` correctly gets this specific headline to the
+frame's Bold/700 rather than the token's default SemiBold/600 — same pattern
+already relied on elsewhere), story (`357:9335`), and the four principle
+cards (`406:7225` and siblings) — border/radius/padding/gap/type/colour all
+matched, including a `py-14` (Tailwind's un-overridden default `3.5rem`
+utility, not one of the Figma-named `space*` tokens) landing on exactly the
+frame's 56px padding. Team block already fixed in G27.
+
+`BlogCard.vue` + `PostMeta.vue` (`276:5724`) checked against both size
+variants (612/28px and 400/24px title) — clean, including the `border-warm-100`
+fix from a prior session holding correctly.
+
+`ProjectPostCard.vue` (`226:2818`, Work index) — everything matched except
+one real miss: the project image is missing its `shadow-[4px_4px_12px_0px_rgba(0,0,0,0.05)]`
+(`shadow-card`) that the frame draws on every other card sharing this same
+shadow token. Fixed.
+

@@ -27,7 +27,7 @@ const props = defineProps<{ project: ProjectSummary }>()
 <template>
   <article class="group">
     <Link :href="props.project.url" class="flex flex-col gap-10">
-      <div class="aspect-square overflow-hidden rounded-[24px] border-2 border-ink-400">
+      <div class="aspect-square overflow-hidden rounded-[24px] border-2 border-ink-400 shadow-card">
         <img
           v-if="props.project.image"
           :src="props.project.image.src"
