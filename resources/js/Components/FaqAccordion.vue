@@ -57,7 +57,7 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
               <summary
                 class="flex cursor-pointer list-none items-center justify-between gap-6 [&::-webkit-details-marker]:hidden"
               >
-                <span class="text-title-sm text-ink-1000">{{ faq.question }}</span>
+                <span class="text-title-sm text-warm-900">{{ faq.question }}</span>
 
                 <img
                   :src="plusUrl"
@@ -77,7 +77,7 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
                 />
               </summary>
 
-              <p class="mt-6 text-body-lg text-ink-700">{{ faq.answer }}</p>
+              <p class="mt-6 text-body-lg text-warm-700">{{ faq.answer }}</p>
             </details>
           </li>
         </ul>

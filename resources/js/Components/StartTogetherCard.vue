@@ -7,14 +7,17 @@ import journeyUrl from '~img/sizdah/about/cta-journey.svg'
  * The cream "شروع همکاری" card — Figma "Frame 96467", 1248x513.
  *
  * The file carries it as a duplicated frame rather than a component, but the
- * copies are byte-identical: 577:10889 on about (336:5623) and 577:9134 on
- * projects (222:1989) have the same five text runs, the same 592x417 vectorised
- * illustration and the same geometry. It is a component here so the two pages
- * cannot drift apart.
+ * copies are byte-identical across every page that ends on it — about
+ * (577:10889), projects (577:9134), case study (577:10538), Insights index
+ * (577:9485), services (577:10187) and the article page (577:9836) all carry
+ * the same five text runs, the same 592x417 vectorised illustration and the
+ * same geometry, confirmed by screenshot. It is a component here so none of
+ * them can drift apart.
  *
- * Not to be confused with `FinalCtaCard` — that is the older dark card
- * (294:7672) still used by services and the article page. Both read the same
- * `final_cta` section, so a page picks whichever its frame draws.
+ * `FinalCtaCard` (the older dark Sahra card, 294:7672) is dead: that node no
+ * longer exists in the file. Services and the article page used it until
+ * 2026-08-24 on a stale assumption that their frames still drew it — see
+ * GAPS G34.
  *
  * The card's grid wash is `.grid-mesh` with an ink hairline on cream; the
  * frame's own background image (imageRef d7b452aea69f, 1200x884) is nothing but

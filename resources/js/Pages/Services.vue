@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import Eyebrow from '@/Components/Eyebrow.vue'
-import FinalCtaCard from '@/Components/FinalCtaCard.vue'
 import SeoHead from '@/Components/SeoHead.vue'
+import StartTogetherCard from '@/Components/StartTogetherCard.vue'
 import type { PageSectionData, SectionMap, SeoMeta, ServiceItem } from '@/types'
 import ringUrl from '~img/sizdah/services/ring.svg'
 import sparkUrl from '~img/sizdah/services/spark.svg'
@@ -12,7 +12,11 @@ import sparkUrl from '~img/sizdah/services/spark.svg'
  *
  * Four numbered blocks, each a 604x604 image alternating side to side against a
  * copy column: a display numeral, an underlined title, a paragraph, and the
- * service's feature bullets. Ends with the shared final CTA card.
+ * service's feature bullets. Ends with the shared cream final CTA card
+ * (`StartTogetherCard`, 577:10187 "Frame 96467") — this used the dark
+ * `FinalCtaCard` until 2026-08-24, on the belief the frame still drew the old
+ * Sahra card at 294:7672; that node no longer exists in the file, confirmed
+ * by screenshot match against About's card. See GAPS G34.
  *
  * The numbering is positional (01…04) and generated here rather than stored, so
  * reordering services in Filament renumbers them automatically.
@@ -144,7 +148,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
         />
       </template>
 
-      <FinalCtaCard v-if="finalCta" :section="finalCta" />
+      <StartTogetherCard v-if="finalCta" :section="finalCta" />
     </div>
   </div>
 </template>

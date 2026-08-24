@@ -906,3 +906,107 @@ already passes `size="lg"`; `Error.vue` already passes `size="lg"`.
 `FinalCtaCard.vue` passes no size — not yet checked against its frame
 (294:7672); flagged, not fixed, pending that check.
 
+## G34 — `FinalCtaCard` was dead: its Figma node no longer exists, and both its call sites drew the wrong card  (2026-08-24)  (severity: HIGH — wrong component on two full pages)
+Chasing G33's flagged follow-up (check `FinalCtaCard`'s frame, `294:7672`)
+turned up something bigger: `get_metadata` on `294:7672` returns "node not
+found" — **the node this component has cited since it was written no longer
+exists in the file.** `Work/Show.vue`'s own docblock already records that
+this exact class of error happened once before: that page used
+`FinalCtaCard` until 2026-08-21, "which was simply the wrong card for this
+frame," and was switched to `StartTogetherCard`. That fix was never checked
+against `FinalCtaCard`'s two remaining call sites — `Services.vue` and
+`Insights/Show.vue` — which is exactly the gap this pass closed.
+
+Screenshotted both pages' actual closing-card nodes — `577:10187` (Services)
+and `577:9836` (Insights show) — against `577:10889` (About's confirmed
+`StartTogetherCard` instance). All three are pixel-identical: the cream
+"آماده‌اید برندتان را به مسیر درست هدایت کنید؟" card with the three-person
+illustration and the brand CTA. Not the dark, English-copy, invisible-button
+Sahra card `FinalCtaCard` renders. Both `FinalCtaCard.vue`'s docblock and
+`StartTogetherCard.vue`'s own comment describing it (*"the older dark card...
+still used by services and the article page"*) were both stale, sourced from
+whenever `294:7672` was last real — presumably before this file's dark final
+CTA was redesigned into the same cream card used everywhere else.
+
+**Fixed:** `Services.vue` and `Insights/Show.vue` now both use
+`StartTogetherCard`, matching every other page in the file. `FinalCtaCard.vue`
+had zero remaining call sites after the swap (`grep` confirmed), so it and its
+only consumer, `shared/final-cta-bg.png` (1.8 MB — the single largest image
+asset in the repo, dead weight until now), are both **deleted**. Updated the
+docblocks in `Home.vue`, `About.vue`, `Work/Show.vue` and
+`StartTogetherCard.vue` that referenced `FinalCtaCard` by name so none of them
+point at a component that no longer exists.
+
+**Lesson for the ledger:** a component's own docblock citing a node ID is not
+evidence that node still exists — `Work/Show.vue` had already hit this exact
+failure mode once (G-unlabelled, 2026-08-21) and the fix was not propagated to
+the sibling call sites of the same component, because nothing re-checked
+`FinalCtaCard` itself once Work/Show stopped using it. A dead component with
+live call sites elsewhere is invisible to any page-by-page audit that trusts
+each page's own "done" status; it only surfaces by checking the *component's*
+source node directly.
+
+## G35 — `warm-*` vs `ink-*` ramp confusion: two more components, six colour fixes  (2026-08-24)  (severity: medium)
+Continuing the per-value pass through Home. `StatCard` (KPI) and
+`ProcessStepCard` both re-checked value-by-value against `71:2145` and
+`537:5510` — clean, including the exact `.process-wash` gradient angle/stops
+in `app.css`. Two more components were not clean, and both failures are the
+**same root cause already seen once in G25** (the footer's inverted colours)
+and once in Services (G34's sibling checks) — the file has two visually
+similar but distinct dark-neutral ramps, cool `Black/*` (→ `ink-*`) and warm
+`black/*`/`primary-black` (→ `warm-*`), and code keeps reaching for `ink-*` on
+surfaces the frame actually draws in the warm ramp.
+
+**`FaqAccordion.vue`** (`434:5548`, on the warm gold/100 card): question was
+`text-ink-1000` (#141414) where the frame draws `#393637` — `warm-900`.
+Answer was `text-ink-700` (#5B5B5B) where the frame draws `#656363` —
+`warm-700`. Both fixed. The gold card ground made this predictable in
+hindsight: cool greys read visibly off against a warm cream surface.
+
+**`InsightsShowcase.vue`** (`430:5247`, the lead "Big insight" card — also a
+warm cream surface) had five separate misses, all found by reading
+`430:5311`/`430:5315`/`430:5332` in full rather than spot-checking one value:
+- CTA circle: `bg-ink-1000` → `bg-warm-1000` (#231f20, "primary-black" in the
+  frame, not `ink-1000` #141414); was also missing its 1px `warm-800` border
+  entirely; hover moved to `warm-900` to match (no explicit hover node in the
+  frame, kept the existing lighter-on-hover direction, now on the right ramp).
+- CTA arrow icon: 24px → **32px** (`430:5333` is a 32px icon in a 48px circle,
+  8px inset each side; the code had a 24px icon, 12px inset).
+- Lead-post date: `text-ink-700` → `text-ink-600` (#727272, one step off).
+- Lead-post excerpt: `text-ink-600` → `text-warm-700` (#656363) — same
+  ramp-confusion pattern as the FAQ card.
+- Compact-row date: `text-ink-300` → `text-ink-200` (#D0D0D0, one step off).
+- Compact-row title: `text-paper` (#F1F1F1) → `text-ink-200` (#D0D0D0) — the
+  frame deliberately mutes the two secondary rows against the bold gold
+  lead-post title; the code had all three post titles at full brightness.
+- Lead-card background-image gradient: angle `-44deg` → `-32.7deg`, start
+  stop `0%` → `2.3248%`, matching the frame exactly and the same stop value
+  used elsewhere in the file for this raking-wash pattern. The gradient's own
+  base colour (`#fff8eb`) was already exactly right — checked before assuming
+  it should be `gold-100` (#F9F5EC, a different, nearby-but-not-equal cream).
+
+**Lesson for the ledger:** `ink-*`/`warm-*` confusion is not a one-off — this
+is the third time it has surfaced (footer G25, here twice). Worth a deliberate
+check on every remaining warm-surface component (any card on `gold-*` or
+cream ground) rather than waiting to trip over it again.
+
+## G36 — Contact's details card checked value-by-value; clean  (2026-08-24)  (severity: n/a)
+`279:6409` fully re-read against `Contact.vue`'s details card: border (3px
+`ink-300`), radius (24px), padding (32px), row/list gaps (40px/24px), icon
+circle size (48px/24px), label (`brand-50`, 14 Medium) and value (`ink-200`,
+14 Regular) colours all matched exactly. Two things checked and deliberately
+not touched:
+- The flat black overlay in the card's background is literal `rgba(0,0,0,0.2)`
+  in the frame; the code uses `bg-ink-1000/20` (`#141414` at 20%) — a ~4/255
+  difference, imperceptible, and using the token over a hardcoded black is the
+  right call anyway.
+- Row dividers are a hand-drawn hairline asset (`Vector4`) in the frame; the
+  code draws a flat `border-t-2 border-ink-800` instead. Consistent with the
+  site's own established precedent for this exact tradeoff (the testimonial
+  hairline texture, G25 #10: "drawn in CSS on the G22 precedent rather than
+  shipped as a bitmap") — not a fresh miss, a repeated deliberate choice.
+- The "Working With" row's Figma text is literal English Sahra-era copy
+  ("Working With" / "Brands in Oman and Beyond"); the code correctly pulls the
+  CMS/locale value instead, same as every other stale-placeholder case in this
+  file (G24 footer wordmark, G31 FAQ boxes).
+

@@ -43,7 +43,7 @@ const rest = computed(() => props.posts.slice(1, 3))
           class="flex flex-col gap-4 rounded-xl border border-gold-200 p-4 shadow-card sm:flex-row"
           style="
             background-image:
-              linear-gradient(-44deg, rgb(248 185 55 / 0) 0%, rgb(248 185 55 / 10%) 100%),
+              linear-gradient(-32.7deg, rgb(248 185 55 / 0) 2.3248%, rgb(248 185 55 / 10%) 100%),
               linear-gradient(0deg, #fff8eb, #fff8eb);
           "
         >
@@ -61,7 +61,7 @@ const rest = computed(() => props.posts.slice(1, 3))
 
           <div class="flex flex-1 flex-col justify-between gap-6 p-2">
             <div class="flex flex-col gap-4">
-              <p class="flex items-center gap-2 text-body-md text-ink-700">
+              <p class="flex items-center gap-2 text-body-md text-ink-600">
                 <img
                   :src="calendarUrl"
                   alt=""
@@ -79,21 +79,21 @@ const rest = computed(() => props.posts.slice(1, 3))
                 </Link>
               </h3>
 
-              <p v-if="lead.excerpt" class="text-body-md text-ink-600">{{ lead.excerpt }}</p>
+              <p v-if="lead.excerpt" class="text-body-md text-warm-700">{{ lead.excerpt }}</p>
             </div>
 
             <Link
               :href="lead.url"
-              class="flex size-12 shrink-0 items-center justify-center rounded-round bg-ink-1000 transition-colors hover:bg-ink-900"
+              class="flex size-12 shrink-0 items-center justify-center rounded-round border border-warm-800 bg-warm-1000 transition-colors hover:bg-warm-900"
               :aria-label="lead.title"
             >
               <img
                 :src="arrowUrl"
                 alt=""
                 aria-hidden="true"
-                width="24"
-                height="24"
-                class="size-6 flip-rtl"
+                width="32"
+                height="32"
+                class="size-8 flip-rtl"
               />
             </Link>
           </div>
@@ -116,7 +116,7 @@ const rest = computed(() => props.posts.slice(1, 3))
               />
 
               <div class="flex flex-col gap-4">
-                <p class="flex items-center gap-2 text-body-md text-ink-300">
+                <p class="flex items-center gap-2 text-body-md text-ink-200">
                   <img
                     :src="calendarUrl"
                     alt=""
@@ -128,7 +128,7 @@ const rest = computed(() => props.posts.slice(1, 3))
                   <time :datetime="post.publishedAtIso">{{ post.publishedAt }}</time>
                 </p>
 
-                <h3 class="text-title-md text-paper">
+                <h3 class="text-title-md text-ink-200">
                   <Link :href="post.url" class="transition-colors hover:text-brand">
                     {{ post.title }}
                   </Link>

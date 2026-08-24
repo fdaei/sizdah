@@ -288,9 +288,10 @@ function iconFor(item: SectionItem, index: number): string | undefined {
       </section>
 
       <!--
-        Final CTA — 577:10889. About's own cream card, not the dark shared
-        `FinalCtaCard` (294:7672) the services and article frames use. The same
-        card is duplicated onto projects (577:9134), hence the component.
+        Final CTA — 577:10889. Same card as every other page's final CTA
+        (services and the article page included, as of GAPS G34 — the dark
+        `FinalCtaCard` they used to use is now deleted). The same card is
+        duplicated onto projects (577:9134), hence the component.
       -->
       <StartTogetherCard v-if="finalCta" :section="finalCta" />
     </div>

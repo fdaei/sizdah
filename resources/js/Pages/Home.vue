@@ -336,8 +336,9 @@ const finalCta = computed(() => props.sections.final_cta)
 
   <!--
     Final CTA — 553:7779. The same cream "شروع همکاری" card the about and work
-    frames draw, so it reuses StartTogetherCard rather than the older dark
-    FinalCtaCard that services and the article page still use.
+    frames draw, so it reuses StartTogetherCard — the same card every page in
+    the file ends on now; `FinalCtaCard`, the older dark Sahra card, is dead
+    (see GAPS G34).
   -->
   <section v-if="finalCta" class="section">
     <div class="container-sizdah">

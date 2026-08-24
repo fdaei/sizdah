@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import BlogCard from '@/Components/BlogCard.vue'
 import ArticleMeta from '@/Components/ArticleMeta.vue'
-import FinalCtaCard from '@/Components/FinalCtaCard.vue'
 import LeadMagnetBanner from '@/Components/LeadMagnetBanner.vue'
 import SeoHead from '@/Components/SeoHead.vue'
+import StartTogetherCard from '@/Components/StartTogetherCard.vue'
 import { useTranslations } from '@/Composables/useTranslations'
 import type { PageSectionData, PostDetail, SeoMeta } from '@/types'
 import relatedRuleUrl from '~img/sizdah/insights/related-rule.svg'
@@ -19,6 +19,12 @@ import relatedRuleUrl from '~img/sizdah/insights/related-rule.svg'
  * y=792 inside the copy column). Body copy is a single rich-text field, so it
  * cannot be split at an arbitrary point without parsing HTML — the strip is
  * placed after the body instead. Recorded in FIGMA/state.json.
+ *
+ * Final CTA — the frame's closing card (577:9836, "Frame 96467") is the same
+ * cream "شروع همکاری" card every other page ends on, confirmed by screenshot
+ * against 577:10889 (About). This page used the dark `FinalCtaCard` until
+ * 2026-08-24, on the belief that the frame still drew the old Sahra card at
+ * 294:7672 — that node no longer exists in the file. See GAPS G34.
  */
 const props = defineProps<{
   post: PostDetail
@@ -95,7 +101,7 @@ const { t } = useTranslations()
         </div>
       </section>
 
-      <FinalCtaCard v-if="props.finalCta" :section="props.finalCta" class="mt-12" />
+      <StartTogetherCard v-if="props.finalCta" :section="props.finalCta" class="mt-12" />
     </div>
   </article>
 </template>

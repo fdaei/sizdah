@@ -36,8 +36,9 @@ import nextArrowUrl from '~img/sizdah/work/next-arrow.svg'
  *     package copy ("چرا سیزده" / "سه پکیج…"). It is stray content left in the
  *     file, not part of this page. See .figma-sync/GAPS.md G19.
  *   - The frame closes on "Frame 96467" (577:10538) — the cream card, i.e.
- *     StartTogetherCard. This page used FinalCtaCard (the dark 294:7672 card)
- *     until 2026-08-21, which was simply the wrong card for this frame.
+ *     StartTogetherCard. This page used `FinalCtaCard` (the dark card) until
+ *     2026-08-21, which was simply the wrong card for this frame; that card
+ *     turned out to be wrong everywhere else too and is now deleted (GAPS G34).
  */
 const props = defineProps<{
   project: ProjectDetail
