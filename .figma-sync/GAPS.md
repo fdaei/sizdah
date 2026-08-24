@@ -1201,3 +1201,44 @@ offset rather than changing anything dramatic.
 
 Legitimate, unaffected: `inset-inline-0` (Contact's services dropdown) and
 plain `top-full`/`top-1/2` pairings — those aren't this typo.
+
+## G43 — Phone field: real searchable country picker (feature, not a fidelity fix)  (2026-08-24)
+User asked for the phone field's flag to become a working country picker with
+search, not just a static Oman flag. `279:6406` only ever depicts the Oman
+default with a chevron affordance — the frame doesn't specify a dropdown's
+contents, so this is this project's own addition layered on that affordance,
+not a gap the frame resolves. Noted here so it isn't later mistaken for
+something the frame specified and the rebuild missed.
+
+Built:
+- `resources/js/lib/countries.ts` — 248 rows (iso2, E.164 dial code, Persian
+  + English name), reduced from the mledoze/countries dataset (MIT). Shared
+  NANP codes (+1 for US/CA) keep just the root; countries with a distinct
+  single suffix (e.g. +1268 Antigua) get the full code — matches how people
+  actually search/dial. Flags are Unicode regional-indicator emoji derived
+  from `iso2`, not per-country assets (~250 SVGs isn't practical).
+- `Components/CountrySelect.vue` — flag+chevron trigger, `v-model`d country;
+  opens a search box + scrollable list, filters on Persian name, English
+  name, or dial-code digits.
+- `Contact.vue`'s phone field rebuilt as a flex pill (dial code + digits on
+  the growing side, `CountrySelect` on the fixed side) instead of the old
+  absolute-overlay-on-a-fixed-`ps-[92px]` hack — that hack would have broken
+  the instant a 4-digit dial code got selected. `form.phone` is assembled as
+  `"{dialCode} {digits}"` only at submit time; `ContactSubmissionRequest`
+  already validates phone as one loose string for exactly this reason (see
+  its docblock — "the design ships a country picker") so no backend change
+  was needed.
+
+Two bugs caught and fixed before landing, both via Playwright (computed
+styles / bounding boxes), not just screenshots:
+1. The pill wrapper had `overflow-hidden` (leftover defensive styling,
+   nothing inside actually needed it) — clipped the dropdown panel, which is
+   a positioned descendant. Removed.
+2. The panel anchored `inline-end-0` rendered 74px past the viewport's right
+   edge, because this field sits near the page's own right edge under RTL.
+   Anchored `inline-start-0` instead so it opens toward the field's larger
+   side.
+
+`en`/`ar` lang files got the two new `forms.contact.country_search` /
+`country_not_found` keys too, kept parallel per the fa-only note in
+CLAUDE.md even though those locales aren't routed.
