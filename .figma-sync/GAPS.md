@@ -1029,3 +1029,39 @@ one real miss: the project image is missing its `shadow-[4px_4px_12px_0px_rgba(0
 (`shadow-card`) that the frame draws on every other card sharing this same
 shadow token. Fixed.
 
+## G38 — `Eyebrow`'s "square" marker doesn't exist in the file; four page headers had it  (2026-08-24)  (severity: medium — visible on 4 page headers)
+`TestimonialCard` re-checked against `546:7528` (both `Default` and `hover`
+variants) — clean, confirms the G25 rebuild held. `ArticleMeta` (`292:7522`)
+had one miss: border was `border-brand-200` (#FEF1D7) where the frame draws
+Yellow/300 `#FDEAC3` — a colour with no slot in the `brand` token scale
+(50/200/600/800/900/1000, no 300). Fixed as an arbitrary value. `FilterChips`,
+`ClientLogo`, Legal (`279:5998`, plus the already-measured `.rich-prose`
+rhythm), and the 404 page (`266:2830`) all checked clean.
+
+The real find: `Eyebrow.vue`'s own docblock claims the file ships two marker
+styles — a plain `square` diamond for `sm` page-header kickers (citing
+`268:3034` as the example) and a glowing `dot` for `lg` feature bullets. While
+checking Services' own header eyebrow (`309:4757`) it rendered as a glowing
+dot, not the claimed diamond — so the *cited proof node itself* was
+re-fetched (`268:3034`/`268:3036`) to settle whether Services was the
+exception or the docblock was wrong. It was the docblock: `268:3034`, the
+component's own example of "square," is the same glowing round dot (fill
+brand, bordered, dual bloom shadow) as everywhere else. There is no live
+square marker in the file.
+
+Four call sites were relying on `Eyebrow`'s default (`marker: 'square'`)
+because nothing had caught this: `Services.vue` (page header), `Insights/
+Index.vue`, `Contact.vue`, `Work/Index.vue` — all four page-header eyebrows
+were rendering a flat, unbordered diamond instead of the glowing dot every
+other eyebrow in the file (all seven `SectionHeading` consumers, which
+already pass `marker="dot"`, plus Services' own feature-bullet eyebrows)
+correctly shows. Fixed all four call sites; corrected `Eyebrow.vue`'s
+docblock rather than leave the false "two intentional styles" claim standing.
+
+**Lesson for the ledger:** a component's own docblock asserting "the frame
+does X" is a claim like any other in this codebase and can go stale — this
+one was caught only by re-fetching the exact node the docblock cited as
+proof, not by trusting the citation. Worth doing that whenever a docblock's
+claim and a fresh fetch disagree, rather than assuming the fresh fetch is the
+one-off exception.
+

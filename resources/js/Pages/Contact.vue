@@ -117,7 +117,7 @@ const fieldClass =
         (20/500), not the 40/18 pair this header carried.
       -->
       <header class="mx-auto flex max-w-measure flex-col items-center gap-10 text-center">
-        <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
+        <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" marker="dot" />
 
         <div class="flex flex-col items-center gap-6">
           <h1 class="text-display-lg text-ink-50">{{ props.heading.title }}</h1>

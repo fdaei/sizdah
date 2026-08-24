@@ -70,7 +70,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
         lede is tite/Large (22/500), not the 18/400 this carried.
       -->
       <header class="flex flex-col items-center gap-10 text-center">
-        <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
+        <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" marker="dot" />
 
         <div class="flex flex-col items-center gap-6">
           <h1 class="max-w-measure text-display-lg text-ink-50">{{ props.heading.title }}</h1>
