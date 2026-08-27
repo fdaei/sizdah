@@ -149,6 +149,11 @@
       2px 2px 12px 0 rgb(245 185 64 / 70%);
   }
 
+  /* Dark Home section headers use the light-ring component variant. */
+  .eyebrow--dot-paper::before {
+    @apply border-brand-50;
+  }
+
   /* Card surfaces sit one step off the page ground. */
   .card-surface {
     @apply rounded-lg border border-ink-800 bg-ink-900;

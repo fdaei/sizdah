@@ -222,7 +222,7 @@
     },
     {
       "name": "testimonial card",
-      "figmaNode": "391:4899",
+      "figmaNode": "546:7527",
       "file": "resources/js/Components/TestimonialCard.vue",
       "status": "built",
       "notes": "300x334. Fill is the shared .surface-glow rather than tokens re-read off 391:4899 — the Figma connection dropped before that node was verified. Worth a check."

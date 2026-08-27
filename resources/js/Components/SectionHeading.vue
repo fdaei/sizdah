@@ -37,7 +37,12 @@ withDefaults(
 
 <template>
   <div class="flex flex-col items-start gap-6">
-    <Eyebrow v-if="eyebrow" :text="eyebrow" marker="dot" />
+    <Eyebrow
+      v-if="eyebrow"
+      :text="eyebrow"
+      marker="dot"
+      :marker-ring="tone === 'dark' ? 'paper' : 'ink'"
+    />
 
     <div
       class="flex w-full flex-col gap-6"

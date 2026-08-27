@@ -22,8 +22,10 @@ withDefaults(
     as?: 'span' | 'p' | 'li'
     size?: 'sm' | 'lg'
     marker?: 'square' | 'dot'
+    /** Ring colour around the glowing dot; the live component has both variants. */
+    markerRing?: 'ink' | 'paper'
   }>(),
-  { as: 'span', size: 'sm', marker: 'square' },
+  { as: 'span', size: 'sm', marker: 'square', markerRing: 'ink' },
 )
 </script>
 
@@ -31,7 +33,11 @@ withDefaults(
   <component
     :is="as"
     class="eyebrow"
-    :class="[size === 'lg' && 'eyebrow--lg', marker === 'dot' && 'eyebrow--dot']"
+    :class="[
+      size === 'lg' && 'eyebrow--lg',
+      marker === 'dot' && 'eyebrow--dot',
+      marker === 'dot' && markerRing === 'paper' && 'eyebrow--dot-paper',
+    ]"
   >
     {{ text }}
   </component>
