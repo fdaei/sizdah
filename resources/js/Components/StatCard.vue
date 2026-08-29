@@ -10,10 +10,7 @@ import retentionUrl from '~img/sizdah/home/kpi-retention.svg'
  * Figma: 4px border at Yellow/1000 40%, radiusSM, space12 inline / space24
  * block padding, over a 117.4deg wash that fades the same yellow from 6% to 0.
  * Value is Display/Small on Yellow/50, label is title/Medium on Yellow/1000,
- * caption is title/Small on Black/300.
- *
- * The value and its icon sit in one row: in DOM order value first, so the
- * number leads in both directions without a per-locale branch.
+ * and caption is title/Small on Black/300.
  */
 const props = defineProps<{
   /** Authored verbatim by the editor — already in the locale's digits. */
@@ -26,7 +23,9 @@ const props = defineProps<{
 
 /*
  | Composed from the exported Figma path fragments by
- | scripts/compose-figma-icons.py — see the docblock there.
+ | scripts/compose-figma-icons.py — see the docblock there. Keys are the
+ | seeded `_icon` names, one per card in 268:3026: trading-graph,
+ | business-coaching-strategy-1 and job-choose-candidate.
  */
 const ICONS: Record<string, string> = {
   engagement: engagementUrl,
@@ -48,9 +47,12 @@ const iconUrl = computed(() => (props.icon ? ICONS[props.icon] : undefined))
       );
     "
   >
-    <!-- 71:2135 sits the value and its glyph on space8, not space16. -->
+    <!--
+      71:2135 sits the value and its glyph on space8, not space16. The glyph
+      leads in DOM order because the frame draws it on the reading-order side
+      of the number — the right of the value in RTL, mirrored in LTR.
+    -->
     <div class="flex items-center justify-center gap-2">
-      <p class="latin-nums text-display-sm text-brand-50" :data-counter="value">{{ value }}</p>
       <img
         v-if="iconUrl"
         :src="iconUrl"
@@ -60,6 +62,7 @@ const iconUrl = computed(() => (props.icon ? ICONS[props.icon] : undefined))
         height="32"
         class="size-8 shrink-0"
       />
+      <p class="latin-nums text-display-sm text-brand-50" :data-counter="value">{{ value }}</p>
     </div>
 
     <div class="flex flex-col gap-1">

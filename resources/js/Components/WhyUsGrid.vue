@@ -35,6 +35,14 @@ const props = defineProps<{ section: PageSectionData }>()
 
 const GLYPHS = [outcomesUrl, brandUrl, endToEndUrl, qualityUrl]
 
+/** Exact desktop positions inside the 680x400 artwork, in CMS/RTL reading order. */
+const DESKTOP_POSITIONS = [
+  'lg:left-[360px] lg:top-[71px] lg:w-[283px] lg:justify-between',
+  'lg:left-[46px] lg:top-[81px] lg:w-[266px] lg:justify-between',
+  'lg:left-[362px] lg:top-[244px] lg:w-[275px] lg:justify-between',
+  'lg:left-[46px] lg:top-[282px] lg:w-[264px] lg:justify-between',
+]
+
 const claims = computed(() =>
   props.section.items.map((item, index) => ({ item, glyph: GLYPHS[index % GLYPHS.length] })),
 )
@@ -43,7 +51,7 @@ const claims = computed(() =>
 <template>
   <section class="section">
     <div class="container-sizdah">
-      <div class="grid gap-12 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] lg:gap-24">
+      <div class="grid gap-12 lg:grid-cols-[401px_680px] lg:justify-between lg:gap-0">
         <SectionHeading
           data-reveal
           :eyebrow="props.section.eyebrow"
@@ -52,14 +60,17 @@ const claims = computed(() =>
           layout="stacked"
         />
 
-        <div class="relative grid gap-x-10 gap-y-12 sm:grid-cols-2" data-reveal-group>
+        <div
+          class="relative grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:mt-[51px] lg:h-[400px] lg:w-[680px] lg:block"
+          data-reveal-group
+        >
           <img
             :src="ruleVerticalUrl"
             alt=""
             aria-hidden="true"
             width="4"
             height="400"
-            class="pointer-events-none absolute left-1/2 top-0 hidden h-full w-1 -translate-x-1/2 sm:block"
+            class="pointer-events-none absolute top-0 hidden h-[400px] w-1 lg:left-[330px] lg:block"
           />
           <img
             :src="ruleTopUrl"
@@ -67,7 +78,7 @@ const claims = computed(() =>
             aria-hidden="true"
             width="320"
             height="4"
-            class="pointer-events-none absolute left-[50.6%] top-[47%] hidden w-[47%] sm:block"
+            class="pointer-events-none absolute hidden h-1 w-[320px] lg:left-[344px] lg:top-[190px] lg:block"
           />
           <img
             :src="ruleBottomUrl"
@@ -75,7 +86,7 @@ const claims = computed(() =>
             aria-hidden="true"
             width="320"
             height="4"
-            class="pointer-events-none absolute left-0 top-[61%] hidden w-[47%] sm:block"
+            class="pointer-events-none absolute hidden h-1 w-[320px] lg:left-[-26px] lg:top-[246px] lg:block"
           />
 
           <!--
@@ -85,8 +96,8 @@ const claims = computed(() =>
           <div
             v-for="({ item, glyph }, index) in claims"
             :key="item.id"
-            class="relative flex items-start gap-4"
-            :class="index % 2 === 0 ? 'sm:pe-10' : 'sm:ps-0'"
+            class="relative flex items-start gap-4 lg:absolute lg:gap-0"
+            :class="[index % 2 === 0 ? 'sm:pe-10 lg:pe-0' : 'sm:ps-0', DESKTOP_POSITIONS[index]]"
           >
             <img
               :src="glyph"
@@ -97,7 +108,7 @@ const claims = computed(() =>
               class="size-10 shrink-0"
             />
 
-            <div class="flex flex-col gap-2">
+            <div class="flex w-[212px] flex-col gap-2 text-right">
               <h3 class="text-heading-sm text-ink-50">{{ item.title }}</h3>
               <p v-if="item.description" class="text-title-sm text-ink-300">
                 {{ item.description }}

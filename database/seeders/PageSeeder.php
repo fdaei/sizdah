@@ -100,29 +100,57 @@ final class PageSeeder extends Seeder
             ],
         ]);
 
-        // KPI strip — 1419:9318
+        // KPI strip — 268:3026.
         $kpi = $this->section($page, SectionType::Kpi, 1, [
             'en' => ['title' => 'Results that compound'],
             'fa' => ['title' => 'نتایجی که انباشته می‌شوند'],
             'ar' => ['title' => 'نتائج تتراكم'],
         ]);
 
-        // Card copy is the literal text of 1419:9319 / 9320 / 9321 — value
-        // (Poppins Medium 32), gold label (Medium 18), grey note (Regular 14).
+        // Card copy is the literal text of 268:3029 / 3028 / 3027 — value
+        // (Display/Small, 36 bold), gold title (title/Medium, 20), grey note
+        // (title/Small, 18). Cards run in reading order (right to left on the
+        // frame), which is the reverse of the canvas order, so 268:3029 leads.
+        // The Persian frame writes the values in Latin numerals; they are kept
+        // verbatim, as authored content is never transliterated (Numerals).
+        // `_icon` names the Streamline Freehand glyph StatCard sets beside the
+        // value: job-choose-candidate, business-coaching-strategy-1 and
+        // trading-graph respectively.
         $this->items($kpi, [
             [
+                '_icon' => 'retention',
+                'en' => [
+                    'value' => '+90%',
+                    'title' => 'Client Retention',
+                    'description' => 'Across monthly marketing plans',
+                ],
+                'fa' => [
+                    'value' => '+90%',
+                    'title' => 'حفظ مشتریان',
+                    'description' => 'در پلن‌های بازاریابی ماهانه',
+                ],
+                // Arabic-Indic digits (U+0660–U+0669). The fa row follows the
+                // frame's Latin numerals; ar is derived copy (G10) and keeps
+                // its own digit set. See config/locales.php `digits`.
+                'ar' => [
+                    'value' => '+٩٠٪',
+                    'title' => 'الاحتفاظ بالعملاء',
+                    'description' => 'ضمن خطط التسويق الشهرية',
+                ],
+            ],
+            [
+                '_icon' => 'audience',
                 'en' => [
                     'value' => '+70K',
                     'title' => 'Audience Growth',
                     'description' => 'Followers gained from one reel',
                 ],
+                // "فالوئر های" is two words on the frame; kept verbatim.
                 'fa' => [
-                    'value' => '+۷۰ هزار',
+                    'value' => '+70K',
                     'title' => 'رشد مخاطب',
-                    'description' => 'دنبال‌کننده به‌دست‌آمده از یک ریلز',
+                    'description' => 'فالوئر های جذب شده از یک ریلز',
                 ],
-                // Arabic-Indic digits (U+0660–U+0669), matching the fa row's use
-                // of the Persian set. See config/locales.php `digits`.
                 'ar' => [
                     'value' => '+٧٠ ألف',
                     'title' => 'نمو الجمهور',
@@ -130,37 +158,21 @@ final class PageSeeder extends Seeder
                 ],
             ],
             [
+                '_icon' => 'engagement',
                 'en' => [
                     'value' => '+40%',
                     'title' => 'Engagement Lift',
                     'description' => 'Average growth after strategy refresh',
                 ],
                 'fa' => [
-                    'value' => '+۴۰٪',
+                    'value' => '+40%',
                     'title' => 'افزایش تعامل',
-                    'description' => 'میانگین رشد پس از بازنگری استراتژی',
+                    'description' => 'میانگین رشد بعد از بازنگری استراتژی',
                 ],
                 'ar' => [
                     'value' => '+٤٠٪',
                     'title' => 'ارتفاع التفاعل',
                     'description' => 'متوسط النمو بعد تحديث الاستراتيجية',
-                ],
-            ],
-            [
-                'en' => [
-                    'value' => '+90%',
-                    'title' => 'Client Retention',
-                    'description' => 'Across monthly marketing plans',
-                ],
-                'fa' => [
-                    'value' => '+۹۰٪',
-                    'title' => 'حفظ مشتری',
-                    'description' => 'در طرح‌های ماهانه بازاریابی',
-                ],
-                'ar' => [
-                    'value' => '+٩٠٪',
-                    'title' => 'الاحتفاظ بالعملاء',
-                    'description' => 'ضمن خطط التسويق الشهرية',
                 ],
             ],
         ]);
@@ -426,7 +438,7 @@ final class PageSeeder extends Seeder
             'fa' => [
                 'eyebrow' => 'چرا سیزده',
                 'title' => 'مسیرهای مشخص برای رشد برند',
-                'subtitle' => 'زیرا هر تصمیم خلاقانه بر پایه شفافیت برند، انسجام و رشد شکل می‌گیرد.',
+                'subtitle' => 'سه پکیج متناسب با نیاز، مرحله رشد و میزان همراهی موردنیاز کسب‌وکار شما',
             ],
             'ar' => [
                 'eyebrow' => 'لماذا نحن',
@@ -714,7 +726,9 @@ final class PageSeeder extends Seeder
     }
 
     /**
-     * Services header — Figma 1323:7189.
+     * Services header — Figma 308:4492 (309:4754). Persian copy is verbatim
+     * from that frame's text runs, re-read 2026-08-27; en/ar are still the
+     * older derived copy (GAPS G10, TRANSLATIONS_TODO.md).
      */
     private function services(): void
     {
@@ -725,9 +739,9 @@ final class PageSeeder extends Seeder
                 'description' => 'Four core services designed to bring clarity, structure, and long-term direction to your brand.',
             ],
             'fa' => [
-                'title' => 'ما سیستم می‌سازیم، نه صرفاً خدمات',
+                'title' => 'ما برای برند شما سیستم می‌سازیم فرا تر از یک خدمت',
                 'subtitle' => 'خدمات',
-                'description' => 'چهار خدمت اصلی برای ایجاد شفافیت، ساختار و مسیر بلندمدت برای برند شما.',
+                'description' => 'چهار خدمت اصلی برای ساختن مسیری روشن، منسجم و ماندگار برای برند شما',
             ],
             'ar' => [
                 'title' => 'نبني أنظمة لا مجرد خدمات',

@@ -106,15 +106,19 @@ function isActive(item: NavItem): boolean {
           Layer_1 sits 17.8px above the CTA's top edge and 2.1px in from its
           inline-end edge, mirrored on X. It decorates the button, not the logo.
         -->
-        <div v-if="cta" class="relative hidden lg:block">
-          <CtaButton :label="cta.label" :href="cta.url" />
+        <div v-if="cta" class="relative isolate hidden lg:block">
+          <CtaButton
+            :label="cta.label"
+            :href="cta.url"
+            class="h-[46px] w-[127px] px-0 py-0"
+          />
           <img
             :src="doodleUrl"
             alt=""
             aria-hidden="true"
             width="16"
             height="20"
-            class="pointer-events-none absolute -top-[18px] end-[2px] h-5 w-4 -scale-x-100"
+            class="pointer-events-none absolute -top-[18px] end-[2px] z-20 h-5 w-4 flip-rtl"
           />
         </div>
 

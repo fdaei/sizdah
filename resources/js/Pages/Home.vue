@@ -16,6 +16,7 @@ import FaqAccordion from '@/Components/FaqAccordion.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
 import HeroJourney from '@/Components/HeroJourney.vue'
 import trustMarkUrl from '~img/sizdah/clients/trust-divider.svg'
+import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
 import heroNoteArrowUrl from '~img/sizdah/shared/up-right-arrow.svg'
 import testimonialRuleUrl from '~img/sizdah/home/testimonial-rule.svg'
 import type {
@@ -104,7 +105,12 @@ const finalCta = computed(() => props.sections.final_cta)
             class="flex w-fit max-w-[221px] flex-col gap-px text-label-lg text-ink-100"
           >
             <span>{{ hero.eyebrow }}</span>
-            <span aria-hidden="true" class="mt-1 block h-0.5 w-full bg-brand" />
+            <img
+              :src="underlineUrl"
+              alt=""
+              aria-hidden="true"
+              class="mt-1 h-[5px] w-full max-w-none"
+            />
           </p>
 
           <h1 v-if="hero" class="flex flex-col gap-4 text-start">
@@ -180,15 +186,26 @@ const finalCta = computed(() => props.sections.final_cta)
     </div>
   </section>
 
-  <!-- KPI row — 268:3026, three "KPIs" instances across the 1036px track. -->
+  <!--
+    KPI row — 268:3026. The strip is 1036 wide inside the 1440 frame, i.e.
+    narrower than the 1248 content track, so it is capped and centred rather
+    than filling `.container-sizdah`; each card then hugs the frame's 334.667.
+  -->
   <section v-if="kpi?.items.length" class="pb-16 md:pb-24">
     <div class="container-sizdah">
       <h2 v-if="kpi.title" class="sr-only">{{ kpi.title }}</h2>
-      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+      <ul
+        class="mx-auto grid max-w-[1036px] gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        data-reveal-group
+      >
         <li v-for="item in kpi.items" :key="item.id" class="contents">
+          <!--
+            The gold line is the item's `title`; `label` is the package-card
+            column added for the pricing block and is empty on KPI items.
+          -->
           <StatCard
             :value="item.value"
-            :label="item.label"
+            :label="item.title"
             :caption="item.description"
             :icon="item.icon"
           />

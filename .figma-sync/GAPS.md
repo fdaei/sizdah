@@ -1242,3 +1242,120 @@ styles / bounding boxes), not just screenshots:
 `en`/`ar` lang files got the two new `forms.contact.country_search` /
 `country_not_found` keys too, kept parallel per the fa-only note in
 CLAUDE.md even though those locales aren't routed.
+
+## G44 — Services rebuilt against measured boxes; nine real misses on one page  (2026-08-27)  (severity: HIGH — the image column was on the wrong side of all four blocks)
+
+First per-value pass over Services (308:4492) — PROGRESS had it listed as
+"G29's flourish work only", i.e. never checked below the structural tier.
+Measured every node with `get_metadata` (real bounding boxes, not the
+`get_figma_data` layout summary) and then re-measured the built page with
+Playwright bounding boxes at 1440x1000, comparing absolute coordinates.
+
+Nine defects, in rough order of how much they showed:
+
+1. **The image was on the wrong side of every block.** The frame alternates
+   img-left / img-right / img-left / img-right. The page keyed the image to
+   `index % 2 === 0 ? 'lg:order-first' : 'lg:order-last'` — but the document
+   is RTL, where the *first* flex item lands at the **right**. So every
+   block was mirrored. Now `order-last` on even indices. This is the same
+   category as G40 (Contact's mirrored grid): an `order`/`start` decision
+   reasoned about in LTR terms on an RTL page.
+2. **Block rhythm was 96px everywhere; the frame is 200.** The page put
+   header, all four blocks, the sparks and the CTA card in one
+   `flex flex-col gap-24`. Frame: header→blocks 140, block↔block 200,
+   blocks→CTA 224, CTA→footer 224 (315:4945 children sit at y 0/804/1608/
+   2412; 321:5085's are at 0/3240/3976.86).
+3. **Column widths were a 50/50 grid.** The frame is img 604 | gap 135 |
+   copy 505.313, `justify-center` inside the 1248 track (1244.313 wide, so
+   1.84 slack each side). Was `lg:grid-cols-2 lg:gap-16` — i.e. both columns
+   ~592 and the gap 71px short.
+4. **The numeral's 145px line box was being collapsed to leading-1.** The
+   previous docblock called the 2.27 leading "a Maneli metric artefact
+   rather than a layout intent" and set the numerals on leading-1. It is a
+   layout intent: the copy column is vertically centred against the 604
+   image (y=34 in block 1, y=54.5 in the rest), so dropping 81px off the
+   numeral box lifts the whole title/desc/features stack ~40px against the
+   photograph. `leading-[145px]` restores it and is font-independent, so the
+   Maneli substitution no longer leaks into the layout.
+5. **Image corner radius was 16px, frame says 8.** `rounded-lg` is 16 in
+   this config; the img nodes are `borderRadius=8px` → `rounded-sm`.
+6. **The title rule was a straight 2px CSS border.** 315:4856 is a vector,
+   and it is the *same* node template (EL-0d4ea584) as the header's active
+   nav underline — i.e. `shared/nav-underline.svg`, already in the repo and
+   already used by `AppHeader`. Now reuses it with the header's own
+   `h-[2px]` span + `-top-[1.7px] h-[4.71px]` treatment.
+7. **The sparks were in flow.** 511:9195/9200 and 322:5242 are page-level
+   absolute decorations that sit ~20px *above* the top edge of blocks 2-4
+   and overlap them (spark y 1372 vs block y 1391). Rendering them as flow
+   items between blocks both mis-placed them and perturbed the 200px
+   rhythm. Now absolutely positioned, centred on the track.
+8. **The mesh was the wrong size and inset.** 511:9147 is 1200x872 at
+   (120, 202) — inset 24 from both edges of the 1248 content track, not
+   flush to it, and it was rendering 1248 wide. Note `.container-sizdah` is
+   the full 1440 box with the gutter as *padding*, so an absolute child
+   resolves against the padding box: the inset is gutter + 24, not 24.
+9. **The ring was `w-40` (160px) and centred on the glyph.** Frame is
+   163x109.12. Centring on the glyph is wrong here for a font reason:
+   Idealist sets "01" at 37px where Maneli sets it at ~80, so centring on
+   the substitute dragged the ring ~20px toward the column edge. Anchored
+   instead off the copy column's start edge, which the frame overhangs by
+   35.85/40.85/38.85/43.85 across the four blocks → 40.
+
+Copy was also stale — the seeded Persian predates this generation of the
+frame. Reseeded verbatim from the text runs: the page headline is now
+"ما برای برند شما سیستم می‌سازیم فرا تر از یک خدمت" (was "ما سیستم
+می‌سازیم، نه صرفاً خدمات"), service 03 is "مارکتینگ" (was "طراحی
+بازاریابی"), and all four descriptions + feature lists are replaced. Two
+frame typos kept verbatim per the project's usual practice: "فرا تر" as two
+words in the headline, and "شبکه های" without ZWNJ in service 04's title.
+`en`/`ar` are untouched and still the older derived copy (G10).
+
+Verified after the fixes, absolute coordinates, rendered vs frame:
+
+| node | frame | rendered |
+| --- | --- | --- |
+| header block | y=188 h=259 | y=188 h=258.8 |
+| h1 / lede | y=273 h=122 / y=419 h=28 | y=273 h=121.9 / y=419 h=27.9 |
+| blocks | y=587/1391/2195/2999, 604 tall | identical |
+| img x (per block) | 97.84 / 738.16 / 97.84 / 738.16 | 98 / 738 / 98 / 738 |
+| copy col b1 | x=836.84 y=621 505.31x536 | x=837 y=621 505.3x535.7 |
+| numeral box | y=621 h=145 | y=621 h=145 |
+| title / desc / feat0 | y=774 / 862 / 968 | y=774 / 862 / 968 |
+| mesh | (120, 202) 1200x872 | (120, 202) 1200x872 |
+| CTA card | y=3827 1248x512.86 | y=3827 1248x513 |
+| rings | (1215,641) (481,1458) (1218,2265) (484,3065) | (1219,639) (480,1463) (1219,2267) (480,3071) |
+| sparks | y 1372 / 2176 / 2978 | y 1371 / 2175 / 2979 |
+
+The rings land within 6px on both axes; the frame's own four rings scatter
+by ±3 against each other, so that is inside the design's hand-placed noise.
+No horizontal overflow at 390 / 768 / 1024 / 1280 / 1440.
+
+### Deviations kept, and two open questions this raised
+
+- The header block hugs at 676 rather than the frame's 638. 638 is nothing
+  but the lede's single-line hug in Peyda; Vazirmatn needs 676 for the same
+  run, so pinning 638 wrapped a line the frame sets on one. The headline is
+  capped at 638 so it keeps the frame's two-line break, and the block hugs
+  the lede. Block centre is still 720 = frame centre.
+- **OPEN: `.section-first` may be 8px short site-wide.** This frame puts the
+  page-header eyebrow's top edge at y=188; `.section-first` clears the 108px
+  header by 72 and lands at 180. Overridden locally (`md:pt-[188px]`) rather
+  than in the shared utility, because only this frame has been measured at
+  this tier — an 8px shift on every page off one sample is not worth the
+  regression risk. Worth checking About/Insights/Work/Contact headers and,
+  if 188 is universal, moving it into `.section-first` and dropping the
+  override here.
+- **OPEN: the eyebrow marker may sit ~6px too high, site-wide.** In all ~18
+  "small title" instances on this frame the marker rect's *top* is at
+  exactly 50% of the row height (12.5 in a 25px row, 22.5 in a 45px row),
+  not optically centred as `.eyebrow`'s `items-center` renders it. Also,
+  the service feature dots stroke `White` (#F1F1F1) where the page-header
+  eyebrow strokes `Black/800` — `.eyebrow--dot` hardcodes the ink rim for
+  both. Left alone deliberately: `.eyebrow`/`.eyebrow--lg` are used on
+  Home, Contact, Insights, Work and `StartTogetherCard`, all signed off in
+  earlier passes, and a low-confidence read off a 1:1 render is not grounds
+  for moving every eyebrow dot on the site. Needs a second frame sampled
+  before anyone acts on it.
+- Still not placed, unchanged from G29: the "Group 21" badge (315:4998) and
+  the ~20x25 mark at 322:5230, which sits mostly above the frame's own top
+  edge (y=-18.6 of 25 tall) and is treated as clipped.

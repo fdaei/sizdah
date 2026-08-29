@@ -5,6 +5,7 @@ import SectionHeading from '@/Components/SectionHeading.vue'
 import type { PageSectionData, ProjectSummary } from '@/types'
 import industryUrl from '~img/sizdah/home/project-industry.svg'
 import arrowUrl from '~img/sizdah/shared/cta-arrow.svg'
+import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
 
 /**
  * Projects showcase — Figma 268:3461 (heading), 268:3539 (530x663 image) and
@@ -67,12 +68,18 @@ const active = ref(0)
                     {{ project.title }}
                   </Link>
 
-                  <!-- 138:2333 — the 2px gold rule under the open title only. -->
+                  <!-- 138:2333 — the hand-inked gold rule under the open title only. -->
                   <span
                     aria-hidden="true"
-                    class="mt-1 block h-0.5 w-full bg-gradient-to-l from-brand to-transparent transition-opacity duration-300"
+                    class="relative mt-1 block h-[5px] w-full transition-opacity duration-300"
                     :class="active === index ? 'opacity-100' : 'opacity-0'"
-                  />
+                  >
+                    <img
+                      :src="underlineUrl"
+                      alt=""
+                      class="absolute inset-0 h-full w-full max-w-none"
+                    />
+                  </span>
                 </div>
 
                 <Link
