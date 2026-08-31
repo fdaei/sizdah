@@ -1,0 +1,13 @@
+<!-- 268:3437, the 3x2 dot grid to the inline start of the badge. The frame
+     stores it in one group with the LOST LEVEL wordmark, which ships
+     separately as orbit-wordmark.svg; only the dots are drawn here. -->
+<svg width="50" height="28" viewBox="0 0 50 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g fill="#6C6C69">
+    <circle cx="2.5" cy="2.5" r="2.4" />
+    <circle cx="24" cy="2.5" r="2.4" />
+    <circle cx="46" cy="2.5" r="2.4" />
+    <circle cx="2.5" cy="24.5" r="2.4" />
+    <circle cx="24" cy="24.5" r="2.4" />
+    <circle cx="46" cy="24.5" r="2.4" />
+  </g>
+</svg>

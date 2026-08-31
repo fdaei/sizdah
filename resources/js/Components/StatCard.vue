@@ -11,6 +11,10 @@ import retentionUrl from '~img/sizdah/home/kpi-retention.svg'
  * block padding, over a 117.4deg wash that fades the same yellow from 6% to 0.
  * Value is Display/Small on Yellow/50, label is title/Medium on Yellow/1000,
  * and caption is title/Small on Black/300.
+ *
+ * The 4px rule is an inset ring, not a border: Figma draws strokes inside the
+ * frame, so the card measures 153 including its rule. A CSS border sits outside
+ * the padding box and pushed every card to 161.
  */
 const props = defineProps<{
   /** Authored verbatim by the editor — already in the locale's digits. */
@@ -38,7 +42,7 @@ const iconUrl = computed(() => (props.icon ? ICONS[props.icon] : undefined))
 
 <template>
   <div
-    class="flex flex-col items-center justify-center gap-2 rounded-sm border-4 border-brand/40 px-3 py-6 text-center"
+    class="flex flex-col items-center justify-center gap-2 rounded-sm px-3 py-6 text-center ring-4 ring-inset ring-brand/40"
     style="
       background-image: linear-gradient(
         117.4deg,
@@ -62,7 +66,14 @@ const iconUrl = computed(() => (props.icon ? ICONS[props.icon] : undefined))
         height="32"
         class="size-8 shrink-0"
       />
-      <p class="latin-nums text-display-sm text-brand-50" :data-counter="value">{{ value }}</p>
+      <!--
+        `dir="auto"` as the frame emits it: "+40%" carries no strong character,
+        so an RTL paragraph would reorder the sign to the trailing edge and
+        render it "40%+".
+      -->
+      <p class="latin-nums text-display-sm text-brand-50" dir="auto" :data-counter="value">
+        {{ value }}
+      </p>
     </div>
 
     <div class="flex flex-col gap-1">

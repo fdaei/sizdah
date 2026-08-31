@@ -104,7 +104,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
         (309:4758), which is itself gap 24. The lede is tite/Large (22/500).
       -->
       <header class="mx-auto flex w-fit max-w-full flex-col items-center gap-10 text-center">
-        <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" marker="dot" />
+        <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
         <div class="flex flex-col items-center gap-6">
           <!--
@@ -218,7 +218,6 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
                   :key="feature"
                   as="li"
                   size="lg"
-                  marker="dot"
                   :text="feature"
                 />
               </ul>

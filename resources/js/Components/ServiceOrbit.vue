@@ -14,6 +14,8 @@ import lineBottomStartUrl from '~img/sizdah/home/orbit-line-bl.svg'
 import lineBottomEndUrl from '~img/sizdah/home/orbit-line-br.svg'
 import gridDoodleUrl from '~img/sizdah/home/orbit-grid.svg'
 import scribbleUrl from '~img/sizdah/home/orbit-scribble.svg'
+import crossUrl from '~img/sizdah/home/orbit-cross.svg'
+import dotsUrl from '~img/sizdah/home/orbit-dots.svg'
 
 /**
  * Services band — Figma 268:3032, the one cream (#FDFCFA) section on Home.
@@ -113,7 +115,7 @@ const nodes = computed(() => {
 </script>
 
 <template>
-  <section class="section bg-[#FDFCFA]">
+  <section class="bg-[#FDFCFA] py-16 lg:pb-20 lg:pt-[91px]">
     <div class="container-sizdah">
       <SectionHeading
         data-reveal
@@ -121,6 +123,7 @@ const nodes = computed(() => {
         :title="props.section.title"
         :subtitle="props.section.subtitle || props.section.description"
         tone="light"
+        subtitle-width="md:max-w-[505px]"
       />
     </div>
 
@@ -128,8 +131,14 @@ const nodes = computed(() => {
       Desktop composition. `aspect-[1440/760]` keeps the absolute offsets valid
       at every width, so the connectors stay attached to their nodes.
     -->
-    <div class="container-sizdah mt-12">
-      <div class="relative mx-auto hidden aspect-[1440/760] w-full max-w-frame lg:block" data-reveal>
+    <!--
+      Full-bleed to the frame's own 1440, NOT the 1248 content track: every
+      offset below is a percentage of the frame's 1440x760 composition box, so
+      nesting this in `container-sizdah` scaled the whole diagram to 86.7% and
+      pulled all four nodes in towards the badge.
+    -->
+    <div class="mt-12 hidden lg:mt-20 lg:block">
+      <div class="relative mx-auto aspect-[1440/760] w-full max-w-frame" data-reveal>
         <!-- Decorative: the tic-tac-toe hatch above the badge (268:3405). -->
         <img
           :src="gridDoodleUrl"
@@ -138,6 +147,36 @@ const nodes = computed(() => {
           width="160"
           height="143"
           class="absolute left-[41.25%] top-[0.39%] w-[11.11%]"
+        />
+
+<!--
+          Decorative: the two Yellow/900 crosses (268:3460 at 138,2120 and
+          268:3459 at 1090,2552) and the 3x2 dot grid (268:3437 at 1282,2158).
+          All three were missing from the band.
+        -->
+        <img
+          :src="crossUrl"
+          alt=""
+          aria-hidden="true"
+          width="24"
+          height="24"
+          class="absolute left-[9.58%] top-[40%] w-[1.67%]"
+        />
+        <img
+          :src="crossUrl"
+          alt=""
+          aria-hidden="true"
+          width="24"
+          height="24"
+          class="absolute left-[75.69%] top-[96.84%] w-[1.67%]"
+        />
+        <img
+          :src="dotsUrl"
+          alt=""
+          aria-hidden="true"
+          width="47"
+          height="26"
+          class="absolute left-[89.03%] top-[45%] w-[3.26%]"
         />
 
         <!-- Decorative: the scribble below the badge (268:3420). -->
@@ -192,12 +231,14 @@ const nodes = computed(() => {
           <p class="text-center text-heading-sm text-ink-1000">{{ node.service!.title }}</p>
         </div>
       </div>
+    </div>
 
-      <!--
-        Below `lg` the connectors have nowhere to point, so the diagram becomes
-        a plain grid and the badge leads it.
-      -->
-      <div class="flex flex-col items-center gap-10 lg:hidden">
+    <!--
+      Below `lg` the connectors have nowhere to point, so the diagram becomes
+      a plain grid and the badge leads it.
+    -->
+    <div class="container-sizdah mt-12 lg:hidden">
+      <div class="flex flex-col items-center gap-10">
         <div class="relative w-[220px]">
           <img :src="centerUrl" alt="" aria-hidden="true" width="304" height="261" class="w-full" />
           <img

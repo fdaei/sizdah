@@ -143,8 +143,12 @@ final class SiteSettingsSeeder extends Seeder
     }
 
     /**
-     * Header — Figma 1419:9339.
-     * Home / Work / Service / Insight / About, plus the Let's Talk CTA.
+     * Header — Figma 21:2159, as instanced at 268:3031.
+     * Home / Projects / Services / Articles / About, plus the "شروع گفتگو" CTA.
+     *
+     * The FA labels are the frame's text runs verbatim, which is why they read
+     * "پروژه ها" / "سرویس ها" / "مقالات" rather than the site's own vocabulary —
+     * and why the footer says "خدمات" where the header says "سرویس ها" (437:5719).
      */
     private function headerMenu(): void
     {
@@ -157,11 +161,11 @@ final class SiteSettingsSeeder extends Seeder
 
         $items = [
             ['home', ['en' => 'Home', 'fa' => 'خانه', 'ar' => 'الرئيسية'], false],
-            ['work.index', ['en' => 'Work', 'fa' => 'نمونه‌کارها', 'ar' => 'أعمالنا'], false],
-            ['services', ['en' => 'Service', 'fa' => 'خدمات', 'ar' => 'الخدمات'], false],
-            ['insights.index', ['en' => 'Insight', 'fa' => 'بینش', 'ar' => 'رؤى'], false],
+            ['work.index', ['en' => 'Work', 'fa' => 'پروژه ها', 'ar' => 'أعمالنا'], false],
+            ['services', ['en' => 'Service', 'fa' => 'سرویس ها', 'ar' => 'الخدمات'], false],
+            ['insights.index', ['en' => 'Insight', 'fa' => 'مقالات', 'ar' => 'رؤى'], false],
             ['about', ['en' => 'About', 'fa' => 'درباره ما', 'ar' => 'من نحن'], false],
-            ['contact', ['en' => "Let's Talk", 'fa' => 'گفتگو کنیم', 'ar' => 'لنتحدث'], true],
+            ['contact', ['en' => "Let's Talk", 'fa' => 'شروع گفتگو', 'ar' => 'لنتحدث'], true],
         ];
 
         foreach ($items as $index => [$route, $labels, $isCta]) {
@@ -201,14 +205,14 @@ final class SiteSettingsSeeder extends Seeder
                 'children' => [
                     ['home', ['en' => 'Home', 'fa' => 'خانه', 'ar' => 'الرئيسية']],
                     ['services', ['en' => 'Services', 'fa' => 'خدمات', 'ar' => 'الخدمات']],
-                    ['work.index', ['en' => 'Work', 'fa' => 'نمونه‌کارها', 'ar' => 'أعمالنا']],
-                    ['insights.index', ['en' => 'Insight', 'fa' => 'بینش', 'ar' => 'رؤى']],
+                    ['work.index', ['en' => 'Work', 'fa' => 'پروژه ها', 'ar' => 'أعمالنا']],
+                    ['insights.index', ['en' => 'Insight', 'fa' => 'مقالات', 'ar' => 'رؤى']],
                     ['about', ['en' => 'About', 'fa' => 'درباره ما', 'ar' => 'من نحن']],
-                    ['contact', ['en' => 'Contact', 'fa' => 'تماس', 'ar' => 'اتصل بنا']],
+                    ['contact', ['en' => 'Contact', 'fa' => 'تماس با ما', 'ar' => 'اتصل بنا']],
                 ],
             ],
             [
-                'labels' => ['en' => 'Social Links', 'fa' => 'شبکه‌های اجتماعی', 'ar' => 'وسائل التواصل'],
+                'labels' => ['en' => 'Social Links', 'fa' => 'شبکه های اجتماعی', 'ar' => 'وسائل التواصل'],
                 'children' => [],
                 'social' => true,
             ],

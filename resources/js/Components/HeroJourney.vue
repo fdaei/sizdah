@@ -32,7 +32,12 @@ const { t } = useTranslations()
 </script>
 
 <template>
-  <div class="relative aspect-[466/500] w-full max-w-[560px]" aria-hidden="true">
+  <!--
+    466x500 is the composition box itself (x184..650, y216..717 on the frame),
+    so it is also the cap: at the old max-w-[560px] every offset below scaled
+    with it and the whole trail rendered ~20% oversized.
+  -->
+  <div class="relative aspect-[466/500] w-full max-w-[466px]" aria-hidden="true">
     <!--
       Dotted trail, Black/600 in the frame. viewBox matches the composition box
       so the paths land on the marks at any scale.

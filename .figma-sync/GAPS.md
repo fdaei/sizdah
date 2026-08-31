@@ -1359,3 +1359,127 @@ No horizontal overflow at 390 / 768 / 1024 / 1280 / 1440.
 - Still not placed, unchanged from G29: the "Group 21" badge (315:4998) and
   the ~20x25 mark at 322:5230, which sits mostly above the frame's own top
   edge (y=-18.6 of 25 tall) and is treated as clipped.
+
+## G45 — The eyebrow marker: one false alarm, one real system, one outlier  (2026-08-30)  (severity: medium)
+
+G44 left two site-wide questions open. Both are now closed, by reading all
+seven "small title" marker instances in the file rather than one.
+
+### (a) `.section-first` is NOT 8px short  [CLOSED — no change]
+G44 saw the Services page header eyebrow at frame y=188 where the utility puts
+it at 180, and asked whether 180 was wrong everywhere. It is not. Contact
+(`279:6398`) puts its header block at y=180 exactly, and Work index
+(`222:2461`) and Insights index (`268:5234`) both sit in blocks that start at
+180. Services is the single frame at 188 and already carries a local
+`md:pt-[188px]` override. `.section-first` stays at 132/180.
+
+### (b) The marker does NOT sit 6px high  [CLOSED — no change, and a trap recorded]
+G44 suspected the marker was ~6px too high because Figma reports the `obj`
+node at `y = boxHeight / 2` (22.5 in a 45px box, 12.5 in a 25px box) while we
+centre it. Reading that as "AABB top" makes the marker look 5.66px low in the
+frame — 5.66 being half of 11.313, the AABB of an 8px square rotated 45°.
+
+**Figma reports a rotated node's x/y as its CENTRE, not its bounding-box top
+left.** Confirmed by pixel measurement: rendering `315:4859` and locating the
+gold fill puts the marker's centre at node y=12.5 in a 25px box — dead centre.
+`items-center` is correct. Do not "fix" this.
+
+### (c) The rim: a real four-instance system, and one dissenter  [FIXED]
+Every marker is the same 8px disc — `bg #F8B937`, `rounded-round`, the
+symmetric `±2px 12px rgba(245,185,64,.7)` bloom. Only the rim varies:
+
+| Node | Where | Rim |
+|---|---|---|
+| `450:6716` | Contact page header | 1px `#FEFBF5` |
+| `450:6712` | Work index page header | 1px `#FEFBF5` |
+| `462:8519` | Insights index page header | 1px `#FEFBF5` |
+| `450:6700` | Home testimonials heading | 1px `#FEFBF5` |
+| `268:3036` | Home services band (cream ground) | 1px `#434343` |
+| `315:4861` | Services feature bullets (`--lg`) | 2px `#F1F1F1` |
+| `309:4757` | **Services page header** | **2px `#434343`** |
+
+The code shipped `border-2 border-ink-800` as the default — i.e. it had
+generalised `309:4757`, the one node that agrees with nothing else, across the
+whole site. Now: `.eyebrow--dot` is 1px Yellow/50 (the four-instance value),
+`.eyebrow--dot-ink` is the cream band's 1px Black/800, and
+`.eyebrow--lg.eyebrow--dot` is the feature bullets' 2px White.
+
+**DECISION — Services page header normalised, not reproduced.** `309:4757` is
+a detached node; the other three page headers are instances of the shared
+`450:66xx` component. A 2px dark-grey rim on a dark ground, on one page only,
+reads as art that was never refreshed rather than intent. It now takes the
+system default. Reverse by giving that one call site its own variant if a
+human disagrees.
+
+### (d) Dead `square` marker removed
+`Eyebrow` still defaulted to `marker="square"`, a diamond no frame draws (G38
+found this; the default was never changed, only the call sites). Every call
+site passed `marker="dot"`. The prop is gone and the disc is unconditional.
+
+### (e) Section-heading eyebrow gap: 24 vs 48  [FIXED]
+The gap under the eyebrow is 24 on projects (`268:3461`), the services band
+(`502:5424`) and why-us (`268:3475`), and **48** on testimonials (`268:3721`)
+and insights (`268:3797`) — the latter two being two copies of one block
+("Frame 96355"). The code used 24 everywhere. `SectionHeading` now takes a
+`gap` prop; those two call sites pass `gap="lg"`. Page headers were already
+right (40 on Contact/Work/Insights, per `279:6399` / `222:2461` / `268:5234`).
+
+## G46 — The responsive suite was measuring an unmounted page  (2026-08-30)  (severity: HIGH — every layout guarantee it made was vacuous)
+
+`tests/Browser/responsive.spec.ts` asserted "no horizontal overflow" on six
+routes across seven breakpoints, and had passed for as long as it existed.
+
+It was measuring nothing. `page.goto` resolves on `load`; in dev, Vite injects
+the Vue bundle and its stylesheet *after* that. Measured at `load` the document
+is a bare `#app` shell — one stylesheet, no page markup, and
+`document.documentElement.scrollWidth === clientWidth` trivially. Instrumenting
+the same navigation shows it directly:
+
+```
+at load        : overflow=0px   styleSheets=1  whyUsGrid=null
+at networkidle : overflow=147px styleSheets=2  whyUsGrid=680px
+```
+
+All navigations now go through a `visit()` helper that waits for `networkidle`
+and for `main` + `footer` to attach. Three real defects surfaced the moment it
+did:
+
+1. **`WhyUsGrid` overflowed 147px from 1024–1279px.** The band is a 401px
+   heading column beside a fixed 680px artwork — 1081px of content box — gated
+   at `lg`, where `container-sizdah` only offers 896. Moved to `xl` (1280 gives
+   1088). Between 1024 and 1279 the existing `sm:grid-cols-2` fallback carries
+   it; the decorative rules, which only mean anything inside the absolute
+   composition, drop with it. Desktop geometry is untouched — the change is
+   purely which breakpoint the same classes fire at.
+2. **Contact overflowed below ~400px.** Four `min-width: auto` floors: a bare
+   `<input>`'s ~245px intrinsic width, the services trigger's 276px min-content
+   (its `truncate` span could not shrink without `min-w-0`), and both cards as
+   grid items. The narrowest column the card could form was 346px.
+3. **Home overflowed at 320px.** `InsightsShowcase`'s list thumbnail is a fixed
+   `size-[190px] shrink-0`; 190 + 24 gap + copy left a 291px floor in a 280px
+   track. It now scales to 120px below `sm`.
+
+Also fixed while here:
+
+- **The suite tested `/en/*`** — routes that stopped resolving with the fa-only
+  decision (G15). Ten of its assertions had been failing on missing routes;
+  they now run against `/fa/*`, plus the two legal pages. The language-switcher
+  test is gone (the switcher collapses under fa-only by design) and is replaced
+  by two tests for what the contract actually is now: a bare path redirects
+  into `fa` and renders RTL, and a deactivated prefix 404s.
+- **`mobile-320` added.** Below anything the file designs for, so it exists
+  purely to catch min-width floors.
+- **`webServer` added to the config.** `artisan serve` is single-process unless
+  `PHP_CLI_SERVER_WORKERS` is set, so `fullyParallel` starved it and three
+  tests failed with navigation timeouts that read as layout defects. The suite
+  now boots its own server with 8 workers and reuses a running one.
+- **A page-error/failed-request test per route**, which is where
+  `.scratch-navbar.mjs` went. Both `.scratch-*.mjs` files were committed
+  debug one-offs: they imported `playwright` (not a dependency of this repo),
+  hardcoded `/usr/bin/chromium`, drove `/en/*`, and nothing referenced them.
+  Deleted.
+
+**mobile-390 cannot run on this machine.** It is the only WebKit project and
+the host is missing WebKit's system libraries; it fails to launch, which
+presents as 12 layout failures. `sudo npx playwright install-deps` fixes it.
+Every other project passes: **137 passed, 0 failed, 3 skipped.**

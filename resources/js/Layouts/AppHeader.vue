@@ -50,7 +50,7 @@ function isActive(item: NavItem): boolean {
   <header class="fixed inset-x-0 top-0 z-header bg-white/[0.15] backdrop-blur-header">
     <div class="container-sizdah flex items-center justify-between gap-6 py-6">
       <!-- Wordmark — inline start -->
-      <Link :href="`/${page.props.locale.current}`" class="shrink-0">
+      <Link :href="`/${page.props.locale.current}`" class="shrink-0 lg:ms-9">
         <BrandLogo :width="104" :title="settings.siteName" />
       </Link>
 
@@ -62,11 +62,11 @@ function isActive(item: NavItem): boolean {
               :href="item.url"
               :target="item.target"
               :aria-current="isActive(item) ? 'page' : undefined"
-              class="flex flex-col items-center justify-center px-1 py-1 text-title-md transition-colors duration-200 ease-brand"
+              class="flex flex-col items-center justify-center px-1 py-1 font-normal transition-colors duration-200 ease-brand"
               :class="
                 isActive(item)
-                  ? 'font-medium text-paper'
-                  : 'font-normal text-ink-200 hover:text-paper'
+                  ? 'text-title-sm text-paper'
+                  : 'text-title-md text-ink-200 hover:text-paper'
               "
             >
               {{ item.label }}
@@ -107,11 +107,7 @@ function isActive(item: NavItem): boolean {
           inline-end edge, mirrored on X. It decorates the button, not the logo.
         -->
         <div v-if="cta" class="relative isolate hidden lg:block">
-          <CtaButton
-            :label="cta.label"
-            :href="cta.url"
-            class="h-[46px] w-[127px] px-0 py-0"
-          />
+          <CtaButton :label="cta.label" :href="cta.url" class="whitespace-nowrap" />
           <img
             :src="doodleUrl"
             alt=""

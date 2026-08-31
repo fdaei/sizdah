@@ -30,17 +30,36 @@ withDefaults(
     layout?: 'split' | 'stacked'
     /** `light` is the cream services band (268:3032). */
     tone?: 'dark' | 'light'
+    /**
+     * Space between the eyebrow and the headline row. The frames carry two
+     * values with no rule behind them: 24 on projects (268:3461), the services
+     * band (502:5424) and why-us (268:3475); 48 on testimonials (268:3721) and
+     * insights (268:3797), which are two copies of one block. See GAPS G45.
+     */
+    gap?: 'sm' | 'lg'
+    /**
+     * Width of the subtitle column. The frames set it per instance (505 on the
+     * services band, 268:3039), so it is a prop rather than one shared value;
+     * 430 is what the split instances measured at before they were re-read.
+     */
+    subtitleWidth?: string
   }>(),
-  { eyebrow: '', subtitle: '', layout: 'split', tone: 'dark' },
+  {
+    eyebrow: '',
+    subtitle: '',
+    layout: 'split',
+    tone: 'dark',
+    gap: 'sm',
+    subtitleWidth: '',
+  },
 )
 </script>
 
 <template>
-  <div class="flex flex-col items-start gap-6">
+  <div class="flex flex-col items-start" :class="gap === 'lg' ? 'gap-12' : 'gap-6'">
     <Eyebrow
       v-if="eyebrow"
       :text="eyebrow"
-      marker="dot"
       :marker-ring="tone === 'dark' ? 'paper' : 'ink'"
     />
 
@@ -60,7 +79,7 @@ withDefaults(
         class="text-title-md"
         :class="[
           tone === 'light' ? 'text-ink-700' : 'text-ink-200',
-          layout === 'split' ? 'md:max-w-[430px]' : 'max-w-[400px]',
+          subtitleWidth || (layout === 'split' ? 'md:max-w-[430px]' : 'max-w-[400px]'),
         ]"
       >
         {{ subtitle }}

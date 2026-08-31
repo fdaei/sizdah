@@ -186,10 +186,13 @@ final class PageSeeder extends Seeder
                 'content' => '+50',
                 'subtitle' => 'brands',
             ],
+            // 268:3014 / 268:3004 verbatim: the frame writes the count in Latin
+            // numerals and spaces "کرده اند" rather than joining it with a ZWNJ.
+            // Authored copy is never transliterated (Numerals).
             'fa' => [
-                'title' => 'بیش از ۵۰ برند',
-                'content' => '+۵۰',
-                'subtitle' => 'را انتخاب کرده‌اند',
+                'title' => 'بیش از 50 برند',
+                'content' => '+50',
+                'subtitle' => 'را انتخاب کرده اند',
             ],
             'ar' => [
                 'title' => 'موضع ثقة',

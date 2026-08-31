@@ -35,12 +35,20 @@ const props = defineProps<{ section: PageSectionData }>()
 
 const GLYPHS = [outcomesUrl, brandUrl, endToEndUrl, qualityUrl]
 
-/** Exact desktop positions inside the 680x400 artwork, in CMS/RTL reading order. */
+/**
+ * Exact desktop positions inside the 680x400 artwork, in CMS/RTL reading order.
+ *
+ * Gated at `xl`, not `lg`. The artwork is a fixed 680 beside a 401 heading
+ * column — 1081px of content box, which `container-sizdah` only offers from
+ * 1280 up (1280 - 2*96 = 1088). Running it from 1024 overflowed the viewport
+ * by 147px; between 1024 and 1279 the `sm:grid-cols-2` fallback carries the
+ * section instead.
+ */
 const DESKTOP_POSITIONS = [
-  'lg:left-[360px] lg:top-[71px] lg:w-[283px] lg:justify-between',
-  'lg:left-[46px] lg:top-[81px] lg:w-[266px] lg:justify-between',
-  'lg:left-[362px] lg:top-[244px] lg:w-[275px] lg:justify-between',
-  'lg:left-[46px] lg:top-[282px] lg:w-[264px] lg:justify-between',
+  'xl:left-[360px] xl:top-[71px] xl:w-[283px] xl:justify-between',
+  'xl:left-[46px] xl:top-[81px] xl:w-[266px] xl:justify-between',
+  'xl:left-[362px] xl:top-[244px] xl:w-[275px] xl:justify-between',
+  'xl:left-[46px] xl:top-[282px] xl:w-[264px] xl:justify-between',
 ]
 
 const claims = computed(() =>
@@ -51,7 +59,7 @@ const claims = computed(() =>
 <template>
   <section class="section">
     <div class="container-sizdah">
-      <div class="grid gap-12 lg:grid-cols-[401px_680px] lg:justify-between lg:gap-0">
+      <div class="grid gap-12 xl:grid-cols-[401px_680px] xl:justify-between xl:gap-0">
         <SectionHeading
           data-reveal
           :eyebrow="props.section.eyebrow"
@@ -61,7 +69,7 @@ const claims = computed(() =>
         />
 
         <div
-          class="relative grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:mt-[51px] lg:h-[400px] lg:w-[680px] lg:block"
+          class="relative grid gap-x-10 gap-y-12 sm:grid-cols-2 xl:mt-[51px] xl:h-[400px] xl:w-[680px] xl:block"
           data-reveal-group
         >
           <img
@@ -70,7 +78,7 @@ const claims = computed(() =>
             aria-hidden="true"
             width="4"
             height="400"
-            class="pointer-events-none absolute top-0 hidden h-[400px] w-1 lg:left-[330px] lg:block"
+            class="pointer-events-none absolute top-0 hidden h-[400px] w-1 xl:left-[330px] xl:block"
           />
           <img
             :src="ruleTopUrl"
@@ -78,7 +86,7 @@ const claims = computed(() =>
             aria-hidden="true"
             width="320"
             height="4"
-            class="pointer-events-none absolute hidden h-1 w-[320px] lg:left-[344px] lg:top-[190px] lg:block"
+            class="pointer-events-none absolute hidden h-1 w-[320px] xl:left-[344px] xl:top-[190px] xl:block"
           />
           <img
             :src="ruleBottomUrl"
@@ -86,7 +94,7 @@ const claims = computed(() =>
             aria-hidden="true"
             width="320"
             height="4"
-            class="pointer-events-none absolute hidden h-1 w-[320px] lg:left-[-26px] lg:top-[246px] lg:block"
+            class="pointer-events-none absolute hidden h-1 w-[320px] xl:left-[-26px] xl:top-[246px] xl:block"
           />
 
           <!--
@@ -96,8 +104,8 @@ const claims = computed(() =>
           <div
             v-for="({ item, glyph }, index) in claims"
             :key="item.id"
-            class="relative flex items-start gap-4 lg:absolute lg:gap-0"
-            :class="[index % 2 === 0 ? 'sm:pe-10 lg:pe-0' : 'sm:ps-0', DESKTOP_POSITIONS[index]]"
+            class="relative flex items-start gap-4 xl:absolute xl:gap-0"
+            :class="[index % 2 === 0 ? 'sm:pe-10 xl:pe-0' : 'sm:ps-0', DESKTOP_POSITIONS[index]]"
           >
             <img
               :src="glyph"

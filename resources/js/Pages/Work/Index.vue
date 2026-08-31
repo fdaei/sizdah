@@ -66,7 +66,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
       <header class="mx-auto flex max-w-[670px] flex-col items-center gap-16 text-center">
         <!-- 222:2461 — the eyebrow/title/description column is 612 wide inside the 670 track. -->
         <div class="flex w-full max-w-[612px] flex-col items-center gap-10">
-          <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" marker="dot" />
+          <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
           <div class="flex flex-col items-center gap-6">
             <h1 class="text-display-lg text-ink-50">{{ props.heading.title }}</h1>

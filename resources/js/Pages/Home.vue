@@ -85,7 +85,7 @@ const finalCta = computed(() => props.sections.final_cta)
     RTL, matching the frame) with the illustration opposite; below `lg` the two
     stack and the illustration follows the copy.
   -->
-  <section class="section-first relative overflow-hidden pb-16">
+  <section class="section-first relative overflow-hidden pb-24">
     <!-- Decorative hairline mesh, Figma "Group" 268:2966 — 884x778, not square. -->
     <div
       class="grid-mesh pointer-events-none absolute block-start-[122px] inline-start-16 hidden h-[778px] w-[884px] lg:block"
@@ -93,8 +93,10 @@ const finalCta = computed(() => props.sections.final_cta)
     />
 
     <div class="container-sizdah relative">
-      <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,517px)_minmax(0,1fr)] lg:gap-16">
-        <div class="flex flex-col gap-6" data-reveal-group>
+      <div
+        class="grid items-center gap-12 lg:grid-cols-[minmax(0,566px)_minmax(0,1fr)] lg:items-start lg:gap-16"
+      >
+        <div class="flex flex-col gap-6 lg:gap-0 lg:pt-4" data-reveal-group>
           <!--
             394:4964 — a 221px label over a 2px brand rule. Not the dotted
             `.eyebrow` used by the section headers further down the page; this
@@ -102,7 +104,7 @@ const finalCta = computed(() => props.sections.final_cta)
           -->
           <p
             v-if="hero?.eyebrow"
-            class="flex w-fit max-w-[221px] flex-col gap-px text-label-lg text-ink-100"
+            class="flex w-fit max-w-[221px] flex-col gap-px text-label-lg text-ink-100 lg:max-w-none lg:whitespace-nowrap"
           >
             <span>{{ hero.eyebrow }}</span>
             <img
@@ -113,17 +115,17 @@ const finalCta = computed(() => props.sections.final_cta)
             />
           </p>
 
-          <h1 v-if="hero" class="flex flex-col gap-4 text-start">
+          <h1 v-if="hero" class="flex flex-col gap-4 text-start lg:mt-[47.5px]">
             <span class="text-hero-line text-paper">{{ hero.title }}</span>
             <span class="text-hero-accent text-brand">{{ hero.subtitle }}</span>
             <span class="text-hero-line text-paper">{{ hero.description }}</span>
           </h1>
 
-          <p v-if="hero?.content" class="max-w-[506px] text-title-sm leading-[normal] text-ink-200">
+          <p v-if="hero?.content" class="max-w-[506px] text-title-sm text-ink-200 lg:mt-[59px]">
             {{ hero.content }}
           </p>
 
-          <div v-if="hero" class="flex flex-wrap items-center gap-4">
+          <div v-if="hero" class="flex flex-wrap items-center gap-4 lg:mt-[109px]">
             <CtaButton
               v-if="hero.primaryCta"
               :label="hero.primaryCta.label"
@@ -145,7 +147,7 @@ const finalCta = computed(() => props.sections.final_cta)
               :href="hero.secondaryCta.url"
               variant="light"
               size="lg"
-              class="border border-brand"
+              class="ring-1 ring-inset ring-brand"
             />
           </div>
 
@@ -154,14 +156,17 @@ const finalCta = computed(() => props.sections.final_cta)
             up-right doodle (268:3024) beside it. Fixed chrome rather than
             authored copy, so it comes from lang/{locale}/home.php.
           -->
-          <p v-if="hero" class="flex items-center gap-2 text-body-lg text-ink-300">
+          <p
+            v-if="hero"
+            class="flex items-start gap-2 text-body-lg text-ink-300 lg:ms-[65px] lg:mt-[49px] lg:gap-[13px]"
+          >
             <img
               :src="heroNoteArrowUrl"
               alt=""
               aria-hidden="true"
               width="56"
               height="56"
-              class="size-10 shrink-0 flip-rtl"
+              class="size-10 shrink-0 flip-rtl lg:-mt-[35px] lg:size-14"
             />
             <span class="max-w-[173px]">{{ $t('home.hero.note') }}</span>
           </p>
@@ -181,7 +186,11 @@ const finalCta = computed(() => props.sections.final_cta)
           height="673"
           class="h-auto w-full max-w-[700px] justify-self-center"
         />
-        <HeroJourney v-else class="justify-self-center" />
+        <!--
+          88 from the frame's inline-end gutter and 36 below the section top,
+          which is where 268:2962 puts the composition box.
+        -->
+        <HeroJourney v-else class="justify-self-center lg:me-[88px] lg:ms-auto lg:mt-9" />
       </div>
     </div>
   </section>
@@ -219,9 +228,9 @@ const finalCta = computed(() => props.sections.final_cta)
     mark (268:3005), then the six client marks. `title` is the run before the
     mark and `subtitle` the run after it, which is how the frame splits it.
   -->
-  <section v-if="trustProof" class="pb-16 md:pb-24">
-    <div class="container-sizdah flex flex-col items-center gap-6">
-      <p class="flex flex-wrap items-center justify-center gap-2 text-center" data-reveal>
+  <section v-if="trustProof" class="pb-16 md:pb-24 lg:pb-[117px]">
+    <div class="container-sizdah flex flex-col items-center gap-6 lg:gap-0">
+      <p class="flex flex-wrap items-center justify-center gap-1 text-center" data-reveal>
         <span class="text-title-lg text-brand-50">{{ trustProof.title }}</span>
         <img
           :src="trustMarkUrl"
@@ -251,8 +260,9 @@ const finalCta = computed(() => props.sections.final_cta)
   <!-- Services band — 268:3032, the one cream section on the page. -->
   <ServiceOrbit v-if="servicesCloud" :section="servicesCloud" :services="props.services" />
 
-  <!-- Lead magnet — 391:4795, the larger of the two strips. -->
-  <section v-if="leadMagnet" class="section">
+  <!-- Lead magnet — 391:4795, the larger of the two strips: 2780..2974, i.e.
+       124 below the services band and 146 above the projects heading. -->
+  <section v-if="leadMagnet" class="section lg:pb-[146px] lg:pt-[124px]">
     <div class="container-sizdah">
       <LeadMagnetBanner :section="leadMagnet" size="lg" data-reveal />
     </div>
@@ -304,6 +314,7 @@ const finalCta = computed(() => props.sections.final_cta)
           :eyebrow="reviews.eyebrow"
           :title="reviews.title"
           :subtitle="reviews.subtitle || reviews.description"
+          gap="lg"
         />
         <!-- 268:3728 — a hand-drawn rule tucked under the subtitle's end. -->
         <img

@@ -35,9 +35,13 @@ const rest = computed(() => props.posts.slice(1, 3))
         :eyebrow="props.section.eyebrow"
         :title="props.section.title"
         :subtitle="props.section.subtitle || props.section.description"
+        gap="lg"
       />
 
-      <div class="mt-12 grid items-stretch gap-6 lg:mt-16 lg:grid-cols-2" data-reveal-group>
+      <div
+        class="mt-12 grid items-stretch gap-6 lg:mt-16 lg:grid-cols-2 [&>*]:min-w-0"
+        data-reveal-group
+      >
         <!-- 430:5311 — the lead post, cream on the dark ground. -->
         <article
           class="flex flex-col gap-4 rounded-xl border border-gold-200 p-4 shadow-card sm:flex-row"
@@ -112,10 +116,10 @@ const rest = computed(() => props.posts.slice(1, 3))
                 height="190"
                 loading="lazy"
                 decoding="async"
-                class="size-[190px] shrink-0 rounded-lg object-cover"
+                class="size-[120px] shrink-0 rounded-lg object-cover sm:size-[190px]"
               />
 
-              <div class="flex flex-col gap-4">
+              <div class="flex min-w-0 flex-col gap-4">
                 <p class="flex items-center gap-2 text-body-md text-ink-200">
                   <img
                     :src="calendarUrl"

@@ -109,8 +109,13 @@ function submit(): void {
 
 // Shared between the five inputs so the light-on-dark field treatment stays in
 // one place (Figma: 80% white fill, 3px Yellow/300 border, radiusLG).
+//
+// `min-w-0` is load-bearing: a bare <input> carries a ~245px intrinsic width
+// and the services trigger a 276px min-content, and as flex/grid children both
+// default to `min-width: auto`. Without it the narrowest column the card can
+// form is 346px, which overflows the viewport below ~400px.
 const fieldClass =
-  'w-full rounded-lg border-3 border-brand-200 bg-white/80 p-3 text-body-md text-ink-1000 placeholder:text-ink-600 focus:border-brand focus:outline-none focus:ring-0'
+  'w-full min-w-0 rounded-lg border-3 border-brand-200 bg-white/80 p-3 text-body-md text-ink-1000 placeholder:text-ink-600 focus:border-brand focus:outline-none focus:ring-0'
 </script>
 
 <template>
@@ -131,7 +136,7 @@ const fieldClass =
         (20/500), not the 40/18 pair this header carried.
       -->
       <header class="mx-auto flex max-w-measure flex-col items-center gap-10 text-center">
-        <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" marker="dot" />
+        <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
         <div class="flex flex-col items-center gap-6">
           <h1 class="text-display-lg text-ink-50">{{ props.heading.title }}</h1>
@@ -151,7 +156,7 @@ const fieldClass =
       <div class="mt-12 grid gap-6 lg:grid-cols-[801fr_423fr]">
         <!-- Form card — 279:6439 -->
         <form
-          class="flex flex-col gap-6 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tr from-brand/10 to-transparent p-8"
+          class="flex min-w-0 flex-col gap-6 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tr from-brand/10 to-transparent p-8"
           novalidate
           @submit.prevent="submit"
         >
@@ -169,7 +174,7 @@ const fieldClass =
 
           <!-- 279:6404's field pair is RIGHT=name/LEFT=brand; name has to be the first DOM child (see the card-row note above). -->
           <div class="grid gap-6 md:grid-cols-2">
-            <div class="flex flex-col gap-2">
+            <div class="flex min-w-0 flex-col gap-2">
               <label for="name" class="text-label-lg text-brand-50">
                 {{ t('forms.contact.name') }}
               </label>
@@ -195,7 +200,7 @@ const fieldClass =
               <p v-if="form.errors.name" class="text-label-md text-brand">{{ form.errors.name }}</p>
             </div>
 
-            <div class="flex flex-col gap-2">
+            <div class="flex min-w-0 flex-col gap-2">
               <label for="brand_name" class="text-label-lg text-brand-50">
                 {{ t('forms.contact.brand') }}
               </label>
@@ -225,7 +230,7 @@ const fieldClass =
 
           <!-- 279:6406's field pair is RIGHT=phone/LEFT=service; phone has to be the first DOM child (see the card-row note above). -->
           <div class="grid gap-6 md:grid-cols-2">
-            <div class="flex flex-col gap-2">
+            <div class="flex min-w-0 flex-col gap-2">
               <label for="phone" class="text-label-lg text-brand-50">
                 {{ t('forms.contact.phone') }}
               </label>
@@ -265,7 +270,7 @@ const fieldClass =
               native <select multiple>, which cannot be styled to the frame and
               is poor on touch. Semantics stay real: a fieldset of checkboxes.
             -->
-            <div class="flex flex-col gap-2">
+            <div class="flex min-w-0 flex-col gap-2">
               <span class="text-label-lg text-brand-50">{{ t('forms.contact.services') }}</span>
               <div class="relative">
                 <button
@@ -284,7 +289,7 @@ const fieldClass =
                     class="size-6 shrink-0"
                   />
                   <span
-                    class="flex-1 truncate"
+                    class="min-w-0 flex-1 truncate"
                     :class="selectedServices.length ? 'text-ink-1000' : 'text-ink-600'"
                   >
                     {{
@@ -331,7 +336,7 @@ const fieldClass =
             </div>
           </div>
 
-          <div class="flex flex-col gap-2">
+          <div class="flex min-w-0 flex-col gap-2">
             <label for="message" class="text-label-lg text-brand-50">
               {{ t('forms.contact.message') }}
             </label>
@@ -358,7 +363,7 @@ const fieldClass =
 
         <!-- Details card — 279:6409 -->
         <div
-          class="flex flex-col gap-10 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tl from-brand/10 to-transparent p-8"
+          class="flex min-w-0 flex-col gap-10 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tl from-brand/10 to-transparent p-8"
         >
           <h2 class="text-title-lg text-brand-50">{{ t('forms.details.title') }}</h2>
 

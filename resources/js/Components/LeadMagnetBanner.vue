@@ -14,8 +14,10 @@ import leadMagnetScribbleUrl from '~img/sizdah/home/lead-magnet-scribble.svg'
  * The two frames are the same strip at two scales, so they share this
  * component and differ only by `size`:
  *   - `sm` — 303:4455, mid-article. space32 padding, radiusSM, no rule.
- *   - `lg` — 391:4795, Home. space64 padding, 24px corners, a 3px brand rule
- *            and a hollow brand button instead of the filled one.
+ *   - `lg` — 391:4795, Home. 1036 wide inside the 1248 track, space64 padding,
+ *            24px corners, a 3px brand rule drawn INSIDE the box (so the card
+ *            stays 1036 x 194), Yellow/50 — not the Yellow/200 the `sm` strip
+ *            fills with — and a hollow brand button instead of the filled one.
  *
  * The frame draws a button but no email field, so this links to the section's
  * own CTA rather than posting inline; the newsletter route stays where the
@@ -31,7 +33,7 @@ const props = withDefaults(defineProps<{ section: PageSectionData; size?: 'sm' |
     class="relative flex flex-col items-center gap-6 overflow-hidden"
     :class="
       props.size === 'lg'
-        ? 'min-h-[272px] rounded-xl border-3 border-brand bg-brand-200 p-8 lg:flex-row lg:justify-between lg:p-16'
+        ? 'mx-auto max-w-[1036px] rounded-xl bg-brand-50 p-8 ring-[3px] ring-inset ring-brand lg:flex-row lg:justify-between lg:p-16'
         : 'rounded-sm p-8 md:flex-row md:justify-between'
     "
     :style="
@@ -44,21 +46,28 @@ const props = withDefaults(defineProps<{ section: PageSectionData; size?: 'sm' |
     "
   >
     <template v-if="props.size === 'lg'">
+<!--
+        391:4800 is a 400x400 ruled sheet parked at the card's inline end and
+        pulled 85 above its top edge, so `overflow-hidden` crops it to the
+        right third. Stretching it to `h-full w-[55%] object-cover` turned its
+        horizontal rules into vertical ones.
+      -->
       <img
         :src="leadMagnetGridUrl"
         alt=""
         aria-hidden="true"
-        width="401"
-        height="401"
-        class="pointer-events-none absolute right-0 top-0 hidden h-full w-[55%] object-cover lg:block"
+        width="400"
+        height="400"
+        class="pointer-events-none absolute left-[699px] top-[-85px] hidden size-[400px] max-w-none lg:block"
       />
+      <!-- 391:4837, a 3x2 dot grid — 48x26, not the 26x48 it was exported at. -->
       <img
         :src="leadMagnetDotsUrl"
         alt=""
         aria-hidden="true"
-        width="26"
-        height="48"
-        class="pointer-events-none absolute left-[60px] top-[24px] hidden h-[48px] w-[26px] lg:block"
+        width="48"
+        height="26"
+        class="pointer-events-none absolute left-[66px] top-[26px] hidden h-[26px] w-[48px] lg:block"
       />
       <img
         :src="leadMagnetScribbleUrl"
@@ -66,13 +75,13 @@ const props = withDefaults(defineProps<{ section: PageSectionData; size?: 'sm' |
         aria-hidden="true"
         width="56"
         height="56"
-        class="pointer-events-none absolute left-[306px] top-[128px] hidden size-14 lg:block"
+        class="pointer-events-none absolute left-[308px] top-[130px] hidden size-14 lg:block"
       />
     </template>
 
     <div
       class="relative z-10 flex flex-col gap-2 text-center"
-      :class="props.size === 'lg' ? 'max-w-[546px] gap-4 lg:w-[546px]' : 'max-w-[458px]'"
+      :class="props.size === 'lg' ? 'max-w-[580px] gap-4 lg:w-[580px]' : 'max-w-[458px]'"
     >
       <p
         :class="
@@ -102,13 +111,13 @@ const props = withDefaults(defineProps<{ section: PageSectionData; size?: 'sm' |
     />
 
     <img
+      v-if="props.size !== 'lg'"
       :src="doodleUrl"
       alt=""
       aria-hidden="true"
       width="64"
       height="49"
       class="hidden h-[49px] w-16 shrink-0 flip-rtl md:block"
-      :class="props.size === 'lg' && 'hidden'"
     />
   </aside>
 </template>

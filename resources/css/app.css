@@ -139,19 +139,37 @@
   }
 
   /*
-   | The same 8px marker as a glowing disc: brand fill, 2px ink-800 rim and a
+   | The 8px marker as a glowing disc: brand fill, a hairline rim and a
    | symmetric Yellow/1000 bloom. Border-box, so it stays 8px overall.
+   |
+   | The rim is 1px Yellow/50 on every dark ground: the page headers
+   | (450:6716 contact, 450:6712 work, 462:8519 insights) and the dark section
+   | headings (450:6700 testimonials) are all the same component instance and
+   | all agree. `--dot-ink` carries the one cream-band value and `--lg` its
+   | own; the Services page header is the lone dissenter, see GAPS G45.
    */
   .eyebrow--dot::before {
-    @apply rotate-0 rounded-round border-2 border-ink-800 bg-brand;
+    @apply rotate-0 rounded-round border border-brand-50 bg-brand;
     box-shadow:
       -2px -2px 12px 0 rgb(245 185 64 / 70%),
       2px 2px 12px 0 rgb(245 185 64 / 70%);
   }
 
-  /* Dark Home section headers use the light-ring component variant. */
-  .eyebrow--dot-paper::before {
-    @apply border-brand-50;
+  /*
+   | The cream services band (268:3036) is the only heading on a light ground,
+   | and it rims in Black/800 so the marker still reads against the cream.
+   */
+  .eyebrow--dot-ink::before {
+    @apply border-ink-800;
+  }
+
+  /*
+   | Service feature bullets (315:4861) are the one instance drawn at 2px, and
+   | they stroke White rather than Yellow/50 — a heavier, cooler rim than the
+   | headings above.
+   */
+  .eyebrow--lg.eyebrow--dot::before {
+    @apply border-2 border-paper;
   }
 
   /* Card surfaces sit one step off the page ground. */
