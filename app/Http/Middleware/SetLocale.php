@@ -52,8 +52,13 @@ final class SetLocale
 
     /**
      * Priority: URL segment > session > Accept-Language > configured default.
+     *
+     * Public: also called directly by bootstrap/app.php's exception renderer,
+     * which builds the Error page's Inertia response for a genuine 404 —
+     * a request that matched no route at all, so this middleware never ran
+     * and never called URL::defaults() below. See that call site.
      */
-    private function resolve(Request $request): string
+    public function resolve(Request $request): string
     {
         $supported = array_keys(config('locales.supported'));
 

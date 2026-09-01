@@ -84,6 +84,13 @@ already in the repo by checksum; SIL OFL) is now installed and declared in
 Line-height: raw variable says 100% but laid-out nodes measure ~1.5 — superseded,
 see the 1.25 re-measurement in CLAUDE.md.
 
+**Update 2026-09-01:** first licensed Peyda cut supplied — `Peyda-ExtraBold`
+(weight 800) is now installed in `public/fonts/peyda/` and declared in
+`resources/css/fonts.css`. `fontFamily.arabic`/`.sans` in tailwind.config.js
+are still NOT rewired: only this one weight exists, and the body text tokens
+need 400/500/600/700 too. Rewire once the remaining Peyda weights (and, if
+wanted, Maneli) arrive — see the plan two paragraphs up.
+
 ## G6 — i18n: file is PERSIAN-only  [CORRECTED 2026-08-21]  (severity: med)
 The original entry below had this exactly backwards. A full-file text scan
 (every TEXT node on all three pages, classified by script) shows **no English
@@ -1483,3 +1490,201 @@ Also fixed while here:
 the host is missing WebKit's system libraries; it fails to launch, which
 presents as 12 layout failures. `sudo npx playwright install-deps` fixes it.
 Every other project passes: **137 passed, 0 failed, 3 skipped.**
+
+## G47 — Home services/orbit and testimonials: pixel-level re-check; one real miss  (2026-09-01)  (severity: medium)
+
+First item of the Phase 7 value-check tier (per-node `get_design_context`, not
+just structural/`get_metadata` sweeps like G32). Two areas re-measured in full:
+
+**Services/orbit band (`268:3032`).** Every icon slot position, connector-line
+bounding box, and decorative doodle (grid hatch, both crosses, dot cluster,
+scribble, the "lost level 1" wordmark overlap) recomputed from the frame's raw
+px/inset values against `ServiceOrbit.vue`'s percentage offsets. All matched
+to sub-pixel precision (largest delta ~0.4px, from the frame's own rotated-line
+`hypot()` math). **No gap** — G32's "did not pull full `get_design_context`,
+trusted the component" is now upgraded to verified.
+
+**Testimonials heading + `TestimonialCard` (`268:3720`, `546:7528`).** Checked
+the eyebrow rim, heading typography/widths, card root (border/radius/padding/
+gap), and the `.testimonial-wash` ground including its hairline pitch — this
+last one looked like a bug at first (`GAPS` G25 documents the source texture's
+native pitch as 54.4px on a 442px image, but the shipped CSS uses 40.6px).
+Downloaded the actual raw texture PNG (confirmed 442×442, lines repeating
+every ~54.4px by direct pixel sampling) and recomputed the `object-cover`
+scale: the card is taller than it is wide (300×~336), so height — not width —
+is the binding dimension, giving `54.4 × (336/442) ≈ 41.3px`, which rounds to
+the shipped 40.6. **Not a bug** — confirmed correct, no change.
+
+**One real miss, fixed: `quote-mark.svg` was vertically mirrored.** Downloaded
+Figma's own SVG export of node `546:7500` ("Group 23", the quote glyph) and
+diffed it pixel-for-pixel against `resources/images/sizdah/home/quote-mark.svg`.
+The shipped asset has the round blob at the *bottom* of each comma with the
+tail curling up-left; Figma's actual glyph has the blob at the *top* with the
+tail hanging down — a top/bottom mirror of the same shape, confirmed by
+rendering both at 4x and comparing side by side. The design-context React
+reference hints at this: it wraps the glyph in a `-scale-y-100` transform,
+which only makes sense if the underlying asset needs a flip to reach the
+frame's true orientation. Fixed by replacing the SVG's path data with Figma's
+exported paths (same viewBox, same fill) rather than adding a CSS transform —
+the file itself was simply wrong, so this is a source-of-truth correction, not
+a runtime compensation. Single call site (`TestimonialCard.vue`); the hover
+state's `brightness-0` filter is shape-agnostic so it needed no change.
+Verified live via a `composer run dev` + Playwright screenshot of `/fa` — the
+rendered glyph now matches the Figma reference exactly.
+
+The `quote-scribble.svg` sibling asset (the pencil doodle above the avatar
+row) was cross-checked the same way and matches Figma exactly — not every
+small SVG in this card was wrong, just the one.
+
+## G48 — 404 page rendered a blank screen for its one real trigger: no matching route at all  (2026-09-01)  (severity: CRITICAL)
+
+Second value-check-tier item: the 404 page (`266:2825`). Static comparison
+against `Error.vue` confirmed the frame faithfully — illustration at
+725×544 with the documented -40px overlap, 506px text column, gap-32/gap-16
+rhythm, `heading-xl`/`title-sm` type tokens and `brand-50`/`ink-200` colours
+all matched exactly. But per this ledger's own rule (no page is done without
+running it), loaded it in an actual browser rather than stopping at the
+frame diff — and it rendered as a **fully blank dark screen**. No header, no
+illustration, no copy, no CTA.
+
+**Root cause: this is the one page whose defining trait — a request that
+matches no route — means `SetLocale` (a route middleware) never runs.**
+`SetLocale::handle()` is what calls `URL::defaults(['locale' => $locale])`,
+which is what seeds Ziggy's client-side `defaults` object. A real 404 (as
+opposed to a 403/419/429/500/503, which all occur on an *already-matched*
+route where `SetLocale` already ran before the failure) matches nothing at
+all, so the middleware pipeline for that route never executes. Confirmed by
+diffing the Ziggy blob between two live responses:
+
+```
+/fa                              -> "defaults":{"locale":"fa"}
+/fa/<nonexistent path>            -> "defaults":{}
+```
+
+`CtaButton`'s "back to home" button calls `route('home')`, a locale-scoped
+named route. With no default, Ziggy's client-side resolver throws
+synchronously (`Ziggy error: 'locale' parameter is required for route
+'home'.`) while evaluating the template, which is an unrecoverable Vue
+render error for the whole `Error` component — hence the blank page. The
+`<html lang dir>` attributes still came out correct by coincidence, not
+correctness: Blade's root view resolves those independently of
+`URL::defaults()`, and the site currently supports exactly one locale, so
+its independent fallback happens to land on the same value.
+
+**Fix:** `SetLocale::resolve()` (locale-lookup logic: route segment ->
+session -> `Accept-Language` -> configured default) made `public`; the
+exception responder in `bootstrap/app.php` now calls it directly and sets
+`App::setLocale()` / `URL::defaults()` itself, immediately before rendering
+`Error`, for every status in its list (idempotent when `SetLocale` already
+ran on a matched route — same value, set twice). Verified: Ziggy's
+`defaults` blob now carries `{"locale":"fa"}` on the 404 response, and a
+full Playwright pass shows the page rendering completely — header,
+illustration, heading, CTA, footer — with zero console/page errors beyond
+the browser's own (expected) "404 Not Found" resource-load log for the
+bad URL itself. `/fa`, `/fa/about`, `/fa/contact` re-checked after the
+change to confirm no regression on matched routes.
+
+**Why prior passes missed this:** G20/G31 both verified this page by
+reading `Error.vue` against the frame's node tree — correct as far as static
+comparison goes, but this bug is invisible to any method that doesn't
+actually load the page in a browser as its real, unmatched-route trigger.
+Neither Pest (blocked, no `pdo_sqlite` on this host) nor the Playwright
+`responsive.spec.ts` suite (checks known routes, not a deliberately-bad one)
+exercised this path — it does now: added "a genuine 404 renders the Error
+page, not a blank screen" next to the existing locale-routing tests,
+asserting the heading renders, the back-home link resolves to `/fa`, and
+zero `pageerror`s fire. Full `desktop-1440` project re-run after the fix:
+20 passed, 1 skipped (the mobile-menu test, correctly inapplicable at this
+viewport), 0 failed.
+
+## G49 — Legal (both frames): 188px content-top confirmed as a real second data point, plus one missing decorative seal  (2026-09-01)  (severity: low)
+
+Third value-check-tier item: Legal privacy (`279:5924`) and terms (`281:6773`),
+both re-measured with `get_design_context` (they share one Vue component,
+`Legal.vue`, so both frames were pulled to be sure they agree).
+
+**Type scale, rhythm, column widths — all already exact.** `heading-lg`
+(30/1.27/500), `title-md` (20/1.25/500), `display-lg` (48/1.27/700),
+`max-w-measure` (612px), the 96/64/24/32 spacing rhythm in `.rich-prose` —
+every one matched the frame with no drift. This confirms G14's original
+type-scale fix rather than finding anything new.
+
+**Both Legal frames put the title block's top edge at y=188, not 180.** G44
+found Services at 188 and flagged it as maybe-universal; G45 checked three
+more frames (Contact, Work index, Insights index), found them all at 180, and
+closed it as "Services is a genuine outlier." That verdict was reached without
+checking Legal. With both Legal frames now independently confirmed at 188,
+the site is a 3-3 split (Services + privacy + terms at 188, vs.
+Contact/Work index/Insights index at 180) — not clearly one outlier anymore,
+but also not clearly universal either. Kept `.section-first` at 180 and added
+the same kind of local override Services already carries
+(`md:pt-[188px]` on `Legal.vue`'s root), rather than reopening the shared
+token on a coin-flip. If a future pass finds a fourth data point either way,
+this should be revisited as a real pattern rather than per-page overrides.
+
+**One missing decorative element: a hand-drawn seal/badge (279:5927 privacy,
+281:6776 terms — "image 127 [Vectorized]"), identical on both frames.**
+Downloaded it directly: a detailed hand-drawn circular badge with a
+checkmark-heart centre, filled `#202024`/`#222326` against the page's
+`#141414` ground — full opacity, but only ~4% brightness contrast, so it
+reads as a barely-visible watermark rather than a focal decoration (confirmed
+by rendering it recoloured at 12x to see the actual linework, then checking
+the real near-invisible contrast against the page background). Saved as
+`resources/images/sizdah/legal/trust-badge.svg` and added to `Legal.vue`.
+
+Positioning required adapting, not copying, Figma's absolute coordinates:
+both frames place it at the exact same page-pixel (physical left
+`calc(66.67%-16px)` of the 1440 frame, y=1446) despite having different total
+heights (2818 vs 2443) — i.e. it's an ambient accent that was never
+re-positioned per page, not something tied to a specific heading in the
+admin-authored rich text. Reproduced as `calc(66.67%-16px)` inside a
+`max-w-frame`-width wrapper (the same "don't nest a frame-relative offset in
+`container-sizdah`" pattern `ServiceOrbit.vue` already documents) and a
+content-relative `top-[1258px]` (1446 minus the frame's y=188), hidden below
+`xl` where the container's padding stops matching the frame's 96px gutter.
+Verified live via Playwright at 1440px (visible, correctly faint) and 390px
+(hidden, no overflow, no console errors).
+
+**Not a frontend gap, but worth recording: the live CMS copy has drifted from
+the Figma mock's placeholder text.** The frame's title, address and email
+("سیاست حفظ حریم خصوصی", "کرمان، ایران", "Sizdahmarketing@gmail.com") differ
+from what the running site actually renders ("حریم خصوصی", "مسقط، عمان",
+"Sahramarketing@gmail.com" — the last two are literal Sahra-era leftovers).
+`Legal.vue` correctly renders whatever `LegalController` hands it; this is
+Filament-authored content, not a template bug, and per the "don't hardcode
+API responses into the UI" rule it is not something to patch here. Flagged
+for whoever owns Filament content — same class of issue as G10's en/ar
+review, not a rebuild-scope item.
+
+## G50 — FilterChips: the two frames genuinely disagree on the active-chip colour, not just "an old note being wrong"  (2026-09-01)  (severity: medium)
+
+Fourth value-check-tier item: Work index (`222:1989`), which shares
+`FilterChips.vue` with Insights index. `FilterChips`'s own docblock asserted
+"both frames agree" on every property including the active state. Re-pulling
+both frames directly disproves that for one specific property:
+
+| | insights (`268:5250`) | projects (`222:2472`) |
+|---|---|---|
+| fill | `#2C2C2C` (ink-900) | `#F8B937` (brand, solid) |
+| border | 3px `#F8B937` (brand) | 3px `#F8B937` (brand) — agrees |
+| label colour | `#F8B937` (brand) | `#141414` (ink-1000) |
+| radius / inactive state / everything else | identical | identical |
+
+This isn't a case of the earlier note being stale — both frames were pulled
+fresh in this same session and simply draw the active pill differently:
+insights inverts to a dark chip with a glowing brand label, projects inverts
+to a solid brand chip with dark label. The component had only ever
+implemented the insights version, so Work index's active filter chip was
+rendering with the wrong colours (dark fill instead of the frame's solid
+yellow).
+
+**Fix:** added a `variant: 'outline' | 'solid'` prop to `FilterChips.vue`
+(default `outline`, preserving the existing Insights call site unchanged);
+`Work/Index.vue` now passes `variant="solid"`. Verified both consumers live —
+screenshotted the actual chip row on `/fa/work` (now solid brand fill, dark
+label, matching `222:2472`) and `/fa/insights` (unchanged dark fill, brand
+label, matching `268:5250`) side by side, zero console errors on either.
+
+This is also the shared-component regression check the master brief asks
+for: `FilterChips` has exactly two consumers (Work index, Insights index),
+both were re-verified after the change, and neither shows a defect.

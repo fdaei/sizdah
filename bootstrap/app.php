@@ -11,6 +11,8 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Support\Facades\App as AppFacade;
+use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -72,6 +74,20 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($status === 419) {
                 return back()->with('error', __('errors.session_expired'));
             }
+
+            /*
+             | A genuine 404 matches no route at all, so SetLocale — a route
+             | middleware — never ran and never called URL::defaults(). The
+             | Blade root view still renders the right lang/dir because it
+             | falls back independently, but Ziggy's client-side route()
+             | ships an empty `defaults` object, and CtaButton's
+             | route('home') then throws client-side ("'locale' parameter is
+             | required"), blanking the whole page. Resolve and set it here
+             | too — idempotent when SetLocale already ran on a matched route.
+             */
+            $locale = (new SetLocale())->resolve($request);
+            AppFacade::setLocale($locale);
+            URL::defaults(['locale' => $locale]);
 
             return inertia('Error', ['status' => $status])
                 ->toResponse($request)

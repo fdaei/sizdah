@@ -9,6 +9,7 @@ return [
     'change_language'     => 'تغییر زبان',
     'open_menu'           => 'باز کردن منو',
     'close_menu'          => 'بستن منو',
+    'close'               => 'بستن',
 
     'read_more'           => 'ادامه مطلب',
     'read_article'        => 'خواندن مقاله',

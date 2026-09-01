@@ -80,6 +80,7 @@ const { t } = useTranslations()
       <LeadMagnetBanner
         v-if="props.leadMagnet"
         :section="props.leadMagnet"
+        source="article"
         class="mx-auto w-full max-w-[831px]"
       />
 

@@ -109,6 +109,31 @@ test('a deactivated locale prefix does not resolve', async ({ page }) => {
   expect(response?.status()).toBe(404)
 })
 
+/**
+ * GAPS G48: a request matching no route at all never runs `SetLocale`
+ * (a route middleware), so Ziggy's client-side `defaults` object shipped
+ * empty and `CtaButton`'s `route('home')` threw synchronously, blanking the
+ * whole Error page. Only a real 404 (as opposed to 403/419/429/500/503,
+ * which occur on an *already-matched* route) hits this — the suite's other
+ * checks never visit a route this deliberately wrong.
+ */
+test('a genuine 404 renders the Error page, not a blank screen', async ({ page }) => {
+  const problems: string[] = []
+  page.on('pageerror', (e) => problems.push(e.message))
+
+  const response = await page.goto('/fa/this-page-does-not-exist')
+  expect(response?.status()).toBe(404)
+
+  await expect(page.locator('main')).toBeAttached()
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+
+  const backHome = page.getByRole('link', { name: /بازگشت به خانه/ })
+  await expect(backHome).toBeVisible()
+  await expect(backHome).toHaveAttribute('href', /\/fa$/)
+
+  expect(problems).toEqual([])
+})
+
 test('reduced motion disables marquee animation', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await visit(page, '/fa')

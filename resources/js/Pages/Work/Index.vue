@@ -82,6 +82,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
             :options="filterOptions"
             :active="props.activeFilter"
             :label="t('work.services')"
+            variant="solid"
           />
         </div>
       </header>

@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import CtaButton from '@/Components/CtaButton.vue'
+import LeadMagnetModal from '@/Components/LeadMagnetModal.vue'
 import type { PageSectionData } from '@/types'
 import doodleUrl from '~img/sizdah/shared/checklist-doodle.svg'
 import leadMagnetDotsUrl from '~img/sizdah/home/lead-magnet-dots.svg'
@@ -19,13 +21,24 @@ import leadMagnetScribbleUrl from '~img/sizdah/home/lead-magnet-scribble.svg'
  *            stays 1036 x 194), Yellow/50 — not the Yellow/200 the `sm` strip
  *            fills with — and a hollow brand button instead of the filled one.
  *
- * The frame draws a button but no email field, so this links to the section's
- * own CTA rather than posting inline; the newsletter route stays where the
- * form that collects an address lives.
+ * The button opens `LeadMagnetModal` — see that component's docblock and
+ * GAPS G51. An earlier note here read "the frame draws a button but no email
+ * field, so this links to the section's own CTA" — true of 303:4455/391:4795
+ * themselves, but incomplete: the actual field lives in a modal these two
+ * frames open, found later nested inside an unrelated "blog list" exploration
+ * frame rather than filed as its own component.
  */
-const props = withDefaults(defineProps<{ section: PageSectionData; size?: 'sm' | 'lg' }>(), {
-  size: 'sm',
-})
+const props = withDefaults(
+  defineProps<{
+    section: PageSectionData
+    size?: 'sm' | 'lg'
+    /** Matches `NewsletterSubscriptionRequest`'s `source` enum. */
+    source: 'home' | 'article'
+  }>(),
+  { size: 'sm' },
+)
+
+const modalOpen = ref(false)
 </script>
 
 <template>
@@ -105,9 +118,9 @@ const props = withDefaults(defineProps<{ section: PageSectionData; size?: 'sm' |
     <CtaButton
       v-if="props.section.primaryCta"
       :label="props.section.primaryCta.label"
-      :href="props.section.primaryCta.url"
       :variant="props.size === 'lg' ? 'brand-outline' : 'solid'"
       class="relative z-10 shrink-0"
+      @click="modalOpen = true"
     />
 
     <img
@@ -120,4 +133,12 @@ const props = withDefaults(defineProps<{ section: PageSectionData; size?: 'sm' |
       class="hidden h-[49px] w-16 shrink-0 flip-rtl md:block"
     />
   </aside>
+
+  <LeadMagnetModal
+    :open="modalOpen"
+    :title="props.section.title"
+    :description="props.section.description"
+    :source="props.source"
+    @close="modalOpen = false"
+  />
 </template>

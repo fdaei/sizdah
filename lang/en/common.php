@@ -9,6 +9,7 @@ return [
     'change_language'     => 'Change language',
     'open_menu'           => 'Open menu',
     'close_menu'          => 'Close menu',
+    'close'               => 'Close',
 
     'read_more'           => 'Read more',
     'read_article'        => 'Read Article',

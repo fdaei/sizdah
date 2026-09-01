@@ -124,3 +124,19 @@
   font-style: normal;
   font-display: swap;
 }
+
+/* ------------------------------------------------------------------ Peyda
+   The Figma frames' actual FA/AR body face (see G8 in .figma-sync/GAPS.md —
+   the licence gate that had FA/AR falling back to Vazirmatn). Only the
+   ExtraBold (800) cut has been supplied so far; the `arabic` / `sans` tokens
+   in tailwind.config.js are NOT rewired yet, since the 400/500/600/700 body
+   weights still need their own files first — wiring now would render all FA
+   copy in ExtraBold regardless of requested weight. */
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/peyda/Peyda-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}

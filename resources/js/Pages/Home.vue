@@ -264,7 +264,7 @@ const finalCta = computed(() => props.sections.final_cta)
        124 below the services band and 146 above the projects heading. -->
   <section v-if="leadMagnet" class="section lg:pb-[146px] lg:pt-[124px]">
     <div class="container-sizdah">
-      <LeadMagnetBanner :section="leadMagnet" size="lg" data-reveal />
+      <LeadMagnetBanner :section="leadMagnet" size="lg" source="home" data-reveal />
     </div>
   </section>
 
