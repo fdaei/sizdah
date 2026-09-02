@@ -49,9 +49,14 @@ const form = useForm<{ email: string; source: string; website: string }>({
 function submit(): void {
   form.post(route('newsletter.store'), {
     preserveScroll: true,
-    onSuccess: () => {
+    onSuccess: async () => {
       succeeded.value = true
       form.reset()
+      // The submit button this click focused is removed by the v-else swap
+      // to the success view, which drops focus to <body> — and once focus
+      // leaves the panel, Escape no longer bubbles through its handler.
+      await nextTick()
+      panel.value?.focus()
     },
   })
 }
@@ -71,7 +76,11 @@ watch(
       succeeded.value = false
       form.clearErrors()
       await nextTick()
-      emailInput.value ? emailInput.value.focus() : panel.value?.focus()
+      if (emailInput.value) {
+        emailInput.value.focus()
+      } else {
+        panel.value?.focus()
+      }
     }
   },
 )
@@ -151,9 +160,18 @@ watch(
                   :placeholder="t('forms.newsletter.email_placeholder')"
                   class="w-full min-w-0 bg-transparent text-end text-body-md text-ink-1000 placeholder:text-ink-600 focus:outline-none"
                 />
-                <img :src="envelopeIconUrl" alt="" aria-hidden="true" width="24" height="18" class="size-6 shrink-0" />
+                <img
+                  :src="envelopeIconUrl"
+                  alt=""
+                  aria-hidden="true"
+                  width="24"
+                  height="18"
+                  class="size-6 shrink-0"
+                />
               </div>
-              <p v-if="form.errors.email" class="text-label-md text-brand">{{ form.errors.email }}</p>
+              <p v-if="form.errors.email" class="text-label-md text-brand">
+                {{ form.errors.email }}
+              </p>
             </div>
 
             <button
@@ -170,7 +188,14 @@ watch(
 
         <template v-else>
           <div class="flex flex-col items-center gap-6 py-4 text-center" role="status">
-            <img :src="successIconUrl" alt="" aria-hidden="true" width="96" height="96" class="size-24" />
+            <img
+              :src="successIconUrl"
+              alt=""
+              aria-hidden="true"
+              width="96"
+              height="96"
+              class="size-24"
+            />
             <p class="text-heading-sm text-ink-50">{{ t('forms.newsletter.success') }}</p>
           </div>
         </template>

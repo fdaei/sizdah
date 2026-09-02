@@ -17,14 +17,14 @@ Canonical picks among duplicates resolved at Phase 5 (see GAPS G2/G5).
 | 1 | Home | `450:4908` | page (variant) | 1440×11273 | `/{locale}` | pending |
 | 2 | projects (Work index) | `222:1989` | page (variant) | 1440×4656 | `/{locale}/work` | **done** |
 | 2 | projects (Work index) | `261:2545` | page (variant) | 1440×4656 | `/{locale}/work` | pending |
-| 2 | projects (short/state) | `226:3080` | page? state | 1440×1762 | `/{locale}/work` | pending |
+| 2 | projects (short/state) | `226:3080` | page? state | 1440×1762 | `/{locale}/work` | **excluded** — stray exploration duplicate (an old-template Contact draft, unrelated to Work); see GAPS G52 |
 | 3 | case study (Work show) | `336:5374` | page | 1440×7403 | `/{locale}/work/{slug}` | **done** |
 | 4 | services | `308:4492` | page | 1440×5333 | `/{locale}/services` | **done** |
 | 5 | about | `336:5623` | page | 1440×4021 | `/{locale}/about` | **done** |
 | 6 | blog list (Insights index) | `268:4158` | page (variant) | 1440×4277 | `/{locale}/insights` | **done** |
 | 6 | blog list (Insights show) | `285:4590` | page (variant) | 1440×4844 | `/{locale}/insights/{slug}` | **done** |
-| 6 | blog list (state) | `416:4959` | page? state | 1440×1024 | `/{locale}/insights` | pending |
-| 6 | blog list (state) | `416:5834` | page? state | 1440×1024 | `/{locale}/insights` | pending |
+| 6 | blog list (state) | `416:4959` | page? state | 1440×1024 | `/{locale}/insights` | **done** — nests the lead-magnet dialog (`416:5399`), built as `LeadMagnetModal.vue`; see GAPS G51 |
+| 6 | blog list (state) | `416:5834` | page? state | 1440×1024 | `/{locale}/insights` | **done** — nests the lead-magnet dialog's success state (`416:6003`); see GAPS G51 |
 | 7 | contact us | `279:6325` | page | 1440×1755 | `/{locale}/contact` | **done** |
 | 8 | privacy policy | `279:5924` | page | 1440×2818 | `/{locale}/privacy-policy` | **done** |
 | 9 | term of use | `281:6773` | page | 1440×2443 | `/{locale}/terms` | **done** |

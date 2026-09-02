@@ -59,21 +59,18 @@ These pages were previously built *blind* (from controller data, no frame). They
 are the highest-value targets of this rebuild — real designs now exist. Verify
 which projects frame is canonical at Phase 5.
 
-## G8 — FA/AR font: design specifies "Peyda"  [CLOSED 2026-08-21]  (severity: med)
+## G8 — FA/AR font: design specifies "Peyda"  [RE-CLOSED 2026-09-02]  (severity: med)
 Figma binds every FA text style to **Peyda** and every eyebrow / display accent
 to **Maneli**. Self-hosted faces are poppins, vazirmatn, doran, idealist — neither
 Peyda nor Maneli.
 
-**Resolved: the substitutes are the intended faces.** Both Peyda and Maneli are
-paid fontiran.com products (Peyda 398–698k تومان desktop + a separate web licence
-from 350k; Maneli 3,980,000 ریال) and no free/redistributable cut exists — the
-only "free" sources are unlicensed re-uploads the publisher asks people to report.
-Human decision 2026-08-21: **keep Vazirmatn for FA body text and
-Idealist → Doran FaNum → Vazirmatn (the `font-display` token) for eyebrows and
-display accents.** Do not reopen this without a purchased licence; if one is
-bought, drop the woff2 files into `public/fonts/peyda/` and `public/fonts/maneli/`
-and rewire `fontFamily` in tailwind.config.js — every consumer already goes
-through the tokens, so nothing else changes.
+**2026-08-21 — originally resolved with substitutes.** Both Peyda and Maneli
+are paid fontiran.com products (Peyda 398–698k تومان desktop + a separate web
+licence from 350k; Maneli 3,980,000 ریال) and no free/redistributable cut
+existed at the time — the only "free" sources were unlicensed re-uploads the
+publisher asks people to report. Human decision: keep Vazirmatn for FA body
+text and Idealist → Doran FaNum → Vazirmatn (the `font-display` token) for
+eyebrows and display accents, until a licence was bought.
 
 Consequence handled the same day: `hero-line` / `hero-accent` are weight **600**
 and `public/fonts/vazirmatn` shipped 400/500/700 only, so the hero rendered with a
@@ -84,12 +81,15 @@ already in the repo by checksum; SIL OFL) is now installed and declared in
 Line-height: raw variable says 100% but laid-out nodes measure ~1.5 — superseded,
 see the 1.25 re-measurement in CLAUDE.md.
 
-**Update 2026-09-01:** first licensed Peyda cut supplied — `Peyda-ExtraBold`
-(weight 800) is now installed in `public/fonts/peyda/` and declared in
-`resources/css/fonts.css`. `fontFamily.arabic`/`.sans` in tailwind.config.js
-are still NOT rewired: only this one weight exists, and the body text tokens
-need 400/500/600/700 too. Rewire once the remaining Peyda weights (and, if
-wanted, Maneli) arrive — see the plan two paragraphs up.
+**2026-09-02 — licence bought, both faces installed.** All 9 Peyda weights
+(Thin through Black) and Maneli (single static cut) are now self-hosted —
+`public/fonts/peyda/*.woff2` and `public/fonts/maneli/Maneli.woff2` — with
+`@font-face` blocks in `resources/css/fonts.css`. `fontFamily.arabic` now
+leads with Peyda and `fontFamily.display` with Maneli in
+`tailwind.config.js`; Vazirmatn / Idealist / Doran FaNum stay in the fallback
+chain per the original plan, so no component changes were needed. Original
+`.ttf` sources are kept alongside the converted `.woff2` files in the same
+directories (matches the existing Doran FaNum convention).
 
 ## G6 — i18n: file is PERSIAN-only  [CORRECTED 2026-08-21]  (severity: med)
 The original entry below had this exactly backwards. A full-file text scan
@@ -1688,3 +1688,85 @@ label, matching `268:5250`) side by side, zero console errors on either.
 This is also the shared-component regression check the master brief asks
 for: `FilterChips` has exactly two consumers (Work index, Insights index),
 both were re-verified after the change, and neither shows a defect.
+
+## G51 — Lead-magnet signup: a whole modal was missing, found nested inside an unrelated exploration frame  (2026-09-01)  (severity: high)
+
+`LeadMagnetBanner.vue`'s docblock had asserted "the frame draws a button but
+no email field, so this links to the section's own CTA" — true of the two
+banner frames themselves (`303:4455` article, `391:4795` Home) in isolation,
+but wrong about the feature: neither banner frame is a dead end. Their CTA
+opens a signup dialog that lives elsewhere in the file — `416:5399` (default
+state) and `416:6003` (success state), both nested inside two otherwise-
+identical "blog list" exploration frames (`416:4959` / `416:5834`) rather
+than filed as their own component sheet. Easy to miss and previously missed;
+found this pass by opening those exploration frames for an unrelated reason
+and recognising the dialog inside one.
+
+The frame draws a "نام و نام خانوادگی" (full name) field alongside email, but
+`newsletter_subscriptions` and `NewsletterSubscriptionRequest` only ever
+collect an email — no `name` column exists anywhere in the schema. Adding one
+for this alone is a schema change for a value nothing downstream reads (the
+success state is generic, doesn't greet by name), so — per the "don't
+redesign backend just for frontend convenience" rule — the field was dropped
+rather than added: the modal renders email-only, matching the real contract
+over the frame literally.
+
+**Built:** `LeadMagnetModal.vue` (new), dialog mechanics copied from
+`MobileMenu.vue` (focus into the panel on open, Escape + backdrop-click to
+close, body-scroll lock). Wired into `LeadMagnetBanner.vue` (the CTA now
+opens the modal instead of linking out) and given a required `source: 'home'
+| 'article'` prop, threaded from `Home.vue` and `Insights/Show.vue` to match
+`NewsletterSubscriptionRequest`'s `source` enum. New `common.close`,
+`forms.newsletter.disclaimer`, and `forms.newsletter.dialog_label` keys added
+in all three locales; `fa`'s `email_placeholder` updated from the generic
+English mock text to a real Persian placeholder.
+
+Two token bugs caught in self-review before live verification: the title
+was first built at `text-heading-md` (28px) against the frame's actual
+Heading/XL (32px), and the panel width was first guessed at `max-w-[612px]`
+(this project's common `maxWidth.measure` token) before re-deriving the real
+value from the frame's raw metadata (`x=367 width=706` inside the 1440-wide
+overlay) — 706, not 612.
+
+**A real interaction bug found during live verification, not a Figma-fidelity
+gap:** submitting successfully swaps the form for the success view via
+`v-else`, which removes the focused submit button from the DOM. The browser
+has nowhere to put focus but `<body>`, and once focus leaves the panel,
+`@keydown.esc` on the panel never fires — Escape stopped closing the dialog
+on the success screen only. Fixed by moving focus to the panel itself
+(`panel.value?.focus()`) right after `succeeded` flips true, the same
+`nextTick` + `.focus()` pattern the open-watcher already uses. Verified live:
+open → fill → submit → success text renders → Escape closes cleanly; also
+re-verified the plain open/close path and the honeypot field are untouched.
+
+(Also verified during end-to-end testing, not a code issue: Laravel's
+`email:rfc,dns` validator correctly rejects `qa-test@example.com` —
+`example.com` is a reserved documentation domain per RFC 2606 with no real
+deliverable mail server, despite `checkdnsrr('example.com', 'MX')` returning
+true for unrelated DNS record reasons. `gmail.com` addresses pass the same
+validator cleanly. Test fixture problem, not an app bug.)
+
+## G52 — `226:3080`: a stray exploration duplicate, not an unimplemented page  (2026-09-02)  (severity: none — verification only)
+
+Completeness-audit item carried over from the previous session as
+unresolved: a frame named "projects" at `226:3080`, never actually opened.
+Pulling it now shows its content has nothing to do with projects — it's a
+full alternate Contact page (small-title "تماس با ما", heading "جایی که
+استراتژی شکل می‌گیرد", a contact-details card plus a form with brand/name/
+service/phone/message fields). The name is a leftover from whatever frame it
+was duplicated from and was never updated to match its actual content.
+
+Treated as a stray duplicate rather than a second real page to reconcile,
+on the strength of four independent signals: (1) it sits at canvas
+coordinates (`x=-9717, y=8433`) far outside the cluster every real page frame
+in this file occupies; (2) its footer is the old template wholesale — brand
+name "Sahra", `Sahramarketing@gmail.com`, English "Muscat, Oman", generic
+"Quick Links / Social Links / Info" columns — none of which the live site
+has ever shown, including on the page this looks like a draft of; (3) it's a
+plain white-background/light-card design with no relative in the site's
+otherwise-consistently-dark visual language (Home, Legal, Work, Insights,
+and the real Contact page are all dark ink-1000 surfaces); (4) the real,
+currently-implemented Contact page already comes from a different, distinct
+node (`279:6325`, see that file's own docblock) whose content, styling, and
+copy all match the live dark theme and the actual Persian footer. No code
+change made — recorded so this node doesn't resurface as "unresolved" again.

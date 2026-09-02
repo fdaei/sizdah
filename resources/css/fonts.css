@@ -1,14 +1,16 @@
 /*
  | Self-hosted webfonts — Sizdah.
  |
- | EN     -> Poppins    (Google Fonts, OFL — scripts/fetch-fonts.sh)
- | FA/AR  -> Vazirmatn  (OFL)
+ | EN          -> Poppins    (Google Fonts, OFL — scripts/fetch-fonts.sh)
+ | FA/AR body  -> Peyda, fallback Vazirmatn (both self-hosted)
+ | FA/AR/EN
+ |   display   -> Maneli, fallback Idealist / Doran FaNum / Vazirmatn
  |
- | The Figma variables name "Peyda" for every FA-Desktop text style. Peyda is
- | not licensed here; Vazirmatn is the specified substitute and has near
- | identical metrics, so the frame heights still hold. Swapping Peyda in later
- | means dropping the .woff2 files in public/fonts/peyda/ and adding a
- | @font-face block above Vazirmatn — no component changes.
+ | The Figma variables name "Peyda" for every FA-Desktop text style and
+ | "Maneli" for eyebrows / display accents — both are now licensed and
+ | installed (see G8 in .figma-sync/GAPS.md for the licensing history).
+ | Vazirmatn is kept as the fallback face (near-identical metrics, so frame
+ | heights still hold if a Peyda file ever goes missing).
  */
 
 /* ---------------------------------------------------------------- Poppins */
@@ -83,12 +85,13 @@
 
 /* ------------------------------------------------- Display (eyebrows, accents)
 
-   The frames set every section eyebrow and the package prices in a display face
-   the file names "Maneli" / "Idealist". Idealist is Latin-only — it has no
-   Arabic-script coverage at all — so it carries an explicit unicode-range and
-   Doran FaNum picks up fa/ar. Consumed as the `font-display` Tailwind token
-   (Idealist -> Doran FaNum -> Vazirmatn); never hardcode `Idealist, serif`, or
-   fa/ar falls through to a generic serif instead of the Arabic display face. */
+   The frames set every section eyebrow and the package prices in "Maneli",
+   now licensed and leading the `display` Tailwind token. Idealist is
+   Latin-only — it has no Arabic-script coverage at all — so it carries an
+   explicit unicode-range and stays in the fallback chain alongside Doran
+   FaNum (fa/ar) for any glyph Maneli itself is missing. Always reach for the
+   `font-display` token rather than naming a face directly; a bare
+   `Idealist, serif` drops fa/ar onto a generic serif. */
 
 @font-face {
   font-family: 'Idealist';
@@ -127,16 +130,94 @@
 
 /* ------------------------------------------------------------------ Peyda
    The Figma frames' actual FA/AR body face (see G8 in .figma-sync/GAPS.md —
-   the licence gate that had FA/AR falling back to Vazirmatn). Only the
-   ExtraBold (800) cut has been supplied so far; the `arabic` / `sans` tokens
-   in tailwind.config.js are NOT rewired yet, since the 400/500/600/700 body
-   weights still need their own files first — wiring now would render all FA
-   copy in ExtraBold regardless of requested weight. */
+   the licence gate that had FA/AR falling back to Vazirmatn). The full
+   weight range is now licensed and installed, so the `arabic` fontFamily
+   token in tailwind.config.js leads with Peyda; Vazirmatn stays as the
+   fallback (near-identical metrics, per G8). */
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/peyda/Peyda-Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/peyda/Peyda-ExtraLight.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/peyda/Peyda-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/peyda/Peyda-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/peyda/Peyda-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/peyda/Peyda-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/peyda/Peyda-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @font-face {
   font-family: 'Peyda';
   src: url('/fonts/peyda/Peyda-ExtraBold.woff2') format('woff2');
   font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/peyda/Peyda-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ----------------------------------------------------------------- Maneli
+   The Figma frames' actual eyebrow / display-accent face (see G8). Single
+   static cut (no weight family), full Latin + fa/ar coverage on its own —
+   unlike Idealist it needs no unicode-range split with Doran FaNum. Now
+   leads the `display` fontFamily token; Idealist / Doran FaNum / Vazirmatn
+   remain as the fallback chain. */
+
+@font-face {
+  font-family: 'Maneli';
+  src: url('/fonts/maneli/Maneli.woff2') format('woff2');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }

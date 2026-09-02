@@ -52,14 +52,14 @@ const modalOpen = ref(false)
     :style="
       props.size === 'sm'
         ? {
-          backgroundImage:
-            'linear-gradient(-8.86deg, rgb(248 185 55 / 0) 2.32%, rgb(248 185 55 / 10%) 100%), linear-gradient(0deg, #fef1d7, #fef1d7)',
-        }
+            backgroundImage:
+              'linear-gradient(-8.86deg, rgb(248 185 55 / 0) 2.32%, rgb(248 185 55 / 10%) 100%), linear-gradient(0deg, #fef1d7, #fef1d7)',
+          }
         : undefined
     "
   >
     <template v-if="props.size === 'lg'">
-<!--
+      <!--
         391:4800 is a 400x400 ruled sheet parked at the card's inline end and
         pulled 85 above its top edge, so `overflow-hidden` crops it to the
         right third. Stretching it to `h-full w-[55%] object-cover` turned its

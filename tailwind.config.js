@@ -142,24 +142,23 @@ export default {
       fontFamily: {
         /*
          | The Figma variables name "Peyda" for every FA text style. Peyda is
-         | not licensed for this project, so fa/ar render in Vazirmatn — near
-         | identical metrics, and the stack the brief specifies. Latin copy
-         | uses Poppins. Both are self-hosted (public/fonts/*).
-         |
-         | Deviation from the file is deliberate and recorded in
-         | TRANSLATIONS_TODO.md / FIGMA/state.json.
+         | now licensed and self-hosted (public/fonts/peyda/, all 9 weights),
+         | with Vazirmatn kept as the fallback (near-identical metrics — see
+         | G8 in .figma-sync/GAPS.md). Latin copy uses Poppins.
          */
         sans: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        arabic: ['Vazirmatn', 'Tahoma', 'sans-serif'],
+        arabic: ['Peyda', 'Vazirmatn', 'Tahoma', 'sans-serif'],
 
         /*
-         | Eyebrows and display accents. The frames set these in "Maneli" /
-         | "Idealist"; Idealist is licensed and self-hosted but Latin-only, so
-         | Doran FaNum carries fa/ar and Vazirmatn is the last resort. Always
-         | reach for this token rather than naming Idealist directly — a bare
-         | `Idealist, serif` drops fa/ar onto a generic serif.
+         | Eyebrows and display accents. The frames set these in "Maneli",
+         | now licensed and self-hosted (public/fonts/maneli/) with full
+         | Latin + fa/ar coverage on its own. Idealist (Latin-only) and Doran
+         | FaNum (fa/ar) remain as the fallback chain for any glyph Maneli is
+         | missing. Always reach for this token rather than naming a face
+         | directly — a bare `Idealist, serif` drops fa/ar onto a generic
+         | serif.
          */
-        display: ['Idealist', 'Doran FaNum', 'Vazirmatn', 'serif'],
+        display: ['Maneli', 'Idealist', 'Doran FaNum', 'Vazirmatn', 'serif'],
       },
 
       fontSize: {
@@ -195,7 +194,7 @@ export default {
         'display-md': ['40px', { lineHeight: '1.27', fontWeight: '700' }],
         'display-lg': ['48px', { lineHeight: '1.27', fontWeight: '700' }],
         // Service block numerals (315:4854). The frame sets these in Maneli,
-        // which is not licensed here, so they take the display stack.
+        // which now leads the `display` stack (see G8 in .figma-sync/GAPS.md).
         'display-xl': ['64px', { lineHeight: '1', fontWeight: '400' }],
 
         /*

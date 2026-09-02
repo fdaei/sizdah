@@ -149,7 +149,7 @@ const nodes = computed(() => {
           class="absolute left-[41.25%] top-[0.39%] w-[11.11%]"
         />
 
-<!--
+        <!--
           Decorative: the two Yellow/900 crosses (268:3460 at 138,2120 and
           268:3459 at 1090,2552) and the 3x2 dot grid (268:3437 at 1282,2158).
           All three were missing from the band.
