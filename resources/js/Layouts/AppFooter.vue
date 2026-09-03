@@ -4,37 +4,41 @@ import { Link, usePage } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
 import { Mail, MapPin, Phone } from 'lucide-vue-next'
 import BrandLogo from '@/Components/BrandLogo.vue'
+import footerBloomUrl from '~img/sizdah/shared/footer-bloom.svg'
 import type { NavItem, SharedProps } from '@/types'
 
 /**
- * Site footer. Figma I279:6327 — brand block + link columns + bottom bar.
+ * Site footer. Figma page-instance Footer, e.g. `688:5781` on Contact
+ * (`279:6325`) — every page frame carries its own copy at this node range
+ * (`688:5xxx`/`688:6xxx`), all structurally identical.
  *
- * DEVIATION, deliberate: the Footer instance in the Sizdah file was never
- * rebranded. It still carries the SAHRA logotype, LTR English copy, the old
- * `black/*` palette and a hardcoded "© 2026 Sahra" line. Shipping it verbatim
- * would put the previous agency's name on every page of this site, so the
- * *structure* is taken from the frame (brand + tagline, link columns, rule,
- * copyright / legal row) while the content comes from `navigation.footer` and
- * `settings` and the colours come from the Sizdah ramp. Logged in
- * FIGMA/state.json.
+ * RE-VERIFIED 2026-09-02 (see GAPS G53): the file's footer was redesigned
+ * since the 2026-08-21 pass this docblock previously described. The SAHRA/
+ * unrebranded-instance deviation this docblock used to document no longer
+ * applies — the current frame is properly Sizdah-branded (own wordmark,
+ * Persian copy) — so the structure AND content now both come straight from
+ * the frame; nothing is being substituted.
  *
- * Geometry and colour ARE taken from the frame and were re-measured 2026-08-21:
- * py space48, a 402 brand column on gap 32, three link columns on gap 88, the
- * top block 40 above a bottom bar that pads 24 either side of its rule. Column
- * heights confirm the type runs on 1.5, not the 1.25 scale default — the Quick
- * Links column is 24 + 16 + 6x21 + 5x12 = 226, exactly the frame's height.
+ * Geometry: outer frame 1440x501.76, content track inset px96/pt48
+ * (`container-sizdah` at `xl`). Top block (brand + 3 nav columns) is
+ * 1248x218; a 40px gap to the bottom legal bar (1248x66, itself a 24px-padded
+ * rule + 18px text row). Column heights still confirm the 1.5 type scale.
+ * Colours unchanged from the 2026-08-21 pass: column titles black/900
+ * `#393637`, links/tagline/bottom-bar black/600 `#7B7979`, top hairline
+ * black/100 `#E9E9E9`, bottom-bar hairline black/300 `#BDBCBD`.
  *
- * Two colour findings that had been inverted here: the column TITLES are
- * black/900 #393637 (a deliberately recessive label, darker than the links) and
- * the links, tagline and bottom bar are black/600 #7B7979. Both hairlines are
- * light, not dark — the footer's top rule is black/100 #E9E9E9 and the bottom
- * bar's is black/300 #BDBCBD; both were ink-800. Sampled off the rendered frame.
+ * NEW this pass — a `Group 26` decorative wash sits behind the whole block,
+ * x=96/y=52, 1248x449.76, seven brand-yellow (`#F8B937`) blobs at 3% opacity.
+ * It alone accounts for the frame's height: 52 (its own top offset) + 449.76
+ * (its height) = 501.76, exactly the frame height — the real content only
+ * needs 324px, so the frame carries ~130px of pure bottom padding purely to
+ * give the wash room to breathe. Exported as `footer-bloom.svg` and painted
+ * as a `container-sizdah`-track-width background, `xl:` and up only — same
+ * "container padding only matches the frame's 96px gutter at `xl`" reasoning
+ * as Legal's trust-badge (`Legal.vue`, GAPS G49).
  *
- * NOT implemented, deliberately: the 1248x304 outlined wordmark (1065:2315) that
- * bleeds past the footer's bottom edge. It spells SAHRA, and it is drawn as
- * #231F20 at 15% over #141414 — it renders #171717, a 3/255 tonal shift that is
- * imperceptible. Redrawing it with the Sizdah letterforms would be inventing
- * artwork for an invisible effect. Logged in .figma-sync/GAPS.md G24.
+ * The old NOT-implemented note about a bleeding SAHRA wordmark (former
+ * GAPS G24) is retired along with it — the current frame does not draw one.
  */
 const page = usePage<SharedProps>()
 
@@ -50,8 +54,15 @@ const contact = computed(() => settings.value.contact)
 
 <template>
   <footer class="rounded-t-lg border-t border-warm-100 bg-ink-1000 shadow-footer">
-    <div class="container-sizdah py-12">
-      <div class="flex flex-col gap-10">
+    <div class="container-sizdah relative pb-12 pt-12 xl:pb-[177.76px]">
+      <img
+        :src="footerBloomUrl"
+        alt=""
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-x-0 top-[52px] hidden w-full xl:block"
+      />
+
+      <div class="relative flex flex-col gap-10">
         <div class="flex flex-col justify-between gap-10 md:flex-row md:items-start">
           <!-- Brand + positioning line -->
           <div class="flex max-w-[402px] flex-col gap-8">
@@ -129,16 +140,16 @@ const contact = computed(() => settings.value.contact)
 
           <div class="flex items-center gap-4">
             <Link
-              :href="route('legal.privacy')"
-              class="text-label-lg leading-normal text-warm-600 underline transition-colors duration-200 ease-brand hover:text-brand"
-            >
-              {{ $t('footer.privacy_policy') }}
-            </Link>
-            <Link
               :href="route('legal.terms')"
               class="text-label-lg leading-normal text-warm-600 underline transition-colors duration-200 ease-brand hover:text-brand"
             >
               {{ $t('footer.terms') }}
+            </Link>
+            <Link
+              :href="route('legal.privacy')"
+              class="text-label-lg leading-normal text-warm-600 underline transition-colors duration-200 ease-brand hover:text-brand"
+            >
+              {{ $t('footer.privacy_policy') }}
             </Link>
           </div>
         </div>

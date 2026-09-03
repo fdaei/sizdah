@@ -14,9 +14,15 @@ import tavakoliUrl from '~img/sizdah/clients/tavakoli.svg'
  * is fixed; each mark keeps its own height (pars is 80x24.41), so the box
  * centres them rather than scaling them to fill it.
  *
- * The marks are drawn in Figma at full colour and knocked back with
- * `mix-blend-luminosity`, so they read as one grey row against the ink ground
- * instead of six competing brand palettes.
+ * The marks are drawn in Figma at full colour and knocked back to luminosity,
+ * so they read as one grey row against the ink ground instead of six
+ * competing brand palettes. Figma's own paint is `mix-blend-mode: luminosity`,
+ * but every logo here sits inside a GSAP `data-reveal` item — GSAP leaves a
+ * non-`none` `transform` on the `<li>` even at rest (`translate(0px, 0px)`),
+ * which per spec creates a new stacking context and silently isolates any
+ * descendant `mix-blend-mode` from the real page background, so it blends
+ * against nothing and renders at full colour. `grayscale` is self-contained
+ * (a filter, not a compositing blend) and immune to that, so it stands in.
  *
  * Sourcing order: the CMS logo if an editor has uploaded one, otherwise the
  * frame export matched on the client's name. Every `Client` row currently has
@@ -50,7 +56,7 @@ const source = computed(() => props.client.logo || EXPORTS[props.client.name] ||
       width="80"
       loading="lazy"
       decoding="async"
-      class="h-auto w-20 object-contain opacity-80 mix-blend-luminosity"
+      class="h-auto w-20 object-contain grayscale"
     />
   </span>
   <span v-else class="text-title-sm text-ink-400">{{ props.client.name }}</span>

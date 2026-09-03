@@ -44,7 +44,7 @@ const rest = computed(() => props.posts.slice(1, 3))
       >
         <!-- 430:5311 — the lead post, cream on the dark ground. -->
         <article
-          class="flex flex-col gap-4 rounded-xl border border-gold-200 p-4 shadow-card sm:flex-row"
+          class="flex flex-col gap-4 rounded-xl border border-gold-200 p-4 shadow-card sm:flex-row sm:justify-between"
           style="
             background-image:
               linear-gradient(-32.7deg, rgb(248 185 55 / 0) 2.3248%, rgb(248 185 55 / 10%) 100%),
@@ -56,15 +56,15 @@ const rest = computed(() => props.posts.slice(1, 3))
             :src="lead.image.src"
             :srcset="lead.image.srcset"
             :alt="lead.image.alt || lead.title"
-            width="287"
-            height="390"
+            width="279"
+            height="392"
             loading="lazy"
             decoding="async"
-            class="w-full rounded-lg object-cover sm:order-first sm:w-[47%]"
+            class="w-full rounded-lg object-cover sm:order-first sm:w-[279px] sm:shrink-0"
           />
 
-          <div class="flex flex-1 flex-col justify-between gap-6 p-2">
-            <div class="flex flex-col gap-4">
+          <div class="flex flex-col justify-between gap-6 p-2 sm:w-[270px] sm:shrink-0">
+            <div class="flex flex-col gap-[80px]">
               <p class="flex items-center gap-2 text-body-md text-ink-600">
                 <img
                   :src="calendarUrl"
@@ -77,13 +77,15 @@ const rest = computed(() => props.posts.slice(1, 3))
                 <time :datetime="lead.publishedAtIso">{{ lead.publishedAt }}</time>
               </p>
 
-              <h3 class="text-title-md text-gold">
-                <Link :href="lead.url" class="transition-opacity hover:opacity-80">
-                  {{ lead.title }}
-                </Link>
-              </h3>
+              <div class="flex flex-col gap-[32px]">
+                <h3 class="text-title-md text-gold">
+                  <Link :href="lead.url" class="transition-opacity hover:opacity-80">
+                    {{ lead.title }}
+                  </Link>
+                </h3>
 
-              <p v-if="lead.excerpt" class="text-body-md text-warm-700">{{ lead.excerpt }}</p>
+                <p v-if="lead.excerpt" class="text-body-md text-warm-700">{{ lead.excerpt }}</p>
+              </div>
             </div>
 
             <Link
@@ -112,14 +114,14 @@ const rest = computed(() => props.posts.slice(1, 3))
                 :src="post.image.src"
                 :srcset="post.image.srcset"
                 :alt="post.image.alt || post.title"
-                width="190"
-                height="190"
+                width="188"
+                height="188"
                 loading="lazy"
                 decoding="async"
-                class="size-[120px] shrink-0 rounded-lg object-cover sm:size-[190px]"
+                class="size-[120px] shrink-0 rounded-lg object-cover sm:size-[188px]"
               />
 
-              <div class="flex min-w-0 flex-col gap-4">
+              <div class="flex min-w-0 flex-col gap-6">
                 <p class="flex items-center gap-2 text-body-md text-ink-200">
                   <img
                     :src="calendarUrl"

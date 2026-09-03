@@ -1770,3 +1770,86 @@ currently-implemented Contact page already comes from a different, distinct
 node (`279:6325`, see that file's own docblock) whose content, styling, and
 copy all match the live dark theme and the actual Persian footer. No code
 change made — recorded so this node doesn't resurface as "unresolved" again.
+
+## G53 — Footer was redesigned in Figma after the 2026-08-21 pass; the build had drifted behind it  (2026-09-02)  (severity: high)
+
+Fresh page-by-page audit (post-Home-freeze), starting with the shared header/
+footer/gutter sweep. `get_metadata` on the old footer instance id
+(`279:6327`, cited by every prior docblock and by GAPS G24) now 404s — the
+file's footer was rebuilt since the last pass. Every current page frame
+carries a new footer node (`688:5781` on Contact, `688:5893` Insights,
+`688:6117` Services, `688:6229` case study, `688:6341` About, `688:6453`
+privacy, `688:6565` terms — same structure on all seven, confirmed by
+metadata diff), height **501.76**, not the old 431. `13:2766`/`261:2545`/
+`226:3080`/`416:4959`/`416:5834` still carry the *old* 431-tall instance —
+consistent with the manifest's read that those five frames are superseded/
+stray, not live.
+
+Pulling `688:5781` (Contact's copy, representative of all seven) and
+screenshotting it turned up four real deltas against the shipped
+`AppFooter.vue`:
+
+1. **A full-width decorative wash was never built.** `Group 26` (`688:5840`),
+   x=96/y=52, 1248x449.76, seven brand-yellow `#F8B937` blobs at 3% opacity —
+   absent from the component entirely. It alone explains the height jump:
+   52 (its own offset) + 449.76 = 501.76, exactly the frame height; the real
+   content only needs 324px, so ~130px of the frame's height is pure padding
+   to give the wash room. This is very likely what "the footer is known to be
+   visually incorrect" was pointing at.
+2. **The bottom-bar legal links were in the wrong order.** Figma's reading
+   order (right-to-left) is Terms then Privacy — `688:5834` (x=0, w=153) is
+   "سیاست حفظ حریم خصوصی", `688:5836` (x=169, w=80) is "شرایط و قوانین",
+   and RTL reads right-to-left so the right-hand (larger-x) item reads
+   first. Confirmed by cropping/zooming the frame screenshot, not by width
+   guesswork alone. `AppFooter.vue` rendered `[Privacy, Terms]` in DOM
+   order, which puts Privacy on the right (read first) — inverted.
+3. **The privacy-link label text had drifted.** Figma draws "سیاست حفظ
+   حریم خصوصی"; `lang/fa/footer.php`'s `privacy_policy` key held the
+   shorter "حریم خصوصی". Static i18n copy, not CMS content, so this one is a
+   direct fix (unlike the Legal page's own admin-authored-content drift,
+   G49, which is out of scope for the same reason it was there).
+4. **The old SAHRA-deviation rationale in the component's docblock is now
+   false.** The current frame is properly Sizdah-branded (own wordmark,
+   Persian tagline) — there is nothing left to deviate from. Docblock
+   rewritten; the "not implemented: bleeding SAHRA wordmark" note (old G24)
+   is retired with it, since the current frame doesn't draw one.
+
+**Fixed:** exported `Group 26` as `resources/images/sizdah/shared/footer-bloom.svg`
+and painted it as an `absolute inset-x-0 top-[52px]` layer inside
+`container-sizdah` (same track width, so no extra alignment math needed),
+`xl:` and up only — same "container padding only matches the frame's 96px
+gutter at `xl`" reasoning as Legal's trust-badge (G49). Padding changed from
+uniform `py-12` to `pt-12 pb-12 xl:pb-[177.76px]` (48 + the wash's own
+129.76) so the wash has room without affecting `lg` and below, where there's
+no ground-truth frame anyway. Swapped the two legal-link `<Link>`s. Updated
+`footer.privacy_policy`.
+
+**A stacking bug found and fixed during live verification, not a Figma gap:**
+first attempt pinned the wash at `-z-10`. Since neither it nor its parent
+carried an explicit `z-index`, `position: relative` alone doesn't open a new
+stacking context, so the negative z-index escaped to whatever ancestor
+*does* — landing the wash behind the footer's own opaque `bg-ink-1000` and
+making it invisible. Fixed by dropping the explicit z-index entirely: the
+wash (first in DOM) and the content wrapper (now also `relative`, later in
+DOM) resolve correctly via tree order alone once both are "positioned."
+
+**Verified live**, not just code-reviewed: `/fa/contact` at 1440px, cropped
+and blended 50/50 against the Figma screenshot of `688:5781` — text,
+columns, wash position and bottom bar all align closely (only the CTA-header
+area's separate background gradient noise showed up in a pixel diff, unrelated
+to this component). Re-verified on `/fa` (Home, frozen) at the same size —
+identical footer render, confirming the shared-component change doesn't
+regress the frozen page. Also checked at 390px: the wash correctly stays
+hidden below `xl` (no ground-truth mobile frame exists per CLAUDE.md), no
+console errors, no broken stacking, `pb-12` unchanged from before.
+
+**Two things flagged, not fixed — content drift, not template bugs (same
+class as G49):** `SiteSettingsSeeder`'s social-links list now has 5 entries
+(adds `X`/Twitter) where the frame's `شبکه های اجتماعی` column still shows
+4 — the mock is behind the real accounts, not the other way round, so
+nothing was removed. And the footer's contact block renders "مسقط، عمان" /
+`Sahramarketing@gmail.com` where the frame's Info column reads "کرمان،
+ایران" / `Sizdahmarketing@gmail.com` — the identical Sahra-era
+`settings.contact` drift G49 already logged for the Legal page's trust
+badge, now confirmed present in the footer too since both read the same
+settings source. Filament-content ownership issue, not a rebuild-scope fix.

@@ -77,7 +77,7 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
                 />
               </summary>
 
-              <p class="mt-6 text-body-lg text-warm-700">{{ faq.answer }}</p>
+              <p class="mt-4 text-body-lg text-warm-700">{{ faq.answer }}</p>
             </details>
           </li>
         </ul>

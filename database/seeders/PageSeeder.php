@@ -329,7 +329,10 @@ final class PageSeeder extends Seeder
             [
                 '_icon' => 'optimization',
                 'en' => ['value' => '06', 'title' => 'Reporting & Optimization', 'description' => 'Performance tracking and data-driven optimization'],
-                'fa' => ['value' => '۰۶', 'title' => 'گزارش‌دهی و بهینه‌سازی', 'description' => 'پایش عملکرد و بهینه‌سازی داده‌محور'],
+                // 523:5759 verbatim: title/description previously didn't match the
+                // frame at all (a different, unrelated pair of strings) — no
+                // documented reason, so treated as a miss and corrected.
+                'fa' => ['value' => '۰۶', 'title' => 'تحلیل و رشد', 'description' => 'بررسی نتایج و تحلیل داده‌ها و بهینه‌سازی مستمر برای رشد پایدار برند'],
                 'ar' => ['value' => '٠٦', 'title' => 'التقارير والتحسين', 'description' => 'تتبع الأداء والتحسين القائم على البيانات'],
             ],
         ]);

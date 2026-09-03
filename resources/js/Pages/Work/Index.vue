@@ -28,6 +28,16 @@ import type { FilterOption, PageSectionData, ProjectSummary, SectionMap, SeoMeta
  * does. Its lines measure 109.095px apart on both axes, so it is drawn with the
  * shared `.grid-mesh` background rather than shipped as an SVG — the same way
  * About draws its own mesh (359:9560, 109x118).
+ *
+ * RE-VERIFIED 2026-09-02: the frame's grid is not a uniform two-up — the
+ * first row (`226:2880`) holds three 400-wide "project post" instances
+ * (`226:2818` etc.), and only the rows after it (`226:2957`, `226:3019`) are
+ * the 612-wide two-up this docblock used to describe exclusively. Both sizes
+ * are the *same* Figma component ("project post") just resized, and its
+ * detail block underneath (category/title/excerpt/services) uses fluid
+ * flex/gap layout at both widths — 148px tall either way — so `ProjectPostCard`
+ * needed no size-specific variant, just a grid that narrows its first three
+ * cells to three columns instead of two. See GAPS G54.
  */
 const props = defineProps<{
   heading: { eyebrow: string; title: string; description: string }
@@ -50,6 +60,19 @@ const filterOptions = computed<FilterOption[]>(() => [
 ])
 
 const finalCta = computed<PageSectionData | undefined>(() => props.sections.final_cta)
+
+/**
+ * The frame's first row is a compact three-up; everything after it is the
+ * larger two-up. Only split off a featured row when there are enough
+ * projects to fill it — otherwise the existing two-up grid degrades fine on
+ * its own for 1-2 results.
+ */
+const featuredProjects = computed<ProjectSummary[]>(() =>
+  props.projects.length >= 3 ? props.projects.slice(0, 3) : [],
+)
+const remainingProjects = computed<ProjectSummary[]>(() =>
+  props.projects.slice(featuredProjects.value.length),
+)
 </script>
 
 <template>
@@ -94,17 +117,30 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
         {{ props.activeFilter ? t('common.empty_results') : t('common.empty_projects') }}
       </p>
 
-      <div
-        v-else
-        class="mt-16 grid gap-x-6 gap-y-16 md:mt-[110px] md:grid-cols-2 md:gap-y-24"
-        data-reveal-group
-      >
-        <ProjectPostCard
-          v-for="project in props.projects"
-          :key="project.slug"
-          :project="project"
-          data-reveal
-        />
+      <div v-else class="mt-16 flex flex-col gap-16 md:mt-[110px] md:gap-24" data-reveal-group>
+        <div
+          v-if="featuredProjects.length"
+          class="grid gap-x-6 gap-y-16 sm:grid-cols-2 md:grid-cols-3 md:gap-y-24"
+        >
+          <ProjectPostCard
+            v-for="project in featuredProjects"
+            :key="project.slug"
+            :project="project"
+            data-reveal
+          />
+        </div>
+
+        <div
+          v-if="remainingProjects.length"
+          class="grid gap-x-6 gap-y-16 md:grid-cols-2 md:gap-y-24"
+        >
+          <ProjectPostCard
+            v-for="project in remainingProjects"
+            :key="project.slug"
+            :project="project"
+            data-reveal
+          />
+        </div>
       </div>
 
       <div v-if="finalCta" class="mt-24 md:mt-[259px]">
