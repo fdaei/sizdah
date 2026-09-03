@@ -12,7 +12,7 @@ return [
     'close'               => 'بستن',
 
     'read_more'           => 'ادامه مطلب',
-    'read_article'        => 'خواندن مقاله',
+    'read_article'        => 'مطالعه مقاله',
     'view_all'            => 'مشاهده همه',
     'load_more'           => 'نمونه‌کارهای بیشتر',
     'back'                => 'بازگشت',

@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/vue3'
 import PostMeta from '@/Components/PostMeta.vue'
 import { useTranslations } from '@/Composables/useTranslations'
 import type { PostSummary } from '@/types'
-import arrowUrl from '~img/sizdah/shared/cta-arrow.svg'
+import arrowUrl from '~img/sizdah/shared/read-arrow.svg'
 
 /**
  * Featured post row — Figma 270:5253 (1248x491).
@@ -75,6 +75,7 @@ const { t } = useTranslations()
             :href="props.post.url"
             class="flex items-center gap-2 text-body-lg text-ink-100 transition-colors duration-200 ease-brand hover:text-brand"
           >
+            {{ t('common.read_article') }}
             <img
               :src="arrowUrl"
               alt=""
@@ -83,7 +84,6 @@ const { t } = useTranslations()
               height="24"
               class="size-6 flip-rtl"
             />
-            {{ t('common.read_article') }}
           </Link>
         </div>
       </div>

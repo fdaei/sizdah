@@ -20,8 +20,13 @@ import journeyUrl from '~img/sizdah/about/cta-journey.svg'
  * GAPS G34.
  *
  * The card's grid wash is `.grid-mesh` with an ink hairline on cream. It is
- * cropped to the physical right side of the card and uses oversized cells,
- * leaving the copy side on a clean cream background.
+ * cropped to the physical right side of the card (the frame's own raster
+ * fill sits at 42.53%..100% of the card width, i.e. the right ~58%) and uses
+ * oversized cells, leaving the copy side on a clean cream background. The
+ * frame draws this at 10% opacity over a near-white line/fill, which is
+ * barely visible even under a heavy contrast boost on the reference
+ * screenshot — `--mesh-color` is tuned faint (2%) to match that, not the
+ * 6% that made an earlier pass visibly grid-like.
  */
 const props = defineProps<{ section: PageSectionData }>()
 </script>
@@ -30,7 +35,7 @@ const props = defineProps<{ section: PageSectionData }>()
   <section class="relative overflow-hidden rounded-xl bg-brand-200 p-8 lg:p-12">
     <div
       class="grid-mesh pointer-events-none absolute inset-y-0 right-0 w-[58%]"
-      style="--mesh-color: rgb(20 20 20 / 6%); --mesh-cell-x: 156px; --mesh-cell-y: 112px"
+      style="--mesh-color: rgb(20 20 20 / 2%); --mesh-cell-x: 113px; --mesh-cell-y: 115px"
       aria-hidden="true"
     />
 

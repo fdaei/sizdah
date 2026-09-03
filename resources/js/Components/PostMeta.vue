@@ -27,8 +27,8 @@ const { t } = useTranslations()
         alt=""
         aria-hidden="true"
         width="24"
-        height="24"
-        class="size-6 shrink-0"
+        height="22"
+        class="h-[22px] w-6 shrink-0"
       />
       <time :datetime="props.post.publishedAtIso">{{ props.post.publishedAt }}</time>
     </span>

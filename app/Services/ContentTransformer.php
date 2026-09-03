@@ -14,6 +14,7 @@ use App\Models\SectionItem;
 use App\Models\Service;
 use App\Models\TeamMember;
 use App\Models\Testimonial;
+use App\Support\JalaliDate;
 use App\Support\Numerals;
 use Illuminate\Support\Collection;
 
@@ -164,17 +165,21 @@ final class ContentTransformer
             'url' => $post->url(absolute: false),
 
             /*
-             | Display string in the locale's own format (config/locales.php:
-             | en "M d, Y" → "May 09, 2024", fa/ar "Y/m/d"), then run through
-             | Numerals because translatedFormat() localises month names but
-             | still emits ASCII digits. The ISO value is deliberately NOT
-             | converted — it feeds <time datetime> and must stay machine
-             | readable.
+             | `fa` renders the Jalali calendar (Figma's post-meta strings are
+             | "۲۰ اردیبهشت ۱۴۰۳", not a Gregorian Y/m/d) via JalaliDate. Other
+             | locales keep the Gregorian display string in their own format
+             | (config/locales.php: en "M d, Y" → "May 09, 2024", ar "Y/m/d"),
+             | run through Numerals because translatedFormat() localises month
+             | names but still emits ASCII digits. The ISO value is
+             | deliberately NOT converted either way — it feeds <time
+             | datetime> and must stay machine readable (Gregorian).
              */
-            'publishedAt' => Numerals::localise(
-                $post->published_at?->translatedFormat(
-                    (string) config('locales.supported.'.app()->getLocale().'.date_format', 'M d, Y'),
-                ) ?? '',
+            'publishedAt' => $post->published_at === null ? '' : (
+                app()->getLocale() === 'fa'
+                    ? JalaliDate::format($post->published_at)
+                    : Numerals::localise($post->published_at->translatedFormat(
+                        (string) config('locales.supported.'.app()->getLocale().'.date_format', 'M d, Y'),
+                    ))
             ),
             'publishedAtIso' => $post->published_at?->toIso8601String() ?? '',
 
