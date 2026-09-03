@@ -17,6 +17,7 @@ final class NewsletterSubscription extends Model
 
     protected $fillable = [
         'email',
+        'name',
         'locale',
         'source',
         'confirmed_at',

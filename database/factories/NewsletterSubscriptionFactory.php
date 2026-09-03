@@ -22,6 +22,7 @@ final class NewsletterSubscriptionFactory extends Factory
     {
         return [
             'email' => $this->faker->unique()->safeEmail(),
+            'name' => $this->faker->name(),
             'locale' => 'en',
             'source' => 'home',
             'unsubscribe_token' => Str::random(64),

@@ -129,9 +129,14 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
           class="relative flex flex-col items-center gap-8 lg:flex-row lg:justify-center lg:gap-[135px]"
         >
           <!--
-            511:9195/9200, 322:5242 — a spark centred on the track, 20px above
-            the top edge of every block after the first. Absolute, because the
-            frame draws it over the block rather than between them: its box
+            511:9195/9200, 322:5242 — a spark 20px above the top edge of every
+            block after the first, NOT centred on the track: it hugs whichever
+            side that block's image sits on. Measured off the frame, spark
+            centres land at x 751/709/749 against a track centred at x 720 —
+            i.e. +30px off centre for blocks 2/4 (image right) and -11px for
+            block 3 (image left), matching the same `index % 2` split that
+            drives the image's own order below. Absolute, because the frame
+            draws it over the block rather than between them: its box
             overlaps the block it sits on.
           -->
           <img
@@ -139,7 +144,8 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
             :src="sparkUrl"
             alt=""
             aria-hidden="true"
-            class="pointer-events-none absolute -top-[20px] left-1/2 h-[25px] w-[20px] max-w-none -translate-x-1/2"
+            class="pointer-events-none absolute -top-[20px] left-1/2 h-[25px] w-[20px] max-w-none"
+            :class="index % 2 === 0 ? 'translate-x-[calc(-50%-11px)]' : 'translate-x-[calc(-50%+30px)]'"
           />
 
           <!--

@@ -71,6 +71,20 @@
 
 @layer components {
   /*
+   | Horizontally scrolling chip rows should still respond to touch, trackpad,
+   | mouse-wheel and keyboard navigation without showing a native scrollbar
+   | underneath the controls.
+   */
+  .scrollbar-hidden {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  /*
    | Figma content track: 1248px inside a 1440px frame — a 96px gutter each
    | side. Below 1440 the gutter shrinks rather than the track overflowing.
    */
@@ -288,7 +302,8 @@
   }
 
   .marquee-track {
-    @apply flex w-max animate-marquee items-center gap-16;
+    @apply flex w-max animate-marquee items-center;
+    will-change: transform;
   }
 
   .marquee-mask:hover .marquee-track,
@@ -317,6 +332,17 @@
       linear-gradient(to right, var(--mesh-color, rgb(255 255 255 / 4%)) 1px, transparent 1px),
       linear-gradient(to bottom, var(--mesh-color, rgb(255 255 255 / 4%)) 1px, transparent 1px);
     background-size: var(--mesh-cell-x, 80.36px) var(--mesh-cell-y, 80.36px);
+  }
+
+  /*
+   | Vertical fade for a .grid-mesh instance that spans across a section
+   | boundary (About's story mesh, 359:9560, runs from under the hero into
+   | the story block) — softens the hard rectangular cutoff into the hairline
+   | fade the frame shows instead of a visible box edge.
+   */
+  .grid-mesh-fade {
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 76%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 76%, transparent);
   }
 }
 

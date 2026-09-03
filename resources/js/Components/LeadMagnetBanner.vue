@@ -26,7 +26,9 @@ import leadMagnetScribbleUrl from '~img/sizdah/home/lead-magnet-scribble.svg'
  * field, so this links to the section's own CTA" — true of 303:4455/391:4795
  * themselves, but incomplete: the actual field lives in a modal these two
  * frames open, found later nested inside an unrelated "blog list" exploration
- * frame rather than filed as its own component.
+ * frame rather than filed as its own component. The modal has its own fixed
+ * title/description (see its docblock) — this banner's own copy is not
+ * passed through to it.
  */
 const props = withDefaults(
   defineProps<{
@@ -134,11 +136,5 @@ const modalOpen = ref(false)
     />
   </aside>
 
-  <LeadMagnetModal
-    :open="modalOpen"
-    :title="props.section.title"
-    :description="props.section.description"
-    :source="props.source"
-    @close="modalOpen = false"
-  />
+  <LeadMagnetModal :open="modalOpen" :source="props.source" @close="modalOpen = false" />
 </template>

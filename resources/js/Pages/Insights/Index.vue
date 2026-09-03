@@ -7,8 +7,9 @@ import Eyebrow from '@/Components/Eyebrow.vue'
 import FeaturedPostCard from '@/Components/FeaturedPostCard.vue'
 import FilterChips from '@/Components/FilterChips.vue'
 import SeoHead from '@/Components/SeoHead.vue'
+import StartTogetherCard from '@/Components/StartTogetherCard.vue'
 import { useTranslations } from '@/Composables/useTranslations'
-import type { FilterOption, PostSummary, SeoMeta } from '@/types'
+import type { FilterOption, PageSectionData, PostSummary, SectionMap, SeoMeta } from '@/types'
 import bookIconUrl from '~img/sizdah/insights/book.svg'
 import bookMarkUrl from '~img/sizdah/insights/book-arrow.svg'
 import paperclipUrl from '~img/sizdah/insights/paperclip.svg'
@@ -27,6 +28,19 @@ import paperclipUrl from '~img/sizdah/insights/paperclip.svg'
  * which would overlap real copy of any length, so it is pinned just above the
  * eyebrow pill instead, not at the frame's literal y=0. A paperclip
  * (456:6721) sits centred in the gap between the header and the card grid.
+ *
+ * The frame also lays a 1200x1200 hairline grid (691:7297) behind the header,
+ * starting level with it at y=180 — same position/size as the grid Work's
+ * listing (266:2771) and About (359:9560) draw with the shared `.grid-mesh`
+ * utility, and the same 109.095px cell measured off this frame's own hairline
+ * vectors, so it reuses that treatment rather than shipping the flattened
+ * Figma export as an image. The page's amber corner glow is the shared
+ * `.page-wash` on `AppLayout`, not part of this frame — no separate asset needed.
+ *
+ * The closing "Frame 96467" card (577:9485) — same shared StartTogetherCard
+ * every other page ends on (see its docblock) — was never wired up even
+ * though `sections.final_cta` has been available from the controller all
+ * along.
  */
 interface PostsPage {
   data: PostSummary[]
@@ -43,10 +57,13 @@ const props = defineProps<{
   posts: PostsPage
   categories: { slug: string; name: string }[]
   filters: { category: string | null; q: string | null }
+  sections: SectionMap
   seo: SeoMeta
 }>()
 
 const { t } = useTranslations()
+
+const finalCta = computed<PageSectionData | undefined>(() => props.sections.final_cta)
 
 const filterOptions = computed<FilterOption[]>(() => [
   { value: null, label: t('common.all'), href: route('insights.index') },
@@ -67,7 +84,14 @@ const rest = computed(() => props.posts.data.slice(2))
 
   <section class="section-first pb-24">
     <!-- Header sits 96 above the content block; 270:5252 then runs on 144. -->
-    <div class="container-sizdah flex flex-col gap-16 lg:gap-24">
+    <div class="container-sizdah relative isolate flex flex-col gap-16 lg:gap-24">
+      <!-- 691:7297 — the mesh starts level with the content, at frame y=180. -->
+      <div
+        class="grid-mesh pointer-events-none absolute inline-start-0 block-start-0 -z-10 hidden h-[1200px] w-full max-w-container lg:block"
+        style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
+        aria-hidden="true"
+      />
+
       <!-- 268:5233 — 670 track, 64 to the chip row; 268:5234 is the 612 column. -->
       <header class="relative mx-auto flex max-w-[670px] flex-col items-center gap-16 text-center">
         <!-- 298:7715 + 299:7724 — book-and-mark corner accent; see docblock. -->
@@ -163,6 +187,11 @@ const rest = computed(() => props.posts.data.slice(2))
           {{ t('common.next') }}
         </Link>
       </nav>
+    </div>
+
+    <!-- 577:9485 — the shared closing card the frame ends on, 190 below the grid. -->
+    <div v-if="finalCta" class="container-sizdah mt-16 lg:mt-[190px]">
+      <StartTogetherCard :section="finalCta" />
     </div>
   </section>
 </template>

@@ -23,9 +23,8 @@ import type { NavItem, SharedProps } from '@/types'
  * (`container-sizdah` at `xl`). Top block (brand + 3 nav columns) is
  * 1248x218; a 40px gap to the bottom legal bar (1248x66, itself a 24px-padded
  * rule + 18px text row). Column heights still confirm the 1.5 type scale.
- * Colours unchanged from the 2026-08-21 pass: column titles black/900
- * `#393637`, links/tagline/bottom-bar black/600 `#7B7979`, top hairline
- * black/100 `#E9E9E9`, bottom-bar hairline black/300 `#BDBCBD`.
+ * Column titles use the brand yellow while the remaining footer copy is white
+ * so the navigation stays legible against the dark footer background.
  *
  * NEW this pass — a `Group 26` decorative wash sits behind the whole block,
  * x=96/y=52, 1248x449.76, seven brand-yellow (`#F8B937`) blobs at 3% opacity.
@@ -67,7 +66,7 @@ const contact = computed(() => settings.value.contact)
           <!-- Brand + positioning line -->
           <div class="flex max-w-[402px] flex-col gap-8">
             <BrandLogo :width="87" :title="settings.siteName" />
-            <p class="text-body-lg leading-normal text-warm-600">{{ settings.tagline }}</p>
+            <p class="text-body-lg leading-normal text-white">{{ settings.tagline }}</p>
           </div>
 
           <!-- Link columns -->
@@ -78,7 +77,7 @@ const contact = computed(() => settings.value.contact)
               :aria-label="column.label"
               class="flex flex-col gap-4"
             >
-              <h2 class="text-body-lg font-medium leading-normal text-warm-900">
+              <h2 class="text-body-lg font-medium leading-normal text-brand">
                 {{ column.label }}
               </h2>
 
@@ -87,7 +86,7 @@ const contact = computed(() => settings.value.contact)
                   <Link
                     :href="child.url"
                     :target="child.target"
-                    class="text-label-lg leading-normal text-warm-600 transition-colors duration-200 ease-brand hover:text-brand"
+                    class="text-label-lg leading-normal text-white transition-colors duration-200 ease-brand hover:text-brand"
                   >
                     {{ child.label }}
                   </Link>
@@ -97,11 +96,11 @@ const contact = computed(() => settings.value.contact)
 
             <!-- Contact column — from settings, not the menu tree -->
             <div class="flex flex-col gap-4">
-              <h2 class="text-body-lg font-medium leading-normal text-warm-900">
+              <h2 class="text-body-lg font-medium leading-normal text-brand">
                 {{ $t('footer.info') }}
               </h2>
 
-              <ul class="flex flex-col gap-3 text-label-lg leading-normal text-warm-600">
+              <ul class="flex flex-col gap-3 text-label-lg leading-normal text-white">
                 <li v-if="contact.location" class="flex items-center gap-2">
                   <MapPin class="size-4 shrink-0" aria-hidden="true" />
                   <span>{{ contact.location }}</span>
@@ -134,20 +133,20 @@ const contact = computed(() => settings.value.contact)
         <div
           class="flex flex-col items-start justify-between gap-4 border-t border-warm-300 py-6 sm:flex-row sm:items-center"
         >
-          <p class="text-label-lg leading-normal text-warm-600">
+          <p class="text-label-lg leading-normal text-white">
             {{ $t('footer.copyright', { year, name: settings.siteName }) }}
           </p>
 
           <div class="flex items-center gap-4">
             <Link
               :href="route('legal.terms')"
-              class="text-label-lg leading-normal text-warm-600 underline transition-colors duration-200 ease-brand hover:text-brand"
+              class="text-label-lg leading-normal text-white underline transition-colors duration-200 ease-brand hover:text-brand"
             >
               {{ $t('footer.terms') }}
             </Link>
             <Link
               :href="route('legal.privacy')"
-              class="text-label-lg leading-normal text-warm-600 underline transition-colors duration-200 ease-brand hover:text-brand"
+              class="text-label-lg leading-normal text-white underline transition-colors duration-200 ease-brand hover:text-brand"
             >
               {{ $t('footer.privacy_policy') }}
             </Link>

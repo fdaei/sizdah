@@ -103,8 +103,15 @@ function isActive(item: NavItem): boolean {
         <LanguageSwitcher class="hidden lg:flex" />
 
         <!--
-          Layer_1 sits 17.8px above the CTA's top edge and 2.1px in from its
-          inline-end edge, mirrored on X. It decorates the button, not the logo.
+          Layer_1 decorates the CTA's top-left corner: 18px above its top
+          edge, hanging mostly outside the button along its inline-end side
+          (only ~2px overlaps the corner), mirrored on X. The frame's raw
+          node metadata for this layer reports x=98.15 (2px inset, i.e.
+          *inside* the button) — that number is wrong, off by exactly one
+          icon-width (16px), most likely because the metadata tool doesn't
+          resolve this layer's mirror transform. Verified instead against
+          the rendered Figma screenshot pixel-by-pixel: the doodle's true
+          bounding box sits at x=82..97 against the CTA's x=96..222.
         -->
         <div v-if="cta" class="relative isolate hidden lg:block">
           <CtaButton :label="cta.label" :href="cta.url" class="whitespace-nowrap" />
@@ -114,7 +121,7 @@ function isActive(item: NavItem): boolean {
             aria-hidden="true"
             width="16"
             height="20"
-            class="pointer-events-none absolute -top-[18px] end-[2px] z-20 h-5 w-4 flip-rtl"
+            class="pointer-events-none absolute -top-[18px] end-[-14px] z-20 h-5 w-4 flip-rtl"
           />
         </div>
 

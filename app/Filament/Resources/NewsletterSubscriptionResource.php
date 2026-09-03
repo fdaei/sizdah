@@ -40,6 +40,10 @@ final class NewsletterSubscriptionResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->placeholder('—'),
+
                 Tables\Columns\TextColumn::make('email')
                     ->searchable()
                     ->copyable()
@@ -73,14 +77,15 @@ final class NewsletterSubscriptionResource extends Resource
                         $rows = NewsletterSubscription::query()
                             ->whereNull('unsubscribed_at')
                             ->orderBy('created_at')
-                            ->get(['email', 'locale', 'source', 'created_at']);
+                            ->get(['name', 'email', 'locale', 'source', 'created_at']);
 
                         return response()->streamDownload(function () use ($rows): void {
                             $handle = fopen('php://output', 'wb');
-                            fputcsv($handle, ['Email', 'Locale', 'Source', 'Joined']);
+                            fputcsv($handle, ['Name', 'Email', 'Locale', 'Source', 'Joined']);
 
                             foreach ($rows as $row) {
                                 fputcsv($handle, [
+                                    $row->name,
                                     $row->email,
                                     $row->locale,
                                     $row->source,

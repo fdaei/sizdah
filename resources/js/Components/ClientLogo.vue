@@ -16,7 +16,8 @@ import tavakoliUrl from '~img/sizdah/clients/tavakoli.svg'
  *
  * The marks are drawn in Figma at full colour and knocked back to luminosity,
  * so they read as one grey row against the ink ground instead of six
- * competing brand palettes. Figma's own paint is `mix-blend-mode: luminosity`,
+ * competing brand palettes. Hovering restores each mark's original colour.
+ * Figma's own paint is `mix-blend-mode: luminosity`,
  * but every logo here sits inside a GSAP `data-reveal` item — GSAP leaves a
  * non-`none` `transform` on the `<li>` even at rest (`translate(0px, 0px)`),
  * which per spec creates a new stacking context and silently isolates any
@@ -56,7 +57,7 @@ const source = computed(() => props.client.logo || EXPORTS[props.client.name] ||
       width="80"
       loading="lazy"
       decoding="async"
-      class="h-auto w-20 object-contain grayscale"
+      class="h-auto w-20 object-contain grayscale transition-[filter] duration-300 ease-brand hover:grayscale-0"
     />
   </span>
   <span v-else class="text-title-sm text-ink-400">{{ props.client.name }}</span>

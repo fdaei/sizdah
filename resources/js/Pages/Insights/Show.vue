@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BlogCard from '@/Components/BlogCard.vue'
 import ArticleMeta from '@/Components/ArticleMeta.vue'
+import ArticleShare from '@/Components/ArticleShare.vue'
 import LeadMagnetBanner from '@/Components/LeadMagnetBanner.vue'
 import SeoHead from '@/Components/SeoHead.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
@@ -25,6 +26,14 @@ import relatedRuleUrl from '~img/sizdah/insights/related-rule.svg'
  * against 577:10889 (About). This page used the dark `FinalCtaCard` until
  * 2026-08-24, on the belief that the frame still drew the old Sahra card at
  * 294:7672 — that node no longer exists in the file. See GAPS G34.
+ *
+ * Share rail (690:7022, "Frame 95907") floats beside the body copy at
+ * x=1096 relative to the container — 54px past the 831-wide prose column's
+ * end edge. `ArticleShare` is placed in a flex row with the prose so it
+ * stays adjacent rather than pixel-pinned; `sticky` keeps it usable while
+ * scrolling a long article, which the static frame can't itself demonstrate.
+ * xl+ only (1280px) — below that there's no room beside an 831px column
+ * inside the 1248px container.
  */
 const props = defineProps<{
   post: PostDetail
@@ -74,8 +83,18 @@ const { t } = useTranslations()
         class="aspect-[1248/624] w-full rounded-lg object-cover"
       />
 
-      <!-- eslint-disable-next-line vue/no-v-html -- admin-authored rich text -->
-      <div class="rich-prose mx-auto w-full max-w-[831px]" v-html="props.post.content" />
+      <div
+        class="mx-auto flex w-full max-w-[831px] flex-col items-start gap-6 xl:w-fit xl:max-w-none xl:flex-row"
+      >
+        <ArticleShare
+          :url="props.seo.canonical"
+          :title="props.post.title"
+          class="hidden shrink-0 xl:sticky xl:top-32 xl:flex"
+        />
+
+        <!-- eslint-disable-next-line vue/no-v-html -- admin-authored rich text -->
+        <div class="rich-prose w-full max-w-[831px]" v-html="props.post.content" />
+      </div>
 
       <LeadMagnetBanner
         v-if="props.leadMagnet"

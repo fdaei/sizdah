@@ -10,6 +10,16 @@ import arrowUrl from '~img/sizdah/shared/cta-arrow.svg'
  *
  * Copy column beside a 612x459 image. The category renders as a Yellow/600 pill
  * (270:5256); posts without a category simply omit it.
+ *
+ * The frame draws the image at the inline-end (physical right in this RTL
+ * site) and the copy column at the inline-start — confirmed against the
+ * screenshot, not just the layer order, since Figma's own child order doesn't
+ * imply reading direction. The image markup comes first in the template so a
+ * default `flex-row` places it correctly under `dir="rtl"` without a manual
+ * `flex-row-reverse`. Same reasoning inside the copy column's own CTA/meta
+ * row (270:5263): the frame puts "مطالعه مقاله" at that row's inline-start
+ * and the date/reading-time strip at its inline-end, so `PostMeta` is first
+ * in the template and the CTA link second.
  */
 const props = defineProps<{ post: PostSummary }>()
 
@@ -21,6 +31,22 @@ const { t } = useTranslations()
     class="surface-glow flex flex-col gap-8 rounded-xl border-3 border-ink-400 p-4 lg:flex-row lg:items-center"
     style="--glow-angle: -20.03deg"
   >
+    <Link
+      :href="props.post.url"
+      class="group block shrink-0 overflow-hidden rounded-lg border border-ink-100 shadow-card lg:w-[612px]"
+    >
+      <img
+        v-if="props.post.image"
+        :src="props.post.image.src"
+        :srcset="props.post.image.srcset"
+        :alt="props.post.image.alt"
+        :width="props.post.image.width"
+        :height="props.post.image.height"
+        class="aspect-[612/459] w-full object-cover transition-transform duration-500 ease-brand group-hover:scale-105"
+      />
+      <div v-else class="aspect-[612/459] w-full bg-ink-900" aria-hidden="true" />
+    </Link>
+
     <div class="flex flex-1 flex-col gap-8 lg:gap-24">
       <p
         v-if="props.post.category"
@@ -43,6 +69,8 @@ const { t } = useTranslations()
         </div>
 
         <div class="flex flex-wrap items-center justify-between gap-4">
+          <PostMeta :post="props.post" />
+
           <Link
             :href="props.post.url"
             class="flex items-center gap-2 text-body-lg text-ink-100 transition-colors duration-200 ease-brand hover:text-brand"
@@ -57,26 +85,8 @@ const { t } = useTranslations()
             />
             {{ t('common.read_article') }}
           </Link>
-
-          <PostMeta :post="props.post" />
         </div>
       </div>
     </div>
-
-    <Link
-      :href="props.post.url"
-      class="group block shrink-0 overflow-hidden rounded-lg border border-ink-100 shadow-card lg:w-[612px]"
-    >
-      <img
-        v-if="props.post.image"
-        :src="props.post.image.src"
-        :srcset="props.post.image.srcset"
-        :alt="props.post.image.alt"
-        :width="props.post.image.width"
-        :height="props.post.image.height"
-        class="aspect-[612/459] w-full object-cover transition-transform duration-500 ease-brand group-hover:scale-105"
-      />
-      <div v-else class="aspect-[612/459] w-full bg-ink-900" aria-hidden="true" />
-    </Link>
   </article>
 </template>

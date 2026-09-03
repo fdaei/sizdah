@@ -33,6 +33,10 @@ return [
     ],
 
     'newsletter' => [
+        'title'             => 'احصل على قائمة اتجاه المحتوى',
+        'description'       => 'قائمة تحقق قصيرة لمعرفة ما إذا كان محتواك يسير في مسار واضح ومحدد أم لا.',
+        'name'              => 'الاسم الكامل',
+        'name_placeholder'  => 'اسمك',
         'email'             => 'البريد الإلكتروني',
         'email_placeholder' => 'you@example.com',
         'submit'            => 'احصل على القائمة',

@@ -33,22 +33,35 @@ const props = withDefaults(
     label: string
     /** `outline` — insights (268:5250): dark fill, brand label. `solid` — projects (222:2472): brand fill, dark label. */
     variant?: 'outline' | 'solid'
+    /** Keep every chip on one row and allow horizontal scrolling when needed. */
+    singleLine?: boolean
   }>(),
-  { variant: 'outline' },
+  { variant: 'outline', singleLine: false },
 )
 </script>
 
 <template>
-  <nav :aria-label="props.label">
-    <ul class="flex flex-wrap items-start gap-3">
-      <li v-for="option in props.options" :key="option.value ?? 'all'">
+  <nav
+    :aria-label="props.label"
+    :class="props.singleLine && 'scrollbar-hidden max-w-full overflow-x-auto'"
+  >
+    <ul
+      class="flex items-start gap-3"
+      :class="props.singleLine ? 'w-max flex-nowrap' : 'flex-wrap'"
+    >
+      <li
+        v-for="option in props.options"
+        :key="option.value ?? 'all'"
+        :class="props.singleLine && 'shrink-0'"
+      >
         <Link
           :href="option.href"
           preserve-scroll
           :aria-current="option.value === props.active ? 'page' : undefined"
           class="inline-flex items-center justify-center rounded-lg px-6 py-3 text-body-lg transition-colors duration-200 ease-brand"
           :class="[
-            option.value !== props.active && 'border-2 border-ink-300 text-paper hover:border-paper',
+            option.value !== props.active &&
+              'border-2 border-ink-300 text-paper hover:border-paper',
             option.value === props.active &&
               props.variant === 'solid' &&
               'border-3 border-brand bg-brand text-ink-1000',

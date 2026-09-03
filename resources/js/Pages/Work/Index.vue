@@ -106,6 +106,7 @@ const remainingProjects = computed<ProjectSummary[]>(() =>
             :active="props.activeFilter"
             :label="t('work.services')"
             variant="solid"
+            single-line
           />
         </div>
       </header>

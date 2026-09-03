@@ -1853,3 +1853,67 @@ nothing was removed. And the footer's contact block renders "مسقط، عمان
 `settings.contact` drift G49 already logged for the Legal page's trust
 badge, now confirmed present in the footer too since both read the same
 settings source. Filament-content ownership issue, not a rebuild-scope fix.
+
+## G54 — Lead-magnet modal was echoing the banner's own copy instead of the frame's fixed checklist pitch  (2026-09-03)  (severity: medium)
+
+User-reported directly against the proto link for `416:4959` (the "blog list"
+exploration frame G51 already flagged as nesting the lead-magnet dialog).
+Re-pulling that node and its overlay child `416:5399` shows the modal draws
+its own fixed headline and subhead (`416:5401` "چک‌لیست مسیر محتوا را دریافت
+کنید", `416:5402` "یک چک‌لیست کوتاه برای اینکه ببینید محتوای شما با یک مسیر
+روشن و مشخص پیش می‌رود یا نه.") — independent of whichever banner opened it.
+
+`LeadMagnetModal.vue` instead took `title`/`description` as props and
+`LeadMagnetBanner.vue` passed its own `section.title`/`section.description`
+through, so the dialog just repeated the banner text already visible on the
+page above it. Live-verified on both consumers: `/fa` (Home banner text "آیا
+محتوای شما مسیر مشخصی دارد یا فقط ادامه پیدا می‌کند؟") and `/fa/insights/*`
+(article banner, same Home copy since both read the same `sections.lead_magnet`
+data) — both opened a modal with that banner headline instead of the frame's
+actual checklist copy.
+
+**Fixed:** added fixed `forms.newsletter.title`/`.description` keys (fa/en/ar)
+matching the frame's text runs verbatim; `LeadMagnetModal.vue` now reads them
+directly instead of accepting props for them; `LeadMagnetBanner.vue` no longer
+passes its section copy through. Verified live on both consumers (Home, the
+one seeded article) — correct checklist headline/subhead render on each,
+`npm run typecheck` clean, no console errors, Escape/backdrop-close and the
+honeypot field unaffected.
+
+**Follow-up, same session:** the user then compared the live modal against
+the Figma prototype directly and flagged the missing "نام و نام خانوادگی"
+field G51 had deliberately dropped — asked, and confirmed they want it added
+and actually persisted, reversing that call. Added a nullable `name` column
+(migration `2026_09_03_000001_add_name_to_newsletter_subscriptions_table`),
+wired through `NewsletterSubscription`, `NewsletterSubscriptionRequest`,
+`SubmissionHandler::handleNewsletter` (set on create, and on reactivating a
+previously-unsubscribed row if a name is given), the Filament resource table
+and CSV export, and the factory. Frontend: `LeadMagnetModal.vue` now renders
+the name field (416:5431, reusing `field-user.svg` — the same "user 1" glyph
+node 416:5436 draws, already in the repo from Contact) above email, matching
+the frame's field order; initial focus moved from the email input to the
+name input to match. Verified end-to-end: curl round-trip confirmed the row
+persists with the submitted name, then a full Playwright pass (focus lands
+on name field on open → fill name + email → submit → success screen) with
+zero console errors. `name` stays optional — no success/notification copy
+greets the user by it — so email-only submissions (as before this follow-up)
+still work.
+
+**Second follow-up, same session:** the user then pasted a specific missing
+icon ("Group 33", a small hand-drawn tick-mark/dot cluster) and reported it
+was missing from the form's response. `get_design_context` on the card node
+alone doesn't surface it — it's not a descendant of the card frame, it's a
+sibling positioned against the full-bleed overlay wrapper (`416:4927`
+default state / `416:6001` success state), found via `get_metadata` on those
+wrappers instead. It's present on BOTH states (`416:5469` default,
+card-relative 47,355; `416:6026` success, card-relative 48,224) — added as
+one reused asset, `lead-magnet-tick-marks.svg`. A visual diff against a fresh
+Figma screenshot of `416:4927` while placing it turned up a third, related
+gap: the default (non-success) card was also missing the scratch/pencil-mark
+accent near the email field that the success card already had (`416:6040`,
+built as `successScribbleUrl` in the earlier CTA/success-state pass) — its
+default-state counterpart is `416:5484`, card-relative 617,217.5, fixed by
+reusing the same asset rather than exporting a new one. Verified live on both
+`/fa` (Home) and `/fa/insights/*` (article) — screenshot-compared against
+the fresh Figma reference for placement, `npm run typecheck` clean, no
+console errors, full name+email submit round-trip still works on both.

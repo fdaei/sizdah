@@ -51,7 +51,8 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
         <ul class="flex flex-col gap-6" data-reveal-group>
           <li v-for="(faq, index) in props.faqs" :key="faq.question">
             <details
-              class="group rounded-lg border border-gold-200 bg-gold-100 p-8"
+              name="faq-accordion"
+              class="group rounded-lg border border-gold-200 bg-gold-100 p-8 transition-colors duration-200 ease-brand open:bg-brand"
               :open="index === 0"
             >
               <summary
@@ -65,7 +66,7 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
                   aria-hidden="true"
                   width="24"
                   height="24"
-                  class="size-6 shrink-0 group-open:hidden"
+                  class="size-6 shrink-0 rounded-full bg-white group-open:hidden"
                 />
                 <img
                   :src="minusUrl"
@@ -73,7 +74,7 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
                   aria-hidden="true"
                   width="24"
                   height="24"
-                  class="hidden size-6 shrink-0 group-open:block"
+                  class="hidden size-6 shrink-0 rounded-full bg-white group-open:block"
                 />
               </summary>
 

@@ -18,7 +18,6 @@ import HeroJourney from '@/Components/HeroJourney.vue'
 import trustMarkUrl from '~img/sizdah/clients/trust-divider.svg'
 import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
 import heroNoteArrowUrl from '~img/sizdah/shared/up-right-arrow.svg'
-import testimonialRuleUrl from '~img/sizdah/home/testimonial-rule.svg'
 import type {
   ClientItem,
   PostSummary,
@@ -245,15 +244,26 @@ const finalCta = computed(() => props.sections.final_cta)
         </span>
       </p>
 
-      <ul
+      <div
         v-if="props.clients.length"
-        class="flex flex-wrap items-center justify-center gap-x-12 gap-y-4"
-        data-reveal-group
+        class="marquee-mask w-full max-w-[1036px] overflow-hidden"
+        data-reveal
       >
-        <li v-for="client in props.clients" :key="client.name">
-          <ClientLogo :client="client" />
-        </li>
-      </ul>
+        <div class="marquee-track">
+          <ul class="flex shrink-0 items-center gap-x-12 pe-12">
+            <li v-for="client in props.clients" :key="client.name" class="shrink-0">
+              <ClientLogo :client="client" />
+            </li>
+          </ul>
+
+          <!-- The duplicate completes the continuous loop; assistive tech only needs one set. -->
+          <ul aria-hidden="true" class="flex shrink-0 items-center gap-x-12 pe-12">
+            <li v-for="client in props.clients" :key="`duplicate-${client.name}`" class="shrink-0">
+              <ClientLogo :client="client" />
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -309,23 +319,12 @@ const finalCta = computed(() => props.sections.final_cta)
   <!-- Testimonials — 268:3720 heading over the 268:3729 card row. -->
   <section v-if="reviews && props.testimonials.length" class="section">
     <div class="container-sizdah">
-      <div class="relative">
-        <SectionHeading
-          :eyebrow="reviews.eyebrow"
-          :title="reviews.title"
-          :subtitle="reviews.subtitle || reviews.description"
-          gap="lg"
-        />
-        <!-- 268:3728 — a hand-drawn rule tucked under the subtitle's end. -->
-        <img
-          :src="testimonialRuleUrl"
-          alt=""
-          aria-hidden="true"
-          width="81"
-          height="4"
-          class="pointer-events-none absolute inline-end-0 top-full mt-1 hidden w-20 md:block"
-        />
-      </div>
+      <SectionHeading
+        :eyebrow="reviews.eyebrow"
+        :title="reviews.title"
+        :subtitle="reviews.subtitle || reviews.description"
+        gap="lg"
+      />
 
       <!--
         The frame draws four cards. The CMS currently holds one, and stretching

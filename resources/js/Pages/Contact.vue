@@ -13,12 +13,14 @@ import phoneIconUrl from '~img/sizdah/contact/contact-phone.svg'
 import locationIconUrl from '~img/sizdah/contact/contact-location.svg'
 import emailIconUrl from '~img/sizdah/contact/contact-email.svg'
 import workingWithIconUrl from '~img/sizdah/home/kpi-retention.svg'
+import detailRuleUrl from '~img/sizdah/insights/related-rule.svg'
+import pushpinUrl from '~img/sizdah/contact/pushpin.svg'
 import brandFieldUrl from '~img/sizdah/contact/field-brand.svg'
 import userFieldUrl from '~img/sizdah/contact/field-user.svg'
 import serviceFieldUrl from '~img/sizdah/contact/field-service.svg'
 import caretUrl from '~img/sizdah/contact/field-caret.svg'
 import wordmarkUrl from '~img/sizdah/shared/wordmark-inline.svg'
-import upRightUrl from '~img/sizdah/shared/up-right-arrow.svg'
+import followSwooshUrl from '~img/sizdah/contact/follow-swoosh.svg'
 
 /**
  * Contact — Figma 279:6325.
@@ -363,25 +365,40 @@ const fieldClass =
 
         <!-- Details card — 279:6409 -->
         <div
-          class="flex min-w-0 flex-col gap-10 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tl from-brand/10 to-transparent p-8"
+          class="relative flex min-w-0 flex-col gap-10 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tl from-brand/10 to-transparent p-8"
         >
+          <!--
+            The pin (`279:6521`, 40x50, mirrored on X) is a sibling of this
+            card in the frame, not a child of it — same pattern as the header
+            doodle (AppHeader.vue). Figma places it at frame-local (414,273)
+            against the card's own frame-local box of (0,312)-(423,816), i.e.
+            9px in from the card's inline-start edge and hanging mostly above
+            the card, overhanging inline-start by 31px. It had been rendered
+            square (56x56) at inline-start-2/-top-11 — neither the aspect
+            ratio nor the position the frame actually draws.
+          -->
+          <img
+            :src="pushpinUrl"
+            alt=""
+            aria-hidden="true"
+            width="40"
+            height="50"
+            class="pointer-events-none absolute block-start-[-39px] inline-start-[-31px] h-[50px] w-10 -scale-x-100"
+          />
+
           <h2 class="text-title-lg text-brand-50">{{ t('forms.details.title') }}</h2>
 
           <ul class="flex flex-col gap-6">
             <li v-for="(detail, index) in details" :key="detail.key" class="flex flex-col gap-6">
               <div class="flex items-center gap-4">
-                <span
-                  class="inline-flex size-12 shrink-0 items-center justify-center rounded-round border border-ink-700"
-                >
-                  <img
-                    :src="detail.icon"
-                    alt=""
-                    aria-hidden="true"
-                    width="24"
-                    height="24"
-                    class="size-6"
-                  />
-                </span>
+                <img
+                  :src="detail.icon"
+                  alt=""
+                  aria-hidden="true"
+                  width="24"
+                  height="24"
+                  class="size-6 shrink-0"
+                />
                 <span class="flex flex-col gap-1">
                   <span class="text-label-lg text-brand-50">
                     {{ t(`forms.details.${detail.key}`) }}
@@ -389,7 +406,13 @@ const fieldClass =
                   <span class="text-body-md text-ink-200 latin-nums">{{ detail.value }}</span>
                 </span>
               </div>
-              <hr v-if="index < details.length - 1" class="border-0 border-t-2 border-ink-800" />
+              <img
+                v-if="index < details.length - 1"
+                :src="detailRuleUrl"
+                alt=""
+                aria-hidden="true"
+                class="h-[5px] w-full"
+              />
             </li>
           </ul>
         </div>
@@ -401,25 +424,46 @@ const fieldClass =
         on the right (see the card-row note above).
       -->
       <div class="mt-14 flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
-        <p class="relative flex items-center gap-2 text-body-lg font-medium text-ink-100">
+        <div class="relative">
+          <p class="flex items-center gap-2 text-body-lg font-medium text-ink-100">
+            <img
+              :src="wordmarkUrl"
+              alt=""
+              aria-hidden="true"
+              width="56"
+              height="20"
+              class="h-5 w-14"
+            />
+            {{ t('forms.details.follow') }}
+          </p>
+          <!--
+            `up-right 1` (`279:6519`, 92x88) is a sibling of this text row
+            (`279:6509`, 708,17.9-1248,38.1 in frame-local coords), not a
+            child of it. Figma places the arrow at local (664.4,-16.8), i.e.
+            43.6px outside this row's inline-end edge and straddling it
+            top-to-bottom (34.7px above, 52.5px below) — not flush-above it
+            as `block-end-full inline-end-0` assumed. The frame's own layer
+            is rotated -145deg with a 72x56 intrinsic size (hence Figma's
+            reported 91.1x87.17 bounding box), but that rotation is already
+            baked into this exported path's coordinates — confirmed against
+            a direct Figma screenshot of the node. Re-applying `rotate(-145deg)`
+            on top, as Figma's Dev Mode CSS panel suggests, double-rotates it
+            into an unrecognisable shape; render the asset as-is, unrotated.
+            Ships as its own `contact/follow-swoosh.svg` rather than reusing
+            `shared/up-right-arrow.svg` — that file backs two other, unrelated
+            hand-drawn doodles (Home's hero-note arrow, node 268:3024, and
+            InsightsShowcase's card-link arrow), and this node's real path is
+            a different shape from both.
+          -->
           <img
-            :src="wordmarkUrl"
+            :src="followSwooshUrl"
             alt=""
             aria-hidden="true"
-            width="56"
-            height="20"
-            class="h-5 w-14"
+            width="92"
+            height="88"
+            class="pointer-events-none absolute block-start-[-35px] inline-end-[-44px] hidden h-[88px] w-[92px] lg:block"
           />
-          {{ t('forms.details.follow') }}
-          <img
-            :src="upRightUrl"
-            alt=""
-            aria-hidden="true"
-            width="91"
-            height="87"
-            class="pointer-events-none absolute block-end-full inline-end-0 hidden h-auto w-[91px] flip-rtl lg:block"
-          />
-        </p>
+        </div>
 
         <ul class="flex flex-wrap items-center gap-6">
           <li v-for="link in socialLinks" :key="link.platform">

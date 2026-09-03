@@ -33,6 +33,10 @@ return [
     ],
 
     'newsletter' => [
+        'title'             => 'Get the content-direction checklist',
+        'description'       => 'A short checklist to see whether your content follows a clear, defined path — or not.',
+        'name'              => 'Full name',
+        'name_placeholder'  => 'Your name',
         'email'             => 'Email',
         'email_placeholder' => 'you@example.com',
         'submit'            => 'Get checklist',

@@ -19,19 +19,24 @@ import journeyUrl from '~img/sizdah/about/cta-journey.svg'
  * 2026-08-24 on a stale assumption that their frames still drew it — see
  * GAPS G34.
  *
- * The card's grid wash is `.grid-mesh` with an ink hairline on cream; the
- * frame's own background image (imageRef d7b452aea69f, 1200x884) is nothing but
- * that grid, so it is not shipped.
+ * The card's grid wash is `.grid-mesh` with an ink hairline on cream. It is
+ * cropped to the physical right side of the card and uses oversized cells,
+ * leaving the copy side on a clean cream background.
  */
 const props = defineProps<{ section: PageSectionData }>()
 </script>
 
 <template>
-  <section
-    class="grid-mesh rounded-xl bg-brand-200 p-8 lg:p-12"
-    style="--mesh-color: rgb(20 20 20 / 6%); --mesh-cell-x: 113px; --mesh-cell-y: 64px"
-  >
-    <div class="flex flex-col items-center gap-10 lg:flex-row lg:justify-between lg:gap-6">
+  <section class="relative overflow-hidden rounded-xl bg-brand-200 p-8 lg:p-12">
+    <div
+      class="grid-mesh pointer-events-none absolute inset-y-0 right-0 w-[58%]"
+      style="--mesh-color: rgb(20 20 20 / 6%); --mesh-cell-x: 156px; --mesh-cell-y: 112px"
+      aria-hidden="true"
+    />
+
+    <div
+      class="relative z-10 flex flex-col items-center gap-10 lg:flex-row lg:justify-between lg:gap-6"
+    >
       <div class="flex w-full flex-col items-start gap-12 text-start lg:max-w-[554px]">
         <div class="flex flex-col items-start gap-12">
           <div class="flex flex-col items-start gap-2">
@@ -70,7 +75,7 @@ const props = defineProps<{ section: PageSectionData }>()
         aria-hidden="true"
         width="592"
         height="417"
-        class="w-full max-w-[592px] lg:order-first"
+        class="w-full max-w-[592px]"
       />
     </div>
   </section>

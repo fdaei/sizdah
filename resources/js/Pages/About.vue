@@ -106,8 +106,26 @@ function iconFor(item: SectionItem, index: number): string | undefined {
       -->
       <section
         v-if="hero"
-        class="grid items-center gap-12 lg:grid-cols-[minmax(0,466px)_minmax(0,1fr)] lg:gap-[86px]"
+        class="relative isolate grid items-center gap-12 lg:grid-cols-[minmax(0,466px)_minmax(0,1fr)] lg:gap-[86px]"
       >
+        <!--
+          Decorative hairline mesh (359:9560, 109x118 cells) — the frame runs
+          it from under the hero straight through the story block below, not
+          boxed to the story section alone. Anchored (and `isolate`d) on hero
+          rather than story so its negative z-index sits it behind the hero
+          illustration/copy too, and positioned against hero specifically
+          (not the padded container) because hero's own box has no inline
+          padding, so inline-start-0 lines up exactly with the content edge
+          story also aligns to — anchoring on the padded container instead
+          shifts it by the container's gutter.
+        -->
+        <div
+          v-if="story"
+          class="grid-mesh grid-mesh-fade pointer-events-none absolute inline-start-0 block-start-[474px] -z-10 hidden h-[1020px] w-full max-w-container lg:block"
+          style="--mesh-cell-x: 109px; --mesh-cell-y: 118px"
+          aria-hidden="true"
+        />
+
         <div class="flex flex-col items-start gap-6 text-start" data-reveal>
           <h1 class="flex flex-wrap items-center gap-x-2 text-hero-line font-bold text-ink-50">
             <span>{{ hero.title }}</span>
@@ -156,13 +174,7 @@ function iconFor(item: SectionItem, index: number): string | undefined {
         Story — 357:9335. Centred 824px column over the decorative hairline
         mesh (359:9560, 109x118 cells) with the freehand mark at 583:5905.
       -->
-      <section v-if="story" class="relative isolate">
-        <div
-          class="grid-mesh pointer-events-none absolute inline-start-0 block-start-[-170px] -z-10 hidden h-[944px] w-full max-w-container lg:block"
-          style="--mesh-cell-x: 109px; --mesh-cell-y: 118px"
-          aria-hidden="true"
-        />
-
+      <section v-if="story" class="relative">
         <img
           :src="storyMarkUrl"
           alt=""
