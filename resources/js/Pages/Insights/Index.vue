@@ -141,7 +141,7 @@ const rest = computed(() => props.posts.data.slice(2))
               alt=""
               width="64"
               height="64"
-              style="transform: rotate(166.312deg)"
+              style="transform: rotate(-166.312deg)"
             />
           </div>
 
