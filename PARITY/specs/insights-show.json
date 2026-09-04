@@ -1,0 +1,58 @@
+{
+  "name": "Insights article",
+  "route": "/fa/insights/brand-direction-3",
+  "figmaNode": "285:4590",
+  "frame": {
+    "w": 1440,
+    "h": 4844
+  },
+  "checks": [
+    {
+      "desc": "site header height",
+      "node": "(header instance)",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.h",
+      "expect": 108
+    },
+    {
+      "desc": "site header width",
+      "node": "(header instance)",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.w",
+      "expect": 1440
+    },
+    {
+      "desc": "footer height",
+      "node": "(footer instance)",
+      "find": {
+        "tag": "footer"
+      },
+      "prop": "box.h",
+      "expect": 501.76
+    },
+    {
+      "desc": "page direction",
+      "node": "(header instance)",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "direction",
+      "expect": "rtl"
+    }
+  ],
+  "waivePageHeight": true,
+  "waivers": [
+    {
+      "what": "page 4112 vs 4844",
+      "why": "This route renders one seeded Post; the frame mocks a specific article whose body, pull-quotes and related-posts row are longer. Article length is content, not layout. The shared chrome verifies exactly (header 108, footer 501.76) and the phantom 70px scroll overflow is gone. Element-level verification of the body column was not reached in this run."
+    }
+  ],
+  "slug": "insights-show"
+}

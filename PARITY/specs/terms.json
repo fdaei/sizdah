@@ -1,0 +1,275 @@
+{
+  "name": "Terms of use",
+  "slug": "terms",
+  "route": "/fa/terms",
+  "figmaNode": "281:6773",
+  "frame": {
+    "w": 1440,
+    "h": 2443
+  },
+  "checks": [
+    {
+      "desc": "site header",
+      "node": "281:6774",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.h",
+      "expect": 108
+    },
+    {
+      "desc": "site header",
+      "node": "281:6774",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.w",
+      "expect": 1440
+    },
+    {
+      "desc": "h1 top",
+      "node": "281:6826",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "box.y",
+      "expect": 188
+    },
+    {
+      "desc": "h1 line box",
+      "node": "281:6826",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "box.h",
+      "expect": 61
+    },
+    {
+      "desc": "h1 width",
+      "node": "281:6826",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "box.w",
+      "expect": 612
+    },
+    {
+      "desc": "h1 font-size",
+      "node": "281:6826",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "fontSize",
+      "expect": 48
+    },
+    {
+      "desc": "h1 weight (Display/Large Bold)",
+      "node": "281:6826",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "fontWeight",
+      "expect": "700"
+    },
+    {
+      "desc": "h1 colour Black/50",
+      "node": "281:6826",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "color",
+      "expect": "rgb(243, 243, 243)"
+    },
+    {
+      "desc": "subtitle top (h1 + 24 gap)",
+      "node": "281:6828",
+      "find": {
+        "tag": "p",
+        "text": "دستورالعمل‌های شفافی"
+      },
+      "prop": "box.y",
+      "expect": 273
+    },
+    {
+      "desc": "subtitle line box (2 lines x 25)",
+      "node": "281:6828",
+      "find": {
+        "tag": "p",
+        "text": "دستورالعمل‌های شفافی"
+      },
+      "prop": "box.h",
+      "expect": 50
+    },
+    {
+      "desc": "subtitle font-size (tite/Medium)",
+      "node": "281:6828",
+      "find": {
+        "tag": "p",
+        "text": "دستورالعمل‌های شفافی"
+      },
+      "prop": "fontSize",
+      "expect": 20
+    },
+    {
+      "desc": "subtitle weight",
+      "node": "281:6828",
+      "find": {
+        "tag": "p",
+        "text": "دستورالعمل‌های شفافی"
+      },
+      "prop": "fontWeight",
+      "expect": "500"
+    },
+    {
+      "desc": "subtitle colour Black/200",
+      "node": "281:6828",
+      "find": {
+        "tag": "p",
+        "text": "دستورالعمل‌های شفافی"
+      },
+      "prop": "color",
+      "expect": "rgb(208, 208, 208)"
+    },
+    {
+      "desc": "section 1 h2 top",
+      "node": "281:6832",
+      "find": {
+        "tag": "h2",
+        "nth": 0
+      },
+      "prop": "box.y",
+      "expect": 419
+    },
+    {
+      "desc": "section 1 h2 line box",
+      "node": "281:6832",
+      "find": {
+        "tag": "h2",
+        "nth": 0
+      },
+      "prop": "box.h",
+      "expect": 38
+    },
+    {
+      "desc": "section h2 font-size (off-scale 30)",
+      "node": "281:6832",
+      "find": {
+        "tag": "h2",
+        "nth": 0
+      },
+      "prop": "fontSize",
+      "expect": 30
+    },
+    {
+      "desc": "section h2 weight",
+      "node": "281:6832",
+      "find": {
+        "tag": "h2",
+        "nth": 0
+      },
+      "prop": "fontWeight",
+      "expect": "500"
+    },
+    {
+      "desc": "section h2 colour Black/50",
+      "node": "281:6832",
+      "find": {
+        "tag": "h2",
+        "nth": 0
+      },
+      "prop": "color",
+      "expect": "rgb(243, 243, 243)"
+    },
+    {
+      "desc": "section body top (h2 + 24 gap)",
+      "node": "281:6834",
+      "find": {
+        "tag": "p",
+        "text": "با دسترسی به این وب‌سایت"
+      },
+      "prop": "box.y",
+      "expect": 481
+    },
+    {
+      "desc": "content track x",
+      "node": "284:3949",
+      "find": {
+        "tag": "h2",
+        "nth": 0
+      },
+      "prop": "box.x",
+      "expect": 96
+    },
+    {
+      "desc": "content track width",
+      "node": "284:3949",
+      "find": {
+        "tag": "h2",
+        "nth": 0
+      },
+      "prop": "box.w",
+      "expect": 1248,
+      "waive": true
+    },
+    {
+      "desc": "footer height",
+      "node": "688:6565",
+      "find": {
+        "tag": "footer"
+      },
+      "prop": "box.h",
+      "expect": 501.76
+    },
+    {
+      "desc": "footer brand column width",
+      "node": "688:6586",
+      "find": {
+        "cls": "md:w-[402px]"
+      },
+      "prop": "box.w",
+      "expect": 402
+    },
+    {
+      "desc": "footer nav column height",
+      "node": "688:6585",
+      "find": {
+        "tag": "nav",
+        "nth": 1
+      },
+      "prop": "box.h",
+      "expect": 218
+    },
+    {
+      "desc": "footer top block height",
+      "node": "688:6567",
+      "find": {
+        "cls": "md:flex-row"
+      },
+      "prop": "box.h",
+      "expect": 218
+    },
+    {
+      "desc": "page direction",
+      "node": "279:5924",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "direction",
+      "expect": "rtl"
+    }
+  ],
+  "waivers": [
+    {
+      "what": "content track width 1250 (Figma) vs 1248 (code)",
+      "why": "The frame contradicts itself: `284:3948` and `280:6742` are 1250 wide and overhang the right gutter by 2px (96+1250=1346 > 1440-96=1344), while the header and footer on the SAME frame use 1248, and the inner body boxes (`Frame 96292`) are 1248 offset by x=2. 1248 is the gutter-consistent value and the code uses it for all 31 track elements. Matching 1250 would misalign the legal copy against its own header and footer. Design-file defect — logged for the designer."
+    },
+    {
+      "what": "page height 2364 vs 2443, and section 2-8 positions",
+      "why": "Same cause as privacy: the seeded copy differs from the frame's, so paragraphs wrap to different line counts. Figma's section-1 body is 2 lines (50px); the seeded one is 1 line (25px). The 64px-gapped stack then accumulates the difference. Content decision, not parity — parked per the brief."
+    }
+  ],
+  "waivePageHeight": true
+}

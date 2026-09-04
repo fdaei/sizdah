@@ -1,0 +1,58 @@
+{
+  "name": "Case study",
+  "route": "/fa/work/باغچه",
+  "figmaNode": "336:5374",
+  "frame": {
+    "w": 1440,
+    "h": 7403
+  },
+  "checks": [
+    {
+      "desc": "site header height",
+      "node": "(header instance)",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.h",
+      "expect": 108
+    },
+    {
+      "desc": "site header width",
+      "node": "(header instance)",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.w",
+      "expect": 1440
+    },
+    {
+      "desc": "footer height",
+      "node": "(footer instance)",
+      "find": {
+        "tag": "footer"
+      },
+      "prop": "box.h",
+      "expect": 501.76
+    },
+    {
+      "desc": "page direction",
+      "node": "(header instance)",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "direction",
+      "expect": "rtl"
+    }
+  ],
+  "waivePageHeight": true,
+  "waivers": [
+    {
+      "what": "page 3212 vs 7403 — the largest gap in the run",
+      "why": "The frame is a fully-authored 7403px case study; the seeded project «باغچه» carries a fraction of that content (no long-form sections, fewer gallery rows). This is a content shortfall of ~4200px, not a layout defect — no amount of spacing correction closes it. Needs either seeded content matching the frame, or a decision that the seed is representative. Parked; element-level verification not reached."
+    }
+  ],
+  "slug": "work-show"
+}

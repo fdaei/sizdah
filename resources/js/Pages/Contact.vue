@@ -123,8 +123,22 @@ const fieldClass =
 <template>
   <SeoHead :seo="props.seo" />
 
-  <section class="section-first pb-24">
-    <div class="container-sizdah relative isolate">
+  <!--
+    279:6325 places the footer at y=1253.24 and the 920-tall content block at
+    y=180, so the gap from content to footer is 153.24, not the 96 that
+    `pb-24` gave.
+  -->
+  <section class="section-first pb-[153.24px]">
+    <!--
+      279:6398 is a FIXED 920-tall column on `justify-content: space-between`,
+      not a stack with an authored gap. Its 92px inner gap is leftover slack:
+      title 220 + form row 608 = 828, and 920 - 828 = 92. The grid below used
+      to carry `mt-12` (48px), a hardcoded stand-in that both missed the value
+      and lost the rule — with the seeded copy running shorter than the frame's,
+      a fixed margin cannot land the form row where the frame puts it, while
+      space-between does.
+    -->
+    <div class="container-sizdah relative isolate flex flex-col justify-between lg:min-h-[920px]">
       <!-- 279:6376 — the same 109px mesh the other frames use, 872 tall, from y=212. -->
       <div
         class="grid-mesh pointer-events-none absolute inline-start-0 block-start-[32px] -z-10 hidden h-[872px] w-full max-w-container lg:block"
@@ -137,10 +151,10 @@ const fieldClass =
         The headline is Display/Large (48/700) and the lede is tite/Medium
         (20/500), not the 40/18 pair this header carried.
       -->
-      <header class="mx-auto flex max-w-measure flex-col items-center gap-10 text-center">
+      <header class="mx-auto flex w-[612px] max-w-full flex-col items-center gap-10 text-center">
         <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
-        <div class="flex flex-col items-center gap-6">
+        <div class="flex w-full flex-col gap-6">
           <h1 class="text-display-lg text-ink-50">{{ props.heading.title }}</h1>
           <p v-if="props.heading.description" class="text-title-md text-ink-200">
             {{ props.heading.description }}
@@ -155,321 +169,344 @@ const fieldClass =
         come first in the DOM for track 1 to land on the right where the
         frame puts it — details (track 2, 423fr) follows and lands left.
       -->
-      <div class="mt-12 grid gap-6 lg:grid-cols-[801fr_423fr]">
-        <!-- Form card — 279:6439 -->
-        <form
-          class="flex min-w-0 flex-col gap-6 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tr from-brand/10 to-transparent p-8"
-          novalidate
-          @submit.prevent="submit"
-        >
-          <!-- Honeypot: never shown, never announced; bots fill it, people cannot. -->
-          <div class="hidden" aria-hidden="true">
-            <label for="website">Website</label>
-            <input
-              id="website"
-              v-model="form.website"
-              type="text"
-              tabindex="-1"
-              autocomplete="off"
-            />
-          </div>
-
-          <!-- 279:6404's field pair is RIGHT=name/LEFT=brand; name has to be the first DOM child (see the card-row note above). -->
-          <div class="grid gap-6 md:grid-cols-2">
-            <div class="flex min-w-0 flex-col gap-2">
-              <label for="name" class="text-label-lg text-brand-50">
-                {{ t('forms.contact.name') }}
-              </label>
-              <div class="relative">
-                <img
-                  :src="userFieldUrl"
-                  alt=""
-                  aria-hidden="true"
-                  width="24"
-                  height="24"
-                  class="pointer-events-none absolute block-start-1/2 inline-start-3 size-6 -translate-y-1/2"
-                />
-                <input
-                  id="name"
-                  v-model="form.name"
-                  type="text"
-                  required
-                  :class="[fieldClass, 'ps-12']"
-                  :placeholder="t('forms.contact.name_placeholder')"
-                  autocomplete="name"
-                />
-              </div>
-              <p v-if="form.errors.name" class="text-label-md text-brand">{{ form.errors.name }}</p>
+      <!--
+        279:6407 — one column, gap 48, holding the form row (279:6408) and
+        the social row (279:6485). It is a SINGLE child of the space-between
+        container; keeping the two as separate children flattened the frame's
+        nesting and let space-between spread them independently, which put the
+        form row ~75px above where the frame has it.
+      -->
+      <div class="flex flex-col gap-12">
+        <div class="grid gap-6 lg:grid-cols-[801fr_423fr]">
+          <!-- Form card — 279:6439 -->
+          <form
+            class="flex min-w-0 flex-col gap-6 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tr from-brand/10 to-transparent p-[29px]"
+            novalidate
+            @submit.prevent="submit"
+          >
+            <!-- Honeypot: never shown, never announced; bots fill it, people cannot. -->
+            <div class="hidden" aria-hidden="true">
+              <label for="website">Website</label>
+              <input
+                id="website"
+                v-model="form.website"
+                type="text"
+                tabindex="-1"
+                autocomplete="off"
+              />
             </div>
 
-            <div class="flex min-w-0 flex-col gap-2">
-              <label for="brand_name" class="text-label-lg text-brand-50">
-                {{ t('forms.contact.brand') }}
-              </label>
-              <div class="relative">
-                <img
-                  :src="brandFieldUrl"
-                  alt=""
-                  aria-hidden="true"
-                  width="24"
-                  height="24"
-                  class="pointer-events-none absolute block-start-1/2 inline-start-3 size-6 -translate-y-1/2"
-                />
-                <input
-                  id="brand_name"
-                  v-model="form.brand_name"
-                  type="text"
-                  :class="[fieldClass, 'ps-12']"
-                  :placeholder="t('forms.contact.brand_placeholder')"
-                  autocomplete="organization"
-                />
-              </div>
-              <p v-if="form.errors.brand_name" class="text-label-md text-brand">
-                {{ form.errors.brand_name }}
-              </p>
-            </div>
-          </div>
-
-          <!-- 279:6406's field pair is RIGHT=phone/LEFT=service; phone has to be the first DOM child (see the card-row note above). -->
-          <div class="grid gap-6 md:grid-cols-2">
-            <div class="flex min-w-0 flex-col gap-2">
-              <label for="phone" class="text-label-lg text-brand-50">
-                {{ t('forms.contact.phone') }}
-              </label>
-              <!--
-                279:6406 draws this as one pill with an internal divider: dial
-                code + digits on the (wider) start side, a bordered flag+caret
-                trigger on the end side. A flex row sizes itself to whatever
-                dial code is picked instead of guessing a fixed padding for
-                every one of CountrySelect's ~250 codes.
-              -->
-              <div
-                class="flex items-stretch rounded-lg border-3 border-brand-200 bg-white/80 focus-within:border-brand"
-              >
-                <span class="flex shrink-0 items-center gap-2 ps-3">
-                  <CountrySelect v-model="selectedCountry" />
-                  <span class="text-body-md text-ink-1000 latin-nums" dir="ltr">
-                    {{ selectedCountry.dialCode }}
-                  </span>
-                </span>
-                <input
-                  id="phone"
-                  v-model="phoneNumber"
-                  type="tel"
-                  dir="ltr"
-                  class="w-full min-w-0 bg-transparent p-3 text-body-md text-ink-1000 placeholder:text-ink-600 focus:outline-none focus:ring-0"
-                  :placeholder="t('forms.contact.phone_placeholder')"
-                  autocomplete="tel"
-                />
-              </div>
-              <p v-if="form.errors.phone" class="text-label-md text-brand">
-                {{ form.errors.phone }}
-              </p>
-            </div>
-
+            <!-- 279:6404's field pair is RIGHT=name/LEFT=brand; name has to be the first DOM child (see the card-row note above). -->
             <!--
-              Multi-select rendered as a disclosure of checkboxes rather than a
-              native <select multiple>, which cannot be styled to the frame and
-              is poor on touch. Semantics stay real: a fieldset of checkboxes.
+              279:6440 — gap 33 between the field grid (279:6441) and the message
+              field (279:6483); the form itself is gap 24 between this block and the
+              CTA. Flattening all of it to one gap-24 stack lost the 33.
             -->
-            <div class="flex min-w-0 flex-col gap-2">
-              <span class="text-label-lg text-brand-50">{{ t('forms.contact.services') }}</span>
-              <div class="relative">
-                <button
-                  type="button"
-                  :class="[fieldClass, 'flex items-center gap-3 text-start']"
-                  :aria-expanded="servicesOpen"
-                  aria-controls="service-options"
-                  @click="servicesOpen = !servicesOpen"
-                >
+            <div class="flex flex-col gap-[33px]">
+              <!-- 279:6441 — the field grid itself is gap 24; only the step out to the message field is 33. -->
+              <div class="flex flex-col gap-6">
+                <div class="grid gap-6 md:grid-cols-2">
+                  <div class="flex min-w-0 flex-col gap-2">
+                    <label for="name" class="text-label-lg text-brand-50">
+                      {{ t('forms.contact.name') }}
+                    </label>
+                    <div class="relative">
+                      <img
+                        :src="userFieldUrl"
+                        alt=""
+                        aria-hidden="true"
+                        width="24"
+                        height="24"
+                        class="pointer-events-none absolute block-start-1/2 inline-start-3 size-6 -translate-y-1/2"
+                      />
+                      <input
+                        id="name"
+                        v-model="form.name"
+                        type="text"
+                        required
+                        :class="[fieldClass, 'ps-12']"
+                        :placeholder="t('forms.contact.name_placeholder')"
+                        autocomplete="name"
+                      />
+                    </div>
+                    <p v-if="form.errors.name" class="text-label-md text-brand">
+                      {{ form.errors.name }}
+                    </p>
+                  </div>
+
+                  <div class="flex min-w-0 flex-col gap-2">
+                    <label for="brand_name" class="text-label-lg text-brand-50">
+                      {{ t('forms.contact.brand') }}
+                    </label>
+                    <div class="relative">
+                      <img
+                        :src="brandFieldUrl"
+                        alt=""
+                        aria-hidden="true"
+                        width="24"
+                        height="24"
+                        class="pointer-events-none absolute block-start-1/2 inline-start-3 size-6 -translate-y-1/2"
+                      />
+                      <input
+                        id="brand_name"
+                        v-model="form.brand_name"
+                        type="text"
+                        :class="[fieldClass, 'ps-12']"
+                        :placeholder="t('forms.contact.brand_placeholder')"
+                        autocomplete="organization"
+                      />
+                    </div>
+                    <p v-if="form.errors.brand_name" class="text-label-md text-brand">
+                      {{ form.errors.brand_name }}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- 279:6406's field pair is RIGHT=phone/LEFT=service; phone has to be the first DOM child (see the card-row note above). -->
+                <div class="grid gap-6 md:grid-cols-2">
+                  <div class="flex min-w-0 flex-col gap-2">
+                    <label for="phone" class="text-label-lg text-brand-50">
+                      {{ t('forms.contact.phone') }}
+                    </label>
+                    <!--
+                      279:6406 draws this as one pill with an internal divider: dial
+                      code + digits on the (wider) start side, a bordered flag+caret
+                      trigger on the end side. A flex row sizes itself to whatever
+                      dial code is picked instead of guessing a fixed padding for
+                      every one of CountrySelect's ~250 codes.
+                    -->
+                    <div
+                      class="flex items-stretch rounded-lg border-3 border-brand-200 bg-white/80 focus-within:border-brand"
+                    >
+                      <span class="flex shrink-0 items-center gap-2 ps-3">
+                        <CountrySelect v-model="selectedCountry" />
+                        <span class="text-body-md text-ink-1000 latin-nums" dir="ltr">
+                          {{ selectedCountry.dialCode }}
+                        </span>
+                      </span>
+                      <input
+                        id="phone"
+                        v-model="phoneNumber"
+                        type="tel"
+                        dir="ltr"
+                        class="w-full min-w-0 bg-transparent p-3 text-body-md text-ink-1000 placeholder:text-ink-600 focus:outline-none focus:ring-0"
+                        :placeholder="t('forms.contact.phone_placeholder')"
+                        autocomplete="tel"
+                      />
+                    </div>
+                    <p v-if="form.errors.phone" class="text-label-md text-brand">
+                      {{ form.errors.phone }}
+                    </p>
+                  </div>
+
+                  <!--
+                    Multi-select rendered as a disclosure of checkboxes rather than a
+                    native <select multiple>, which cannot be styled to the frame and
+                    is poor on touch. Semantics stay real: a fieldset of checkboxes.
+                  -->
+                  <div class="flex min-w-0 flex-col gap-2">
+                    <span class="text-label-lg text-brand-50">{{
+                      t('forms.contact.services')
+                    }}</span>
+                    <div class="relative">
+                      <button
+                        type="button"
+                        :class="[fieldClass, 'flex items-center gap-3 text-start']"
+                        :aria-expanded="servicesOpen"
+                        aria-controls="service-options"
+                        @click="servicesOpen = !servicesOpen"
+                      >
+                        <img
+                          :src="serviceFieldUrl"
+                          alt=""
+                          aria-hidden="true"
+                          width="24"
+                          height="24"
+                          class="size-6 shrink-0"
+                        />
+                        <span
+                          class="min-w-0 flex-1 truncate"
+                          :class="selectedServices.length ? 'text-ink-1000' : 'text-ink-600'"
+                        >
+                          {{
+                            selectedServices.length
+                              ? selectedServices.join('، ')
+                              : t('forms.contact.services_placeholder')
+                          }}
+                        </span>
+                        <img
+                          :src="caretUrl"
+                          alt=""
+                          aria-hidden="true"
+                          width="24"
+                          height="24"
+                          class="size-6 shrink-0 transition-transform duration-200"
+                          :class="servicesOpen && 'rotate-180'"
+                        />
+                      </button>
+
+                      <fieldset
+                        v-show="servicesOpen"
+                        id="service-options"
+                        class="absolute inset-inline-0 z-10 mt-2 flex max-h-64 flex-col gap-2 overflow-y-auto rounded-lg border-3 border-brand-200 bg-white p-3"
+                      >
+                        <legend class="sr-only">{{ t('forms.contact.services') }}</legend>
+                        <label
+                          v-for="service in props.services"
+                          :key="service.id"
+                          class="flex items-center gap-2 text-body-md text-ink-1000"
+                        >
+                          <input
+                            v-model="form.service_ids"
+                            type="checkbox"
+                            :value="service.id"
+                            class="size-4 rounded-xs border-ink-400 text-brand focus:ring-brand"
+                          />
+                          {{ service.title }}
+                        </label>
+                      </fieldset>
+                    </div>
+                    <p v-if="form.errors.service_ids" class="text-label-md text-brand">
+                      {{ form.errors.service_ids }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex min-w-0 flex-col gap-2">
+                <label for="message" class="text-label-lg text-brand-50">
+                  {{ t('forms.contact.message') }}
+                </label>
+                <textarea
+                  id="message"
+                  v-model="form.message"
+                  rows="5"
+                  :class="[fieldClass, 'h-[125.5px] resize-none']"
+                  :placeholder="t('forms.contact.message_placeholder')"
+                />
+                <p v-if="form.errors.message" class="text-label-md text-brand">
+                  {{ form.errors.message }}
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              :disabled="form.processing"
+              class="w-full rounded-md bg-brand px-8 py-4 text-title-md text-ink-1000 transition-colors duration-200 ease-brand hover:bg-brand-900 disabled:opacity-50"
+            >
+              {{ form.processing ? t('common.sending') : t('forms.contact.submit') }}
+            </button>
+          </form>
+
+          <!-- Details card — 279:6409 -->
+          <div
+            class="relative flex min-w-0 flex-col gap-10 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tl from-brand/10 to-transparent p-8"
+          >
+            <!--
+              The pin (`279:6521`, 40x50, mirrored on X) is a sibling of this
+              card in the frame, not a child of it — same pattern as the header
+              doodle (AppHeader.vue). Figma places it at frame-local (414,273)
+              against the card's own frame-local box of (0,312)-(423,816), i.e.
+              9px in from the card's inline-start edge and hanging mostly above
+              the card, overhanging inline-start by 31px. It had been rendered
+              square (56x56) at inline-start-2/-top-11 — neither the aspect
+              ratio nor the position the frame actually draws.
+            -->
+            <img
+              :src="pushpinUrl"
+              alt=""
+              aria-hidden="true"
+              width="40"
+              height="50"
+              class="pointer-events-none absolute block-start-[-39px] inline-start-[-31px] h-[50px] w-10 -scale-x-100"
+            />
+
+            <h2 class="text-title-lg text-brand-50">{{ t('forms.details.title') }}</h2>
+
+            <ul class="flex flex-col gap-6">
+              <li v-for="(detail, index) in details" :key="detail.key" class="flex flex-col gap-6">
+                <div class="flex items-center gap-4">
                   <img
-                    :src="serviceFieldUrl"
+                    :src="detail.icon"
                     alt=""
                     aria-hidden="true"
                     width="24"
                     height="24"
                     class="size-6 shrink-0"
                   />
-                  <span
-                    class="min-w-0 flex-1 truncate"
-                    :class="selectedServices.length ? 'text-ink-1000' : 'text-ink-600'"
-                  >
-                    {{
-                      selectedServices.length
-                        ? selectedServices.join('، ')
-                        : t('forms.contact.services_placeholder')
-                    }}
+                  <span class="flex flex-col gap-1">
+                    <span class="text-label-lg text-brand-50">
+                      {{ t(`forms.details.${detail.key}`) }}
+                    </span>
+                    <span class="text-body-md text-ink-200 latin-nums">{{ detail.value }}</span>
                   </span>
-                  <img
-                    :src="caretUrl"
-                    alt=""
-                    aria-hidden="true"
-                    width="24"
-                    height="24"
-                    class="size-6 shrink-0 transition-transform duration-200"
-                    :class="servicesOpen && 'rotate-180'"
-                  />
-                </button>
-
-                <fieldset
-                  v-show="servicesOpen"
-                  id="service-options"
-                  class="absolute inset-inline-0 z-10 mt-2 flex max-h-64 flex-col gap-2 overflow-y-auto rounded-lg border-3 border-brand-200 bg-white p-3"
-                >
-                  <legend class="sr-only">{{ t('forms.contact.services') }}</legend>
-                  <label
-                    v-for="service in props.services"
-                    :key="service.id"
-                    class="flex items-center gap-2 text-body-md text-ink-1000"
-                  >
-                    <input
-                      v-model="form.service_ids"
-                      type="checkbox"
-                      :value="service.id"
-                      class="size-4 rounded-xs border-ink-400 text-brand focus:ring-brand"
-                    />
-                    {{ service.title }}
-                  </label>
-                </fieldset>
-              </div>
-              <p v-if="form.errors.service_ids" class="text-label-md text-brand">
-                {{ form.errors.service_ids }}
-              </p>
-            </div>
-          </div>
-
-          <div class="flex min-w-0 flex-col gap-2">
-            <label for="message" class="text-label-lg text-brand-50">
-              {{ t('forms.contact.message') }}
-            </label>
-            <textarea
-              id="message"
-              v-model="form.message"
-              rows="5"
-              :class="[fieldClass, 'h-[151px] resize-none']"
-              :placeholder="t('forms.contact.message_placeholder')"
-            />
-            <p v-if="form.errors.message" class="text-label-md text-brand">
-              {{ form.errors.message }}
-            </p>
-          </div>
-
-          <button
-            type="submit"
-            :disabled="form.processing"
-            class="w-full rounded-md bg-brand px-8 py-4 text-title-md text-ink-1000 transition-colors duration-200 ease-brand hover:bg-brand-900 disabled:opacity-50"
-          >
-            {{ form.processing ? t('common.sending') : t('forms.contact.submit') }}
-          </button>
-        </form>
-
-        <!-- Details card — 279:6409 -->
-        <div
-          class="relative flex min-w-0 flex-col gap-10 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tl from-brand/10 to-transparent p-8"
-        >
-          <!--
-            The pin (`279:6521`, 40x50, mirrored on X) is a sibling of this
-            card in the frame, not a child of it — same pattern as the header
-            doodle (AppHeader.vue). Figma places it at frame-local (414,273)
-            against the card's own frame-local box of (0,312)-(423,816), i.e.
-            9px in from the card's inline-start edge and hanging mostly above
-            the card, overhanging inline-start by 31px. It had been rendered
-            square (56x56) at inline-start-2/-top-11 — neither the aspect
-            ratio nor the position the frame actually draws.
-          -->
-          <img
-            :src="pushpinUrl"
-            alt=""
-            aria-hidden="true"
-            width="40"
-            height="50"
-            class="pointer-events-none absolute block-start-[-39px] inline-start-[-31px] h-[50px] w-10 -scale-x-100"
-          />
-
-          <h2 class="text-title-lg text-brand-50">{{ t('forms.details.title') }}</h2>
-
-          <ul class="flex flex-col gap-6">
-            <li v-for="(detail, index) in details" :key="detail.key" class="flex flex-col gap-6">
-              <div class="flex items-center gap-4">
+                </div>
                 <img
-                  :src="detail.icon"
+                  v-if="index < details.length - 1"
+                  :src="detailRuleUrl"
                   alt=""
                   aria-hidden="true"
-                  width="24"
-                  height="24"
-                  class="size-6 shrink-0"
+                  class="h-[5px] w-full"
                 />
-                <span class="flex flex-col gap-1">
-                  <span class="text-label-lg text-brand-50">
-                    {{ t(`forms.details.${detail.key}`) }}
-                  </span>
-                  <span class="text-body-md text-ink-200 latin-nums">{{ detail.value }}</span>
-                </span>
-              </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!--
+          Social row — 279:6485. Physically LEFT=icons/RIGHT=follow-text in the
+          frame; the follow-text <p> has to be the first DOM child so it lands
+          on the right (see the card-row note above).
+        -->
+        <div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+          <div class="relative">
+            <p class="flex items-center gap-2 text-body-lg font-medium text-ink-100">
               <img
-                v-if="index < details.length - 1"
-                :src="detailRuleUrl"
+                :src="wordmarkUrl"
                 alt=""
                 aria-hidden="true"
-                class="h-[5px] w-full"
+                width="56"
+                height="20"
+                class="h-5 w-14"
               />
+              {{ t('forms.details.follow') }}
+            </p>
+            <!--
+              `up-right 1` (`279:6519`, 92x88) is a sibling of this text row
+              (`279:6509`, 708,17.9-1248,38.1 in frame-local coords), not a
+              child of it. Figma places the arrow at local (664.4,-16.8), i.e.
+              43.6px outside this row's inline-end edge and straddling it
+              top-to-bottom (34.7px above, 52.5px below) — not flush-above it
+              as `block-end-full inline-end-0` assumed. The frame's own layer
+              is rotated -145deg with a 72x56 intrinsic size (hence Figma's
+              reported 91.1x87.17 bounding box), but that rotation is already
+              baked into this exported path's coordinates — confirmed against
+              a direct Figma screenshot of the node. Re-applying `rotate(-145deg)`
+              on top, as Figma's Dev Mode CSS panel suggests, double-rotates it
+              into an unrecognisable shape; render the asset as-is, unrotated.
+              Ships as its own `contact/follow-swoosh.svg` rather than reusing
+              `shared/up-right-arrow.svg` — that file backs two other, unrelated
+              hand-drawn doodles (Home's hero-note arrow, node 268:3024, and
+              InsightsShowcase's card-link arrow), and this node's real path is
+              a different shape from both.
+            -->
+            <img
+              :src="followSwooshUrl"
+              alt=""
+              aria-hidden="true"
+              width="92"
+              height="88"
+              class="pointer-events-none absolute block-start-[-35px] inline-end-[-44px] hidden h-[88px] w-[92px] lg:block"
+            />
+          </div>
+
+          <ul class="flex flex-wrap items-center gap-6">
+            <li v-for="link in socialLinks" :key="link.platform">
+              <SocialIcon :link="link" />
             </li>
           </ul>
         </div>
-      </div>
-
-      <!--
-        Social row — 279:6485. Physically LEFT=icons/RIGHT=follow-text in the
-        frame; the follow-text <p> has to be the first DOM child so it lands
-        on the right (see the card-row note above).
-      -->
-      <div class="mt-14 flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
-        <div class="relative">
-          <p class="flex items-center gap-2 text-body-lg font-medium text-ink-100">
-            <img
-              :src="wordmarkUrl"
-              alt=""
-              aria-hidden="true"
-              width="56"
-              height="20"
-              class="h-5 w-14"
-            />
-            {{ t('forms.details.follow') }}
-          </p>
-          <!--
-            `up-right 1` (`279:6519`, 92x88) is a sibling of this text row
-            (`279:6509`, 708,17.9-1248,38.1 in frame-local coords), not a
-            child of it. Figma places the arrow at local (664.4,-16.8), i.e.
-            43.6px outside this row's inline-end edge and straddling it
-            top-to-bottom (34.7px above, 52.5px below) — not flush-above it
-            as `block-end-full inline-end-0` assumed. The frame's own layer
-            is rotated -145deg with a 72x56 intrinsic size (hence Figma's
-            reported 91.1x87.17 bounding box), but that rotation is already
-            baked into this exported path's coordinates — confirmed against
-            a direct Figma screenshot of the node. Re-applying `rotate(-145deg)`
-            on top, as Figma's Dev Mode CSS panel suggests, double-rotates it
-            into an unrecognisable shape; render the asset as-is, unrotated.
-            Ships as its own `contact/follow-swoosh.svg` rather than reusing
-            `shared/up-right-arrow.svg` — that file backs two other, unrelated
-            hand-drawn doodles (Home's hero-note arrow, node 268:3024, and
-            InsightsShowcase's card-link arrow), and this node's real path is
-            a different shape from both.
-          -->
-          <img
-            :src="followSwooshUrl"
-            alt=""
-            aria-hidden="true"
-            width="92"
-            height="88"
-            class="pointer-events-none absolute block-start-[-35px] inline-end-[-44px] hidden h-[88px] w-[92px] lg:block"
-          />
-        </div>
-
-        <ul class="flex flex-wrap items-center gap-6">
-          <li v-for="link in socialLinks" :key="link.platform">
-            <SocialIcon :link="link" />
-          </li>
-        </ul>
       </div>
     </div>
   </section>

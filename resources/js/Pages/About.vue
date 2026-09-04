@@ -98,7 +98,17 @@ function iconFor(item: SectionItem, index: number): string | undefined {
 <template>
   <SeoHead :seo="props.seo" />
 
-  <div class="section-first pb-24 lg:pb-48">
+  <!--
+    336:5623 puts the first content (the 696x522 portrait, 343:9292) at y=250,
+    not the 180 that `section-first` gives every other page. The frame is
+    absolutely positioned, so this is the frame's own offset rather than a
+    shared rhythm.
+  -->
+  <!--
+    336:5623 puts the footer at 3519.24 and the cream CTA (577:10889) at 2859;
+    the slack below the CTA is 147.24.
+  -->
+  <div class="section-first md:pt-[250px] pb-[147.24px]">
     <div class="container-sizdah flex flex-col gap-24 lg:gap-48">
       <!--
         Hero — 336:5703 / 343:9292. Copy column (466) at the inline start with

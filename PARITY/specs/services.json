@@ -1,0 +1,21 @@
+{
+  "name": "Services",
+  "slug": "services",
+  "route": "/fa/services",
+  "figmaNode": "308:4492",
+  "frame": { "w": 1440, "h": 5066 },
+  "checks": [
+    { "desc": "site header height", "node": "308:4493", "find": { "tag": "header", "nth": 0 }, "prop": "box.h", "expect": 108 },
+    { "desc": "site header width", "node": "308:4493", "find": { "tag": "header", "nth": 0 }, "prop": "box.w", "expect": 1440 },
+    { "desc": "title block x", "node": "309:4754", "find": { "tag": "h1" }, "prop": "box.x", "expect": 401 },
+    { "desc": "h1 top (title 188 + eyebrow 45 + gap 40)", "node": "309:4754", "find": { "tag": "h1" }, "prop": "box.y", "expect": 273 },
+    { "desc": "h1 font-size", "node": "309:4754", "find": { "tag": "h1" }, "prop": "fontSize", "expect": 48 },
+    { "desc": "h1 weight", "node": "309:4754", "find": { "tag": "h1" }, "prop": "fontWeight", "expect": "700" },
+    { "desc": "content block top", "node": "321:5085", "find": { "cls": "gap-24", "minW": 1200 }, "prop": "box.y", "expect": 587 },
+    { "desc": "content block width", "node": "315:4945", "find": { "cls": "gap-24", "minW": 1200 }, "prop": "box.w", "expect": 1248 },
+    { "desc": "content block gap", "node": "315:4945", "find": { "cls": "gap-24", "minW": 1200 }, "prop": "gap", "expect": 200 },
+    { "desc": "footer height", "node": "688:6117", "find": { "tag": "footer" }, "prop": "box.h", "expect": 501.76 },
+    { "desc": "page direction", "node": "308:4492", "find": { "tag": "header", "nth": 0 }, "prop": "direction", "expect": "rtl" }
+  ],
+  "waivers": []
+}

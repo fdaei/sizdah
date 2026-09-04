@@ -1,0 +1,72 @@
+{
+  "name": "404",
+  "route": "/fa/no-such-page-xyz",
+  "figmaNode": "266:2825",
+  "frame": {
+    "w": 1440,
+    "h": 1024
+  },
+  "checks": [
+    {
+      "desc": "site header height",
+      "node": "266:2895",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.h",
+      "expect": 108
+    },
+    {
+      "desc": "site header width",
+      "node": "266:2895",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.w",
+      "expect": 1440
+    },
+    {
+      "desc": "footer height",
+      "node": "(none in frame)",
+      "find": {
+        "tag": "footer"
+      },
+      "prop": "box.h",
+      "expect": 501.76
+    },
+    {
+      "desc": "page direction",
+      "node": "266:2895",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "direction",
+      "expect": "rtl"
+    },
+    {
+      "desc": "h1 font-size",
+      "node": "266:2831",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "fontSize",
+      "expect": 32,
+      "waive": true
+    }
+  ],
+  "waivePageHeight": true,
+  "waivers": [
+    {
+      "what": "the frame draws NO footer; the code renders one (502px)",
+      "why": "266:2825 has exactly two children — the Header and a 725x693 content block at 383,124 — and 207px of unexplained slack below. Every other page frame carries an explicit Footer instance, so its absence here reads as an incomplete mock rather than a decision. Removing the site footer from the error page is a UX change with real consequences, so it is NOT being made on the strength of one under-built frame. STOP-condition park: needs a designer answer."
+    },
+    {
+      "what": "page 1471 vs 1024",
+      "why": "Almost entirely the footer above (502) plus the content block stretching under `min-h-screen-safe` where the frame fixes it at 693. Both follow from the same unresolved question."
+    }
+  ],
+  "slug": "error"
+}

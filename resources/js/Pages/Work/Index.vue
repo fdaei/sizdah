@@ -78,7 +78,11 @@ const remainingProjects = computed<ProjectSummary[]>(() =>
 <template>
   <SeoHead :seo="props.seo" />
 
-  <section class="section-first pb-24">
+  <!--
+    222:1989 puts the footer at 4154.24 and the cream CTA (577:9134) at 3464;
+    the slack below the CTA is 177.24, not the shared `pb-24` (96).
+  -->
+  <section class="section-first pb-[177.24px]">
     <div class="container-sizdah relative isolate">
       <!-- 266:2771 — the mesh starts level with the content, at frame y=180. -->
       <div

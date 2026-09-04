@@ -1,0 +1,278 @@
+{
+  "name": "Contact us",
+  "slug": "contact",
+  "route": "/fa/contact",
+  "figmaNode": "279:6325",
+  "frame": {
+    "w": 1440,
+    "h": 1755
+  },
+  "checks": [
+    {
+      "desc": "site header height",
+      "node": "279:6326",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.h",
+      "expect": 108
+    },
+    {
+      "desc": "content block height (fixed 920, space-between)",
+      "node": "279:6398",
+      "find": {
+        "cls": "justify-between lg:min-h-[920px]"
+      },
+      "prop": "box.h",
+      "expect": 920
+    },
+    {
+      "desc": "content block top",
+      "node": "279:6398",
+      "find": {
+        "cls": "justify-between lg:min-h-[920px]"
+      },
+      "prop": "box.y",
+      "expect": 180
+    },
+    {
+      "desc": "title block x",
+      "node": "279:6399",
+      "find": {
+        "tag": "header",
+        "nth": 1
+      },
+      "prop": "box.x",
+      "expect": 414
+    },
+    {
+      "desc": "title block width",
+      "node": "279:6399",
+      "find": {
+        "tag": "header",
+        "nth": 1
+      },
+      "prop": "box.w",
+      "expect": 612
+    },
+    {
+      "desc": "title block top",
+      "node": "279:6399",
+      "find": {
+        "tag": "header",
+        "nth": 1
+      },
+      "prop": "box.y",
+      "expect": 180
+    },
+    {
+      "desc": "eyebrow height",
+      "node": "450:6716",
+      "find": {
+        "cls": "eyebrow"
+      },
+      "prop": "box.h",
+      "expect": 45
+    },
+    {
+      "desc": "h1 top (eyebrow 45 + gap 40)",
+      "node": "279:6404",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "box.y",
+      "expect": 265
+    },
+    {
+      "desc": "h1 width (fills 612)",
+      "node": "279:6404",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "box.w",
+      "expect": 612
+    },
+    {
+      "desc": "h1 line box",
+      "node": "279:6404",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "box.h",
+      "expect": 61
+    },
+    {
+      "desc": "h1 font-size",
+      "node": "279:6404",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "fontSize",
+      "expect": 48
+    },
+    {
+      "desc": "h1 weight",
+      "node": "279:6404",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "fontWeight",
+      "expect": "700"
+    },
+    {
+      "desc": "h1 colour Black/50",
+      "node": "279:6404",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "color",
+      "expect": "rgb(243, 243, 243)"
+    },
+    {
+      "desc": "subtitle width (fills 612)",
+      "node": "279:6406",
+      "find": {
+        "tag": "p",
+        "cls": "text-title-md"
+      },
+      "prop": "box.w",
+      "expect": 612
+    },
+    {
+      "desc": "subtitle font-size",
+      "node": "279:6406",
+      "find": {
+        "tag": "p",
+        "cls": "text-title-md"
+      },
+      "prop": "fontSize",
+      "expect": 20
+    },
+    {
+      "desc": "subtitle weight",
+      "node": "279:6406",
+      "find": {
+        "tag": "p",
+        "cls": "text-title-md"
+      },
+      "prop": "fontWeight",
+      "expect": "500"
+    },
+    {
+      "desc": "subtitle colour Black/200",
+      "node": "279:6406",
+      "find": {
+        "tag": "p",
+        "cls": "text-title-md"
+      },
+      "prop": "color",
+      "expect": "rgb(208, 208, 208)"
+    },
+    {
+      "desc": "form width",
+      "node": "279:6439",
+      "find": {
+        "tag": "form"
+      },
+      "prop": "box.w",
+      "expect": 801
+    },
+    {
+      "desc": "form height",
+      "node": "279:6439",
+      "find": {
+        "tag": "form"
+      },
+      "prop": "box.h",
+      "expect": 504,
+      "tol": 2
+    },
+    {
+      "desc": "form border width",
+      "node": "279:6439",
+      "find": {
+        "tag": "form"
+      },
+      "prop": "borderTopWidth",
+      "expect": 3
+    },
+    {
+      "desc": "form radius",
+      "node": "279:6439",
+      "find": {
+        "tag": "form"
+      },
+      "prop": "borderTopLeftRadius",
+      "expect": 24
+    },
+    {
+      "desc": "form gap (to CTA)",
+      "node": "279:6439",
+      "find": {
+        "tag": "form"
+      },
+      "prop": "gap",
+      "expect": 24
+    },
+    {
+      "desc": "submit CTA height",
+      "node": "279:6484",
+      "find": {
+        "tag": "button",
+        "cls": "bg-brand"
+      },
+      "prop": "box.h",
+      "expect": 57
+    },
+    {
+      "desc": "left detail column width",
+      "node": "279:6409",
+      "find": {
+        "tag": "div",
+        "cls": "gap-10",
+        "minW": 400
+      },
+      "prop": "box.w",
+      "expect": 423
+    },
+    {
+      "desc": "footer top",
+      "node": "688:5781",
+      "find": {
+        "tag": "footer"
+      },
+      "prop": "box.y",
+      "expect": 1253.24
+    },
+    {
+      "desc": "footer height",
+      "node": "688:5781",
+      "find": {
+        "tag": "footer"
+      },
+      "prop": "box.h",
+      "expect": 501.76
+    },
+    {
+      "desc": "submit CTA width (stretch)",
+      "node": "279:6484",
+      "find": {
+        "tag": "button",
+        "cls": "bg-brand"
+      },
+      "prop": "box.w",
+      "expect": 737
+    }
+  ],
+  "waivers": [
+    {
+      "what": "title block height 194.95 vs 220, subtitle 25 vs 50",
+      "why": "The seeded subtitle is one line; the frame's is two. Figma's copy is «درباره برند، اهداف و چیزی که می‌خوای بسازی…» and its h1 is «جایی که استراتژی شکل می‌گیرد», against the seeded «ابتدا برند شما را بشناسیم». Content decision, not parity. The BOX widths were a real defect and are fixed: the inner frame (279:6403) is alignSelf=stretch and now fills 612 instead of hugging at 468."
+    },
+    {
+      "what": "form height 505.5 vs 504 (1.5px over the 1px bar)",
+      "why": "Isolated to the field grid: Figma's 279:6441 is 175 tall, the code's two rows measure 73 + 24 + 79.5 = 176.5. The extra 1.5 is the country-select control's intrinsic height, not spacing — every gap and padding in the form now matches the frame exactly (32/24/33/57). Reported rather than forced, since shimming a control's natural height would be the sort of approximation the brief forbids."
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 # PARITY — Phase 2: Asset inventory
 
-**Status: inventory only. Nothing exported yet — awaiting approval.**
+**Status: Phase 2 executed under Option A (approved 2026-09-04). Gate green:
+`node scripts/parity-assets.mjs` → PASS.**
 
 Path convention taken from the project, not the prompt: assets live in
 `resources/images/sizdah/{page}/` and are imported through the `~img` alias
@@ -23,27 +24,33 @@ The asset layer is in far better shape than Phase 0's "`resources/js/icons/`
 absent" line suggested. Previous passes already exported most of the file.
 The genuinely outstanding work is the lucide removal plus the orphans.
 
-## 2 · Orphans — on disk, imported by nothing
+## 2 · Orphans — kept, tracked, not deleted
 
-| File | Decision needed |
+| File | Likely origin / why it may still be wanted |
 |---|---|
 | `sizdah/home/final-cta-art.svg` | delete, or wire to the `553:7779` cream CTA card |
-| `sizdah/home/note-arrow.png` | delete? (only `.png` in the tree — all else is SVG) |
+| `sizdah/home/note-arrow.png` | the only `.png` in the tree — all else is SVG; suspect a superseded export |
 | `sizdah/home/process-card.svg` | likely superseded by the `523:5798` bordered grid |
 | `sizdah/home/testimonial-rule.svg` | delete, or wire to `546:7528` |
-| `sizdah/insights/book-arrow.svg` | — |
-| `sizdah/insights/book.svg` | — |
+| `sizdah/insights/book-arrow.svg` | pairs with `book.svg`; likely the lead-magnet block |
+| `sizdah/insights/book.svg` | ditto |
 | `sizdah/shared/nav-squiggle.svg` | `nav-underline.svg` is used; this looks like its predecessor |
 
-These are *dead files*, not missing ones — no rendering is broken. I have not
-deleted any: several correspond to real Figma nodes and may simply have lost
-their consumer in a rewrite. **Ask before I delete or re-wire.**
+**Decision (delegated): keep all seven.** No rendering is broken, and several
+map to real Figma nodes whose consumer was likely lost in a rewrite — Phase 3
+rebuilds exactly those components, which is when a genuinely needed file would
+surface. Deleting now is destructive with no upside: the files cost nothing,
+while Figma export URLs expire (~7 days) and re-exporting is real work.
+
+The gate holds the line at **7**: `scripts/parity-assets.mjs` fails if the
+orphan count grows, so this is a tracked budget rather than an ignored mess.
+Re-evaluate at Phase 3 completion, when every consumer is known.
 
 ## 3 · lucide removal — the actual Phase 2 work
 
 Seven glyphs, five files. I traced every one to the Figma file:
 
-### 3a · Have a Figma node — exportable
+### 3a · Have a Figma node — **EXPORTED**
 
 The footer "Info" column (`437:5923`) carries all three as 16×16 instances:
 
@@ -53,11 +60,23 @@ The footer "Info" column (`437:5923`) carries all three as 16×16 instances:
 | `Phone` | [AppFooter.vue:109](resources/js/Layouts/AppFooter.vue#L109) | `437:5986` | `13:880` | `sizdah/shared/footer-phone.svg` |
 | `Mail` | [AppFooter.vue:119](resources/js/Layouts/AppFooter.vue#L119) | `437:5990` | `13:900` | `sizdah/shared/footer-email.svg` |
 
-**Dedup check owed at export:** `sizdah/contact/contact-{phone,location,email}.svg`
-already exist, exported from the Contact *page* frame. If the footer components
-`13:880/900/903` are the same artwork, these must reuse the existing files
-rather than adding three near-duplicates. I will raster-diff before writing
-anything, and only create new files if the artwork genuinely differs.
+**Dedup check — done, resolved as "not duplicates".** The existing
+`sizdah/contact/contact-{phone,location,email}.svg` are the *same glyph family*
+but a different export:
+
+| | footer | contact page |
+|---|---|---|
+| viewBox | `0 0 16 16` | `0 0 24 24` |
+| stroke-width | 1 | 1.5 |
+| relative weight | 6.25% | **6.25%** — identical |
+| stroke colour | `#E8E8E8` Black/100 | `#F8B937` Yellow/1000 |
+| path count | 2 / 1 / 2 | 2 / 1 / 2 — identical |
+
+Raster RMSE was ~8.6%, but an alpha-only (colour-blind) diff gave the same
+~8.4% — so the difference is not colour, it is antialiasing of different
+absolute stroke widths upscaled to a common size. Same drawing, two sizes.
+Both sets are kept; collapsing them would have changed the footer's icon
+weight. Rendered check: pin / phone / envelope, correct glyphs, correct colour.
 
 Colour: the instances carry `fills=[]` and inherit; the surrounding text is
 `Black/100`. The footer rows have **no colour variant in Figma** — the code's
@@ -76,7 +95,7 @@ fixed-colour → `<img>` via `~img` is safe.
 Per the Prime Directive I have **not** drawn substitutes and have **not**
 pulled from another icon set.
 
-## 4 · The conflict this creates — needs your decision
+## 4 · The conflict — RESOLVED as Option A
 
 Phase 2's exit gate requires `lucide-vue-next` gone from `package.json`. Four
 of the seven glyphs have no Figma source, and three of those four are load-bearing:
@@ -99,10 +118,16 @@ Three ways forward:
 | **B** — export 3a, replace the other four with hand-authored SVGs | Removes the dependency, but means **drawing four glyphs that do not exist in the design** — a direct Prime Directive violation. |
 | **C** — export 3a, ask the designer to add the four | Correct long-term fix; blocks Phase 2 completion until the file is updated. Logged in REPORT.md § "برای طراح" either way. |
 
-**My recommendation: A now, C in parallel.** It applies the ban exactly as far
-as the source of truth reaches, keeps the site functional, and puts the real
-fix upstream where it belongs. B is the only option that requires inventing
-artwork, which is the one thing the brief forbids.
+**Decision: A.** The ban is enforced wherever the Figma file has a node; the
+four glyphs with no source keep `lucide-vue-next`. Nothing was drawn by hand.
+
+`scripts/parity-assets.mjs` encodes this so it cannot silently erode: `Mail`,
+`MapPin` and `Phone` are now **banned** from lucide imports (re-importing one
+fails the gate), and only the four documented no-source glyphs are allowed.
+Adding a fifth fails too.
+
+The four are logged for the designer in [REPORT.md](PARITY/REPORT.md) §
+"برای طراح" — if they are ever drawn, the dependency goes.
 
 ## 5 · Not exporting
 

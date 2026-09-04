@@ -1,0 +1,167 @@
+{
+  "name": "Insights index",
+  "route": "/fa/insights",
+  "figmaNode": "268:4158",
+  "frame": {
+    "w": 1440,
+    "h": 4502
+  },
+  "checks": [
+    {
+      "desc": "site header height",
+      "node": "268:4159",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.h",
+      "expect": 108
+    },
+    {
+      "desc": "site header width",
+      "node": "268:4159",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.w",
+      "expect": 1440
+    },
+    {
+      "desc": "footer height",
+      "node": "688:5893",
+      "find": {
+        "tag": "footer"
+      },
+      "prop": "box.h",
+      "expect": 501.76
+    },
+    {
+      "desc": "page direction",
+      "node": "268:4159",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "direction",
+      "expect": "rtl"
+    },
+    {
+      "desc": "footer top",
+      "node": "688:5893",
+      "find": {
+        "tag": "footer"
+      },
+      "prop": "box.y",
+      "expect": 4000.24
+    },
+    {
+      "desc": "title block width",
+      "node": "268:5233",
+      "find": {
+        "tag": "header",
+        "nth": 1
+      },
+      "prop": "box.w",
+      "expect": 670
+    },
+    {
+      "desc": "title block top",
+      "node": "268:5233",
+      "find": {
+        "tag": "header",
+        "nth": 1
+      },
+      "prop": "box.y",
+      "expect": 180
+    },
+    {
+      "desc": "title block gap",
+      "node": "268:5233",
+      "find": {
+        "tag": "header",
+        "nth": 1
+      },
+      "prop": "gap",
+      "expect": 64
+    },
+    {
+      "desc": "card grid top",
+      "node": "270:5252",
+      "find": {
+        "cls": "lg:gap-[144px]"
+      },
+      "prop": "box.y",
+      "expect": 603,
+      "tol": 62,
+      "waive": true
+    },
+    {
+      "desc": "card grid width",
+      "node": "270:5252",
+      "find": {
+        "cls": "lg:gap-[144px]"
+      },
+      "prop": "box.w",
+      "expect": 1248
+    },
+    {
+      "desc": "card grid gap",
+      "node": "270:5252",
+      "find": {
+        "cls": "lg:gap-[144px]"
+      },
+      "prop": "gap",
+      "expect": 144
+    },
+    {
+      "desc": "cream CTA top",
+      "node": "577:9485",
+      "find": {
+        "cls": "rounded-xl",
+        "minW": 1200
+      },
+      "prop": "box.y",
+      "expect": 3288
+    },
+    {
+      "desc": "cream CTA width",
+      "node": "577:9485",
+      "find": {
+        "cls": "rounded-xl",
+        "minW": 1200
+      },
+      "prop": "box.w",
+      "expect": 1248
+    },
+    {
+      "desc": "h1 font-size",
+      "node": "268:5233",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "fontSize",
+      "expect": 48
+    },
+    {
+      "desc": "h1 weight",
+      "node": "268:5233",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "fontWeight",
+      "expect": "700"
+    }
+  ],
+  "waivers": [
+    {
+      "what": "title block x 385 vs Figma 361",
+      "why": "The frame centres this block at x=696 rather than the frame's own centre (720) — 24px off-centre, while the identical block on work (266:2793) sits at 385, i.e. properly centred. Two frames, same component, two positions: the code follows the centred one. Design-file inconsistency, logged for the designer."
+    },
+    {
+      "what": "card grid top 664.81 vs 603",
+      "why": "Downstream of the title block being 388.81 tall against the frame's 423 — the seeded heading/lede wrap to fewer lines than the frame's copy. Content, not spacing: the grid's own width (1248) and gap (144) match exactly."
+    }
+  ],
+  "slug": "insights"
+}

@@ -1,0 +1,279 @@
+{
+  "name": "Privacy policy",
+  "slug": "privacy",
+  "route": "/fa/privacy-policy",
+  "figmaNode": "279:5924",
+  "frame": {
+    "w": 1440,
+    "h": 2818
+  },
+  "checks": [
+    {
+      "desc": "site header",
+      "node": "279:5925",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.h",
+      "expect": 108
+    },
+    {
+      "desc": "site header",
+      "node": "279:5925",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.w",
+      "expect": 1440
+    },
+    {
+      "desc": "h1 top",
+      "node": "279:6003",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "box.y",
+      "expect": 188
+    },
+    {
+      "desc": "h1 line box",
+      "node": "279:6003",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "box.h",
+      "expect": 61
+    },
+    {
+      "desc": "h1 width",
+      "node": "279:6003",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "box.w",
+      "expect": 612
+    },
+    {
+      "desc": "h1 font-size",
+      "node": "279:6003",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "fontSize",
+      "expect": 48
+    },
+    {
+      "desc": "h1 weight (Display/Large Bold)",
+      "node": "279:6003",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "fontWeight",
+      "expect": "700"
+    },
+    {
+      "desc": "h1 colour Black/50",
+      "node": "279:6003",
+      "find": {
+        "tag": "h1"
+      },
+      "prop": "color",
+      "expect": "rgb(243, 243, 243)"
+    },
+    {
+      "desc": "subtitle top (h1 + 24 gap)",
+      "node": "279:6005",
+      "find": {
+        "tag": "p",
+        "text": "حریم خصوصی شما احترام"
+      },
+      "prop": "box.y",
+      "expect": 273
+    },
+    {
+      "desc": "subtitle line box (2 lines x 25)",
+      "node": "279:6005",
+      "find": {
+        "tag": "p",
+        "text": "حریم خصوصی شما احترام"
+      },
+      "prop": "box.h",
+      "expect": 50
+    },
+    {
+      "desc": "subtitle font-size (tite/Medium)",
+      "node": "279:6005",
+      "find": {
+        "tag": "p",
+        "text": "حریم خصوصی شما احترام"
+      },
+      "prop": "fontSize",
+      "expect": 20
+    },
+    {
+      "desc": "subtitle weight",
+      "node": "279:6005",
+      "find": {
+        "tag": "p",
+        "text": "حریم خصوصی شما احترام"
+      },
+      "prop": "fontWeight",
+      "expect": "500"
+    },
+    {
+      "desc": "subtitle colour Black/200",
+      "node": "279:6005",
+      "find": {
+        "tag": "p",
+        "text": "حریم خصوصی شما احترام"
+      },
+      "prop": "color",
+      "expect": "rgb(208, 208, 208)"
+    },
+    {
+      "desc": "section 1 h2 top",
+      "node": "279:6728",
+      "find": {
+        "tag": "h2",
+        "nth": 0
+      },
+      "prop": "box.y",
+      "expect": 419
+    },
+    {
+      "desc": "section 1 h2 line box",
+      "node": "279:6728",
+      "find": {
+        "tag": "h2",
+        "nth": 0
+      },
+      "prop": "box.h",
+      "expect": 38
+    },
+    {
+      "desc": "section h2 font-size (off-scale 30)",
+      "node": "279:6728",
+      "find": {
+        "tag": "h2",
+        "nth": 0
+      },
+      "prop": "fontSize",
+      "expect": 30
+    },
+    {
+      "desc": "section h2 weight",
+      "node": "279:6728",
+      "find": {
+        "tag": "h2",
+        "nth": 0
+      },
+      "prop": "fontWeight",
+      "expect": "500"
+    },
+    {
+      "desc": "section h2 colour Black/50",
+      "node": "279:6728",
+      "find": {
+        "tag": "h2",
+        "nth": 0
+      },
+      "prop": "color",
+      "expect": "rgb(243, 243, 243)"
+    },
+    {
+      "desc": "section body top (h2 + 24 gap)",
+      "node": "279:6730",
+      "find": {
+        "tag": "p",
+        "text": "وقتی با ما تماس"
+      },
+      "prop": "box.y",
+      "expect": 481
+    },
+    {
+      "desc": "content track x",
+      "node": "284:3948",
+      "find": {
+        "tag": "h2",
+        "nth": 0
+      },
+      "prop": "box.x",
+      "expect": 96
+    },
+    {
+      "desc": "content track width",
+      "node": "284:3948",
+      "find": {
+        "tag": "h2",
+        "nth": 0
+      },
+      "prop": "box.w",
+      "expect": 1248,
+      "waive": true
+    },
+    {
+      "desc": "footer height",
+      "node": "688:6453",
+      "find": {
+        "tag": "footer"
+      },
+      "prop": "box.h",
+      "expect": 501.76
+    },
+    {
+      "desc": "footer brand column width",
+      "node": "688:6474",
+      "find": {
+        "cls": "md:w-[402px]"
+      },
+      "prop": "box.w",
+      "expect": 402
+    },
+    {
+      "desc": "footer nav column height",
+      "node": "688:6473",
+      "find": {
+        "tag": "nav",
+        "nth": 1
+      },
+      "prop": "box.h",
+      "expect": 218
+    },
+    {
+      "desc": "footer top block height",
+      "node": "688:6455",
+      "find": {
+        "cls": "md:flex-row"
+      },
+      "prop": "box.h",
+      "expect": 218
+    },
+    {
+      "desc": "page direction",
+      "node": "279:5924",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "direction",
+      "expect": "rtl"
+    }
+  ],
+  "waivers": [
+    {
+      "what": "content track width 1250 (Figma) vs 1248 (code)",
+      "why": "The frame contradicts itself: `284:3948` and `280:6742` are 1250 wide and overhang the right gutter by 2px (96+1250=1346 > 1440-96=1344), while the header and footer on the SAME frame use 1248, and the inner body boxes (`Frame 96292`) are 1248 offset by x=2. 1248 is the gutter-consistent value and the code uses it for all 31 track elements. Matching 1250 would misalign the legal copy against its own header and footer. Design-file defect — logged for the designer."
+    },
+    {
+      "what": "section 2-8 vertical positions drift 7-29px",
+      "why": "Body copy differs between Figma and the seeded database, so paragraphs wrap to different line counts and the 64px-gapped stack accumulates offset. Figma's own copy still reads «در صحرا مارکتینگ» (the OLD brand) and its h1 is «سیاست حفظ حریم خصوصی» vs the seeded «حریم خصوصی». This is a content decision, not a parity defect — parked per the brief."
+    },
+    {
+      "what": "page height 2747 vs 2818 — and it used to 'pass' at 2817",
+      "why": "A FALSE PASS, exposed by fixing the footer wash. The wash (688:6512) was sized 1440 wide instead of its 1248 track, so it rendered 518.95 tall instead of 449.76 and overflowed the footer by ~70px, inflating the scroll height of every page. On privacy that ~70px happened to offset a ~71px content shortfall, so the page-height check read 2817 against 2818 and looked perfect. With the wash pinned to the frame's 1248x449.76 the real gap shows: the seeded copy runs shorter than the frame's. Content difference, parked — but worth recording that two bugs were cancelling."
+    }
+  ],
+  "waivePageHeight": true
+}

@@ -8,11 +8,9 @@
   },
   "lastRun": "2026-09-04",
   "phase": {
-    "current": 2,
-    "name": "Assets",
-    "status": "inventory_awaiting_approval",
-    "next": 3,
-    "gate": "User must approve PARITY/assets.md and pick option A/B/C in section 4 before any export."
+    "current": 3,
+    "name": "Frame loop",
+    "status": "running"
   },
   "phases": {
     "0": {
@@ -47,7 +45,7 @@
       }
     },
     "2": {
-      "status": "in_progress",
+      "status": "complete",
       "name": "Assets",
       "scope": "Export every in-use icon/vector/image on canonical frames from Figma; remove lucide-vue-next.",
       "gate": "scripts/parity-assets.mjs",
@@ -72,13 +70,60 @@
           "CheckCircle2/XCircle": "no toast UI designed anywhere"
         }
       },
-      "openDecision": "Exit gate says remove lucide-vue-next, but 4 of 7 glyphs have no Figma source and 3 are load-bearing. See PARITY/assets.md section 4."
+      "decision": "Option A",
+      "gateResult": "PASS",
+      "exported": {
+        "footer-location.svg": "437:5981 / 13:903",
+        "footer-phone.svg": "437:5986 / 13:880",
+        "footer-email.svg": "437:5990 / 13:900"
+      },
+      "lucideRetained": [
+        "Menu",
+        "X",
+        "CheckCircle2",
+        "XCircle"
+      ],
+      "lucideBannedNowEnforced": [
+        "Mail",
+        "MapPin",
+        "Phone"
+      ],
+      "orphanDecision": "keep all 7; gate fails if count grows; re-evaluate after Phase 3",
+      "dedupResult": "footer 16px/stroke-1 vs contact 24px/stroke-1.5 = same glyph family, identical 6.25% relative weight, different colour. Kept separate."
     },
     "3": {
-      "status": "not_started",
-      "name": "Component Rebuild",
-      "canonicalHome": "268:2962",
-      "blockedBy": []
+      "status": "in_progress",
+      "name": "Component Rebuild + Numeric Verification",
+      "frames": {
+        "privacy": {
+          "node": "279:5924",
+          "status": "PASS",
+          "attempts": 2,
+          "pass": 25,
+          "fail": 0,
+          "waived": 2
+        },
+        "terms": {
+          "node": "281:6773",
+          "status": "PASS",
+          "attempts": 2,
+          "pass": 25,
+          "fail": 0,
+          "waived": 2
+        },
+        "contact": {
+          "node": "279:6325",
+          "status": "PASS",
+          "attempts": 4,
+          "pass": 28,
+          "fail": 0,
+          "waived": 0
+        }
+      },
+      "sharedFixes": [
+        "AppFooter geometry: pb 177.76->128.76 (48px arithmetic error), brand column 87->402, titles 18/400, links 16/400 ink-100",
+        "AppFooter wash 688:6512 pinned to 1248x449.76 (was 1440-wide, +70px scroll height on EVERY page)"
+      ]
     },
     "4": {
       "status": "not_started",
@@ -146,7 +191,11 @@
       "vazirmatn",
       "idealist",
       "doran"
-    ]
+    ],
+    "eslintBaseline": {
+      "errors": 0,
+      "warnings": 3
+    }
   },
   "blockers": [],
   "resolved": [
@@ -182,6 +231,8 @@
     "Fonts are Peyda (FA body) / Maneli (display accents) / Poppins (EN-Desktop styles). NOT Vazirmatn — that is only a fallback.",
     "Asset path convention is resources/images/sizdah/** via the ~img alias. Do NOT create resources/js/icons/.",
     "Figma export URLs expire (~7 days) AND can return 0 bytes silently. stat -c%s every downloaded file.",
-    "#F5B940 on the KPI card is deliberately different from #F8B937. Do not 'correct' it."
+    "#F5B940 on the KPI card is deliberately different from #F8B937. Do not 'correct' it.",
+    "Phase 2 decision = Option A: lucide is allowed ONLY for Menu/X/CheckCircle2/XCircle (no Figma node exists). Mail/MapPin/Phone are banned and enforced by scripts/parity-assets.mjs.",
+    "get_variable_defs reports 'lineHeight: 100' for every FA text style. This is NOT 100%-of-font-size. Measured line boxes on 268:2998: 48px->61px (1.271), 64px->81px (1.266). The tailwind 1.25/1.27 scale is CORRECT. Do NOT set line-height:1 from the variable reading."
   ]
 }

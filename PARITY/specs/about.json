@@ -1,0 +1,125 @@
+{
+  "name": "About",
+  "route": "/fa/about",
+  "figmaNode": "336:5623",
+  "frame": {
+    "w": 1440,
+    "h": 4021
+  },
+  "checks": [
+    {
+      "desc": "site header height",
+      "node": "336:5624",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.h",
+      "expect": 108
+    },
+    {
+      "desc": "site header width",
+      "node": "336:5624",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "box.w",
+      "expect": 1440
+    },
+    {
+      "desc": "footer height",
+      "node": "688:6341",
+      "find": {
+        "tag": "footer"
+      },
+      "prop": "box.h",
+      "expect": 501.76
+    },
+    {
+      "desc": "page direction",
+      "node": "336:5624",
+      "find": {
+        "tag": "header",
+        "nth": 0
+      },
+      "prop": "direction",
+      "expect": "rtl"
+    },
+    {
+      "desc": "portrait x",
+      "node": "343:9292",
+      "find": {
+        "tag": "img",
+        "minW": 690
+      },
+      "prop": "box.x",
+      "expect": 96
+    },
+    {
+      "desc": "portrait top",
+      "node": "343:9292",
+      "find": {
+        "tag": "img",
+        "minW": 690
+      },
+      "prop": "box.y",
+      "expect": 250
+    },
+    {
+      "desc": "portrait width",
+      "node": "343:9292",
+      "find": {
+        "tag": "img",
+        "minW": 690
+      },
+      "prop": "box.w",
+      "expect": 696
+    },
+    {
+      "desc": "portrait height",
+      "node": "343:9292",
+      "find": {
+        "tag": "img",
+        "minW": 690
+      },
+      "prop": "box.h",
+      "expect": 522
+    },
+    {
+      "desc": "story column x",
+      "node": "357:9335",
+      "find": {
+        "cls": "max-w-[824px]"
+      },
+      "prop": "box.x",
+      "expect": 308
+    },
+    {
+      "desc": "story column width",
+      "node": "357:9335",
+      "find": {
+        "cls": "max-w-[824px]"
+      },
+      "prop": "box.w",
+      "expect": 824
+    },
+    {
+      "desc": "story column gap",
+      "node": "357:9335",
+      "find": {
+        "cls": "max-w-[824px]"
+      },
+      "prop": "gap",
+      "expect": 80
+    }
+  ],
+  "waivePageHeight": true,
+  "waivers": [
+    {
+      "what": "footer 274.73 early; middle sections cumulatively taller",
+      "why": "The frame's first content offset (250, not the shared 180) and its trailing slack (147.24, not 96) were both real defects and are fixed — the portrait now lands at exactly 96,250 696x522. What remains is section height: the values grid and the 8-card team grid render taller than the frame's, which is item-count and copy-length driven. Parked as content; convergence would need the seeded team/values to match the frame's."
+    }
+  ],
+  "slug": "about"
+}

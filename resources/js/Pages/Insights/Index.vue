@@ -85,7 +85,13 @@ const rest = computed(() => props.posts.data.slice(2))
 <template>
   <SeoHead :seo="props.seo" />
 
-  <section class="section-first pb-24">
+  <!--
+    268:4158 places the footer at y=4000.24 and the cream CTA (577:9485) at
+    y=3288; the slack below the CTA is 199.24, not the shared `pb-24` (96).
+    These frames are absolutely positioned, so the trailing space is
+    per-frame rather than a shared section rhythm — same as contact (153.24).
+  -->
+  <section class="section-first pb-[199.24px]">
     <!-- Header sits 96 above the content block; 270:5252 then runs on 144. -->
     <div class="container-sizdah relative isolate flex flex-col gap-16 lg:gap-24">
       <!-- 691:7297 — the mesh starts level with the content, at frame y=180. -->
