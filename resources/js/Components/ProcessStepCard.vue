@@ -66,7 +66,7 @@ const iconUrl = computed(() => (props.item.icon ? ICONS[props.item.icon] : undef
 
 <template>
   <li
-    class="process-wash group flex flex-col gap-6 px-8 py-10 transition-colors duration-200 ease-brand hover:bg-[#f3b435] hover:bg-none"
+    class="process-wash group flex flex-col gap-6 px-8 py-10 transition-colors duration-200 ease-brand hover:bg-brand-pressed hover:bg-none"
   >
     <!--
       537:5890 — glyph at the inline start, numeral opposite. DOM order is the

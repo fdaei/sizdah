@@ -1,0 +1,47 @@
+{
+  "_meta": {
+    "note": "Union of get_variable_defs across 16 canonical nodes. get_variable_defs returns ONLY variables used by the queried node, so a single call is never the full set.",
+    "read": "2026-09-04",
+    "nodesQueried": ["268:2962","21:2152","285:4590","537:5510","308:4492","336:5623","336:5374","222:1989","268:4158","279:6325","279:5924","266:2825","281:6773","276:5724","546:7528","598:5732"]
+  },
+  "color": {
+    "Yellow/50": "#FEFBF5", "Yellow/100": "#FFF8EB", "Yellow/200": "#FEF1D7",
+    "Yellow/300": "#FDEAC3", "Yellow/600": "#FBD587", "Yellow/800": "#F9C75F",
+    "Yellow/900": "#F9C04B", "Yellow/1000": "#F8B937",
+    "Black/50": "#F3F3F3", "Black/100": "#E8E8E8", "Black/200": "#D0D0D0",
+    "Black/300": "#B9B9B9", "Black/400": "#A1A1A1", "Black/500": "#8A8A8A",
+    "Black/600": "#727272", "Black/700": "#5B5B5B", "Black/800": "#434343",
+    "Black/900": "#2C2C2C", "Black/1000": "#141414",
+    "White": "#F1F1F1",
+    "black/100": "#E9E9E9", "black/200": "#D3D2D2", "black/300": "#BDBCBD",
+    "black/500": "#918F90", "black/700": "#656363", "black/800": "#4F4C4D",
+    "black/900": "#393637",
+    "gold/100": "#F9F5EC", "gold/200": "#F2E9D8",
+    "primary gold": "#bd933b", "primary white": "#ffffff", "primary black": "#231f20"
+  },
+  "space": {
+    "space0": 0, "space4": 4, "space8": 8, "space12": 12, "space16": 16,
+    "space24": 24, "space32": 32, "space40": 40, "space48": 48, "space64": 64,
+    "space96": 96
+  },
+  "radius": {
+    "radiusXS": 4, "radiusSM": 8, "radiusMD": 12, "radiusLG": 16, "radiusROUND": 1000
+  },
+  "type": {
+    "FA-Desktop/Display/Large":   { "family": "Peyda", "style": "Bold",    "size": 48, "weight": 700, "lineHeight": "100%", "letterSpacing": 0 },
+    "FA-Desktop/Display/Medium":  { "family": "Peyda", "style": "Bold",    "size": 40, "weight": 700, "lineHeight": "100%", "letterSpacing": 0 },
+    "FA-Desktop/Display/Small":   { "family": "Peyda", "style": "Bold",    "size": 36, "weight": 700, "lineHeight": "100%", "letterSpacing": 0 },
+    "FA-Desktop/Headline/Large":  { "family": "Peyda", "style": "Bold",    "size": 32, "weight": 700, "lineHeight": "100%", "letterSpacing": 0 },
+    "FA-Desktop/Headline/Medium": { "family": "Peyda", "style": "Medium",  "size": 28, "weight": 500, "lineHeight": "100%", "letterSpacing": 0 },
+    "FA-Desktop/Headline/Small":  { "family": "Peyda", "style": "Medium",  "size": 24, "weight": 500, "lineHeight": "100%", "letterSpacing": 0 },
+    "FA-Desktop/tite/Large":      { "family": "Peyda", "style": "Medium",  "size": 22, "weight": 500, "lineHeight": "100%", "letterSpacing": 0 },
+    "FA-Desktop/tite/Medium":     { "family": "Peyda", "style": "Medium",  "size": 20, "weight": 500, "lineHeight": "100%", "letterSpacing": 0 },
+    "FA-Desktop/tite/Small":      { "family": "Peyda", "style": "Regular", "size": 18, "weight": 400, "lineHeight": "100%", "letterSpacing": 0 },
+    "FA-Desktop/Body/Large":      { "family": "Peyda", "style": "Regular", "size": 16, "weight": 400, "lineHeight": "100%", "letterSpacing": 0 },
+    "FA-Desktop/Body/Medium":     { "family": "Peyda", "style": "Regular", "size": 14, "weight": 400, "lineHeight": "100%", "letterSpacing": 0 },
+    "FA-Desktop/Lable/Lage":      { "family": "Peyda", "style": "Medium",  "size": 14, "weight": 500, "lineHeight": "100%", "letterSpacing": 0 },
+    "FA-Desktop/Lable/Medium":    { "family": "Peyda", "style": "Medium",  "size": 12, "weight": 500, "lineHeight": "100%", "letterSpacing": 0 },
+    "EN-Desktop/Label/Large":     { "family": "Poppins", "style": "Medium",  "size": 14, "weight": 500, "lineHeight": "100%", "letterSpacing": 0 },
+    "EN-Desktop/Body/medium":     { "family": "Poppins", "style": "Regular", "size": 14, "weight": 400, "lineHeight": "100%", "letterSpacing": 0 }
+  }
+}

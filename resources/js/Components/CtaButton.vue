@@ -9,7 +9,7 @@ import arrowUrl from '~img/sizdah/shared/cta-arrow.svg'
  * Figma: the component set 21:2164 ships four variants — sm/lg x BW/WB.
  * `sm` is space24/space12 with an 18px Regular label; `lg` is space32/space16
  * with a 20px Medium label. Both round on radiusSM and take an optional 24px
- * arrow at the inline start.
+ * arrow after the label.
  *
  * Heights fall out of the padding plus the label's line box and must NOT be
  * pinned: sm measures 46px bare (12+22+12, e.g. the header CTA I268:3031;21:2147)
@@ -82,9 +82,11 @@ const classes = computed(() => [
     ]"
     @click="$emit('click', $event)"
   >
+    <span>{{ props.label }}</span>
     <!--
-      The arrow points along the reading direction, so it mirrors under RTL
-      (.flip-rtl in app.css) rather than being duplicated per locale.
+      The arrow follows the label and points along the reading direction, so
+      it mirrors under RTL (.flip-rtl in app.css) rather than being duplicated
+      per locale.
     -->
     <img
       v-if="withArrow"
@@ -95,6 +97,5 @@ const classes = computed(() => [
       height="24"
       class="size-6 flip-rtl"
     />
-    <span>{{ props.label }}</span>
   </component>
 </template>

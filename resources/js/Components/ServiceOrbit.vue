@@ -115,7 +115,7 @@ const nodes = computed(() => {
 </script>
 
 <template>
-  <section class="bg-[#FDFCFA] py-16 lg:pb-20 lg:pt-[91px]">
+  <section class="bg-surface-raised py-16 lg:pb-20 lg:pt-[91px]">
     <div class="container-sizdah">
       <SectionHeading
         data-reveal

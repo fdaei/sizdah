@@ -10,11 +10,14 @@ import calendarUrl from '~img/sizdah/shared/calendar.svg'
  * Article header chips — Figma "info" (292:7522 / 292:7507 / 287:5095).
  *
  * 2px Yellow/300 (#FDEAC3) outline over a faint raking brand wash, label above
- * value, and a 24px glyph at the inline start. Yellow/300 has no slot in the
- * `brand` scale (50/200/600/800/900/1000, no 300), so it's an arbitrary value
- * rather than a token — was `border-brand-200` (#FEF1D7, visibly lighter).
- * A chip is dropped when the post has no such value rather than rendering an
- * empty row.
+ * value, and a 24px glyph at the inline start. A chip is dropped when the post
+ * has no such value rather than rendering an empty row.
+ *
+ * CORRECTED 2026-09-04 (PARITY Phase 1): this docblock used to claim Yellow/300
+ * "has no slot in the `brand` scale, so it's an arbitrary value rather than a
+ * token". That was wrong. Yellow/300 IS a Figma variable — it just does not
+ * appear on Home (268:2962), and a `get_variable_defs` read scoped to Home
+ * therefore reports it as absent. It is now `brand-300`.
  *
  * The date glyph in the frame is a ten-fragment variant of the same calendar
  * drawn on the blog cards; the card export is reused for it.
@@ -53,7 +56,7 @@ const chips = computed(() =>
     <li
       v-for="chip in chips"
       :key="chip.key"
-      class="flex items-start gap-2 rounded-lg border-2 border-[#fdeac3] px-6 py-3"
+      class="flex items-start gap-2 rounded-lg border-2 border-brand-300 px-6 py-3"
       style="
         background-image: linear-gradient(
           -15deg,

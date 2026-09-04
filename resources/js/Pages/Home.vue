@@ -165,7 +165,7 @@ const finalCta = computed(() => props.sections.final_cta)
               aria-hidden="true"
               width="56"
               height="56"
-              class="size-10 shrink-0 flip-rtl lg:-mt-[35px] lg:size-14"
+              class="size-10 shrink-0 -scale-x-100 lg:-mt-[35px] lg:size-14"
             />
             <span class="max-w-[173px]">{{ $t('home.hero.note') }}</span>
           </p>

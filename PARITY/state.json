@@ -1,0 +1,187 @@
+{
+  "fileKey": "v1l4ANft5Wtb8wPThyP7P9",
+  "fileName": "SizdahMarketing",
+  "page": {
+    "id": "0:1",
+    "name": "User Interface",
+    "isOnlyPage": true
+  },
+  "lastRun": "2026-09-04",
+  "phase": {
+    "current": 2,
+    "name": "Assets",
+    "status": "inventory_awaiting_approval",
+    "next": 3,
+    "gate": "User must approve PARITY/assets.md and pick option A/B/C in section 4 before any export."
+  },
+  "phases": {
+    "0": {
+      "status": "complete",
+      "artifacts": [
+        "PARITY/manifest.md",
+        "PARITY/blockers.md",
+        "PARITY/state.json"
+      ]
+    },
+    "1": {
+      "status": "complete",
+      "name": "Design Tokens",
+      "artifacts": [
+        "PARITY/tokens/figma-variables.json",
+        "PARITY/hardcoded-values.md",
+        "scripts/parity-tokens.mjs",
+        "scripts/parity-hardcoded.mjs"
+      ],
+      "result": {
+        "tokenCoverage": "PASS",
+        "figmaVariables": 63,
+        "unmapped": 0,
+        "tokensAdded": [
+          "brand.100 #FFF8EB (Yellow/100)",
+          "brand.300 #FDEAC3 (Yellow/300)",
+          "surface-raised #FDFCFA (raw fill, NOT a Figma variable)",
+          "brand-pressed #f3b435 (raw fill, NOT a Figma variable)"
+        ],
+        "hardcodedBefore": 25,
+        "hardcodedAfter": 17
+      }
+    },
+    "2": {
+      "status": "in_progress",
+      "name": "Assets",
+      "scope": "Export every in-use icon/vector/image on canonical frames from Figma; remove lucide-vue-next.",
+      "gate": "scripts/parity-assets.mjs",
+      "inventory": {
+        "assetsOnDisk": 113,
+        "distinctImgRefs": 105,
+        "missingOnDisk": 0,
+        "zeroByte": 0,
+        "orphans": 7,
+        "lucideGlyphs": 7,
+        "lucideWithFigmaNode": 3,
+        "lucideWithoutFigmaNode": 4,
+        "exportable": {
+          "MapPin": "437:5981 (13:903)",
+          "Phone": "437:5986 (13:880)",
+          "Mail": "437:5990 (13:900)"
+        },
+        "noFigmaSource": {
+          "Menu": "no sub-1440 frame exists",
+          "X-MobileMenu": "no mobile menu in file",
+          "X-LeadMagnetModal": "416:5399 draws no close button",
+          "CheckCircle2/XCircle": "no toast UI designed anywhere"
+        }
+      },
+      "openDecision": "Exit gate says remove lucide-vue-next, but 4 of 7 glyphs have no Figma source and 3 are load-bearing. See PARITY/assets.md section 4."
+    },
+    "3": {
+      "status": "not_started",
+      "name": "Component Rebuild",
+      "canonicalHome": "268:2962",
+      "blockedBy": []
+    },
+    "4": {
+      "status": "not_started",
+      "name": "Numeric Verification"
+    },
+    "5": {
+      "status": "not_started",
+      "name": "RTL checklist (fa-only)",
+      "scope": "logical properties, directional-icon mirroring, logo not flipped, Persian line-height, overflow"
+    },
+    "6": {
+      "status": "out_of_scope",
+      "name": "Responsive",
+      "reason": "No non-1440 frame exists in the file. User put it out of scope."
+    },
+    "7": {
+      "status": "not_started",
+      "name": "Final Report"
+    }
+  },
+  "inventory": {
+    "topLevelNodes": 81,
+    "pageFrames": 21,
+    "componentSetsAndSheets": 14,
+    "decorativeAndReference": 16,
+    "hiddenRasterScrap": 36,
+    "routeBearingVuePages": 10,
+    "allFramesWidthPx": 1440,
+    "locales": [
+      "fa"
+    ],
+    "localesInFigma": [
+      "fa"
+    ]
+  },
+  "tooling": {
+    "getMetadataElidesChildren": true,
+    "elidedNodes": [
+      "268:2962",
+      "772:5193",
+      "504:7399"
+    ],
+    "structuralSource": "mcp__figma__get_figma_data",
+    "screenshotSource": "mcp__claude_ai_Figma__get_screenshot",
+    "imageDiff": "ImageMagick compare (available) + PIL (available)",
+    "note": "Never declare a frame empty on get_metadata evidence alone.",
+    "getVariableDefsIsNodeScoped": true,
+    "getVariableDefsNote": "Returns ONLY variables used by the queried node. A single call is never the full set — union across canonical frames. This had already caused a wrong docblock claim in ArticleMeta.vue.",
+    "themeFnNotValidInInlineStyle": true
+  },
+  "baseline": {
+    "iconLibraryInUse": "lucide-vue-next@^0.468.0",
+    "iconLibraryImportSites": 5,
+    "iconsDirExists": false,
+    "defaultTailwindPaletteHits": 2,
+    "arbitraryPxOccurrences": 179,
+    "fontsFromFigma": [
+      "Peyda",
+      "Maneli"
+    ],
+    "fontsSelfHosted": [
+      "peyda",
+      "maneli",
+      "poppins",
+      "vazirmatn",
+      "idealist",
+      "doran"
+    ]
+  },
+  "blockers": [],
+  "resolved": [
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "B7"
+  ],
+  "canonical": {
+    "method": "Canvas row geometry: production row sits at y=-47; the test row at y=8433 with negative x.",
+    "home": "268:2962",
+    "workIndex": "222:1989",
+    "error": "266:2825",
+    "supersededTests": [
+      "450:4908",
+      "13:2766",
+      "504:7399",
+      "226:3080",
+      "261:2545",
+      "82:2059",
+      "88:2490"
+    ],
+    "twinInProductionRow": "772:5193"
+  },
+  "rules": [
+    "get_metadata elides children of large frames and shows them as empty leaves. NEVER declare a node empty on get_metadata alone — confirm with get_figma_data or get_screenshot.",
+    "get_variable_defs is NODE-SCOPED. One call is never the full variable set. Union across canonical frames.",
+    "theme() does NOT work inside a style=\"\" attribute — Tailwind never processes it. The gradient silently breaks.",
+    "Stack is Laravel 12, token file is tailwind.config.js (NOT .ts).",
+    "Fonts are Peyda (FA body) / Maneli (display accents) / Poppins (EN-Desktop styles). NOT Vazirmatn — that is only a fallback.",
+    "Asset path convention is resources/images/sizdah/** via the ~img alias. Do NOT create resources/js/icons/.",
+    "Figma export URLs expire (~7 days) AND can return 0 bytes silently. stat -c%s every downloaded file.",
+    "#F5B940 on the KPI card is deliberately different from #F8B937. Do not 'correct' it."
+  ]
+}

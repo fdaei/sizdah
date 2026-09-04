@@ -44,7 +44,7 @@ const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${
       <li class="relative">
         <button
           type="button"
-          class="flex size-[68px] items-center justify-center rounded-full bg-[#fff8eb] transition-opacity duration-200 ease-brand hover:opacity-80"
+          class="flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-opacity duration-200 ease-brand hover:opacity-80"
           @click="copyLink"
         >
           <span class="sr-only">{{ t('blog.copy_link') }}</span>
@@ -79,7 +79,7 @@ const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${
           :href="xShareUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex size-[68px] items-center justify-center rounded-full bg-[#fff8eb] transition-opacity duration-200 ease-brand hover:opacity-80"
+          class="flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-opacity duration-200 ease-brand hover:opacity-80"
         >
           <span class="sr-only">X</span>
           <img :src="xUrl" alt="" aria-hidden="true" width="24" height="24" class="size-6" />
@@ -91,7 +91,7 @@ const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${
           :href="linkedinShareUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex size-[68px] items-center justify-center rounded-full bg-[#fff8eb] transition-opacity duration-200 ease-brand hover:opacity-80"
+          class="flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-opacity duration-200 ease-brand hover:opacity-80"
         >
           <span class="sr-only">LinkedIn</span>
           <img :src="linkedinUrl" alt="" aria-hidden="true" width="24" height="24" class="size-6" />

@@ -184,7 +184,7 @@ watch(
                 {{ t('forms.newsletter.name') }}
               </label>
               <div
-                class="flex items-center gap-2 rounded-lg border-3 border-[#fdeac3] bg-white/80 p-3"
+                class="flex items-center gap-2 rounded-lg border-3 border-brand-300 bg-white/80 p-3"
               >
                 <input
                   id="lead-magnet-name"
@@ -214,7 +214,7 @@ watch(
                 {{ t('forms.newsletter.email') }}
               </label>
               <div
-                class="flex items-center gap-2 rounded-lg border-3 border-[#fdeac3] bg-white/80 p-3"
+                class="flex items-center gap-2 rounded-lg border-3 border-brand-300 bg-white/80 p-3"
               >
                 <input
                   id="lead-magnet-email"

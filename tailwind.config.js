@@ -40,12 +40,22 @@ export default {
          | Figma "Yellow/*". Yellow/1000 is the brand accent used for CTAs,
          | eyebrow dots, numerals and rules. The lighter steps are surfaces
          | (Yellow/50 and /200 back the one cream section on Home).
+         |
+         | 100 and 300 added 2026-09-04 (PARITY Phase 1). Both are real Figma
+         | variables; they were missed because `get_variable_defs` only returns
+         | the variables a QUERIED NODE uses — neither appears on Home
+         | (268:2962), so a Home-only read reports them as non-existent.
+         | Yellow/100 lives on the article share rail and insights showcase,
+         | Yellow/300 on the article-meta chips and lead-magnet modal. Both
+         | were hardcoded as arbitrary values before this.
          */
         brand: {
           DEFAULT: '#F8B937',
           primary: '#F8B937',
           50: '#FEFBF5',
+          100: '#FFF8EB',
           200: '#FEF1D7',
+          300: '#FDEAC3',
           600: '#FBD587',
           800: '#F9C75F',
           900: '#F9C04B',
@@ -103,6 +113,28 @@ export default {
           900: '#393637',
           1000: '#231f20',
         },
+
+        /*
+         | ---------------------------------------------------------------
+         | RAW FILLS — *NOT* Figma variables. Keep this block separate.
+         | ---------------------------------------------------------------
+         | Every token above maps 1:1 onto a named Figma variable and carries
+         | that variable's name. The two below do NOT: the designer used them
+         | as literal fills and never promoted them to variables, so there is
+         | no Figma name to copy and these names are OURS, chosen by role.
+         |
+         | They are tokens anyway (PARITY B7, 2026-09-04) because leaving them
+         | as raw hex makes them indistinguishable, on the next pass, from a
+         | colour somebody eyeballed. Naming them records that they were
+         | measured against a specific node.
+         |
+         | Do not add to this block casually — a new entry here is a claim that
+         | you checked `get_variable_defs` on the owning node and found no
+         | variable. The real fix is upstream: see PARITY/REPORT.md → "برای
+         | طراح" for the standing request to promote both to Figma variables.
+         */
+        'surface-raised': '#FDFCFA', // raw fill on 268:3032 and 553:7779
+        'brand-pressed': '#f3b435', // raw fill on hover variant 537:5511
       },
 
       // Figma space0 … space96
