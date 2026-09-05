@@ -4,6 +4,7 @@ import CtaButton from '@/Components/CtaButton.vue'
 import LeadMagnetModal from '@/Components/LeadMagnetModal.vue'
 import type { PageSectionData } from '@/types'
 import doodleUrl from '~img/sizdah/shared/checklist-doodle.svg'
+import articleAccentUrl from '~img/sizdah/blog/lead-magnet-accent.svg'
 import leadMagnetDotsUrl from '~img/sizdah/home/lead-magnet-dots.svg'
 import leadMagnetGridUrl from '~img/sizdah/home/lead-magnet-grid.svg'
 import leadMagnetScribbleUrl from '~img/sizdah/home/lead-magnet-scribble.svg'
@@ -49,17 +50,27 @@ const modalOpen = ref(false)
     :class="
       props.size === 'lg'
         ? 'mx-auto max-w-[1036px] rounded-xl bg-brand-50 p-8 ring-[3px] ring-inset ring-brand lg:flex-row lg:justify-between lg:p-16'
-        : 'rounded-sm p-8 md:flex-row md:justify-between'
+        : 'w-full max-w-[826px] rounded-lg p-8 md:flex-row md:items-center md:justify-between md:gap-6'
     "
     :style="
       props.size === 'sm'
         ? {
             backgroundImage:
-              'linear-gradient(-8.86deg, rgb(248 185 55 / 0) 2.32%, rgb(248 185 55 / 10%) 100%), linear-gradient(0deg, #fef1d7, #fef1d7)',
+              'linear-gradient(-8.864deg, rgb(248 185 55 / 0) 2.3248%, rgb(248 185 55 / 10%) 100%), linear-gradient(90deg, #fef1d7 0%, #fef1d7 100%)',
           }
         : undefined
     "
   >
+    <img
+      v-if="props.size === 'sm'"
+      :src="doodleUrl"
+      alt=""
+      aria-hidden="true"
+      width="64"
+      height="50"
+      class="hidden h-[49.419px] w-16 shrink-0 md:block"
+    />
+
     <template v-if="props.size === 'lg'">
       <!--
         391:4800 is a 400x400 ruled sheet parked at the card's inline end and
@@ -95,8 +106,12 @@ const modalOpen = ref(false)
     </template>
 
     <div
-      class="relative z-10 flex flex-col gap-2 text-center"
-      :class="props.size === 'lg' ? 'max-w-[580px] gap-4 lg:w-[580px]' : 'max-w-[458px]'"
+      class="relative z-10 flex flex-col gap-2"
+      :class="
+        props.size === 'lg'
+          ? 'max-w-[580px] text-center gap-4 lg:w-[580px]'
+          : 'w-full max-w-[458px] items-end text-start md:w-[458px]'
+      "
     >
       <p
         :class="
@@ -117,23 +132,24 @@ const modalOpen = ref(false)
       </p>
     </div>
 
-    <CtaButton
-      v-if="props.section.primaryCta"
-      :label="props.section.primaryCta.label"
-      :variant="props.size === 'lg' ? 'brand-outline' : 'solid'"
-      class="relative z-10 shrink-0"
-      @click="modalOpen = true"
-    />
+    <div v-if="props.section.primaryCta" class="relative z-10 shrink-0">
+      <CtaButton
+        :label="props.section.primaryCta.label"
+        :variant="props.size === 'lg' ? 'brand-outline' : 'solid'"
+        @click="modalOpen = true"
+      />
+    </div>
 
     <img
-      v-if="props.size !== 'lg'"
-      :src="doodleUrl"
+      v-if="props.size === 'sm'"
+      :src="articleAccentUrl"
       alt=""
       aria-hidden="true"
-      width="64"
-      height="49"
-      class="hidden h-[49px] w-16 shrink-0 flip-rtl md:block"
+      width="16"
+      height="20"
+      class="pointer-events-none absolute left-[19px] top-1/2 hidden h-5 w-4 -translate-y-1/2 md:block"
     />
+
   </aside>
 
   <LeadMagnetModal :open="modalOpen" :source="props.source" @close="modalOpen = false" />

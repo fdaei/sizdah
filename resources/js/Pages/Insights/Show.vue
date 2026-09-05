@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import BlogCard from '@/Components/BlogCard.vue'
 import ArticleMeta from '@/Components/ArticleMeta.vue'
 import ArticleShare from '@/Components/ArticleShare.vue'
@@ -43,6 +44,25 @@ const props = defineProps<{
 }>()
 
 const { t } = useTranslations()
+
+// The article editor exposes [[lead_magnet]] as an insertion marker. Keep the
+// authored rich text intact while replacing that marker with the actual
+// interactive banner at render time.
+const articleContent = computed(() => {
+  const marker = '[[lead_magnet]]'
+  const content = props.post.content
+  const index = content.indexOf(marker)
+
+  if (index < 0) {
+    return { before: content, after: '', hasMarker: false }
+  }
+
+  return {
+    before: content.slice(0, index),
+    after: content.slice(index + marker.length),
+    hasMarker: true,
+  }
+})
 </script>
 
 <template>
@@ -93,11 +113,29 @@ const { t } = useTranslations()
         />
 
         <!-- eslint-disable-next-line vue/no-v-html -- admin-authored rich text -->
-        <div class="rich-prose w-full max-w-[831px]" v-html="props.post.content" />
+        <div class="rich-prose w-full max-w-[831px]" v-html="articleContent.before" />
+      </div>
+
+      <!-- The Figma strip spans the 1248px article track, not the 831px prose
+           column. Keep it outside the prose/share row even when inserted via
+           the editor marker. -->
+      <LeadMagnetBanner
+        v-if="props.leadMagnet && articleContent.hasMarker"
+        :section="props.leadMagnet"
+        source="article"
+        class="mx-auto w-full max-w-container"
+      />
+
+      <div
+        v-if="articleContent.hasMarker && articleContent.after"
+        class="mx-auto w-full max-w-[831px]"
+      >
+        <!-- eslint-disable-next-line vue/no-v-html -- admin-authored rich text -->
+        <div class="rich-prose" v-html="articleContent.after" />
       </div>
 
       <LeadMagnetBanner
-        v-if="props.leadMagnet"
+        v-if="props.leadMagnet && !articleContent.hasMarker"
         :section="props.leadMagnet"
         source="article"
         class="mx-auto w-full max-w-[831px]"

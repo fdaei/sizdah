@@ -17,7 +17,7 @@ import StartTogetherCard from '@/Components/StartTogetherCard.vue'
 import HeroJourney from '@/Components/HeroJourney.vue'
 import trustMarkUrl from '~img/sizdah/clients/trust-divider.svg'
 import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
-import heroNoteArrowUrl from '~img/sizdah/shared/up-right-arrow.svg'
+import heroNoteArrowUrl from '~img/sizdah/shared/hero-note-icon.svg'
 import type {
   ClientItem,
   PostSummary,
@@ -87,7 +87,7 @@ const finalCta = computed(() => props.sections.final_cta)
   <section class="section-first relative overflow-hidden pb-24">
     <!-- Decorative hairline mesh, Figma "Group" 268:2966 — 884x778, not square. -->
     <div
-      class="grid-mesh pointer-events-none absolute block-start-[122px] inline-start-16 hidden h-[778px] w-[884px] lg:block"
+      class="grid-mesh grid-mesh-edge-fade pointer-events-none absolute block-start-[122px] inline-start-16 hidden h-[778px] w-[884px] lg:block"
       aria-hidden="true"
     />
 
@@ -165,7 +165,7 @@ const finalCta = computed(() => props.sections.final_cta)
               aria-hidden="true"
               width="56"
               height="56"
-              class="size-10 shrink-0 -scale-x-100 lg:-mt-[35px] lg:size-14"
+              class="size-10 shrink-0 lg:-mt-[35px] lg:size-14"
             />
             <span class="max-w-[173px]">{{ $t('home.hero.note') }}</span>
           </p>
@@ -333,7 +333,7 @@ const finalCta = computed(() => props.sections.final_cta)
         four.
       -->
       <ul
-        class="mt-12 grid gap-4 lg:mt-16"
+        class="mt-10 grid gap-[26px] lg:mt-10 lg:h-[297px]"
         :class="[
           props.testimonials.length > 1 && 'sm:grid-cols-2',
           props.testimonials.length > 2 && 'lg:grid-cols-3',

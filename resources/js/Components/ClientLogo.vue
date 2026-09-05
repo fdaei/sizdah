@@ -10,9 +10,7 @@ import tavakoliUrl from '~img/sizdah/clients/tavakoli.svg'
 
 /**
  * The file's "logo" component (268:3017) — a 128px box holding an 80px-wide
- * mark, laid out six across on Home's trust strip (268:3002). Only the width
- * is fixed; each mark keeps its own height (pars is 80x24.41), so the box
- * centres them rather than scaling them to fill it.
+ * mark, laid out across Home's trust strip (268:3002).
  *
  * The marks are drawn in Figma at full colour and knocked back to luminosity,
  * so they read as one grey row against the ink ground instead of six
@@ -50,7 +48,7 @@ const source = computed(() => props.client.logo || EXPORTS[props.client.name] ||
 </script>
 
 <template>
-  <span v-if="source" class="flex size-32 shrink-0 items-center justify-center">
+  <span v-if="source" class="flex size-32 shrink-0 flex-col items-center justify-center gap-2.5">
     <img
       :src="source"
       :alt="props.client.name"

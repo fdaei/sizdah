@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/vue3'
 import SectionHeading from '@/Components/SectionHeading.vue'
 import type { PageSectionData, PostSummary } from '@/types'
 import calendarUrl from '~img/sizdah/shared/calendar.svg'
-import arrowUrl from '~img/sizdah/shared/up-right-arrow.svg'
+import arrowUrl from '~img/sizdah/shared/insight-arrow-icon.svg'
 import dividerUrl from '~img/sizdah/home/insight-divider.svg'
 
 /**
@@ -99,7 +99,7 @@ const rest = computed(() => props.posts.slice(1, 3))
                 aria-hidden="true"
                 width="32"
                 height="32"
-                class="size-8 flip-rtl"
+                class="size-8"
               />
             </Link>
           </div>

@@ -74,7 +74,7 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
                   aria-hidden="true"
                   width="24"
                   height="24"
-                  class="hidden size-6 shrink-0 rounded-full bg-white group-open:block"
+                  class="hidden size-6 shrink-0 rounded-full bg-brand group-open:block"
                 />
               </summary>
 

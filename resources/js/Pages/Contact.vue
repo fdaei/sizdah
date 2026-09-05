@@ -497,7 +497,7 @@ const fieldClass =
               aria-hidden="true"
               width="92"
               height="88"
-              class="pointer-events-none absolute block-start-[-35px] inline-end-[-44px] hidden h-[88px] w-[92px] lg:block"
+              class="pointer-events-none absolute block-start-[-35px] inline-end-[-92px] hidden h-[88px] w-[92px] lg:block"
             />
           </div>
 

@@ -32,9 +32,9 @@ const props = defineProps<{ section: PageSectionData }>()
 </script>
 
 <template>
-  <section class="relative overflow-hidden rounded-xl bg-brand-200 p-8 lg:p-12">
+  <section class="relative overflow-hidden rounded-xl bg-brand-100 p-8 lg:p-12">
     <div
-      class="grid-mesh pointer-events-none absolute inset-y-0 right-0 w-[58%]"
+      class="grid-mesh pointer-events-none absolute inset-y-0 end-0 w-[58%]"
       style="--mesh-color: rgb(20 20 20 / 2%); --mesh-cell-x: 113px; --mesh-cell-y: 115px"
       aria-hidden="true"
     />

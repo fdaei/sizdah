@@ -344,6 +344,16 @@
     -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 76%, transparent);
     mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 76%, transparent);
   }
+
+  /*
+   | Softly dissolves a decorative mesh into the page on every side. This is
+   | useful for isolated hero meshes whose finite bounds would otherwise read
+   | as a visible rectangle beneath the background.
+   */
+  .grid-mesh-edge-fade {
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 38%, rgb(0 0 0 / 0) 100%);
+    mask-image: radial-gradient(ellipse at center, #000 38%, rgb(0 0 0 / 0) 100%);
+  }
 }
 
 @layer utilities {

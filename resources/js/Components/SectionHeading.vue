@@ -65,7 +65,7 @@ withDefaults(
 
     <div
       class="flex w-full flex-col gap-6"
-      :class="layout === 'split' && 'md:flex-row md:items-center md:justify-between'"
+      :class="layout === 'split' && 'md:grid md:grid-cols-[minmax(0,505px)_minmax(0,1fr)] md:items-start md:gap-x-[132px] md:gap-y-6'"
     >
       <h2
         class="whitespace-pre-line text-section-line font-bold"
@@ -79,7 +79,7 @@ withDefaults(
         class="text-title-md"
         :class="[
           tone === 'light' ? 'text-ink-700' : 'text-ink-200',
-          subtitleWidth || (layout === 'split' ? 'md:max-w-[430px]' : 'max-w-[400px]'),
+          subtitleWidth || (layout === 'split' ? 'md:max-w-[612px]' : 'max-w-[400px]'),
         ]"
       >
         {{ subtitle }}

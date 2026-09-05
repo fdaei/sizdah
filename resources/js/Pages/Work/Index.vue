@@ -90,7 +90,7 @@ const remainingProjects = computed<ProjectSummary[]>(() =>
         style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
         aria-hidden="true"
       />
-      <header class="mx-auto flex max-w-[670px] flex-col items-center gap-16 text-center">
+      <header class="mx-auto flex max-w-full flex-col items-center gap-16 text-center">
         <!-- 222:2461 — the eyebrow/title/description column is 612 wide inside the 670 track. -->
         <div class="flex w-full max-w-[612px] flex-col items-center gap-10">
           <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />

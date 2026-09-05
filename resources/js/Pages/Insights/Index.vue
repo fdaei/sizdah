@@ -102,7 +102,7 @@ const rest = computed(() => props.posts.data.slice(2))
       />
 
       <!-- 268:5233 — 670 track, 64 to the chip row; 268:5234 is the 612 column. -->
-      <header class="relative mx-auto flex max-w-[670px] flex-col items-center gap-16 text-center">
+      <header class="relative mx-auto flex max-w-[1000px] flex-col items-center gap-16 text-center">
         <div class="flex w-full max-w-measure flex-col items-center gap-10">
           <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
@@ -115,9 +115,8 @@ const rest = computed(() => props.posts.data.slice(2))
         </div>
 
         <div class="flex w-full justify-center">
-          <!-- 268:5241 — 670x45, one row. Longer category labels than the
-               frame's placeholder set overflow that width, so this scrolls
-               horizontally instead of wrapping to a second row. -->
+          <!-- 268:5241 — the category chips stay on one row in the desktop
+               layout; the wider track keeps the localized labels visible. -->
           <FilterChips
             :options="filterOptions"
             :active="props.filters.category"

@@ -240,7 +240,7 @@ final class PageSeeder extends Seeder
             'fa' => [
                 'title' => 'آیا محتوای شما مسیر مشخصی دارد یا فقط ادامه پیدا می‌کند؟',
                 'description' => 'سیستم محتوای برند خود را بررسی کنید و ببینید چقدر با اهداف شما هماهنگ است.',
-                'primary_cta_label' => 'شروع گفتگو',
+                'primary_cta_label' => 'دریافت چک‌لیست',
                 'primary_cta_url' => '/contact',
             ],
             'ar' => [

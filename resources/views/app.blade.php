@@ -19,8 +19,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="icon" href="/favicon.ico" sizes="32x32">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    {{-- Sizdah brand mark (the previous icon.svg belonged to the Sahra brand). --}}
+    <link rel="icon" href="{{ Vite::asset('resources/images/sizdah/shared/logo.svg') }}" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     {{-- Figma Black/1000 — the page ground for every frame in the file --}}
     <meta name="theme-color" content="#141414">

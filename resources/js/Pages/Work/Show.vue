@@ -100,13 +100,25 @@ function ordinal(index: number): string {
         </div>
 
         <!-- Meta row 411:8568 — label over value, icon at the inline end. -->
-        <dl v-if="meta.length" class="flex flex-wrap justify-center gap-x-16 gap-y-8">
-          <div v-for="item in meta" :key="item.key" class="flex items-center gap-4">
-            <div class="flex flex-col gap-1">
+        <dl v-if="meta.length" class="flex flex-wrap justify-center gap-4">
+          <div
+            v-for="item in meta"
+            :key="item.key"
+            class="flex items-start gap-2 rounded-lg border-2 border-brand-300 px-6 py-3"
+            style="background-image: linear-gradient(-14deg, rgb(248 185 55 / 0) 2.3248%, rgb(248 185 55 / 7%) 100%)"
+          >
+            <div class="flex flex-col items-end gap-2 whitespace-nowrap text-end">
               <dt class="text-label-lg text-ink-50">{{ t(`work.${item.key}`) }}</dt>
               <dd class="text-body-md text-ink-200 latin-nums">{{ item.value }}</dd>
             </div>
-            <img :src="item.icon" alt="" aria-hidden="true" width="24" height="24" />
+            <img
+              :src="item.icon"
+              alt=""
+              aria-hidden="true"
+              width="24"
+              height="24"
+              class="size-6 shrink-0"
+            />
           </div>
         </dl>
       </header>
@@ -123,19 +135,23 @@ function ordinal(index: number): string {
       </figure>
 
       <!-- Challenge 423:4971 — the 144x144 mark at 611:5944 sits beside it. -->
-      <section v-if="props.project.challenge" class="relative flex flex-col gap-6">
+      <section v-if="props.project.challenge" class="relative flex flex-col items-center gap-10">
         <img
           :src="challengeMarkUrl"
           alt=""
           aria-hidden="true"
-          class="hidden size-36 shrink-0 lg:block"
+          class="absolute -left-4 top-0 hidden size-36 shrink-0 lg:block"
         />
-        <h2 class="text-display-md font-semibold text-brand-50">{{ t('work.challenge') }}</h2>
-        <p class="max-w-[832px] text-title-lg text-ink-200">{{ props.project.challenge }}</p>
+        <h2 class="w-full text-center text-display-md font-semibold text-brand-50">
+          {{ t('work.challenge') }}
+        </h2>
+        <p class="w-full max-w-[832px] text-center text-title-lg text-ink-200">
+          {{ props.project.challenge }}
+        </p>
 
         <ul
           v-if="props.project.challengePoints.length"
-          class="flex max-w-[832px] flex-col gap-3 pt-2"
+          class="flex w-full max-w-[832px] flex-col gap-3 pt-0 text-start"
         >
           <li
             v-for="point in props.project.challengePoints"
@@ -151,11 +167,11 @@ function ordinal(index: number): string {
       <section v-for="block in cardBlocks" :key="block.key" class="flex flex-col gap-8">
         <h2 class="text-display-md font-semibold text-brand-50">{{ t(`work.${block.key}`) }}</h2>
 
-        <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-reveal-group>
+        <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-reveal-group>
           <li
             v-for="(item, index) in block.items"
             :key="item.title"
-            class="flex flex-col items-start gap-10 rounded-lg border-3 border-ink-200 bg-black px-6 py-14"
+            class="flex h-full flex-col items-end gap-10 rounded-lg border-3 border-ink-200 bg-black px-6 py-14"
             style="
               background-image:
                 linear-gradient(-42.92deg, rgb(248 185 55 / 0) 2.3248%, rgb(248 185 55 / 8%) 100%),
@@ -166,7 +182,7 @@ function ordinal(index: number): string {
             <span class="text-display-sm font-semibold text-brand latin-nums" aria-hidden="true">
               {{ ordinal(index) }}
             </span>
-            <div class="flex flex-col gap-6">
+            <div class="flex w-full flex-col items-end gap-6 text-end">
               <h3 class="text-heading-sm text-brand-50">{{ item.title }}</h3>
               <p class="text-title-sm text-ink-200">{{ item.description }}</p>
             </div>
