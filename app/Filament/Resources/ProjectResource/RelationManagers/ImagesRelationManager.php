@@ -36,6 +36,17 @@ final class ImagesRelationManager extends RelationManager
                 ->required()
                 ->columnSpanFull(),
 
+            TextInput::make('tag')
+                ->label('Filter tag')
+                ->helperText('Groups the image under a chip in the showcase filter row (Figma 430:5201). Leave every image blank to hide the row.')
+                ->datalist(fn (): array => ProjectImage::query()
+                    ->whereNotNull('tag')
+                    ->distinct()
+                    ->orderBy('tag')
+                    ->pluck('tag')
+                    ->all())
+                ->maxLength(50),
+
             TextInput::make('sort_order')
                 ->numeric()
                 ->default(0),
@@ -58,6 +69,11 @@ final class ImagesRelationManager extends RelationManager
                     ->label('Image')
                     ->disk('public')
                     ->height(60),
+
+                Tables\Columns\TextColumn::make('tag')
+                    ->label('Filter tag')
+                    ->badge()
+                    ->placeholder('—'),
 
                 Tables\Columns\TextColumn::make('alt')
                     ->label('Alt text')

@@ -1917,3 +1917,81 @@ reusing the same asset rather than exporting a new one. Verified live on both
 `/fa` (Home) and `/fa/insights/*` (article) — screenshot-compared against
 the fresh Figma reference for placement, `npm run typecheck` clean, no
 console errors, full name+email submit round-trip still works on both.
+
+---
+
+## G55 — Case study `336:5374` re-verification: Figma's LTR auto-layout was mirroring the whole page  (2026-09-06)  (severity: high)
+
+Phase-8 fresh re-pull of the case-study frame. The page had been marked
+"built and faithful" (G19, and again in PROGRESS "Remaining" item 2), and its
+type ramp, card fills and section order genuinely were. What the earlier
+passes missed is a **systematic RTL inversion**, and it affected every
+horizontally-aligned block on the page.
+
+**Root cause, worth remembering for every remaining frame.** Figma reports
+auto-layout in LTR coordinates even for an RTL design. A column whose copy
+visually hugs the right edge of the frame comes back as
+`alignItems: flex-end`, and a row's first child is the one drawn *leftmost*.
+Translating those property names straight into the Tailwind classes of the
+same name (`items-end`, `text-end`, and DOM order as listed) mirrors the
+result, because in RTL CSS `end` is the **left**. The correct mapping is
+Figma `flex-end` → CSS-logical `start`, and Figma child order → **reversed**
+DOM order.
+
+Everything below was mirrored and is now fixed:
+
+- Goal and deliverable cards (`423:4973`, `429:5099`) — number, title and
+  body were left-aligned against the frame's right.
+- Meta chips (`411:8568`) — rendered services → industry (frame is industry →
+  services reading right-to-left), and the 24px glyph sat at the chip's left
+  instead of its start.
+- Before/after pair (`430:5204`) — قبل and بعد were swapped, and the captions
+  were start-aligned where the frame centres them (32/700).
+- Next-project block (`430:5212`) — sat at the page's left; the frame anchors
+  it right, and the arrow belongs at the title's end, not its start.
+
+**Non-mirroring corrections in the same pass.** The strategy block was drawn
+as a plain 2×2 grid under a heading; the frame (`428:5041`-`428:5088`) is a
+three-column quadrant whose *first column is the heading itself*, spanning
+both rows, with 3px `Yellow/200` rules dividing only the two card columns.
+Deliverables are three-across at radius 24 (`429:5092` + `429:5117`), not
+four-across at 16 like goals — the two blocks share a fill and differ in
+exactly those two properties, now `.surface-case-card` plus a call-site
+radius. Card and chip glows ran at `-42.92deg`/`-14deg` from a 2.3248% stop;
+the frame is `-44deg` from 0% on both. Banner (`423:4964`) had no ratio,
+radius or cast — it is a flat 2:1 at 1248×624, radius 24, 5% shadow.
+Before/after plates likewise: 612×306, radius 8, `0 4 10` at 5%. Results
+(`430:5141`) ran on a 32 gap and an 8 card gap where the frame is 48 and 16.
+The instagram handle carries an underline text style (`ts1`) that was
+dropped. The challenge mark (`611:5944`) was pinned to the container's far
+left rather than 12px off the heading's end.
+
+**Two things the schema could not express, now added rather than skipped.**
+Each result tile carries its own 32px brand glyph (`615:6045`…`615:6160`);
+`section_items.icon` already existed and was simply never populated for this
+section type, so the five glyphs are exported to
+`resources/images/sizdah/work/result-*.svg` and keyed off it — the same
+"stable across locales" role `Service::icon` plays for the Home orbit.
+`430:5201` hangs a FilterChips row off the showcase heading, which needs a
+per-image label to filter on; `project_images.tag` is that label, nullable,
+editable in the Filament relation manager, and the row is only drawn once at
+least one image on the project carries a tag — an untagged project keeps the
+plain gallery instead of showing a control that cannot do anything.
+`FilterChips` grew a button branch (an option with no `href` emits `select`)
+so the gallery filters client-side without a round-trip; both existing
+call sites pass `href` and were re-tested unchanged.
+
+**Still not imported, deliberately.** `428:5044` fills the quadrant's heading
+cell with an eyebrow ("چرا سیزده") and a package subtitle ("سه پکیج…") that
+are Services-page copy left in the file — the cell's geometry is reproduced,
+its copy is not (this is the G19 call, re-confirmed). `430:5211` repeats the
+"نتایج" heading between the before/after pair and the next-project block,
+after the results section has already run; it is a leftover duplicate. The
+frame's result labels are Latin (ROI, Reach, …) on Latin numerals while the
+seeded fa content is Persian on Persian numerals — content wins, but the
+value now sits in a `dir="ltr"` span so its leading "+" is not bidi-flipped
+to the end.
+
+Verified at 1440 against a fresh frame render, and at 1280 / 1024 / 834 /
+768 / 390 / 360 for layout and horizontal overflow. `npm run typecheck`,
+`npm run lint` and `npm run build` all clean.

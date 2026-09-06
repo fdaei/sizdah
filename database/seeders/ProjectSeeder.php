@@ -360,14 +360,21 @@ final class ProjectSeeder extends Seeder
             $this->caseStudyDetail($project, $data);
 
             if (($data['featured'] ?? false) === true) {
+                /*
+                 | The tags drive the showcase filter row (336:5374 — 430:5201),
+                 | whose chips the frame labels برندینگ and مارکتینگ beside an
+                 | "all". They are demo labels on demo photography: an editor
+                 | retags these in the admin, and clearing every tag on a
+                 | project hides the row rather than leaving a dead control.
+                 */
                 foreach ([
-                    'projects/cheshmeh-showcase-1.webp',
-                    'projects/cheshmeh-showcase-2.webp',
-                    'projects/cheshmeh-showcase-3.webp',
-                ] as $order => $path) {
+                    ['projects/cheshmeh-showcase-1.webp', 'برندینگ'],
+                    ['projects/cheshmeh-showcase-2.webp', 'مارکتینگ'],
+                    ['projects/cheshmeh-showcase-3.webp', 'برندینگ'],
+                ] as $order => [$path, $tag]) {
                     $project->images()->updateOrCreate(
                         ['sort_order' => $order],
-                        ['path' => $path],
+                        ['path' => $path, 'tag' => $tag],
                     );
                 }
 
@@ -408,6 +415,27 @@ final class ProjectSeeder extends Seeder
 
         $results = $this->section($project, SectionType::Results, 3);
         $this->items($results, $data['results']);
+        $this->applyResultIcons($results);
+    }
+
+    /**
+     * Each cream result tile on 336:5374 (615:6045…615:6160) carries its own
+     * 32px brand glyph. The key is matched off the English label because that
+     * is the string held stable across all six projects — the fa/ar titles are
+     * translations of it. Anything unrecognised is left null and simply renders
+     * without a glyph.
+     */
+    private function applyResultIcons(PageSection $results): void
+    {
+        $keys = ['roi', 'reach', 'interaction', 'follower', 'view'];
+
+        foreach ($results->items()->with('translations')->get() as $item) {
+            $label = mb_strtolower(trim((string) $item->getTranslation('title', 'en')));
+
+            if (in_array($label, $keys, true)) {
+                $item->update(['icon' => $label]);
+            }
+        }
     }
 
     private function section(Project $project, SectionType $type, int $order): PageSection

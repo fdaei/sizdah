@@ -23,7 +23,10 @@ import type { FilterOption } from '@/types'
  * call site.
  *
  * Navigation is real links, not buttons, so a filtered listing is shareable and
- * works without JavaScript.
+ * works without JavaScript. An option that carries no `href` renders a
+ * `<button>` and emits `select` instead — the case-study content showcase
+ * (430:5201) filters a gallery that is already on the page, so there is no
+ * server round-trip to link to.
  */
 const props = withDefaults(
   defineProps<{
@@ -38,6 +41,20 @@ const props = withDefaults(
   }>(),
   { variant: 'outline', singleLine: false },
 )
+
+const emit = defineEmits<{ select: [value: string | null] }>()
+
+/** Shared between the Link and button branches so the two cannot drift. */
+function chipClass(value: string | null): (string | false)[] {
+  const active = value === props.active
+
+  return [
+    'inline-flex items-center justify-center rounded-lg px-6 py-3 text-body-lg transition-colors duration-200 ease-brand',
+    !active && 'border-2 border-ink-300 text-paper hover:border-paper',
+    active && props.variant === 'solid' && 'border-3 border-brand bg-brand text-ink-1000',
+    active && props.variant === 'outline' && 'border-3 border-brand bg-ink-900 text-brand',
+  ]
+}
 </script>
 
 <template>
@@ -55,23 +72,24 @@ const props = withDefaults(
         :class="props.singleLine && 'shrink-0'"
       >
         <Link
+          v-if="option.href"
           :href="option.href"
           preserve-scroll
           :aria-current="option.value === props.active ? 'page' : undefined"
-          class="inline-flex items-center justify-center rounded-lg px-6 py-3 text-body-lg transition-colors duration-200 ease-brand"
-          :class="[
-            option.value !== props.active &&
-              'border-2 border-ink-300 text-paper hover:border-paper',
-            option.value === props.active &&
-              props.variant === 'solid' &&
-              'border-3 border-brand bg-brand text-ink-1000',
-            option.value === props.active &&
-              props.variant === 'outline' &&
-              'border-3 border-brand bg-ink-900 text-brand',
-          ]"
+          :class="chipClass(option.value)"
         >
           {{ option.label }}
         </Link>
+
+        <button
+          v-else
+          type="button"
+          :aria-pressed="option.value === props.active"
+          :class="chipClass(option.value)"
+          @click="emit('select', option.value)"
+        >
+          {{ option.label }}
+        </button>
       </li>
     </ul>
   </nav>

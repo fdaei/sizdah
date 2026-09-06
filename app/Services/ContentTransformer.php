@@ -85,12 +85,22 @@ final class ContentTransformer
             'strategy' => self::cardsFor($project, SectionType::Strategy),
             'deliverables' => self::cardsFor($project, SectionType::Deliverables),
 
+            /*
+             | 430:5201 hangs a filter row off the showcase heading, so each
+             | image carries the label it filters under. `tag` is nullable —
+             | a project with no tagged image renders the plain gallery and the
+             | chip row is not drawn at all (see Work/Show.vue).
+             */
             'showcase' => $project->images
-                ->map(fn ($image): ?array => MediaTransformer::make(
-                    $image->path,
-                    $image->getTranslation('alt'),
-                    'project.showcase',
-                ))
+                ->map(function ($image): ?array {
+                    $media = MediaTransformer::make(
+                        $image->path,
+                        $image->getTranslation('alt'),
+                        'project.showcase',
+                    );
+
+                    return $media === null ? null : [...$media, 'tag' => $image->tag];
+                })
                 ->filter()
                 ->values()
                 ->all(),
@@ -393,9 +403,16 @@ final class ContentTransformer
     }
 
     /**
-     * ResultStat[] — label + value. Figma 1323:7541 results grid.
+     * ResultStat[] — label + value + icon. Figma 336:5374 results row
+     * (430:5144); each of the five cream tiles carries its own 32px brand
+     * glyph (615:6045…615:6160).
      *
-     * @return array<int, array{label: string, value: string}>
+     * `icon` is an artwork key, not a lucide name — the same role
+     * `Service::icon` plays for the Home orbit. Work/Show.vue resolves it
+     * against resources/images/sizdah/work/result-{key}.svg and simply omits
+     * the glyph for an unknown or null key, so untagged content still renders.
+     *
+     * @return array<int, array{label: string, value: string, icon: string|null}>
      */
     private static function resultsFor(Project $project): array
     {
@@ -409,6 +426,7 @@ final class ContentTransformer
             ->map(fn (SectionItem $item): array => [
                 'label' => (string) $item->getTranslation('title'),
                 'value' => (string) $item->getTranslation('value'),
+                'icon' => $item->icon,
             ])
             ->all();
     }

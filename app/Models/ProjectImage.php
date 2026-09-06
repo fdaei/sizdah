@@ -21,6 +21,7 @@ final class ProjectImage extends Model
     protected $fillable = [
         'project_id',
         'path',
+        'tag',
         'sort_order',
     ];
 

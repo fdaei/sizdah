@@ -209,6 +209,31 @@
   }
 
   /*
+   | Case-study goal and deliverable cards (336:5374 — 423:4973 and 429:5099).
+   | Two fills only: a 20% black wash and a raking brand glow that runs 0 -> 8%
+   | at -44deg. Deliberately NOT .surface-glow, which stacks an extra 80%
+   | ink-1000 ground under the glow and runs its wash to 10% from 2.32% — that
+   | card sits below the page ground, this one on it.
+   |
+   | Shared by both blocks because the frame draws them identically apart from
+   | the corner radius (16 on goals, 24 on deliverables), which the call site
+   | sets.
+   */
+  .surface-case-card {
+    background-image:
+      linear-gradient(0deg, rgb(0 0 0 / 20%), rgb(0 0 0 / 20%)),
+      linear-gradient(-44deg, rgb(248 185 55 / 0) 0%, rgb(248 185 55 / 8%) 100%);
+  }
+
+  /*
+   | The case-study meta chips (411:8569). Same raking angle as the cards above
+   | but a lighter 7% ceiling and no black wash, over a 2px Yellow/300 outline.
+   */
+  .surface-meta-chip {
+    background-image: linear-gradient(-44deg, rgb(248 185 55 / 0) 0%, rgb(248 185 55 / 7%) 100%);
+  }
+
+  /*
    | Process / why-us cell ground (523:5646): a raking Yellow/1000 wash from 0 to
    | 20% at -31.68deg over a flat Black/900 #2C2C2C fill. Lives here rather than
    | as an inline style so the `hover` variant (537:5511) can switch it off — an

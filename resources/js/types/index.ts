@@ -177,7 +177,7 @@ export interface ProjectDetail extends ProjectSummary {
   goals: CardItem[]
   strategy: CardItem[]
   deliverables: CardItem[]
-  showcase: MediaImage[]
+  showcase: ShowcaseImage[]
   results: ResultStat[]
   resultsSummary: string
   beforeAfter: { before: MediaImage | null; after: MediaImage | null }
@@ -190,9 +190,24 @@ export interface CardItem {
   description: string
 }
 
+/**
+ * A content-showcase image. `tag` is the label the 430:5201 filter row filters
+ * on; null when the project's gallery is untagged, in which case the chip row
+ * is not rendered.
+ */
+export interface ShowcaseImage extends MediaImage {
+  tag: string | null
+}
+
 export interface ResultStat {
   label: string
   value: string
+  /**
+   * Artwork key for the tile glyph (615:6045…615:6160), resolved against
+   * resources/images/sizdah/work/result-{icon}.svg. Stable across locales,
+   * like `ServiceItem.icon`; null or unknown renders without a glyph.
+   */
+  icon: string | null
 }
 
 export interface ServiceItem {
@@ -260,5 +275,10 @@ export interface KpiItem {
 export interface FilterOption {
   value: string | null
   label: string
-  href: string
+  /**
+   * Omit to get a `<button>` that emits `select` instead of a navigating
+   * `<Link>` — used by the case-study content showcase (430:5201), which
+   * filters an already-loaded gallery client-side rather than re-querying.
+   */
+  href?: string
 }
