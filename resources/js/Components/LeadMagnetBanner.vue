@@ -11,16 +11,26 @@ import leadMagnetScribbleUrl from '~img/sizdah/home/lead-magnet-scribble.svg'
 
 /**
  * Lead magnet strip — Figma "lead magnet" 303:4455 (article) and 391:4795
- * (Home). The one cream surface in an otherwise dark design: Yellow/200 fill
- * under a raking brand glow, with ink copy.
+ * (Home). The one cream surface in an otherwise dark design: a flat Yellow/50
+ * fill with ink copy.
  *
  * The two frames are the same strip at two scales, so they share this
  * component and differ only by `size`:
- *   - `sm` — 303:4455, mid-article. space32 padding, radiusSM, no rule.
+ *   - `sm` — 303:4455, 826 x 139 mid-article. space32 padding, radiusSM, no
+ *            rule, and a filled brand button.
  *   - `lg` — 391:4795, Home. 1036 wide inside the 1248 track, space64 padding,
  *            24px corners, a 3px brand rule drawn INSIDE the box (so the card
- *            stays 1036 x 194), Yellow/50 — not the Yellow/200 the `sm` strip
- *            fills with — and a hollow brand button instead of the filled one.
+ *            stays 1036 x 194), and a hollow brand button instead of the
+ *            filled one.
+ *
+ * Re-read against the live frame 2026-09-08. Four things had drifted on `sm`
+ * and are corrected: the fill was Yellow/200 under a raking brand gradient
+ * (the frame is a flat #FEFBF5 — sampled on the render, corner to corner);
+ * corners were radiusLG; the 303:4458 ruled sheet behind the copy was missing
+ * altogether; and the 303:4482 accent was centred vertically instead of
+ * sitting 34px down. The content column also carried `items-end`, which under
+ * RTL resolves to the LEFT edge and flushed the description away from the
+ * headline it is meant to hang under.
  *
  * The button opens `LeadMagnetModal` — see that component's docblock and
  * GAPS G51. An earlier note here read "the frame draws a button but no email
@@ -50,15 +60,7 @@ const modalOpen = ref(false)
     :class="
       props.size === 'lg'
         ? 'mx-auto max-w-[1036px] rounded-xl bg-brand-50 p-8 ring-[3px] ring-inset ring-brand lg:flex-row lg:justify-between lg:p-16'
-        : 'w-full max-w-[826px] rounded-lg p-8 md:flex-row md:items-center md:justify-between md:gap-6'
-    "
-    :style="
-      props.size === 'sm'
-        ? {
-            backgroundImage:
-              'linear-gradient(-8.864deg, rgb(248 185 55 / 0) 2.3248%, rgb(248 185 55 / 10%) 100%), linear-gradient(90deg, #fef1d7 0%, #fef1d7 100%)',
-          }
-        : undefined
+        : 'w-full max-w-[826px] rounded-sm bg-brand-50 p-8 md:flex-row md:items-center md:justify-between md:gap-6'
     "
   >
     <img
@@ -68,7 +70,7 @@ const modalOpen = ref(false)
       aria-hidden="true"
       width="64"
       height="50"
-      class="hidden h-[49.419px] w-16 shrink-0 md:block"
+      class="relative z-20 hidden h-[49.419px] w-16 shrink-0 md:block"
     />
 
     <template v-if="props.size === 'lg'">
@@ -110,9 +112,26 @@ const modalOpen = ref(false)
       :class="
         props.size === 'lg'
           ? 'max-w-[580px] text-center gap-4 lg:w-[580px]'
-          : 'w-full max-w-[458px] items-end text-start md:w-[458px]'
+          : 'w-full max-w-[458px] text-start md:w-[458px]'
       "
     >
+      <!--
+        303:4458 — the same ruled sheet the Home banner draws, parented to the
+        content column rather than the card: 400x400 at (305, -102) from the
+        column's top-left, so `overflow-hidden` on the card crops it to a band
+        behind the copy and on past the doodle. `-z-10` keeps it under the two
+        paragraphs without dropping it behind the card's own fill.
+      -->
+      <img
+        v-if="props.size === 'sm'"
+        :src="leadMagnetGridUrl"
+        alt=""
+        aria-hidden="true"
+        width="400"
+        height="400"
+        class="pointer-events-none absolute left-[305px] top-[-102px] -z-10 hidden size-[400px] max-w-none md:block"
+      />
+
       <p
         :class="
           props.size === 'lg' ? 'text-heading-sm text-ink-1000' : 'text-title-md text-ink-900'
@@ -147,9 +166,8 @@ const modalOpen = ref(false)
       aria-hidden="true"
       width="16"
       height="20"
-      class="pointer-events-none absolute left-[19px] top-1/2 hidden h-5 w-4 -translate-y-1/2 md:block"
+      class="pointer-events-none absolute left-[19px] top-[34px] hidden h-5 w-4 md:block"
     />
-
   </aside>
 
   <LeadMagnetModal :open="modalOpen" :source="props.source" @close="modalOpen = false" />

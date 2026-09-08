@@ -415,7 +415,7 @@ final class ProjectSeeder extends Seeder
 
         $results = $this->section($project, SectionType::Results, 3);
         $this->items($results, $data['results']);
-        $this->applyResultIcons($results);
+        $this->applyResultIcons($results, $data['results']);
     }
 
     /**
@@ -423,14 +423,25 @@ final class ProjectSeeder extends Seeder
      * 32px brand glyph. The key is matched off the English label because that
      * is the string held stable across all six projects — the fa/ar titles are
      * translations of it. Anything unrecognised is left null and simply renders
-     * without a glyph.
+     * without a glyph (the frame only draws these five; "Brand Recognition"
+     * and "Visual Consistency" have no glyph and are meant to stay bare).
+     *
+     * The label is read from `$source`, the array just handed to `items()`,
+     * NOT back off the saved record. `HasTranslations::setTranslations()` skips
+     * any locale absent from `locales.supported`, and the site is fa-only, so
+     * no `en` translation row is ever written; `getTranslation('title', 'en')`
+     * silently falls back to the fa title, matches none of the keys, and every
+     * tile loses its glyph. `items()` writes `sort_order` from this same array's
+     * index and `PageSection::items()` orders by it, so the two line up.
+     *
+     * @param  array<int, array<string, array<string, string>>>  $source
      */
-    private function applyResultIcons(PageSection $results): void
+    private function applyResultIcons(PageSection $results, array $source): void
     {
         $keys = ['roi', 'reach', 'interaction', 'follower', 'view'];
 
-        foreach ($results->items()->with('translations')->get() as $item) {
-            $label = mb_strtolower(trim((string) $item->getTranslation('title', 'en')));
+        foreach ($results->items()->get() as $index => $item) {
+            $label = mb_strtolower(trim((string) ($source[$index]['en']['title'] ?? '')));
 
             if (in_array($label, $keys, true)) {
                 $item->update(['icon' => $label]);

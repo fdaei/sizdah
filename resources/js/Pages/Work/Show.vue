@@ -2,16 +2,11 @@
 import { computed, ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import FilterChips from '@/Components/FilterChips.vue'
+import SectionHeading from '@/Components/SectionHeading.vue'
 import SeoHead from '@/Components/SeoHead.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
 import { useTranslations } from '@/Composables/useTranslations'
-import type {
-  CardItem,
-  FilterOption,
-  PageSectionData,
-  ProjectDetail,
-  SeoMeta,
-} from '@/types'
+import type { CardItem, FilterOption, PageSectionData, ProjectDetail, SeoMeta } from '@/types'
 import servicesIconUrl from '~img/sizdah/work/meta-services.svg'
 import instagramIconUrl from '~img/sizdah/work/meta-instagram.svg'
 import yearIconUrl from '~img/sizdah/work/meta-year.svg'
@@ -23,6 +18,8 @@ import resultReachUrl from '~img/sizdah/work/result-reach.svg'
 import resultInteractionUrl from '~img/sizdah/work/result-interaction.svg'
 import resultFollowerUrl from '~img/sizdah/work/result-follower.svg'
 import resultViewUrl from '~img/sizdah/work/result-view.svg'
+import strategyRuleUrl from '~img/sizdah/work/strategy-rule-h.svg'
+import strategyRuleVerticalUrl from '~img/sizdah/work/strategy-rule-v.svg'
 
 /**
  * Case study — Figma "case study" 336:5374 (1440x7403).
@@ -49,14 +46,25 @@ import resultViewUrl from '~img/sizdah/work/result-view.svg'
  *     two rows. The frame's own heading on this block reads "اهداف پروژه", a
  *     copy-paste of the goals heading; `work.deliverables` is used instead.
  *   - strategy (428:5041-428:5088) — no fill or border. A three-column
- *     quadrant: the section heading occupies the first (right-hand) column and
- *     spans both rows, the four numbered cells fill the other two, and 3px
- *     brand-200 rules divide them.
+ *     quadrant: the heading block occupies the first (right-hand) column and
+ *     spans both rows, the four numbered cells fill the other two, staggered
+ *     rather than gridded, and three brush strokes divide them. The strokes
+ *     are real geometry, not rules — a tapered, uneven hand-drawn path — so
+ *     they ship as SVG (`strategy-rule-v`, `strategy-rule-h`) rather than as
+ *     the 3px borders this block used to draw. Vectors 6 and 7 are the same
+ *     path, so one file serves both columns.
  *
  * DEVIATIONS:
  *   - 428:5044 puts an eyebrow ("چرا سیزده") and a package subtitle ("سه پکیج…")
- *     in the quadrant's heading cell. Both are Services-page copy left in the
- *     file; the cell's geometry is reproduced, its copy is not. See GAPS G19.
+ *     in the quadrant's heading cell — Services-page pricing copy left in the
+ *     file, which is why an earlier pass reproduced the cell's geometry but
+ *     not its wording. The user chose the frame verbatim on 2026-09-08, so
+ *     `work.strategy_*` now carries that copy and `work.strategy` is gone.
+ *     See GAPS G19 and G61.
+ *   - 428:5047 rims the eyebrow marker in Black/800 (#434343) where every
+ *     other dark-ground instance rims in Yellow/50. `Eyebrow` keeps its
+ *     documented dark-ground default rather than forking for an invisible
+ *     1px; see GAPS G45 and G61.
  *   - 430:5211 repeats the "نتایج" heading between the before/after pair and
  *     the next-project block, after the results section has already run. It is
  *     a leftover duplicate and is not rendered.
@@ -152,19 +160,19 @@ function ordinal(index: number): string {
 }
 
 /*
- | Quadrant rules 428:5041-428:5043. The heading holds the first column and
- | both rows, so the cells flow two-per-row into the remaining columns: an odd
- | cell is the one in the far column and carries the vertical rule on its
- | inline start; anything on the second row carries the horizontal one. At the
- | one-column breakpoint only the horizontal rule survives.
+ | The quadrant's four cells number 01-04 down the page but do NOT stack in
+ | that order: 01 and 03 sit in the inner column (428:5058, 428:5087) and 02
+ | and 04 in the outer one (428:5067, 428:5088), so the pairs interleave. Split
+ | the list on parity and keep each cell's original index for its numeral.
  */
-function cellRules(index: number): string[] {
+const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
+  const cells = props.project.strategy.map((item, index) => ({ item, index }))
+
   return [
-    index > 0 ? 'border-t-[3px] border-brand-200' : '',
-    index === 1 ? 'sm:border-t-0' : '',
-    index % 2 === 1 ? 'sm:border-s-[3px] sm:border-brand-200' : '',
-  ].filter(Boolean)
-}
+    cells.filter((cell) => cell.index % 2 === 0),
+    cells.filter((cell) => cell.index % 2 === 1),
+  ]
+})
 </script>
 
 <template>
@@ -216,7 +224,10 @@ function cellRules(index: number): string[] {
             />
             <div class="flex flex-col gap-2 whitespace-nowrap">
               <dt class="text-label-lg text-ink-50">{{ t(`work.${item.key}`) }}</dt>
-              <dd class="latin-nums text-body-md text-ink-200" :class="item.underline && 'underline'">
+              <dd
+                class="latin-nums text-body-md text-ink-200"
+                :class="item.underline && 'underline'"
+              >
                 {{ item.value }}
               </dd>
             </div>
@@ -293,33 +304,103 @@ function cellRules(index: number): string[] {
       </section>
 
       <!--
-        Strategy quadrant 428:5041-428:5088. The heading is a cell of the grid,
-        not a header above it: it holds the first column across both rows while
-        the numbered cells fill the other two, divided by 3px brand-200 rules.
-      -->
-      <section v-if="props.project.strategy.length" class="grid sm:grid-cols-2 lg:grid-cols-3">
-        <!--
-          428:5044's cell. The frame lifts the heading clear of the ruled area
-          rather than padding it in line with the cells, so the top padding is
-          dropped once the quadrant actually forms.
-        -->
-        <h2 class="p-8 text-section-line text-brand-50 sm:col-span-2 lg:col-span-1 lg:row-span-2 lg:pt-0">
-          {{ t('work.strategy') }}
-        </h2>
+        Strategy quadrant 428:5041-428:5088. Free-positioned in the frame: the
+        heading block 428:5044 holds the first (right-hand) column and the four
+        numbered cells scatter down the two columns beside it, staggered rather
+        than gridded and divided by hand-drawn brush strokes.
 
-        <div
-          v-for="(item, index) in props.project.strategy"
-          :key="item.title"
-          class="flex items-start gap-4 p-8"
-          :class="cellRules(index)"
-          data-reveal
-        >
-          <span class="latin-nums text-heading-xl text-brand" aria-hidden="true">
-            {{ ordinal(index) }}
-          </span>
-          <div class="flex flex-col gap-2">
-            <h3 class="text-heading-sm text-ink-50">{{ item.title }}</h3>
-            <p class="text-title-sm text-ink-200">{{ item.description }}</p>
+        The stagger is the frame's, measured off the cell tops: the cells start
+        59px below the heading (2280 -> 2339) and the outer column runs a
+        further 38px lower than the inner one (428:5058 at 2339 against
+        428:5067 at 2377; 428:5087 at 2574 against 428:5088 at 2594). Below
+        `lg` the heading returns to a header above the cells, and below `sm`
+        the two columns collapse and the vertical stroke drops out.
+
+        Column track, scaled from the frame's 1284 span onto the 1248 content
+        track: heading 401, a 204 gutter, then the two ~327 cell columns 24
+        apart. An even three-up reads wrong — it closes the gutter the frame
+        opens between the heading and cell 01.
+
+        The heading column is a percentage so it tracks the container's four
+        `px-*` steps, but the gutter is only the frame's 198 at `2xl`, the one
+        width the file was drawn at (1440). Held in px below that it eats the
+        whole 896 track at `lg` and squeezes the cells to three words a line.
+      -->
+      <section
+        v-if="props.project.strategy.length"
+        class="grid lg:grid-cols-[minmax(0,31%)_minmax(0,1fr)] lg:gap-x-10 2xl:gap-x-[198px]"
+      >
+        <!--
+          428:5044 — eyebrow 428:5046 (45px box) over a 40px Bold headline and
+          a 20px Medium subtitle, the same three parts as every Home section
+          header, so this is `SectionHeading` stacked rather than a second copy.
+          Its copy is the frame's own, Services-page wording and all (G61).
+        -->
+        <SectionHeading
+          :eyebrow="t('work.strategy_eyebrow')"
+          :title="t('work.strategy_title')"
+          :subtitle="t('work.strategy_subtitle')"
+          layout="stacked"
+        />
+
+        <div class="relative mt-12 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:mt-[59px]">
+          <!--
+            428:5041 — a 4x400 stroke centred in the gutter between the two
+            columns, drawn the full height of the block rather than per row.
+            `inline-start` keeps it in the gutter in either direction.
+          -->
+          <img
+            v-if="strategyColumns[1].length"
+            :src="strategyRuleVerticalUrl"
+            alt=""
+            aria-hidden="true"
+            width="4"
+            height="400"
+            class="pointer-events-none absolute inset-y-0 hidden h-full w-1 max-w-none sm:block"
+            style="inset-inline-start: calc(50% - 2px)"
+          />
+
+          <!--
+            `contents` below `sm`: with one column there is no quadrant to
+            divide, so the wrappers step out of the box tree, the strokes drop
+            out with them, and `order` puts the cells back in 01-04 reading
+            order — otherwise the interleave would stack them 01, 03, 02, 04.
+          -->
+          <div
+            v-for="(column, columnIndex) in strategyColumns"
+            :key="columnIndex"
+            class="contents sm:flex sm:flex-col sm:gap-12"
+            :class="columnIndex === 1 && 'sm:mt-[38px]'"
+          >
+            <template v-for="cell in column" :key="cell.item.title">
+              <!--
+                428:5042 / 428:5043 — the same 320x4 stroke, one per column,
+                sitting in the gap between that column's two cells. It orders
+                one below the cell it follows so the `order` above cannot sort
+                it to the head of the column.
+              -->
+              <img
+                v-if="cell.index > 1"
+                :src="strategyRuleUrl"
+                alt=""
+                aria-hidden="true"
+                width="320"
+                height="4"
+                class="hidden h-1 w-full max-w-[320px] sm:block"
+                :style="{ order: cell.index - 1 }"
+              />
+
+              <div class="flex items-start gap-4" :style="{ order: cell.index }" data-reveal>
+                <span class="latin-nums text-heading-xl text-brand" aria-hidden="true">
+                  {{ ordinal(cell.index) }}
+                </span>
+                <!-- 428:5058 — a 252 measure, which is what sets the 4-line wrap. -->
+                <div class="flex max-w-[252px] flex-col gap-2">
+                  <h3 class="text-heading-sm text-ink-50">{{ cell.item.title }}</h3>
+                  <p class="text-title-sm text-ink-200">{{ cell.item.description }}</p>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
       </section>
@@ -396,7 +477,10 @@ function cellRules(index: number): string[] {
           </ul>
         </div>
 
-        <p v-if="props.project.resultsSummary" class="whitespace-pre-line text-heading-sm text-ink-200">
+        <p
+          v-if="props.project.resultsSummary"
+          class="whitespace-pre-line text-heading-sm text-ink-200"
+        >
           {{ props.project.resultsSummary }}
         </p>
       </section>
@@ -431,7 +515,9 @@ function cellRules(index: number): string[] {
           :href="props.project.next.url"
           class="group flex items-center gap-4 transition-colors duration-200 ease-brand"
         >
-          <span class="text-display-md text-ink-50 transition-colors duration-200 ease-brand group-hover:text-brand">
+          <span
+            class="text-display-md text-ink-50 transition-colors duration-200 ease-brand group-hover:text-brand"
+          >
             {{ props.project.next.title }}
           </span>
           <img

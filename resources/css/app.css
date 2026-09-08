@@ -364,10 +364,16 @@
    | boundary (About's story mesh, 359:9560, runs from under the hero into
    | the story block) — softens the hard rectangular cutoff into the hairline
    | fade the frame shows instead of a visible box edge.
+   |
+   | The leading ramp is deliberately short (4%, ~40px): About now also draws
+   | the hero mesh above this one (691:7320, G58), and the two abut. A long
+   | top ramp there would read as a dead band between them where the frame
+   | runs one continuous set of verticals. The trailing ramp stays long — the
+   | frame really does end that mesh mid-page with nothing below it.
    */
   .grid-mesh-fade {
-    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 76%, transparent);
-    mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 76%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 4%, #000 76%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 4%, #000 76%, transparent);
   }
 
   /*

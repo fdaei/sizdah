@@ -20,14 +20,35 @@ import titleUnderlineUrl from '~img/sizdah/work/project-title-underline.svg'
  *
  * Service tags are separated by 4px brand dots. The dots are decorative, so
  * they are aria-hidden and the row stays a real list.
+ *
+ * UNIFORM CARDS (2026-09-08): the Figma detail block is a FIXED 148px at both
+ * widths — title 45 (one line), excerpt 40 (exactly two 20px lines), services
+ * 17 (one row) — so every card in a row ends on the same baseline. Real
+ * content does not cooperate: Persian project names such as "کلینیک پزشکی و
+ * دندانپزشکی فخر" wrap to two lines in the 400-wide 3-up, and excerpts run one
+ * or two lines, which used to shove each card's excerpt and service row to a
+ * different height. Rather than truncate the titles, the card now stretches to
+ * its grid cell (`h-full`) and anchors the two lower bands instead:
+ *
+ *   - the excerpt is a fixed two-line box (`min-h-10` + `line-clamp-2`), the
+ *     40px the frame gives it, so its top edge is identical on every card;
+ *   - the caption takes the slack (`flex-1` + `mt-auto` on the excerpt), so a
+ *     wrapped title grows UPWARD into the gap under the image instead of
+ *     pushing everything below it down;
+ *   - the service row is a single non-wrapping line pinned to the bottom.
+ *
+ * When every title fits one line and every excerpt runs two — the frame's own
+ * case — this collapses back to exactly the 40/16/24 rhythm above.
  */
 const props = defineProps<{ project: ProjectSummary }>()
 </script>
 
 <template>
-  <article class="group">
-    <Link :href="props.project.url" class="flex flex-col gap-10">
-      <div class="aspect-square overflow-hidden rounded-[24px] border-2 border-ink-400 shadow-card">
+  <article class="group h-full">
+    <Link :href="props.project.url" class="flex h-full flex-col gap-10">
+      <div
+        class="aspect-square shrink-0 overflow-hidden rounded-[24px] border-2 border-ink-400 shadow-card"
+      >
         <img
           v-if="props.project.image"
           :src="props.project.image.src"
@@ -41,10 +62,10 @@ const props = defineProps<{ project: ProjectSummary }>()
         <div v-else class="size-full bg-ink-900" aria-hidden="true" />
       </div>
 
-      <div class="flex flex-col gap-6">
-        <div class="flex flex-col gap-4">
+      <div class="flex flex-1 flex-col gap-6">
+        <div class="flex flex-1 flex-col gap-4">
           <div class="flex items-start justify-between gap-4">
-            <h3 class="flex flex-col items-start">
+            <h3 class="flex min-w-0 flex-col items-start">
               <span
                 class="text-display-sm font-semibold text-paper transition-colors duration-200 ease-brand group-hover:text-brand"
               >
@@ -63,23 +84,37 @@ const props = defineProps<{ project: ProjectSummary }>()
             </p>
           </div>
 
-          <p v-if="props.project.excerpt" class="text-body-lg text-ink-100">
+          <!--
+            226:2608 — 400x40, i.e. two 20px lines, whatever the excerpt's real
+            length. Kept unconditional so a project without one still reserves
+            the band and its neighbours stay aligned.
+          -->
+          <p class="mt-auto line-clamp-2 min-h-10 text-body-lg text-ink-100">
             {{ props.project.excerpt }}
           </p>
         </div>
 
-        <ul v-if="props.project.services.length" class="flex flex-wrap items-center gap-2">
+        <!--
+          226:2609 — a single 17px row (299 wide inside the 400 card, so three
+          services fit). `flex-nowrap` keeps it one line so the card's foot
+          never moves; the labels stay whole and the row clips at the inline end
+          in the rare case a project carries more tags than the row can hold.
+        -->
+        <ul
+          v-if="props.project.services.length"
+          class="flex min-h-[17.5px] flex-nowrap items-center gap-2 overflow-hidden"
+        >
           <li
             v-for="(service, index) in props.project.services"
             :key="service"
-            class="flex items-center gap-2"
+            class="flex shrink-0 items-center gap-2"
           >
             <span
               v-if="index > 0"
               class="size-1 shrink-0 rounded-round bg-brand"
               aria-hidden="true"
             />
-            <span class="text-body-md text-ink-100">{{ service }}</span>
+            <span class="whitespace-nowrap text-body-md text-ink-100">{{ service }}</span>
           </li>
         </ul>
       </div>

@@ -119,20 +119,59 @@ function iconFor(item: SectionItem, index: number): string | undefined {
         class="relative isolate grid items-center gap-12 lg:grid-cols-[minmax(0,466px)_minmax(0,1fr)] lg:gap-[86px]"
       >
         <!--
-          Decorative hairline mesh (359:9560, 109x118 cells) — the frame runs
-          it from under the hero straight through the story block below, not
-          boxed to the story section alone. Anchored (and `isolate`d) on hero
-          rather than story so its negative z-index sits it behind the hero
-          illustration/copy too, and positioned against hero specifically
-          (not the padded container) because hero's own box has no inline
-          padding, so inline-start-0 lines up exactly with the content edge
-          story also aligns to — anchoring on the padded container instead
-          shifts it by the container's gutter.
+          The frame carries TWO hairline mesh groups, not one, and they hand
+          off to each other so the verticals read as a single run from the
+          illustration down to the principle cards. Both are anchored (and
+          `isolate`d) on hero rather than on the block they sit behind, so
+          their negative z-index stays behind the hero illustration/copy too,
+          and both are positioned against hero specifically (not the padded
+          container) because hero's own box has no inline padding — so
+          inline-start-0 lines up exactly with the content edge story aligns
+          to, where anchoring on the padded container would shift them by the
+          container's gutter.
+
+          Hero mesh, 691:7320 (109 x 92.34 cells). Its horizontal rules do NOT
+          start where its verticals do: the group spans y=182.14-822.14, but
+          the verticals only run 321.93-822.14 and the rules land at 366.81,
+          459.15, 551.49, 643.83 and 736.16. Hence the box below starts at the
+          verticals' y and offsets the rules 45px into it, rather than being
+          drawn from the group's own top edge — the frame has bare page above
+          the illustration, not a grid.
+
+          Both meshes share the vertical run: 227 -> 1211 in frame px, i.e. a
+          109.33 cell inset 131 from the 1248 container's edge. That inset is
+          the 22px x-offset below (131 mod 109.33) — without it a repeat from
+          the container edge drifts a full 84px off the frame by the far side.
+        -->
+        <div
+          class="grid-mesh pointer-events-none absolute inline-start-0 block-start-[72px] -z-10 hidden h-[500px] w-full max-w-container lg:block"
+          style="--mesh-cell-x: 109.33px; --mesh-cell-y: 92.34px; background-position: 22px 45px"
+          aria-hidden="true"
+        />
+
+        <!--
+          691:7331 — the one rule left above that mesh, at y=182.14. Its
+          neighbour at 274.48 was deleted in the frame, so this is a single
+          hairline 140px clear of the grid rather than the first of a run;
+          drawing it as part of the mesh box would reinstate the line the
+          designer removed.
+        -->
+        <div
+          class="pointer-events-none absolute inline-start-0 block-start-[-68px] -z-10 hidden h-px w-full max-w-container bg-white/[0.04] lg:block"
+          aria-hidden="true"
+        />
+
+        <!--
+          Story mesh, 359:9560 (109 x 118 cells) — runs from under the hero
+          straight through the story block below, not boxed to the story
+          section alone, and overlaps the hero mesh's tail so the verticals
+          never break. Its rules start at 839.66, one full cell below the
+          group's own top edge, hence the 116px background offset.
         -->
         <div
           v-if="story"
           class="grid-mesh grid-mesh-fade pointer-events-none absolute inline-start-0 block-start-[474px] -z-10 hidden h-[1020px] w-full max-w-container lg:block"
-          style="--mesh-cell-x: 109px; --mesh-cell-y: 118px"
+          style="--mesh-cell-x: 109.33px; --mesh-cell-y: 118.1px; background-position: 22px 116px"
           aria-hidden="true"
         />
 
@@ -184,7 +223,7 @@ function iconFor(item: SectionItem, index: number): string | undefined {
         Story — 357:9335. Centred 824px column over the decorative hairline
         mesh (359:9560, 109x118 cells) with the freehand mark at 583:5905.
       -->
-      <section v-if="story" class="relative">
+      <section v-if="story" class="relative isolate">
         <img
           :src="storyMarkUrl"
           alt=""

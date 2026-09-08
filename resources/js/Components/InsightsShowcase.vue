@@ -90,7 +90,7 @@ const rest = computed(() => props.posts.slice(1, 3))
 
             <Link
               :href="lead.url"
-              class="flex size-12 shrink-0 items-center justify-center rounded-round border border-warm-800 bg-warm-1000 transition-colors hover:bg-warm-900"
+              class="flex size-12 shrink-0 self-end items-center justify-center rounded-round border border-warm-800 bg-warm-1000 transition-colors hover:bg-warm-900"
               :aria-label="lead.title"
             >
               <img

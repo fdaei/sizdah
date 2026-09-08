@@ -19,23 +19,40 @@ import journeyUrl from '~img/sizdah/about/cta-journey.svg'
  * 2026-08-24 on a stale assumption that their frames still drew it — see
  * GAPS G34.
  *
- * The card's grid wash is `.grid-mesh` with an ink hairline on cream. It is
- * cropped to the physical right side of the card (the frame's own raster
- * fill sits at 42.53%..100% of the card width, i.e. the right ~58%) and uses
- * oversized cells, leaving the copy side on a clean cream background. The
- * frame draws this at 10% opacity over a near-white line/fill, which is
- * barely visible even under a heavy contrast boost on the reference
- * screenshot — `--mesh-color` is tuned faint (2%) to match that, not the
- * 6% that made an earlier pass visibly grid-like.
+ * Ground and mesh are measured off the designer's own 1x export of the frame
+ * (2026-09-08), which supersedes the earlier eyeballed pass — see GAPS G57:
+ *
+ * - The ground is `surface-raised` (#FDFCFA), the raw fill tailwind.config.js
+ *   already records against 553:7779, i.e. THIS card. It rendered as
+ *   `brand-100` (#FFF8EB) until now, which is a visibly warmer yellow cream.
+ * - The mesh sits on the **copy** side, not the illustration side: the frame's
+ *   raster fill spans 42.53%..100% of the card width, and under the RTL frame
+ *   that band is behind the text. Hence `inline-start-0` (physical right in
+ *   fa), which mirrors correctly if an LTR locale ever comes back.
+ * - Hairlines carry ~10% ink. The export's own lines are soft (the frame's
+ *   fill is a resampled raster, so each hairline lands as #EEEEEB against a
+ *   lighter neighbour); 10% is what reproduces their total weight with the
+ *   crisp 1px gradient this utility draws. The old 2% was read off a
+ *   contrast-boosted screenshot and is five times too faint.
+ * - Cells are 113.4 x 115.3, and the tiling is anchored 37.5px in from the
+ *   card's right edge and 75.5px down from its top, exactly where the export
+ *   puts its outermost lines. Without that offset the default 0,0 origin runs
+ *   a hairline down the band's inner edge and along the card's top edge,
+ *   neither of which the frame draws.
  */
 const props = defineProps<{ section: PageSectionData }>()
 </script>
 
 <template>
-  <section class="relative overflow-hidden rounded-xl bg-brand-100 p-8 lg:p-12">
+  <section class="relative overflow-hidden rounded-xl bg-surface-raised p-8 lg:p-12">
     <div
-      class="grid-mesh pointer-events-none absolute inset-y-0 end-0 w-[58%]"
-      style="--mesh-color: rgb(20 20 20 / 2%); --mesh-cell-x: 113px; --mesh-cell-y: 115px"
+      class="grid-mesh pointer-events-none absolute inset-y-0 inline-start-0 w-[57.47%]"
+      style="
+        --mesh-color: rgb(20 20 20 / 10%);
+        --mesh-cell-x: 113.4px;
+        --mesh-cell-y: 115.3px;
+        background-position: right 37.5px top 75.5px;
+      "
       aria-hidden="true"
     />
 

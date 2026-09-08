@@ -18,7 +18,7 @@ import type { FilterOption, PageSectionData, ProjectSummary, SectionMap, SeoMeta
  *
  * Vertical rhythm from the frame: the centred header block (eyebrow 40 title
  * 24 description), gap 64 to the filter row, gap 110 to the grid, gap 259 to
- * the closing card. The grid is two 612px columns, 24 across and 96 down.
+ * the closing card. The grid is 24 across and 96 down.
  *
  * The closing card is the same "Frame 96467" the About page ends on, so it is
  * the shared StartTogetherCard rather than a second copy.
@@ -29,15 +29,15 @@ import type { FilterOption, PageSectionData, ProjectSummary, SectionMap, SeoMeta
  * shared `.grid-mesh` background rather than shipped as an SVG — the same way
  * About draws its own mesh (359:9560, 109x118).
  *
- * RE-VERIFIED 2026-09-02: the frame's grid is not a uniform two-up — the
- * first row (`226:2880`) holds three 400-wide "project post" instances
- * (`226:2818` etc.), and only the rows after it (`226:2957`, `226:3019`) are
- * the 612-wide two-up this docblock used to describe exclusively. Both sizes
- * are the *same* Figma component ("project post") just resized, and its
- * detail block underneath (category/title/excerpt/services) uses fluid
- * flex/gap layout at both widths — 148px tall either way — so `ProjectPostCard`
- * needed no size-specific variant, just a grid that narrows its first three
- * cells to three columns instead of two. See GAPS G54.
+ * DELIBERATE DEVIATION 2026-09-08 (user decision) — the frame's grid is not a
+ * uniform two-up: its first row (`226:2880`) holds three 400-wide "project
+ * post" instances (`226:2818` etc.) and the rows after it (`226:2957`,
+ * `226:3019`) are 612-wide two-ups. Both sizes are the *same* Figma component
+ * just resized. That split was reproduced here until the real project count
+ * (six) exposed what the frame's tidy sample never did: a 3-up row, a 2-up row,
+ * then a single stranded 612 card, i.e. three different card sizes down one
+ * page. The user asked for one set of identical cards, so the listing is now a
+ * single 3-up grid of the 400-wide card at every position. See GAPS G54/G56.
  */
 const props = defineProps<{
   heading: { eyebrow: string; title: string; description: string }
@@ -60,19 +60,6 @@ const filterOptions = computed<FilterOption[]>(() => [
 ])
 
 const finalCta = computed<PageSectionData | undefined>(() => props.sections.final_cta)
-
-/**
- * The frame's first row is a compact three-up; everything after it is the
- * larger two-up. Only split off a featured row when there are enough
- * projects to fill it — otherwise the existing two-up grid degrades fine on
- * its own for 1-2 results.
- */
-const featuredProjects = computed<ProjectSummary[]>(() =>
-  props.projects.length >= 3 ? props.projects.slice(0, 3) : [],
-)
-const remainingProjects = computed<ProjectSummary[]>(() =>
-  props.projects.slice(featuredProjects.value.length),
-)
 </script>
 
 <template>
@@ -122,30 +109,27 @@ const remainingProjects = computed<ProjectSummary[]>(() =>
         {{ props.activeFilter ? t('common.empty_results') : t('common.empty_projects') }}
       </p>
 
-      <div v-else class="mt-16 flex flex-col gap-16 md:mt-[110px] md:gap-24" data-reveal-group>
-        <div
-          v-if="featuredProjects.length"
-          class="grid gap-x-6 gap-y-16 sm:grid-cols-2 md:grid-cols-3 md:gap-y-24"
-        >
-          <ProjectPostCard
-            v-for="project in featuredProjects"
-            :key="project.slug"
-            :project="project"
-            data-reveal
-          />
-        </div>
+      <!--
+        One uniform 3-up: 24 across, 96 down, every cell the frame's 400-wide
+        card. `items-stretch` is the grid default, and ProjectPostCard is
+        `h-full`, so each row's cards share a height and their excerpt and
+        service bands line up.
 
-        <div
-          v-if="remainingProjects.length"
-          class="grid gap-x-6 gap-y-16 md:grid-cols-2 md:gap-y-24"
-        >
-          <ProjectPostCard
-            v-for="project in remainingProjects"
-            :key="project.slug"
-            :project="project"
-            data-reveal
-          />
-        </div>
+        Three columns start at `lg`, not `md`: the card's 36px title needs the
+        width, and at 768 a third of the track is 213px, which pushed the
+        industry label clean out of the card. Tablets take the two-up instead.
+      -->
+      <div
+        v-else
+        class="mt-16 grid gap-x-6 gap-y-16 sm:grid-cols-2 md:mt-[110px] md:gap-y-24 lg:grid-cols-3"
+        data-reveal-group
+      >
+        <ProjectPostCard
+          v-for="project in props.projects"
+          :key="project.slug"
+          :project="project"
+          data-reveal
+        />
       </div>
 
       <div v-if="finalCta" class="mt-24 md:mt-[259px]">

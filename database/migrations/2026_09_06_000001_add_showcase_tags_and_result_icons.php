@@ -25,19 +25,27 @@ use Illuminate\Support\Facades\Schema;
  *    (the same "stable across locales" role `Service::icon` plays for the Home
  *    orbit), not lucide names.
  *
- * The backfill matches on the item's English title because that string is the
- * one the seeder keeps stable across all six projects; the fa/ar titles are
- * translations and differ.
+ * The backfill matches on the item's title in ANY locale, not just `en`. The
+ * site is fa-only (config/locales.php), so the seeded result items carry a fa
+ * translation and no en one — keying on `en` alone made this half of the
+ * migration a silent no-op. The two fa labels with no frame counterpart
+ * (بازشناسی برند, یکدستی بصری, on the placeholder projects) map to nothing and
+ * keep a null icon, which Work/Show.vue renders as a tile without a glyph.
  */
 return new class extends Migration
 {
-    /** @var array<string, string> English result label => artwork key. */
+    /** @var array<string, string> Result label (any locale) => artwork key. */
     private const ICONS = [
         'roi' => 'roi',
         'reach' => 'reach',
         'interaction' => 'interaction',
         'follower' => 'follower',
         'view' => 'view',
+        'بازگشت سرمایه' => 'roi',
+        'دسترسی' => 'reach',
+        'تعامل' => 'interaction',
+        'دنبال‌کننده' => 'follower',
+        'بازدید' => 'view',
     ];
 
     public function up(): void
@@ -60,16 +68,24 @@ return new class extends Migration
             return;
         }
 
-        $titles = DB::table('section_item_translations')
+        $rows = DB::table('section_item_translations')
             ->whereIn('section_item_id', $resultItemIds)
-            ->where('locale', 'en')
-            ->pluck('title', 'section_item_id');
+            ->get(['section_item_id', 'title']);
 
-        foreach ($titles as $itemId => $title) {
-            $key = self::ICONS[mb_strtolower(trim((string) $title))] ?? null;
+        $resolved = [];
+
+        foreach ($rows as $row) {
+            // One item can carry a row per locale; the first locale whose label
+            // is in the map wins, so re-enabling en/ar cannot overwrite a hit.
+            if (isset($resolved[$row->section_item_id])) {
+                continue;
+            }
+
+            $key = self::ICONS[mb_strtolower(trim((string) $row->title))] ?? null;
 
             if ($key !== null) {
-                DB::table('section_items')->where('id', $itemId)->update(['icon' => $key]);
+                $resolved[$row->section_item_id] = $key;
+                DB::table('section_items')->where('id', $row->section_item_id)->update(['icon' => $key]);
             }
         }
     }

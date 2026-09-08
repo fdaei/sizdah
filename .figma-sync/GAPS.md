@@ -1995,3 +1995,346 @@ to the end.
 Verified at 1440 against a fresh frame render, and at 1280 / 1024 / 834 /
 768 / 390 / 360 for layout and horizontal overflow. `npm run typecheck`,
 `npm run lint` and `npm run build` all clean.
+
+---
+
+## G56 — Work index: the frame's mixed 3-up/2-up grid produces three different card sizes once the real project count is used  (2026-09-08)  (severity: medium)
+
+User-reported against `/fa/work`: "تمام این کادر ها باید توی کارد های یکسان
+باشن" — every one of these boxes should be the same card. Two separate faults
+were behind it, and the first is the one the frame itself hides.
+
+**Fault 1 — the cards in a row were not the same height.** `226:2818`
+("project post") is a fixed component: a square image, gap 40, then a detail
+block that is exactly 148 tall at BOTH widths — title 45 (one line), gap 16,
+excerpt 40 (two 20px lines), gap 24, services 17 (one row). The build
+reproduced the gaps but not the fixed bands, so every band was content-sized.
+The frame's own sample copy never exposes that (its titles are "باغچه",
+"کرمان موتور" — one line each, two-line excerpts throughout); the seeded fa
+content does. "کلینیک پزشکی و دندانپزشکی فخر" wraps to two lines in the
+400-wide card and its excerpt runs one line where its neighbours run two, so
+the three cards in a row put their excerpts at three different heights and
+their service rows at three more.
+
+Truncating the titles would match the frame literally and lose a brand name,
+so the card now stretches to its grid cell (`h-full`) and anchors the two
+lower bands instead: the excerpt is a fixed two-line box (`min-h-10` +
+`line-clamp-2`, the frame's 40px), the caption absorbs the slack (`flex-1`
+plus `mt-auto` on the excerpt) so a wrapped title grows UPWARD into the gap
+under the image rather than pushing everything below it down, and the service
+row is `flex-nowrap` — the frame's single 17px line — pinned to the card's
+foot. With the frame's own copy this collapses back to exactly 40/16/24 and
+the 588px card. The title's hand-drawn underline still follows its last line,
+which is the one thing that cannot align across a wrapped and an unwrapped
+title, and is correct: it decorates the title, not the band.
+
+**Fault 2 — three card sizes down one page.** The frame's grid is genuinely
+mixed: first row (`226:2880`) three 400-wide instances, the rows after it
+(`226:2957`, `226:3019`) two 612-wide. That split was reproduced faithfully
+and looked right against the frame's six-project sample. With the six seeded
+projects it renders 3 small + 2 large + **one stranded 612 card**, i.e. three
+card sizes and an orphan row. Asked directly, the user chose one uniform
+grid, so `Work/Index.vue` no longer splits `featured`/`remaining` — it is a
+single 3-up of the 400-wide card at every position, 24 across and 96 down.
+This is a DELIBERATE DEVIATION from `222:1989`, recorded here rather than
+silently absorbed: if the frame's mixed rhythm is ever wanted back, it is the
+two computeds and two grids that were removed.
+
+**Tablet correction found while verifying.** Three columns started at `md`
+(768) for the old featured row and carried over to the whole grid. A third of
+the 768 track is 213px, and a 36px title plus the `shrink-0` industry label
+does not fit it — the label was pushed 5px outside the viewport, the page's
+only non-footer horizontal overflow. Three columns now start at `lg` and
+tablets take the two-up; the title also got `min-w-0` so it yields before the
+label does. Verified at 1440 / 1280 / 1024 / 834 / 768 / 390 / 360: every row
+uniform, no overflow. (The 1280 overflow that remains is the footer's
+`Group 26` art, site-wide and pre-existing — not this page's.)
+
+## G57 — The CTA card's ground and mesh were both wrong; a 1x frame export settled them  (2026-09-08)  (severity: medium)
+
+The user supplied a native-size export of `Frame 96467` (1248x513, the shared
+"شروع همکاری" card). The rendered card is the same 1248x513 at 1440, so the
+two compare pixel-for-pixel, and three of `StartTogetherCard.vue`'s decisions
+turned out to be wrong. All three had been read off a *contrast-boosted
+screenshot* rather than an export, which is why they survived earlier passes.
+
+**Fault 1 — the ground was the wrong cream.** The card drew `brand-100`
+(#FFF8EB), a warm yellow cream. The export's fill is a flat #FDFCFA across
+621,750 of its 640,224 pixels — a neutral near-white. That value is already
+in [tailwind.config.js](../tailwind.config.js) as `surface-raised`, whose own
+comment records it as the "raw fill on 268:3032 and **553:7779**" — 553:7779
+being this very card on Home. The token existed, was named for this node, and
+the component never used it. Now `bg-surface-raised`. This was the only
+change visible without measuring: #FFF8EB against #FDFCFA is a plainly
+warmer, more yellow card.
+
+**Fault 2 — the mesh was on the wrong side.** The band was `end-0 w-[58%]`.
+Under RTL `end` is the physical LEFT, so the wash sat behind the illustration
+— and the file's comment claimed that was deliberate ("leaving the copy side
+on a clean cream background"). The export says the opposite: horizontal
+hairlines begin at x=531 (42.55% of 1248) and run to the right edge, i.e. the
+band is behind the COPY. The comment's own measurement (42.53%..100%, "the
+right ~58%") was right; only the `end-0` that implemented it was wrong,
+because a physical measurement was written as a logical property in a
+direction that inverts it. Now `inline-start-0 w-[57.47%]`, which is the
+copy side in either direction if an LTR locale ever returns.
+
+**Fault 3 — the hairlines were five times too faint, and mis-registered.**
+`--mesh-color` was `rgb(20 20 20 / 2%)`, tuned down on the theory that the
+frame's 10% wash over a near-white line was "barely visible even under a
+heavy contrast boost". Measured against the export instead: each horizontal
+line lands as #EEEEEB with a lighter neighbour, ~23 units of darkening in
+total against the #FDFCFA ground, which a crisp 1px gradient reproduces at
+**10%**, not 2%. (The export's lines are soft because the frame's fill is a
+resampled raster; matching total weight is the right target, not the core
+pixel.) Cells measured 113.4 x 115.3, near the 113/115 already in place.
+
+Registration was also off. The export's outermost lines sit 37.5px in from
+the card's right edge and 75.5px down from its top; CSS's default 0,0 tiling
+origin instead runs a hairline down the band's inner edge and along the card's
+top edge, neither of which the frame draws — the old build had exactly that
+seam at the card's left edge. Fixed with
+`background-position: right 37.5px top 75.5px`.
+
+Verified by re-measuring the rendered card the same way: verticals at
+643.5 / 757.5 / 870.5 / 983.5 / 1097.5 / 1210.5 against the export's
+641.5 / 757 / 870.5 / 984 / 1097 / 1210.5, horizontals within 1px on all
+four, ground exactly #FDFCFA, line weight 24 units against the export's 23.
+
+**Standing note for the next pass:** a contrast-boosted screenshot is not a
+measurement. Every one of these three faults is the kind that a boosted
+screenshot hides (a 10-unit hue shift, a mirrored logical property, a
+sub-1% opacity call). Ask for the 1x export.
+
+---
+
+## G58 — About: the story block's mesh backdrop was half-drawn, and its freehand mark never painted at all  (2026-09-08)  (severity: medium)
+
+User-reported against `/fa/about`: "در فیگما این بک گراندش یه مش داره" — in
+Figma this block's background has a mesh. Three separate faults, only the
+first of which is the one the frame makes obvious.
+
+**Fault 1 — `336:5623` carries TWO mesh groups, and only one was built.**
+G22 recorded the About mesh as a single group and implemented `359:9560`
+(1200x944, behind the story block). The frame also has `691:7320`
+(1200x640) sitting behind the hero, and the two overlap on purpose: the
+story group's verticals start at y=721.55, the hero group's end at 822.14,
+so the run of verticals is continuous from the illustration all the way down
+to the principle cards. With only the lower group built, the mesh began
+under the story heading and the whole hero read as bare page.
+
+`691:7320` is not a plain rectangle and cannot be drawn as one. Its
+horizontal rules land at 366.81 / 459.15 / 551.49 / 643.83 / 736.16 (a 92.34
+cell), but its verticals only run 321.93 -> 822.14, and one more rule sits
+alone at y=182.14 — its neighbour at 274.48 was deleted in the file, so it is
+not the first of a run. So it is built as a mesh box spanning the verticals'
+extent with the rules offset 45px into it, plus one standalone hairline for
+`691:7331`. Drawing the whole group as one repeating box would reinstate the
+rule the designer removed and put a grid over the empty band under the header.
+
+**Fault 2 — the vertical rules were a full 84px out by the far edge.** Both
+meshes are anchored on the 1248 container and repeated from its content edge,
+which put the columns at 96 + 109k. The frame's are at 227 + 109.33k. The
+error is invisible at the inline start and accumulates to most of a cell by
+the opposite one — which is exactly where a side-by-side against the frame
+looks at it. Both now carry `background-position: 22px` (131 mod 109.33, the
+frame's inset off the container edge) and the measured 109.33 cell; verified
+by sampling the rendered rows against the frame render at 1440: 774 / 883 /
+993 / 1102 / 1211 in both. The grid still runs to the container edge rather
+than stopping at the frame's 120/1320 bounds, so it keeps working at widths
+the frame does not define.
+
+**Fault 3 — `583:5905`, the freehand "Problem Solving 7" mark, was in the DOM
+and invisible.** It is placed `-z-10` so the story copy sits over it, but its
+`<section>` was `relative` alone. `position: relative` with `z-index: auto`
+is NOT a stacking context, so the negative index escaped the section and the
+mark painted behind the page ground — geometry, size and asset all correct,
+and nothing on screen. The hero section next door had `isolate` and its mesh
+was fine, which is why this survived review. The story section is now
+`relative isolate` too.
+
+Also adjusted: `.grid-mesh-fade`'s leading ramp, 14% -> 4%. It existed to
+soften a mesh box that started mid-page with nothing above it; now that the
+hero mesh abuts it, a 143px ramp read as a dead band across the story
+heading where the frame runs unbroken verticals. The trailing ramp is
+unchanged — that mesh really does end mid-page.
+
+Verified at 1440 / 1280 / 1024 / 834 / 768 / 390: meshes and mark are `lg`-up
+only (the geometry is canvas px, per G22) and no new horizontal overflow. The
+64px overflow at 1280 is the footer art, site-wide and pre-existing — it
+reproduces identically on Contact and Services.
+
+---
+
+## G59 — `430:5201`'s filter row and the result-tile glyphs were both dark: the migration that backs them had never been run, and half of it was a no-op anyway  (2026-09-08)  (severity: high)
+
+The showcase heading on `/work/{project}` rendered alone — no `همه` /
+`برندینگ` / `مارکتینگ` chips — and the five result tiles rendered without
+their glyphs. Neither was a markup fault: `Work/Show.vue`, `FilterChips`,
+`ContentTransformer` and the `ProjectSeeder` tags were all written correctly
+in the G55 pass. The data underneath them was missing.
+
+**Fault 1 — the migration was still pending.**
+`2026_09_06_000001_add_showcase_tags_and_result_icons` was authored in the G55
+pass and never run, so `project_images.tag` did not exist as a column. The chip
+row is deliberately gated on "at least one image carries a tag" (so an untagged
+project never shows a dead control), and with no column at all that gate could
+never open. Ran the migration; backfilled the three cheshmeh showcase tags to
+the values `ProjectSeeder` already writes, so the DB now matches a fresh seed.
+
+**Fault 2 — the result-icon backfill matched nothing, silently.** The same
+migration's second half keys each result item's artwork glyph off its **English**
+title (`where('locale', 'en')`), on the stated assumption that en is "the string
+the seeder keeps stable across all six projects". It is not: the site is fa-only
+per G15, so the seeded result items carry a fa translation and no en one. The
+lookup returned an empty set and the loop had nothing to iterate — `icon` stayed
+null on all 25 result items and every tile fell through
+`Work/Show.vue`'s "omit the glyph for an unknown key" branch. The map now carries
+both the en keys and the five fa labels (`بازگشت سرمایه`, `دسترسی`, `تعامل`,
+`دنبال‌کننده`, `بازدید`), the query no longer filters by locale, and the loop
+takes the first locale that resolves so re-enabling en/ar cannot overwrite a hit.
+The two fa labels with no counterpart in the frame (`بازشناسی برند`,
+`یکدستی بصری`, on the placeholder projects) stay null on purpose — the frame
+draws five glyphs and only five.
+
+Editing an already-applied migration is normally off-limits; it is correct here
+because the migration had been applied exactly once, minutes earlier, in this
+same working tree — it has never run anywhere else.
+
+Verified at 1440 against the frame: the row is 1248x51 at x=96 with the heading
+at x=1054 w=290 (frame: x=1054 w=290), 40px/600 in `#FEFBF5`; chips read
+`همه` / `برندینگ` / `مارکتینگ` right-to-left on 12px gaps at radius 16, the
+active chip on `#2C2C2C` with the 3px `#F8B937` outline and label. The rendered
+chips run 48px tall against the frame's 44 because `text-body-lg` carries 20px
+leading where Figma's Body/Large is set to 100%; left alone rather than
+special-cased, since that leading is the G14 token decision and moving it would
+move every chip on the site. All five result tiles now draw their own glyph.
+
+---
+
+## G60 — `615:6133`'s glyph was still dark: G59 fixed the migration that had already run, and never touched the seeder  (2026-09-08)  (severity: high)
+
+User pointed at the result tile `615:6133` on `/fa/work/{project}` and asked for
+it to be fixed. Measured live against the frame, the tile was correct in every
+property G39 and G55 had settled — `bg-gold-100` (#F9F5EC), radius 8,
+`px-8 py-4` (the frame's 32/16), gap 16 between glyph and block and gap 8 inside
+it, label `text-title-lg text-warm-900` (22px / #393637), value
+`text-heading-lg text-brand` (30px / #F8B937), all flush to the RTL start edge
+at a 32px inset, five across on a 24px gap. Everything except the one thing the
+frame leads with: **the 32px brand glyph was absent from all 25 result items.**
+
+**Why G59's fix did not take.** G59 diagnosed this exact fault correctly (the
+`icon` backfill keyed on an `en` title that fa-only seeding never writes) and
+corrected the map inside
+`2026_09_06_000001_add_showcase_tags_and_result_icons`. But that migration was
+already `Ran` — batch 3 — and editing an applied migration does not re-run it.
+The corrected map has therefore never executed against this database, and
+`section_items.icon` was still null on every result item. G59's closing line
+("All five result tiles now draw their own glyph") described the edited file,
+not the data.
+
+**The fault G59 did not reach.** `ProjectSeeder::applyResultIcons()` carried the
+*same* en-only lookup, independently of the migration:
+`$item->getTranslation('title', 'en')`. `HasTranslations::setTranslations()`
+skips any locale absent from `locales.supported`, so under fa-only no `en` row
+is ever written, the getter falls back to the fa title, nothing matches the five
+keys, and every glyph is dropped. This is the path that matters — a fresh
+`migrate --seed` runs the migration against an empty table (a guaranteed no-op)
+and then seeds, so the seeder is the *only* writer of these icons on any new
+install. Fixed by reading the English label from the array `items()` was just
+handed rather than back off the saved record; `items()` writes `sort_order` from
+that array's index and `PageSection::items()` orders by it, so the two line up.
+The live DB was backfilled separately, matched on the stored fa title (a 1:1
+mapping to the seeder's English labels), touching only `section_items.icon`.
+
+Verified two ways: a fresh sqlite `migrate` + `db:seed` yields 23/25 items with
+an icon, and the live page renders all five glyphs — `result-roi.svg` 32×32,
+`reach` 32×22, `interaction` 24×24, `follower` 32×20, `view` 32×19, each SVG's
+own viewBox, against the frame's 32×31.4 / 32×21.66 / 24×24 / 32×19.72 /
+32×18.71. The two labels with no glyph in the frame (`بازشناسی برند`,
+`یکدستی بصری`) stay null on purpose, as G59 intended. Checked at 1440 / 1280 /
+1024 / 834 / 768 / 390 / 360: every tile draws its glyph, no tile overflows.
+(The 1280 document overflow is the site-wide footer `Group 26` art, pre-existing.)
+
+**Two frame properties left alone, deliberately.** The tile renders 154 tall
+against the frame's 160.4; the 6.4 is the value's line box, which the frame
+draws at 45 for a 30px face (Poppins at ~1.5) where `text-heading-lg` carries
+the G14-measured 1.27. The value also renders in Peyda, not Poppins, because the
+seeded values are Persian digits — the G55 content-wins call. Both would need
+the shared type token moved, which would move every `heading-lg` on the site.
+
+Also noted, not changed: the frame does **not** give the glyph a fixed band. Each
+tile centres its own content in the stretched row (frame block offsets 63.4 /
+58.5 / 59.7 / 57.6 / 57.1 track `(160.4 − content)/2` exactly), which is what
+`h-full` + `justify-center` already reproduces. Below `lg`, where nothing
+stretches the row, that leaves tiles with shorter glyphs slightly shorter — a
+consequence of the frame's own centring, in territory the file does not design.
+
+---
+
+## G61 — Case study strategy quadrant `428:5041-428:5088`: the heading cell was a bare label and the brush strokes had been redrawn as CSS borders  (2026-09-08)  (severity: medium)
+
+Prompted by the user pointing at `428:5049` (the heading title) and `428:5060`
+(cell 01's body). Both live in the strategy quadrant, and the block had drifted
+from the frame in three ways that compounded.
+
+**1 — the heading cell was two-thirds empty.** `428:5044` is a three-part block:
+the "small title" eyebrow `428:5046` in a 45px box, a 40/700 headline
+`428:5049` on a 399 measure (two lines, 102 tall), and a 20/500 subtitle
+`428:5050` (two lines, 50 tall), 24 and 16 apart. The build rendered a single
+`text-section-line` h2 carrying `t('work.strategy')` and nothing else, pinned to
+the top of a 339-tall column. That is the same three parts every Home section
+header has, so it is now `SectionHeading` stacked — a reuse, not a fourth copy.
+Its one delta from the frame is the 24px title/subtitle gap against the frame's
+16; not worth forking the shared component over 8px.
+
+**2 — the copy.** G19 skipped `428:5044`'s wording because it is Services-page
+pricing copy left in the file ("مسیرهای مشخص برای رشد برند" / "سه پکیج متناسب
+با نیاز…" — three packages, on a case study). Flagged again and the user chose
+the frame verbatim, so `work.strategy` is replaced by `work.strategy_eyebrow` /
+`_title` / `_subtitle` in all three locale files, fa transcribed and en/ar
+translated from it.
+
+**3 — the rules were never rules.** `428:5041`, `428:5042` and `428:5043` are
+*paths*, not strokes: tapered, uneven, hand-drawn, in Yellow/200 (#FEF1D7).
+They had been reproduced as `border-[3px] border-brand-200`, which produced a
+crisp geometric plus running edge to edge — the one detail that made the block
+read as a table rather than a diagram. Exported as SVG (`strategy-rule-v` 4x400,
+`strategy-rule-h` 320x4); Figma's export wraps each path in the frame's own
+`#1E1E1E`/`#141414` backing rects, which had to be stripped or the strokes ship
+as opaque dark bars. Vectors 6 and 7 are the same path, so one file serves both
+columns.
+
+**Geometry, and why an even three-up was wrong.** The frame free-positions the
+block across 84-1368, wider than the 1248 track. Its columns are heading 401 /
+gutter 204 / inner 326 / gutter 24 / outer 329 — the 204 is what gives the
+heading its air. The build's `lg:grid-cols-3` closed it to 24. Now
+`lg:grid-cols-[minmax(0,31%)_minmax(0,1fr)]`, and the measured result at 1440
+tracks the frame within single pixels: heading 954-1344 (frame 967-1368, the
+frame's 24px bleed past the track dropped), inner column 438-756 (frame
+437-763), outer 96-414 (frame 84-413), vertical stroke at 424 (frame 426),
+horizontal strokes 438-756 and 96-414 (frame 437-757 and 93-413).
+
+The cells are staggered, not gridded: they start 59px below the heading and the
+outer column runs a further 38 lower than the inner one (`428:5058` 2339 vs
+`428:5067` 2377; `428:5087` 2574 vs `428:5088` 2594). And they interleave —
+01/03 in the inner column, 02/04 in the outer — so `strategyColumns` splits the
+list on parity and each cell keeps its original index for its numeral.
+
+**Three things the frame does not answer, decided here.** The 204 gutter is held
+in px only at `2xl`; below that it ate the 896 `lg` track and squeezed the cells
+to three words a line, so it drops to `gap-x-10`. Below `sm` there is no
+quadrant to divide, so the column wrappers go `display: contents`, the strokes
+drop out with them, and `order` restores 01-04 reading order — without it the
+interleave stacks 01, 03, 02, 04 on a phone. The strokes carry their own
+`order` one below the cell they follow, or they sort to the head of the column.
+
+**One frame property deliberately not followed.** `428:5047` rims the eyebrow
+marker in Black/800 (#434343) where every other dark-ground instance rims in
+Yellow/50 (see G45, which recorded the Services header as the lone dissenter).
+`Eyebrow` keeps its documented dark-ground default: at 8px behind a Yellow/1000
+bloom the rim is invisible either way, and forking the shared component for it
+would cost more than it buys.
+
+Checked at 1440 / 1024 / 768 / 640 / 390: reading order correct at every width,
+no horizontal overflow, `npm run typecheck` and `npm run lint` clean.
