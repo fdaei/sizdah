@@ -139,15 +139,12 @@ const rest = computed(() => props.posts.data.slice(2))
                not floating in the header-to-grid gap. -->
           <div
             aria-hidden="true"
-            class="pointer-events-none absolute inset-x-0 block-end-full -mb-8 hidden justify-center lg:flex"
+            class="pointer-events-none absolute inset-x-0 top-0 hidden -translate-y-1/2 justify-center lg:flex"
           >
-            <img
-              :src="paperclipUrl"
-              alt=""
-              width="64"
-              height="64"
-              style="transform: rotate(-166.312deg)"
-            />
+            <!-- The export is already rotated (78x78 box, rotated clip
+                 matrix), so no CSS transform here - a second rotation threw
+                 the artwork off-centre inside its box. -->
+            <img :src="paperclipUrl" alt="" width="78" height="78" />
           </div>
 
           <FeaturedPostCard :post="props.featured" />

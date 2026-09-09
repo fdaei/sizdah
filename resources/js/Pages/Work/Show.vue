@@ -6,7 +6,7 @@ import SectionHeading from '@/Components/SectionHeading.vue'
 import SeoHead from '@/Components/SeoHead.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
 import { useTranslations } from '@/Composables/useTranslations'
-import type { CardItem, FilterOption, PageSectionData, ProjectDetail, SeoMeta } from '@/types'
+import type { CardItem, FilterOption, PageSectionData, ProjectDetail, ResultStat, SeoMeta } from '@/types'
 import servicesIconUrl from '~img/sizdah/work/meta-services.svg'
 import instagramIconUrl from '~img/sizdah/work/meta-instagram.svg'
 import yearIconUrl from '~img/sizdah/work/meta-year.svg'
@@ -102,18 +102,29 @@ const meta = [
  | differ, and both are the frame's (423:4972 is four across at r16, 429:5092
  | and 429:5117 are three across at r24).
  */
-const cardBlocks: { key: string; items: CardItem[]; radius: string; columns: string }[] = [
+const cardBlocks: {
+  key: string
+  items: CardItem[]
+  radius: string
+  columns: string
+  /** Step above the block; see the rhythm table on the track. */
+  lead: string
+}[] = [
   {
     key: 'goals',
     items: props.project.goals,
     radius: 'rounded-lg',
-    columns: 'sm:grid-cols-2 lg:grid-cols-4',
+    // Single row, so the 16 gutter is the only gap the frame draws.
+    columns: 'gap-4 sm:grid-cols-2 lg:grid-cols-4',
+    lead: 'mt-20 md:mt-[136px]',
   },
   {
     key: 'deliverables',
     items: props.project.deliverables,
     radius: 'rounded-xl',
-    columns: 'sm:grid-cols-2 lg:grid-cols-3',
+    // 429:5092 -> 429:5117 is 40 between the rows against 16 between columns.
+    columns: 'gap-x-4 gap-y-10 sm:grid-cols-2 lg:grid-cols-3',
+    lead: 'mt-20 md:mt-[233px]',
   },
 ].filter((block) => block.items.length > 0)
 
@@ -124,6 +135,30 @@ const resultIcons: Record<string, { src: string; width: number; height: number }
   interaction: { src: resultInteractionUrl, width: 24, height: 24 },
   follower: { src: resultFollowerUrl, width: 32, height: 20 },
   view: { src: resultViewUrl, width: 32, height: 19 },
+}
+
+// `icon` is persisted as a stable English key, but older rows may have been
+// seeded before the icon backfill ran. Resolve the visible label as a safety
+// net so a tile can never receive the wrong glyph (or lose it) because the
+// database contains a localized title.
+const resultIconAliases: Record<string, keyof typeof resultIcons> = {
+  roi: 'roi',
+  'بازگشت سرمایه': 'roi',
+  reach: 'reach',
+  'دسترسی': 'reach',
+  interaction: 'interaction',
+  'تعامل': 'interaction',
+  follower: 'follower',
+  'دنبال‌کننده': 'follower',
+  view: 'view',
+  'بازدید': 'view',
+}
+
+function resultIcon(result: ResultStat): (typeof resultIcons)[string] | undefined {
+  const key = resultIconAliases[result.icon?.trim().toLowerCase() ?? '']
+    ?? resultIconAliases[result.label.trim().toLowerCase()]
+
+  return key ? resultIcons[key] : undefined
 }
 
 /*
@@ -173,13 +208,41 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
     cells.filter((cell) => cell.index % 2 === 1),
   ]
 })
+
+// When a project has no deliverables block, strategy takes its place in the
+// section sequence and therefore uses the frame's goals-to-next-block rhythm.
+const strategyLead = computed(() =>
+  props.project.deliverables.length > 0 ? 'mt-20 md:mt-[121px]' : 'mt-20 md:mt-[233px]',
+)
 </script>
 
 <template>
   <SeoHead :seo="props.seo" />
 
-  <article class="section-first pb-24">
-    <div class="container-sizdah relative isolate flex flex-col gap-20 md:gap-[120px]">
+  <article class="section-first pb-[442.38px] md:pt-[188px]">
+    <!--
+      Vertical rhythm. 336:5374 is free-positioned, so the step between blocks
+      is NOT uniform — it is measured per boundary off the frame and carried on
+      each section as `md:mt-[…]` rather than as one `gap` on the track:
+
+        header -> hero        153   (438 -> 591)
+        hero -> challenge     163   (1215 -> 1378)
+        challenge -> goals    136   (1525 -> 1661)
+        goals -> next block   233   (2047 -> 2280)
+        that -> the one after 121   (2720 -> 2841)
+        -> showcase           167   (3562 -> 3729)
+        showcase -> results   189   (4337 -> 4526)
+        results -> before/after 127 (4893 -> 5020)
+        -> next project       270   (5391 -> 5661)
+        next project -> CTA   172   (5774 -> 5946)
+
+      The frame runs goals, strategy, deliverables; this page keeps the same
+      blocks when content exists (the Cheshmeh case study replaces
+      deliverables with its «چرا سیزده» strategy quadrant), so the 233 and 121
+      steps sit either side of the middle block when it is present.
+      Below `md` the whole ramp collapses to a flat 80.
+    -->
+    <div class="container-sizdah relative isolate flex flex-col">
       <!--
         511:9519 — a 109px hairline mesh, 1200x872, inset 24 from the content
         track (frame x=120 against a 96 gutter) and starting 22px below the
@@ -207,22 +270,20 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
           </p>
         </div>
 
-        <!-- Meta row 411:8568 — icon at the inline start, label over value. -->
+        <!--
+          Meta row 411:8568. The label/value stack leads and the 24px glyph
+          follows it, so in RTL the text hugs the right edge and the glyph sits
+          at the inline END (visually left) — 411:8569 orders them that way and
+          the frame renders it that way. An earlier pass had the glyph first,
+          which mirrored every chip.
+        -->
         <dl v-if="meta.length" class="flex flex-wrap justify-center gap-4">
           <div
             v-for="item in meta"
             :key="item.key"
             class="surface-meta-chip flex items-start gap-2 rounded-lg border-2 border-brand-300 px-6 py-3"
           >
-            <img
-              :src="item.icon"
-              alt=""
-              aria-hidden="true"
-              width="24"
-              height="24"
-              class="size-6 shrink-0"
-            />
-            <div class="flex flex-col gap-2 whitespace-nowrap">
+            <div class="flex flex-col justify-center gap-2 whitespace-nowrap">
               <dt class="text-label-lg text-ink-50">{{ t(`work.${item.key}`) }}</dt>
               <dd
                 class="latin-nums text-body-md text-ink-200"
@@ -231,12 +292,23 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
                 {{ item.value }}
               </dd>
             </div>
+            <img
+              :src="item.icon"
+              alt=""
+              aria-hidden="true"
+              width="24"
+              height="24"
+              class="size-6 shrink-0"
+            />
           </div>
         </dl>
       </header>
 
       <!-- 423:4964 — 1248x624, i.e. a flat 2:1, at radius 24 under a 5% cast. -->
-      <figure v-if="props.project.banner ?? props.project.image" class="overflow-hidden rounded-xl">
+      <figure
+        v-if="props.project.banner ?? props.project.image"
+        class="mt-20 overflow-hidden rounded-xl md:mt-[153px]"
+      >
         <img
           :src="(props.project.banner ?? props.project.image)!.src"
           :srcset="(props.project.banner ?? props.project.image)!.srcset"
@@ -248,7 +320,10 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
       </figure>
 
       <!-- Challenge 423:4971 — the 144x144 mark (611:5944) sits off the heading's end. -->
-      <section v-if="props.project.challenge" class="flex flex-col items-center gap-10">
+      <section
+        v-if="props.project.challenge"
+        class="mt-20 flex flex-col items-center gap-10 md:mt-[163px]"
+      >
         <h2 class="relative mx-auto w-fit text-center text-section-line text-brand-50">
           {{ t('work.challenge') }}
           <img
@@ -281,10 +356,15 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
       </section>
 
       <!-- Goals 428:5089 / deliverables 429:5090 — gap 40 over a gap-16 card row. -->
-      <section v-for="block in cardBlocks" :key="block.key" class="flex flex-col gap-10">
+      <section
+        v-for="block in cardBlocks"
+        :key="block.key"
+        class="flex flex-col gap-10"
+        :class="block.lead"
+      >
         <h2 class="text-section-line text-brand-50">{{ t(`work.${block.key}`) }}</h2>
 
-        <ul class="grid gap-4" :class="block.columns" data-reveal-group>
+        <ul class="grid" :class="block.columns" data-reveal-group>
           <li
             v-for="(item, index) in block.items"
             :key="item.title"
@@ -329,6 +409,7 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
       <section
         v-if="props.project.strategy.length"
         class="grid lg:grid-cols-[minmax(0,31%)_minmax(0,1fr)] lg:gap-x-10 2xl:gap-x-[198px]"
+        :class="strategyLead"
       >
         <!--
           428:5044 — eyebrow 428:5046 (45px box) over a 40px Bold headline and
@@ -343,7 +424,7 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
           layout="stacked"
         />
 
-        <div class="relative mt-12 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:mt-[59px]">
+        <div class="relative mt-12 grid gap-x-6 gap-y-[52px] sm:grid-cols-2 lg:mt-[59px]">
           <!--
             428:5041 — a 4x400 stroke centred in the gutter between the two
             columns, drawn the full height of the block rather than per row.
@@ -369,7 +450,7 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
           <div
             v-for="(column, columnIndex) in strategyColumns"
             :key="columnIndex"
-            class="contents sm:flex sm:flex-col sm:gap-12"
+            class="contents sm:flex sm:flex-col sm:gap-[52px]"
             :class="columnIndex === 1 && 'sm:mt-[38px]'"
           >
             <template v-for="cell in column" :key="cell.item.title">
@@ -406,7 +487,10 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
       </section>
 
       <!-- Content showcase 430:5201 (heading + chips) over 430:5137 (the grid). -->
-      <section v-if="props.project.showcase.length" class="flex flex-col gap-12">
+      <section
+        v-if="props.project.showcase.length"
+        class="mt-20 flex flex-col gap-[57px] md:mt-[167px]"
+      >
         <div class="flex flex-wrap items-center justify-between gap-6">
           <h2 class="text-section-line text-brand-50">{{ t('work.showcase') }}</h2>
 
@@ -441,7 +525,7 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
       -->
       <section
         v-if="props.project.results.length || props.project.resultsSummary"
-        class="flex flex-col gap-12"
+        class="mt-20 flex flex-col gap-12 md:mt-[189px]"
       >
         <div class="flex flex-col gap-12">
           <h2 class="text-section-line text-brand-50">{{ t('work.results') }}</h2>
@@ -458,10 +542,10 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
               data-reveal
             >
               <img
-                v-if="result.icon && resultIcons[result.icon]"
-                :src="resultIcons[result.icon].src"
-                :width="resultIcons[result.icon].width"
-                :height="resultIcons[result.icon].height"
+                v-if="resultIcon(result)"
+                :src="resultIcon(result)!.src"
+                :width="resultIcon(result)!.width"
+                :height="resultIcon(result)!.height"
                 alt=""
                 aria-hidden="true"
                 class="block h-auto"
@@ -488,7 +572,7 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
       <!-- 430:5204 — قبل leads (right), بعد follows; captions centred over a 2:1 plate. -->
       <section
         v-if="props.project.beforeAfter.before && props.project.beforeAfter.after"
-        class="grid gap-6 md:grid-cols-2"
+        class="mt-20 grid gap-6 md:mt-[127px] md:grid-cols-2"
       >
         <figure
           v-for="side in ['before', 'after'] as const"
@@ -509,7 +593,10 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
       </section>
 
       <!-- Next project 430:5212 — label, then title with the arrow at its end. -->
-      <section v-if="props.project.next" class="flex flex-col items-start gap-8">
+      <section
+        v-if="props.project.next"
+        class="mt-20 flex flex-col items-start gap-8 md:mt-[270px]"
+      >
         <p class="text-heading-sm text-ink-200">{{ t('work.next_case_study') }}</p>
         <Link
           :href="props.project.next.url"
@@ -531,7 +618,11 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
         </Link>
       </section>
 
-      <StartTogetherCard v-if="props.finalCta" :section="props.finalCta" />
+      <StartTogetherCard
+        v-if="props.finalCta"
+        :section="props.finalCta"
+        class="mt-20 md:mt-[172px]"
+      />
     </div>
   </article>
 </template>

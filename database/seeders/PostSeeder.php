@@ -20,15 +20,21 @@ final class PostSeeder extends Seeder
     public function run(): void
     {
         $author = User::query()->first();
-        $socialCategory = PostCategory::query()
+        /*
+         * TaxonomySeeder only persists the active locale (currently `fa`).
+         * Looking up these records by their English slug therefore returns
+         * null and silently removes the featured card's category badge
+         * (Figma 270:5256). Sort order is the locale-independent identity of
+         * the seeded taxonomy entries, so use it instead of a translated
+         * value that may not exist.
+         */
+        $categories = PostCategory::query()
             ->withTranslations()
             ->get()
-            ->first(fn (PostCategory $c): bool => $c->getTranslation('slug', 'en') === 'social-media-support');
+            ->keyBy('sort_order');
 
-        $growthCategory = PostCategory::query()
-            ->withTranslations()
-            ->get()
-            ->first(fn (PostCategory $c): bool => $c->getTranslation('slug', 'en') === 'marketing-design');
+        $socialCategory = $categories->get(3);
+        $growthCategory = $categories->get(1);
 
         $enBody = <<<'HTML'
 <h3>Most brands don't struggle with creating content, They struggle with creating direction</h3>

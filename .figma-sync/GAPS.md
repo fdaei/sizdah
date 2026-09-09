@@ -2338,3 +2338,37 @@ would cost more than it buys.
 
 Checked at 1440 / 1024 / 768 / 640 / 390: reading order correct at every width,
 no horizontal overflow, `npm run typecheck` and `npm run lint` clean.
+
+## G62 — `322:5230` is not a fifth spark: it is the master spark stretched on y, and the spark is now a shared component  (2026-09-10)  (severity: low)
+
+G29 logged `322:5230` twice as "a fifth small mark", once at `~17×25` and once
+at `~20x25`, and left it unplaced because ~19.5 of it sits above the Services
+frame's own top edge (`y=-19.5419`) and Figma frames clip. The unplaced call
+still stands. What was wrong is the *identity*: the node is `20 × 29.0429`, and
+it is the same master vector as the three placed sparks, scaled on one axis.
+
+**The measurement.** Every x coordinate in the node's export matches
+`services/spark.svg` to 4dp (`18.9222`/`18.922`, `11.4241`/`11.424`, `0`/`0`).
+Every y is the master's times `29.0429 / 25 = 1.16171` — `6.87 → 7.98115`,
+`20.241 → 23.5146`, `21.571 → 25.0588`. Not a redraw, not a fourth instance
+with its own artwork: one vector, non-uniformly scaled.
+
+**Lesson for the ledger, extending G29's.** G29 taught that a raw-export hash
+does not prove distinct artwork, because Figma bakes the node id in. This adds
+the converse: a differing *bounding box* does not prove it either. Two nodes
+`20×25` and `20×29` look like two assets in a metadata dump and are one asset
+under a `viewBox`. Compare coordinates before exporting a second file.
+
+**What changed.** `services/spark.svg` moved to `shared/spark.svg` and gained
+`viewBox="0 0 20 25"` — it was exported without one, so it could only ever
+render at its intrinsic box, which is why a second export looked necessary. It
+already carried `preserveAspectRatio="none"` from `svgo`, so with a `viewBox`
+present the non-uniform box the design actually asks for is expressible. No
+bytes of path data changed and Services renders at the same 20×25, so this is
+a no-op visually. `Components/SparkMark.vue` wraps it with `width`/`height`
+props (defaulting to the master 20×25), decorative by default, class
+attributes falling through so placement stays at the call site.
+
+**Still not placed**, unchanged: the "Group 21" badge (`315:4998`), and
+`322:5230` itself — the component makes its geometry available, it does not
+reopen the clipping decision.

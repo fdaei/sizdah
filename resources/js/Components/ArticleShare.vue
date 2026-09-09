@@ -7,9 +7,9 @@ import linkedinUrl from '~img/sizdah/social/linkedin.svg'
 
 /**
  * Article share rail — Figma "Frame 95907" (690:7022), floating beside the
- * body copy column. 68px Yellow/100 (#fff8eb) circles on a 16px track; not
- * in the `brand` scale (no /100 step) so it's an arbitrary value, same
- * reasoning as the border colour in `ArticleMeta.vue`.
+ * body copy column. 68px Yellow/100 (#fff8eb) circles on a 16px track.
+ * Re-read 2026-09-09: these carried Yellow/50 (#fefbf5), which is the
+ * lead-magnet card's fill, not the warmer one the frame paints here.
  *
  * The file's "Share icons" instances resolve to the same placeholder glyph
  * for the X/LinkedIn buttons (an unresolved instance-swap on Figma's end) —

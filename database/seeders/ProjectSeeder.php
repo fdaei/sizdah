@@ -312,14 +312,9 @@ final class ProjectSeeder extends Seeder
                     ['en' => ['title' => 'Publishing Flow', 'description' => 'A structured publishing rhythm was created to help the brand stay active, consistent, and aligned across posts, stories, and campaign content.'], 'fa' => ['title' => 'جریان انتشار', 'description' => 'ریتم انتشار ساختارمندی ایجاد شد تا برند در پست‌ها، استوری‌ها و محتوای کمپین فعال و یکدست بماند.'], 'ar' => ['title' => 'تدفق النشر', 'description' => 'أُنشئ إيقاع نشر منظم ليبقى العلامة نشطة ومتسقة عبر المنشورات والقصص ومحتوى الحملات.']],
                     ['en' => ['title' => 'Audience Focus', 'description' => 'The messaging was shaped around people looking for quality, trust, simplicity, and a brand they could connect with beyond the product itself.'], 'fa' => ['title' => 'تمرکز بر مخاطب', 'description' => 'پیام‌رسانی حول افرادی شکل گرفت که به دنبال کیفیت، اعتماد، سادگی و ارتباطی فراتر از محصول بودند.'], 'ar' => ['title' => 'التركيز على الجمهور', 'description' => 'صيغت الرسائل حول أشخاص يبحثون عن الجودة والثقة والبساطة وعلامة يتواصلون معها بما يتجاوز المنتج.']],
                 ],
-                'deliverables' => [
-                    ['en' => ['title' => 'Brand Direction', 'description' => 'A clearer direction for how Cheshmeh should communicate visually and verbally.'], 'fa' => ['title' => 'جهت‌گیری برند', 'description' => 'جهتی شفاف‌تر برای نحوه ارتباط بصری و کلامی چشمه.'], 'ar' => ['title' => 'توجيه العلامة', 'description' => 'اتجاه أوضح لكيفية تواصل تشيشمه بصرياً ولفظياً.']],
-                    ['en' => ['title' => 'Content Strategy', 'description' => "Content pillars and messaging themes designed around the brand's audience and business goals."], 'fa' => ['title' => 'استراتژی محتوا', 'description' => 'ستون‌های محتوا و مضامین پیام طراحی‌شده حول مخاطب و اهداف کسب‌وکار.'], 'ar' => ['title' => 'استراتيجية المحتوى', 'description' => 'ركائز محتوى وموضوعات رسائل مصممة حول جمهور العلامة وأهداف العمل.']],
-                    ['en' => ['title' => 'Visual System', 'description' => 'Reusable layouts, visual rules, and design patterns for social media.'], 'fa' => ['title' => 'سیستم بصری', 'description' => 'قالب‌ها، قواعد بصری و الگوهای طراحی قابل‌استفاده مجدد برای شبکه‌های اجتماعی.'], 'ar' => ['title' => 'النظام البصري', 'description' => 'تخطيطات وقواعد بصرية وأنماط تصميم قابلة لإعادة الاستخدام لوسائل التواصل.']],
-                    ['en' => ['title' => 'Content Calendar', 'description' => 'A structured monthly content plan for posts, stories, and campaigns.'], 'fa' => ['title' => 'تقویم محتوا', 'description' => 'برنامه ماهانه ساختارمند محتوا برای پست‌ها، استوری‌ها و کمپین‌ها.'], 'ar' => ['title' => 'تقويم المحتوى', 'description' => 'خطة محتوى شهرية منظمة للمنشورات والقصص والحملات.']],
-                    ['en' => ['title' => 'Story Templates', 'description' => 'Flexible story formats for product highlights, brand moments, FAQs, and engagement.'], 'fa' => ['title' => 'قالب‌های استوری', 'description' => 'فرمت‌های انعطاف‌پذیر استوری برای معرفی محصول، لحظات برند و تعامل.'], 'ar' => ['title' => 'قوالب القصص', 'description' => 'صيغ قصص مرنة لإبراز المنتج ولحظات العلامة والأسئلة الشائعة والتفاعل.']],
-                    ['en' => ['title' => 'Campaign Ideas', 'description' => 'Creative concepts to support seasonal promotions, awareness, and audience interaction.'], 'fa' => ['title' => 'ایده‌های کمپین', 'description' => 'مفاهیم خلاقانه برای پشتیبانی از پروموشن‌های فصلی و تعامل مخاطب.'], 'ar' => ['title' => 'أفكار الحملات', 'description' => 'مفاهيم إبداعية لدعم العروض الموسمية والتوعية وتفاعل الجمهور.']],
-                ],
+                // The case-study frame replaces deliverables with the
+                // strategy quadrant headed «چرا سیزده» below.
+                'deliverables' => [],
                 'results' => [
                     ['en' => ['value' => '+189%', 'title' => 'ROI'], 'fa' => ['value' => '+۱۸۹٪', 'title' => 'بازگشت سرمایه'], 'ar' => ['value' => '+١٨٩٪', 'title' => 'عائد الاستثمار']],
                     ['en' => ['value' => '+154%', 'title' => 'Reach'], 'fa' => ['value' => '+۱۵۴٪', 'title' => 'دسترسی'], 'ar' => ['value' => '+١٥٤٪', 'title' => 'الوصول']],
@@ -397,8 +392,8 @@ final class ProjectSeeder extends Seeder
     }
 
     /**
-     * Goals / strategy / deliverables / results sections shared by every
-     * project's case-study page (`Work/Show.vue`, Figma 336:5374's system).
+     * Goals / strategy / optional deliverables / results sections shared by
+     * every project's case-study page (`Work/Show.vue`, Figma 336:5374).
      */
     private function caseStudyDetail(Project $project, array $data): void
     {
@@ -410,8 +405,10 @@ final class ProjectSeeder extends Seeder
         $strategy = $this->section($project, SectionType::Strategy, 1);
         $this->items($strategy, $data['strategy']);
 
-        $deliverables = $this->section($project, SectionType::Deliverables, 2);
-        $this->items($deliverables, $data['deliverables']);
+        if ($data['deliverables'] !== []) {
+            $deliverables = $this->section($project, SectionType::Deliverables, 2);
+            $this->items($deliverables, $data['deliverables']);
+        }
 
         $results = $this->section($project, SectionType::Results, 3);
         $this->items($results, $data['results']);

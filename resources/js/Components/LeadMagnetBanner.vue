@@ -157,17 +157,26 @@ const modalOpen = ref(false)
         :variant="props.size === 'lg' ? 'brand-outline' : 'solid'"
         @click="modalOpen = true"
       />
+      <!--
+        303:4482 — the hand-drawn arrow that points at the button. The frame
+        puts it at (19, 34) and the CTA at (32, 46.5), i.e. 13 left of and 12.5
+        above the button's top-inline corner. Those two offsets are what the
+        design fixes; the card-relative 34 is not, because the card only
+        measures 139 when the copy is the frame's own two-line title. The
+        seeded copy is shorter (114.5), the CTA rides up with it, and an
+        accent pinned to the card lands flat on the button instead. So it
+        hangs off the button, which is what it is drawn against.
+      -->
+      <img
+        v-if="props.size === 'sm'"
+        :src="articleAccentUrl"
+        alt=""
+        aria-hidden="true"
+        width="16"
+        height="20"
+        class="pointer-events-none absolute -left-[13px] -top-[12.5px] hidden h-5 w-4 md:block"
+      />
     </div>
-
-    <img
-      v-if="props.size === 'sm'"
-      :src="articleAccentUrl"
-      alt=""
-      aria-hidden="true"
-      width="16"
-      height="20"
-      class="pointer-events-none absolute left-[19px] top-[34px] hidden h-5 w-4 md:block"
-    />
   </aside>
 
   <LeadMagnetModal :open="modalOpen" :source="props.source" @close="modalOpen = false" />

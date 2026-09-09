@@ -277,11 +277,13 @@
   }
 
   /*
-   | Long-form bodies: legal pages (279:5924, 281:6773) and article copy
-   | (294:7566). All are admin-authored rich text, so
-   | the frame's rhythm is expressed as element rules rather than per-block
-   | markup: 64px between blocks, 24px from a heading to its copy, 32px between
-   | paragraphs inside one block.
+   | Long-form bodies: the legal pages (279:5924, 281:6773). Admin-authored
+   | rich text, so the frame's rhythm is expressed as element rules rather
+   | than per-block markup: 64px between blocks, 24px from a heading to its
+   | copy, 32px between paragraphs inside one block.
+   |
+   | The insights article body (294:7566) runs a DIFFERENT scale — see
+   | `.rich-prose-article` below, which is layered on top of this one.
    */
   .rich-prose > h2 {
     @apply text-heading-lg text-ink-50;
@@ -324,6 +326,41 @@
 
   .rich-prose a {
     @apply text-brand underline underline-offset-4;
+  }
+
+  /*
+   | Article body — Figma 294:7566, the 831-wide copy column on the insights
+   | show frame. Re-measured 2026-09-09 against the live nodes: the article
+   | sets a tighter scale than the legal pages `.rich-prose` was tuned to.
+   |
+   |   h2/h3  Peyda Medium 24 / Black-50 (294:7564, "Headline/Small"). The
+   |          frame draws one heading tier and the seeded articles author it
+   |          as h3, so both tags carry it — the base h2 rule draws 30, which
+   |          is the legal-page heading (279:6728), and the base h3 has the
+   |          right size but a 32/16 rhythm rather than this frame's.
+   |   p      Peyda Regular 18 / Black-200 (294:7565, "tite/Small") — the
+   |          base rule draws 20 at weight 500, a step too heavy and large.
+   |
+   | Rhythm, measured off the block frames (294:7560 / 7563 / 7567 / 7590 /
+   | 7594, whose tops sit 72 apart from the previous block's last line): 72
+   | above a heading, 40 from a heading to its copy. The paragraph break
+   | inside a block is authored in Figma as an empty line, so it measures one
+   | 18px body line box (22px) rather than the base rule's 32.
+   */
+  .rich-prose-article > h2,
+  .rich-prose-article > h3 {
+    @apply text-heading-sm;
+    margin-block-start: 72px;
+    margin-block-end: 40px;
+  }
+
+  .rich-prose-article p,
+  .rich-prose-article li {
+    @apply text-title-sm;
+  }
+
+  .rich-prose-article p + p {
+    margin-block-start: 22px;
   }
 
   .marquee-track {

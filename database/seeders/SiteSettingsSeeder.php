@@ -61,24 +61,23 @@ final class SiteSettingsSeeder extends Seeder
                 ],
             ],
             /*
-             | TODO(sizdah): the three contact facts below and `contact_location`
-             | are still Sahra's Oman details. They are real-world values, not
-             | design copy, so they are left as-is rather than guessed — replace
-             | them with Sizdah's own number, address and inbox.
+             | TODO(sizdah): the phone/WhatsApp number is still a legacy value.
+             | It is a real-world contact detail, not design copy, so replace it
+             | with Sizdah's verified number when one is available.
              */
             'contact_whatsapp' => ['translatable' => false, 'value' => '+96 7781 1213'],
             'contact_phone' => ['translatable' => false, 'value' => '+96 7781 1213'],
-            'contact_email' => ['translatable' => false, 'value' => 'Sahramarketing@gmail.com'],
+            'contact_email' => ['translatable' => false, 'value' => 'Sizdahmarketing@gmail.com'],
             'contact_location' => [
                 'translatable' => true,
-                'value' => ['en' => 'Muscat, Oman', 'fa' => 'مسقط، عمان', 'ar' => 'مسقط، عُمان'],
+                'value' => ['en' => 'Kerman, Iran', 'fa' => 'کرمان، ایران', 'ar' => 'كرمان، إيران'],
             ],
             'contact_working_with' => [
                 'translatable' => true,
                 'value' => [
-                    'en' => 'Brands ready to grow',
-                    'fa' => 'برندهایی که آماده رشدند',
-                    'ar' => 'علامات مستعدة للنمو',
+                    'en' => 'Brands in Iran and Beyond',
+                    'fa' => 'برندهایی در ایران و فراتر',
+                    'ar' => 'علامات في إيران وخارجها',
                 ],
             ],
             'seo_default_title' => [
@@ -122,11 +121,15 @@ final class SiteSettingsSeeder extends Seeder
     {
         $links = [
             ['instagram', 'Instagram', 'https://instagram.com/sizdahmarketing', 'instagram', 1],
-            ['linkedin', 'LinkedIn', 'https://linkedin.com/company/sizdahmarketing', 'linkedin', 2],
+            ['linkedin', 'LinkedIn', 'https://www.linkedin.com/company/sizdah-marketing/', 'linkedin', 2],
             ['whatsapp', 'WhatsApp', 'https://wa.me/96777811213', 'message-circle', 3],
-            ['x', 'X', 'https://x.com/sizdahmarketing', 'twitter', 4],
-            ['youtube', 'YouTube', 'https://youtube.com/@sizdahmarketing', 'youtube', 5],
+            ['telegram', 'Telegram', 'https://t.me/sizdahmarketing', 'telegram', 4],
+            ['x', 'X', 'https://x.com/sizdahmarketing', 'twitter', 5],
         ];
+
+        // Keep editor-added profiles intact; only retire the stale profile
+        // that this design no longer includes in the contact row.
+        SocialLink::query()->where('platform', 'youtube')->update(['is_active' => false]);
 
         foreach ($links as [$platform, $label, $url, $icon, $order]) {
             SocialLink::updateOrCreate(

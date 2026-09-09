@@ -5,7 +5,7 @@ import SeoHead from '@/Components/SeoHead.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
 import type { PageSectionData, SectionMap, SeoMeta, ServiceItem } from '@/types'
 import ringUrl from '~img/sizdah/services/ring.svg'
-import sparkUrl from '~img/sizdah/services/spark.svg'
+import sparkUrl from '~img/sizdah/shared/spark.svg'
 import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
 
 /**
@@ -53,10 +53,11 @@ import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
  * byte-identical situation). Both flourishes are page-level absolute
  * decorations in the frame, so they are positioned rather than laid out; the
  * ring is anchored off the copy column's start edge rather than centred on the
- * glyph, for the reason given at its call site. The "Group 21"
- * badge at 315:4998 is still not placed, and a fifth, ~20x25 mark (322:5230)
- * sits mostly above the frame's own top edge (y=-18.6 of 25 tall) so it is
- * treated as clipped/not meant to render, same reasoning as the footer's
+ * glyph, for the reason given at its call site. The "Group 21" badge at
+ * 315:4998 is still not placed, and neither is 322:5230 — not a fifth piece of
+ * artwork but the same master spark scaled on y to 20x29.043 (GAPS G62), which
+ * sits mostly above the frame's own top edge (y=-19.542 of 29.043 tall) so it
+ * is treated as clipped/not meant to render, same reasoning as the footer's
  * invisible SAHRA wordmark (GAPS G24). Both recorded in FIGMA/state.json and
  * GAPS G29.
  *
