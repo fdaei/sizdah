@@ -39,12 +39,15 @@ import journeyUrl from '~img/sizdah/about/cta-journey.svg'
  *   puts its outermost lines. Without that offset the default 0,0 origin runs
  *   a hairline down the band's inner edge and along the card's top edge,
  *   neither of which the frame draws.
+ * - The frame draws no outline on this card; it carries `.sketch-frame` from
+ *   2026-09-11 (GAPS G68), which sets the radius-24 clip the card used to get
+ *   from `rounded-xl`.
  */
 const props = defineProps<{ section: PageSectionData }>()
 </script>
 
 <template>
-  <section class="relative overflow-hidden rounded-xl bg-surface-raised p-8 lg:p-12">
+  <section class="sketch-frame overflow-hidden bg-surface-raised p-8 lg:p-12">
     <div
       class="grid-mesh pointer-events-none absolute inset-y-0 inline-start-0 w-[57.47%]"
       style="

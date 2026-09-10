@@ -2372,3 +2372,507 @@ attributes falling through so placement stays at the call site.
 **Still not placed**, unchanged: the "Group 21" badge (`315:4998`), and
 `322:5230` itself — the component makes its geometry available, it does not
 reopen the clipping decision.
+
+## G63 — Numerals were being set in the body face; Lahzeh is now installed and applied per digit-run  (2026-09-10)  (severity: medium)
+
+Every figure on the site — KPI counts, years, prices, dates — was painting in
+Peyda, because the face was chosen by the component that rendered the value
+rather than by the value itself. The brief calls for two faces: **لحظه
+(Lahzeh)** for numbers and **پیدا (Peyda)** for text.
+
+**What was actually available.** The licensed drop held 18 Lahzeh `.ttf` files
+across three cuts, and the internal `name` tables (not the filenames) were what
+settled which to install:
+
+- `Lahzeh-*` — family `Lahzeh`, 9 weights, ASCII + Persian + Arabic-Indic digits.
+- `Lahzeh-FaNum-*` — family `Lahzeh-FaNum`, 8 weights, **draws ASCII 0-9 with
+  the Persian numeral glyphs**.
+- `Lahzeh-NoEn-*` — family `Lahzeh-NoEn`, 2 weights, **no ASCII digits and no
+  Latin at all**. Unusable as a numeric face; the name does not say so.
+- `Lahzeh-FamilyVF.ttf` — a variable font, family `Lahzeh-Family`, axis `[0 210]`.
+
+**The decision (user, 2026-09-10): the FaNum cut.** A record stored as `1402`
+therefore *renders* as ۱۴۰۲ with no transliteration step anywhere in PHP or JS.
+That is a display-layer trick, not a data change — the DOM still contains
+`1402`, so copy-paste, `Ctrl+F` and screen readers all get the ASCII. Anything
+that needs Persian numerals in the *text* (an `alt`, a `<title>`, a meta
+description) still has to convert them properly.
+
+**The weight metadata in these files is wrong.** `Lahzeh-FaNum-SemiBold` and
+`-ExtraBold` both report OS/2 weight 80 — Regular. `Lahzeh-ExtraBold` reports 80
+as well. Every `@font-face` therefore pins `font-weight` from the filename,
+which is correct, so the browser never reads the embedded value. There is no
+Thin cut, so weight 100 deliberately has no rule and falls to the 200 file.
+
+**Peyda needed nothing.** It has been installed since G8 — all 9 weights in
+`public/fonts/peyda/`, led by the `arabic` token. Only the numeric half was
+missing.
+
+**Mixed content splits per run** (user decision, same date), which is the part
+that makes this more than a class swap. "سال ۱۴۰۲ بود" sets the year in Lahzeh
+and the two words in Peyda on one line. `resources/js/lib/typeface.ts` owns the
+segmentation; a separator (`. , : / - ٫ ٬`) only stays inside a numeric run when
+digits sit on **both** sides of it, which is what holds `۱۴۰۲/۰۷/۱۲`, `14:30`
+and `1,200` together while leaving a sentence-final full stop in the text face.
+U+060C (، ) is excluded on purpose: it is a sentence comma in Persian far more
+often than a thousands separator, and including it fused "۱۲، ۱۳" into one run.
+
+**RTL.** Direction is resolved first-strong, and the Arabic ranges used for that
+skip U+0660-0669 and U+06F0-06F9 — those digits are bidi class AN, not strong
+RTL, so a bare ۱۴۰۲ correctly resolves LTR instead of flipping its container.
+Each numeric run renders inside `<bdi>`; without the isolate a trailing number
+reorders around adjacent punctuation and "نسخه ۲.۰:" paints its colon on the
+wrong side. There is a Playwright assertion for exactly that
+(`tests/Browser/smart-font.spec.ts`).
+
+**Not done.** Nothing on the existing pages was migrated to `<SmartText>` — the
+component and composable are in place and tested, but every KPI, price and date
+already on the site still renders in the body face until it is switched over
+deliberately. That is a follow-up, not an oversight: touching those frames is
+fidelity work and belongs in its own pass.
+
+## G64 — About's hero band was drawn with two mismatched meshes plus a stray rule, so the section ground read as bare verticals instead of a grid  (2026-09-10)  (severity: medium)
+
+The user supplied the intended ground for `/fa/about`'s hero as a flat image:
+an even hairline grid on the ink-1000 sheet, running edge to edge of the
+container inset, with the team illustration (`about/hero-team.webp`, already in
+place) sitting on top of it. The live page did not match — not because the mesh
+was missing, but because it was authored in three pieces.
+
+**What was there.** `691:7320` (109 × 92.34) whose horizontal rules start 45px
+*inside* its own box, so the top of the hero band carried verticals and nothing
+crossing them; `691:7331`, a single rule 140px clear above that group; and
+`359:9560` (109 × 118.1) starting only at the illustration's lower third. The
+result on screen: one hairline near the top, then ~550px of bare verticals
+behind the illustration, then a normal grid from the story block down. Each
+piece was faithful to its node — the composite was not the background.
+
+**The measurement.** Counting the reference image's rules gives ~109.3 on x and
+~117.5 on y, i.e. `359:9560`'s cell, not `691:7320`'s. So the even grid is the
+story group's, extended up over the hero, and the 92.34 group plus its orphan
+rule are the pieces that do not survive.
+
+**What changed.** The three nodes collapse to one `.grid-mesh` box at
+109.33 × 118.1. Its origin is one whole cell above the old hero rule
+(`-118.6px`) precisely so the rules still land where `359:9560` put them
+(590, 708.1, …) — extending the grid upward must not shift the story band that
+was already verified against the frame. The x-offset (22px = 131 mod 109.33)
+and the anchoring on `hero` rather than the padded container are both unchanged
+and still carry their original reasoning in the component comment.
+`grid-mesh-fade` now covers the whole run, so the tail dissolves as before and
+the new top edge ramps in rather than starting on a hard rule. Height drops to
+`h-[760px]` when the page has no story section, since there is then nothing
+below for the mesh to run into.
+
+**Deliberately not changed.** The reference is the section's background layer
+alone, so it shows no warm corner wash. `.page-wash` (AppLayout) is the
+site-wide treatment every dark frame carries — including `336:5623` itself, at
+-11deg/7% — and stays. The mesh remains `lg:` only, matching every other mesh
+on the site; the Figma file ships desktop frames only.
+
+## G64 — G63's numeric face was built but never reached a single figure on the site; `unicode-range` is what actually delivers it  (2026-09-10)  (severity: high)
+
+G63 installed Lahzeh, wrote the detector and the component, tested all of it,
+and then left every number on the site rendering in Peyda — it logged that
+under "Not done" and called migration a follow-up. That was the wrong call:
+the requirement was "the site's numbers are in Lahzeh", and a mechanism nobody
+has adopted satisfies none of it. The user's correction (2026-09-10) is the
+gap worth recording, not the fix.
+
+**What actually delivers it.** The Lahzeh `@font-face` rules now carry
+`unicode-range: U+0030-0039, U+0660-0669, U+06F0-06F9, U+066B-066C`, and
+Lahzeh leads the `arabic` and `display` stacks. A face is only consulted for
+codepoints it claims, so Lahzeh takes the figures and hands every letter
+straight back to Peyda / Maneli. No component opts in, nothing is wrapped, and
+content authored in Filament is covered without being touched. This is the
+whole feature in two edits; `<SmartText>` never was.
+
+**Verified, not assumed.** `getComputedStyle` reports the declared stack, not
+the face that drew a glyph, so the test measures instead: the advance width of
+"1402" under `Lahzeh, Peyda` differs from `Peyda` alone, while "سلام" is
+identical under both. That is the assertion that would catch a widened range.
+
+**`sans` is deliberately excluded.** It is the Latin stack app.blade.php puts
+on `<html>` for `font: 'sans'` locales — i.e. `en`. Lahzeh's FaNum cut draws
+ASCII 0-9 as Persian numerals, which is simply wrong on an English page, and
+including it would have quietly broken config/locales.php's promise that
+moving `en` back into `supported` needs no other code change. It was in the
+`sans` stack for about ten minutes; the test now pins it to Poppins.
+
+**Digit tracking (user, same date): -0.04em.** Worth knowing why it is a
+token on `.font-numeric` and not a rule that follows the digits everywhere:
+CSS applies `letter-spacing` to a whole element and cannot reach a subset of
+glyphs, so `unicode-range` — which only ever affects font *selection* — buys
+nothing here. Tracking can only land where a numeric run is its own element,
+which is what `<SmartText>` builds. So digits inside a plain paragraph render
+in Lahzeh at default tracking, and only marked-up runs are tightened.
+Tightening the paragraph instead would tighten its Persian letters too.
+
+**Still true from G63**, and now the only outstanding piece: no existing page
+has been migrated onto `<SmartText>`, so the site's KPI values, prices and
+step numbers get the face but not the tracking. That is a real gap, no longer
+hidden behind "the mechanism exists".
+
+**Environment note for whoever runs the suite.** `npm run dev`'s Vite server
+does not reliably re-read tailwind.config.js when a new key is added — a
+freshly added utility can be absent from dev CSS while present in the build.
+The tracking assertion therefore loads the built stylesheet through
+`/build/manifest.json` rather than the running page, so it tests what ships.
+
+## G65 — The "why us" glyphs were swapped in as hand-drawn redraws, and file order is not claim order  (2026-09-10)  (severity: medium)
+
+`resources/images/sizdah/home/why-{outcomes,brand,endtoend,quality}.svg` were
+even 2.5px-stroke pictograms — clipboard, two squares, gem, seal. The user
+supplied replacements (2026-09-10): the same four subjects as filled
+single-colour drawings on the same 40x40 viewBox, in the same brand amber
+`#F8B937`, so the swap is file-for-file — no markup, sizing or colour change in
+[WhyUsGrid.vue](resources/js/Components/WhyUsGrid.vue), which still matches
+glyph to claim by position.
+
+**Order is load-bearing, and the file order was wrong.** `GLYPHS` is
+`[outcomes, brand, endToEnd, quality]`, matching the seeded `why_us` items in
+[PageSeeder.php](database/seeders/PageSeeder.php) (خروجی‌های مشخص →
+نگاه برندمحور → همراهی از ابتدا تا انتها → خروجی باکیفیت). The four files were
+supplied as `1..4.svg` and dropped in that order, which was wrong: they came out
+in the frame's z-order — clipboard, **gem**, **two squares**, badge — so files 2
+and 3 land on the opposite claims. Figma settles it (`268:3707` clipboard beside
+`268:3708` خروجی‌های مشخص; the gem beside `268:3711` همراهی; the two squares
+beside `268:3717` نگاه برندمحور; the badge beside `268:3714` باکیفیت), and the
+files are now installed under that pairing. `why_us` items carry no icon field
+in the CMS, so nothing but this positional match binds a drawing to its claim —
+reordering the seeder silently reassigns all four, and nothing would fail.
+
+**The Figma file still holds the geometric versions.** Verified 2026-09-10 by
+rendering Home `268:2962` and reading the band at y≈5440: all four glyphs there
+are the even-stroke pictograms that were already committed. The supplied files
+are the same four subjects redrawn with an irregular, hand-inked outline — a
+deliberate deviation from the frame, in the direction of the section's other
+hand-drawn marks (the rules `268:2993`-`268:2995`). If the frame is ever
+re-exported these will read as a regression unless the Figma icons are updated
+to match.
+
+**`why-quality.svg` was not only the why-us glyph.** `ProcessStepCard` imported
+it as its approval icon, so overwriting it would have redrawn a second,
+unrelated section. The old file is kept as `step-approval.svg` and the process
+card now imports that; the two uses are no longer coupled.
+
+---
+
+## G66 — The sketched card frame is one radius-24 drawing, so it is a nine-slice, not a stretched background  (2026-09-10)  (severity: medium)
+
+**What was asked.** Put the "contact us" frame (426x507 — gold raking wash, 20%
+black, blur(7.5px) backdrop, hand-drawn #B9B9B9 rule at radius 24) around every
+card on the site.
+
+**Why it could not just be a background.** `kpi-card-bg.svg` paints its frame as
+a `preserveAspectRatio="none"` background because that card and that frame are
+the same 339x167 shape. This frame has to serve cards from a 300-wide
+testimonial to a 1248-wide featured post, and non-uniform scaling scales the
+vertical strokes' *thickness* with the width: the 1.5px side rules render ~4.4px
+on the wide cards while the horizontals stay hairlines. Verified on
+`270:5253` at 1248 before the technique was changed.
+
+**Resolution.** Only the outline path is shipped as an asset
+(`shared/sketch-frame.svg`); the other three layers are resolution-independent
+and are CSS. The outline is drawn as a `border-image` nine-slice at 32 — corners
+land at native size at every card size, and only the edge strips stretch, along
+their own length, where scaling cannot change how thick the line reads.
+`stretch` rather than `round` on the repeat: the edges are near-straight, so a
+round tiling would seam mid-wobble. The rule rides on `::after` so it costs no
+padding and cards keep their measured insets.
+
+**The gradient angle.** The frame's gradient runs (404.055, 505.143) ->
+(-67.885, 77.761) in its own 426x507 user space. CSS measures clockwise from
+"to top", so `atan2(-471.94, 427.38)` = 312.2deg.
+
+**Which cards took it, and which did not.** The rule and the fill are separate
+classes (`.sketch-frame` / `.sketch-frame-fill`) precisely so adopting the frame
+does not overwrite grounds that were already measured off their own frames:
+
+- Both contact cards (`279:6409`, `279:6439`) take rule + fill + blur — they
+  *are* this frame, and had been rebuilt approximately in Tailwind
+  (`bg-ink-1000/20 bg-gradient-to-tr from-brand/10`). The form card's
+  `p-[29px]` was a border-compensated 32 (29 + 3px border) and is now `p-8`.
+- Testimonial (`546:7527`), featured post (`270:5253`) and the case-study
+  deliverables (`429:5099`) take the rule only and keep `.testimonial-wash`,
+  `.surface-glow` and `.surface-case-card`.
+- **Not** the case-study goals row (`423:4973`): it renders at radius 16 and the
+  artwork's corners are radius 24, so it keeps its 3px ink-200 border. This is
+  what the `frame` flag on `cardBlocks` gates.
+- **Not** the cream cards — the insights lead post (`430:5311`, #FFF8EB), the
+  CTA card (`surface-raised` #FDFCFA, see G57) or the FAQ rows. This is a
+  translucent dark-glass treatment; on a cream ground it is not a frame, it is a
+  stain. Their grounds were measured off 1x frame exports and stand.
+- **Not** `BlogCard` / `ProjectCard` / `ProjectPostCard`: their `border`s are on
+  the *thumbnails*, not on a card surface. Those frames draw no card.
+
+## G67 — The last four glyphs came from `lucide-vue-next`; one had a real Figma source, three never existed  (2026-09-10)  (severity: medium)
+
+The user asked for every site icon to be pulled from Figma and the package
+dropped, on the grounds that the icons are designed. Most of the site already
+was: 147 SVGs sit under `resources/images/sizdah/`, and G-note "ICONS
+2026-09-04" in `AppFooter.vue` had already done this same swap for the footer's
+Info column. What remained was four `lucide-vue-next` imports across four files
+— `Menu` (`AppHeader`), `X` (`MobileMenu`, `LeadMagnetModal`, `FlashMessages`),
+and `CheckCircle2` / `XCircle` (`FlashMessages`).
+
+**Only one of them is in the file.** `cross 1` (`165:1533`) on the icon sheet
+`149:2691` — the Streamline Freehand set the file's other glyphs were pulled
+from — is a genuine hand-drawn X. Downloaded and inlined as
+`Components/Icons/IconClose.vue`.
+
+**The other three are not, and searching harder will not find them.** Checked
+the icon sheet `149:2691` (46 children, screenshotted — thought bubbles,
+arrows, quote marks, calendars, an Instagram glyph; no burger, no tick, no
+status ring) and the whole `1:2` "Style & Component" canvas including the
+component sheet `21:2152`. Neither carries one. The reason is structural, not
+an oversight in the search:
+
+- **The hamburger** belongs to a mobile header, and the file ships desktop 1440
+  frames only (CLAUDE.md; G-note at `MobileMenu` line ~1843). There is no
+  mobile frame to have drawn it in.
+- **The tick and the status ring** belong to a flash/toast banner. The file
+  designs no such state on any frame.
+
+So these three were *never* design decisions that got lost — they are UI the
+file does not describe. Per the user's call, they are drawn locally in the same
+idiom rather than kept on a package: `IconMenu.vue` and `IconCheck.vue`, both
+`viewBox="0 0 24 24"` at `stroke-width="1.5"` — the family's 6.25% relative
+stroke weight that `AppFooter.vue` already pins for the 16/1 and 24/1.5 pair —
+with round caps and bowed, unequal-length strokes so they do not read as a
+geometric set beside a Freehand export.
+
+**The error state reuses `IconClose`, not a fourth drawing.** `XCircle` was
+already an X; the real Figma cross says the same thing with one fewer invented
+asset. It does not collide with the dismiss control beside it: that is the same
+drawing at `size-4` in `text-ink-400`, against `size-5` in the banner's
+`text-red-300`.
+
+**Inline components, not `<img>`.** `AppFooter.vue`'s rule is that a glyph stays
+an `<img>` when its frame defines no colour variant. These four call sites are
+the exception — each drives the glyph from the button's own colour
+(`text-paper`, `text-ink-300 hover:text-paper`, `text-ink-400
+hover:text-paper`, and the brand/red split in the banner). `fill="currentColor"`
+/ `stroke="currentColor"` is what carries those hovers into the glyph.
+
+**One export-geometry trap worth recording.** `165:1533` exports as a 64x64 box
+whose drawing actually occupies x 13.86-62.95 / y 5.77-62.00 — it is not
+centred in its own frame. Rendered at `0 0 64 64` the cross sits visibly right
+and low in a square button. `IconClose` carries `viewBox="10.29 5.77 56.23
+56.23"`, the glyph's own bounds squared off. Any future single-glyph export off
+this sheet should be bbox-checked the same way rather than trusted to be
+centred.
+
+`lucide-vue-next` is removed from `package.json`. `npm run typecheck` and
+`npm run lint` both clean; the three glyphs were rendered standalone on the
+`#141414` ground to confirm they centre and read as one family.
+
+---
+
+## G68 — The sketched frame is now the site-wide card outline, overriding four per-frame borders  (2026-09-11)  (severity: medium)
+
+**Decision (user, 2026-09-11).** Every card surface on the site wears the
+sketched rule from `279:6409`/`279:6439` — the contact cards' frame, built as a
+nine-slice in G66 — in place of whatever rectangular border or ring the Figma
+frame measured it with. The instruction was explicit that this holds "in
+different sites", i.e. across pages, not only on Contact.
+
+**Only the rule, not the ground.** The user chose outline-only when asked: the
+card's own fill stays exactly as measured. So `.sketch-frame` is applied alone
+and `.sketch-frame-fill` / `.sketch-frame-blur` remain what they were — the two
+contact cards, which *are* this frame. The grounds preserved this way are
+`bg-gold-100` (FAQ), the `#FFF8EB` cream lead post, `bg-brand-50` (lead
+magnet), `bg-surface-raised` (CTA card) and `.surface-case-card`.
+
+**What changed, and what each card gave up:**
+
+| Site | Border it was measured with | Now |
+| --- | --- | --- |
+| `FaqAccordion.vue` (FAQ item) | 1px gold-200, r16 | `.sketch-frame` |
+| `InsightsShowcase.vue` (lead post `430:5311`) | 1px gold-200, r24 | `.sketch-frame` |
+| `LeadMagnetBanner.vue` (`lg`) | 3px inset brand ring, r24 | `.sketch-frame` |
+| `About.vue` value cards (`406:7225`) | 3px ink-200, r16 | `.sketch-frame` |
+| `StartTogetherCard.vue` | no rule, r24 | `.sketch-frame` |
+| `Work/Show.vue` goals (`423:4973`) | 3px ink-200, r16 | `.sketch-frame` |
+
+**The r16 cards round up to r24.** The drawing is a fixed radius-24 path, so
+`.sketch-frame` sets the radius itself. G66's `frame: boolean` on
+`Work/Show.vue`'s `cardBlocks` existed only to keep the r16 goals row off the
+frame for exactly this reason; with the site-wide rule in force both blocks take
+it and the flag plus its sibling `radius` field are gone — the two blocks now
+differ only in column count.
+
+**Deliberately NOT framed, and why.** Blog and project cards are bare stacks —
+the only bordered box in them is the image, carrying a hairline, not a card
+surface; framing the `<article>` would invent a box the frame does not draw.
+Toasts (`FlashMessages.vue`) are not cards. `FilterChips.vue` was deferred here
+and is now resolved separately — see G-chip below.
+
+## G-chip — the filter chips get their own sketch outline (2026-09-11)
+
+The user supplied a chip-sized hand-drawn frame (105 x 46) for the filter row —
+`همه / برندینگ / تولید محتوا / مارکتینگ / پشتیبانی شبکه های اجتماعی` on
+`Work/Index.vue`, the insights listing and the case-study showcase — so the
+deferral above is lifted. It is a *second* drawing, not the card frame scaled:
+the card frame's nine-slice needs 32px corners a 44px chip cannot give.
+
+Saved as `resources/images/sizdah/shared/filter-chip-frame.svg` and applied by
+`.sketch-frame-chip` (app.css) on an overlay span in `FilterChips.vue` and, on
+the same instruction, in `ArticleMeta.vue` — the موضوع / نویسنده / تاریخ chips
+in the article header, which were also drawn with this outline. Those keep
+their brand-300 colour and their raking brand wash; only the 2px border is
+gone. They are roughly 1.9x the drawing in both axes, so the line scales close
+to uniformly there, unlike the wide filter chips.
+
+**Inferred, because the drawing settles none of it:**
+
+- **Mask, not `border-image`.** The chip outline is tinted per state and a
+  `border-image` cannot be recoloured; a mask + `background-color` can. The
+  drawing's own `#B9B9B9` fill is therefore irrelevant and the state colours
+  stay the ones the frames measured: ink-300 inactive, paper on hover, brand
+  when active.
+- **Stretched, not tiled.** `preserveAspectRatio="none"` on the SVG, so one
+  drawing spans a 4-character chip and a 26-character one. The line weight
+  distorts horizontally on the long chips; the alternative (a nine-slice) is
+  what the chip is too short for.
+- **Box size preserved.** Padding moved from `px-6 py-3` + 2px border to
+  `px-[26px] py-[14px]`, so chips occupy the same box they did with the border.
+  `rounded-lg` stays on the element for the active fill only — the fill is a
+  plain rounded rect behind the sketched line, since the drawing describes an
+  outline and not a silhouette to mask a fill with.
+
+## G69 — Services' spark: wrong anchor, missing on block 01, and a mirror the metadata hid  (2026-09-11)  (severity: medium)
+
+Reported from the running page over three rounds, each round exposing a
+different error underneath the last.
+
+**Position.** It was placed at `left-1/2` of the section with a
+`translate-x-[calc(-50%-11px)]` / `+30px` nudge, i.e. anchored to the content
+track's centre. That is a coincidence, not the rule: the frame hangs the spark
+just off the image's **inner** top corner — the vertical edge facing the copy
+column — so it changes side with the image. Anchoring moved from the
+`<section>` to the image wrapper, which gained `relative` while
+`overflow-hidden rounded-sm` moved to an inner crop div; the mark overhangs the
+image on both axes and the crop would have eaten it. Side is chosen with
+`inline-start` / `inline-end` keyed to the same `index % 2` that sets the
+image's `order`, so the anchor follows the flip in either direction.
+`bottom-full` pins the mark's bottom to the image's top edge, which is what the
+frame draws (rendered gaps 0 / -1 / +3 / +9) and is height-independent.
+
+**The metadata lie, and two wrong fixes because of it.** Figma reports
+`x=741` for `511:9195` and `x=739` for `511:9200`. Those are not left edges:
+both nodes carry a **negative x scale**, so the reported `x` is the box's right
+edge. Taking it as the left edge put them 20px off and, worse, made the four
+offsets look asymmetric — `-5.2 / +12.8 / -7.2 / +10.8` from the inner edge.
+The first fix averaged that into "centred on the edge" (both sides half-wrong,
+clearing the corner on one and overlapping it on the other); the second
+reproduced the phantom asymmetry faithfully, which pushed two of them onto the
+photograph. Measured off the **rendered** frame instead — yellow-pixel bounding
+boxes against the image edges — the centres are `707 / 731 / 709 / 729` against
+inner edges `701.84 / 738.16 / 701.84 / 738.16`: `5.2 / 7.2 / 7.2 / 9.2`
+**outside** the edge, every time. Symmetric, one value, `-17px` inset on a
+20-wide box. The mark never touches the photograph.
+
+**The mirror.** That same negative scale is a design decision, not noise: the
+frame mirrors the glyph by which physical side the block's image is on — 01/03
+one way, 02/04 the other. It was invisible in `get_screenshot` of the nodes
+themselves (which render them unflipped) and only showed up in crops of the
+full-frame render. Physical side is the product of flow order *and* direction,
+so neither index parity alone picks the orientation: the committed export is
+the RTL-left reading, so even blocks (image at the flow end) mirror under LTR
+and odd blocks under RTL. `app.css` gained `.flip-ltr` beside the existing
+`.flip-rtl` to say exactly that. The asset itself is byte-unchanged — an
+intermediate commit-free edit had wrapped it in a `scale(-1 1)` on the belief
+that the export was simply wrong, which was the same mirror seen from the
+wrong end.
+
+**Block 01.** `322:5230` was left unplaced by G29 and the call was upheld by
+G62, both times on the reading that ~19.5px of it sits above the frame's top
+edge and Figma frames clip — the same reasoning as the footer's invisible SAHRA
+wordmark (G24). Wrong here: that y is `-19.5419` relative to its own parent
+frame `321:5085`, which starts at `y=587` and does not clip. On the page it
+renders at the top inner corner of block 01's image exactly like the other
+three. Now placed, at its own `20 × 29.043` — the one instance stretched on y,
+which G62's `viewBox` + `preserveAspectRatio="none"` already made expressible.
+
+**Lessons for the ledger.**
+
+- A Figma bounding box is not a position when the node carries a negative
+  scale. Three of the four numbers in this entry's first two attempts were
+  wrong for that one reason. Measure the render when a placement looks
+  asymmetric — asymmetry across otherwise-identical instances is the tell.
+- `get_screenshot` on a node renders it in isolation and drops the parent's
+  transform, so it cannot show a flip. Crop the full-frame render instead.
+- A negative coordinate is only evidence of clipping relative to the node that
+  actually clips. G29 and G62 both read `y=-19.5419` without resolving which
+  frame it was measured against, and the second inherited the first's
+  conclusion instead of re-deriving it.
+
+**Still not placed**, unchanged: the "Group 21" badge (`315:4998`).
+
+## G70 — Insights' paperclip was centred; the frame paints it 53px left of centre  (2026-09-11)  (severity: medium)
+G30 added the hand-drawn paperclip (`456:6721`) to the Insights index and
+placed it from `get_metadata`, which reports the node at `x=690.18, y=557,
+77.33 × 77.33`. `Index.vue` rendered it horizontally centred on the featured
+card's top edge, and it read visibly wrong on the page.
+
+The reported box is not where the frame paints it. Cropping a 1:1 render of
+`268:4158` (grid lines at `x=227` / `x=338` confirm the render and the
+metadata share one coordinate space, so this is not a scaling artefact) puts
+the artwork at **x 639-695, y 567-624** — centre `(667, 595.5)`, 56 × 58 of
+actual ink. The x is 61px off the reported box; the y matches. Same cause as
+G69's mirror: the node carries a rotated clip matrix (`matrix(-0.9716 …)` is
+visible in the exported SVG's own `clipPath`), and its bounding box is the
+pre-rotation one.
+
+**Placement now derived from the render:**
+- centre is 53px LEFT of the 1440 frame's centre → `left-[45.75%]` of the
+  1248 content column, as a percentage so it holds as the column narrows
+  rather than pinning a 1440-only pixel;
+- centre is 7.5px ABOVE the card's top edge (`y=603`), so the clip overlaps
+  ~21px into the card and ~36px sits above it → `translate-y-[calc(-50%-8px)]`;
+- offsets are physical, not logical: the frame is already the RTL layout, so
+  its coordinates map straight across.
+
+The `-translate-x-1/2` / `-50%` centring is valid on the 78px export because
+the ink sits at 10-68 / 9-68 inside that box, i.e. the box centre and the ink
+centre coincide. No CSS rotation — the export is already rotated (unchanged
+from G30's note).
+
+**Third entry in a row where a bounding box was not a position** (G69, and
+G69's own retelling of G29/G62). Treat `get_metadata` coordinates for any
+`[Vectorized]` / clipped node as a hint only, and measure the full-frame
+render before placing it.
+
+## G71 — Social chips: a rounded-rect in the node data that the frame draws by hand, plus two glyph bugs  (2026-09-11)  (severity: medium)
+
+**Resolved by reading the file, not by guessing.** The `figma` MCP server was
+timing out this session (CONNECT_TIMEOUT), so the five chips on `279:6486`
+(contact "follow us", 56px each) were read straight off the Figma REST API with
+the same token — `/v1/files/{key}/nodes` for geometry, `/v1/images` for SVG and
+PNG renders. Worth remembering as the fallback when the MCP server is down.
+
+**The trap.** `279:6487` and its four siblings report `cornerRadius: 16` with a
+1px `#A1A1A1` (ink-400) stroke — which is what the chip was built to, a plain
+CSS border. The PNG render of the row shows something else entirely: a wobbly
+hand-drawn outline with a visible break near the top-left, i.e. the same
+sketched rule as the cards (G68). Exporting the chip as SVG confirms it — four
+paths, the first an 8kB traced outline, the other three the glyph. **The
+rounded-rect numbers describe the container; they are not what renders.** Same
+class of mistake as G69/G70: trust the render over the metadata.
+
+**Radius.** The first fix here reused `.sketch-frame-chip` (the 105 x 46 filter
+chip drawing) stretched into the 56px square. It read as a much tighter radius
+than the frame, because `preserveAspectRatio="none"` squeezes the corners to
+53% horizontally. Replaced with the chip's own 57 x 57 drawing, extracted from
+the `279:6487` export to `shared/social-chip-frame.svg` and masked by
+`.sketch-frame-social` — no distortion, so the drawn radius survives.
+
+**Glyphs.** Four of the five (instagram, linkedin, whatsapp, youtube) are
+byte-identical to what is already on disk. Two real defects:
+- `x.svg` had been exported with an un-normalised viewBox
+  (`16.3316 16.1048 24.8310 24.8310`), so it drew ~3% small inside its box.
+  Replaced with the current `615:6297` export, `0 0 24 24`.
+- The reported "youtube doesn't match Figma" was not the asset: youtube is
+  24 x **18**, and `SocialIcon` rendered every glyph at `size-6` (24 x 24),
+  stretching it 1.33x vertically. The img is now sized on width with `h-auto`.

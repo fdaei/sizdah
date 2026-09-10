@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import AppHeader from '@/Layouts/AppHeader.vue'
 import AppFooter from '@/Layouts/AppFooter.vue'
@@ -14,7 +14,7 @@ import type { SharedProps } from '@/types'
  * The page transition (A12) runs on <main> only, so the header and footer stay
  * put across Inertia navigations instead of re-mounting.
  *
- * Every dark page frame paints a warm wash into one corner over the ink-1000
+ * MOST dark page frames paint a warm wash into one corner over the ink-1000
  * ground — a brand-yellow linear gradient that is fully transparent for the
  * first ~80% of its run. The angle and peak opacity drift slightly per frame
  * (projects 222:1989 and 404 266:2825 are -42deg/10%, about 336:5623 is
@@ -27,11 +27,21 @@ import type { SharedProps } from '@/types'
  */
 const page = usePage<SharedProps>()
 
+/**
+ * Home is the exception: 268:2962 has NO page wash. Sampled down the full
+ * 9919px of the frame, its ground is a flat #141414 — the warm glow visible in
+ * the hero belongs to the hero art itself and is already baked into
+ * `home/hero-bg.png`. Because that art is an opaque full-bleed raster it also
+ * MASKS the shared wash, so leaving Home washed produced a hard seam at the
+ * hero's bottom edge: #141414 above, a gold-tinted #1f1c15 below.
+ */
+const washed = computed(() => page.component !== 'Home')
+
 const menuOpen = ref(false)
 </script>
 
 <template>
-  <div class="page-wash flex min-h-screen-safe flex-col bg-ink-1000">
+  <div class="flex min-h-screen-safe flex-col bg-ink-1000" :class="{ 'page-wash': washed }">
     <AppHeader @open-menu="menuOpen = true" />
     <MobileMenu :open="menuOpen" @close="menuOpen = false" />
 

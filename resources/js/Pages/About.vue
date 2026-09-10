@@ -119,59 +119,39 @@ function iconFor(item: SectionItem, index: number): string | undefined {
         class="relative isolate grid items-center gap-12 lg:grid-cols-[minmax(0,466px)_minmax(0,1fr)] lg:gap-[86px]"
       >
         <!--
-          The frame carries TWO hairline mesh groups, not one, and they hand
-          off to each other so the verticals read as a single run from the
-          illustration down to the principle cards. Both are anchored (and
-          `isolate`d) on hero rather than on the block they sit behind, so
-          their negative z-index stays behind the hero illustration/copy too,
-          and both are positioned against hero specifically (not the padded
-          container) because hero's own box has no inline padding — so
-          inline-start-0 lines up exactly with the content edge story aligns
-          to, where anchoring on the padded container would shift them by the
-          container's gutter.
+          One continuous hairline mesh behind the hero and the story block.
 
-          Hero mesh, 691:7320 (109 x 92.34 cells). Its horizontal rules do NOT
-          start where its verticals do: the group spans y=182.14-822.14, but
-          the verticals only run 321.93-822.14 and the rules land at 366.81,
-          459.15, 551.49, 643.83 and 736.16. Hence the box below starts at the
-          verticals' y and offsets the rules 45px into it, rather than being
-          drawn from the group's own top edge — the frame has bare page above
-          the illustration, not a grid.
+          The frame authored this as two groups plus a stray rule — 691:7320
+          (109 x 92.34) whose horizontal rules start 45px into its own box,
+          691:7331 (a lone rule at y=182.14) and 359:9560 (109 x 118.1) — which
+          left the hero band running bare verticals with a single rule above
+          them. The background for this section is an EVEN grid top to bottom,
+          so the three are collapsed into 359:9560's 109.33 x 118.1 cell and
+          extended up over the hero. See GAPS G64.
 
-          Both meshes share the vertical run: 227 -> 1211 in frame px, i.e. a
-          109.33 cell inset 131 from the 1248 container's edge. That inset is
-          the 22px x-offset below (131 mod 109.33) — without it a repeat from
-          the container edge drifts a full 84px off the frame by the far side.
+          It is anchored (and `isolate`d) on hero rather than on the block it
+          sits behind, so its negative z-index stays behind the hero
+          illustration and copy too, and it is positioned against hero
+          specifically (not the padded container) because hero's own box has no
+          inline padding — so inline-start-0 lines up exactly with the content
+          edge story aligns to, where anchoring on the padded container would
+          shift it by the container's gutter.
+
+          Vertical run: 227 -> 1211 in frame px, i.e. a 109.33 cell inset 131
+          from the 1248 container's edge. That inset is the 22px x-offset below
+          (131 mod 109.33) — without it a repeat from the container edge drifts
+          a full 84px off the frame by the far side.
+
+          The box starts one whole cell above the old hero rule (-118.6) so the
+          rules still land where 359:9560 put them (590, 708.1, ...) rather
+          than shifting the story band, and runs to that group's own tail at
+          1494. Without the story block below there is nothing to run into, so
+          it stops under the hero instead.
         -->
         <div
-          class="grid-mesh pointer-events-none absolute inline-start-0 block-start-[72px] -z-10 hidden h-[500px] w-full max-w-container lg:block"
-          style="--mesh-cell-x: 109.33px; --mesh-cell-y: 92.34px; background-position: 22px 45px"
-          aria-hidden="true"
-        />
-
-        <!--
-          691:7331 — the one rule left above that mesh, at y=182.14. Its
-          neighbour at 274.48 was deleted in the frame, so this is a single
-          hairline 140px clear of the grid rather than the first of a run;
-          drawing it as part of the mesh box would reinstate the line the
-          designer removed.
-        -->
-        <div
-          class="pointer-events-none absolute inline-start-0 block-start-[-68px] -z-10 hidden h-px w-full max-w-container bg-white/[0.04] lg:block"
-          aria-hidden="true"
-        />
-
-        <!--
-          Story mesh, 359:9560 (109 x 118 cells) — runs from under the hero
-          straight through the story block below, not boxed to the story
-          section alone, and overlaps the hero mesh's tail so the verticals
-          never break. Its rules start at 839.66, one full cell below the
-          group's own top edge, hence the 116px background offset.
-        -->
-        <div
-          v-if="story"
-          class="grid-mesh grid-mesh-fade pointer-events-none absolute inline-start-0 block-start-[474px] -z-10 hidden h-[1020px] w-full max-w-container lg:block"
-          style="--mesh-cell-x: 109.33px; --mesh-cell-y: 118.1px; background-position: 22px 116px"
+          class="grid-mesh grid-mesh-fade pointer-events-none absolute inline-start-0 block-start-[-118.6px] -z-10 hidden w-full max-w-container lg:block"
+          :class="story ? 'h-[1613px]' : 'h-[760px]'"
+          style="--mesh-cell-x: 109.33px; --mesh-cell-y: 118.1px; background-position: 22px 0"
           aria-hidden="true"
         />
 
@@ -272,7 +252,7 @@ function iconFor(item: SectionItem, index: number): string | undefined {
           <li
             v-for="(item, index) in think.items"
             :key="item.id"
-            class="flex flex-col items-start gap-10 rounded-lg border-3 border-ink-200 px-6 py-14 text-start"
+            class="sketch-frame flex flex-col items-start gap-10 px-6 py-14 text-start"
             style="
               background-image:
                 linear-gradient(-45deg, rgb(248 185 55 / 0%) 0%, rgb(248 185 55 / 8%) 100%),

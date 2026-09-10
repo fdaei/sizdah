@@ -20,8 +20,9 @@ import paperclipUrl from '~img/sizdah/insights/paperclip.svg'
  * a page render wide and the rest render 3-up, so the rhythm holds for any page
  * size the backend paginates to.
  *
- * A hand-drawn paperclip (456:6721) sits centred in the gap between the header
- * and the card grid.
+ * A hand-drawn paperclip (456:6721) is clipped onto the featured card's top
+ * edge, left of centre — measured off a 1:1 render of the frame, not off the
+ * node's reported bounding box (see the markup comment).
  *
  * 2026-09-03: removed a "book-and-mark" accent (298:7715 + 299:7724) that a
  * previous pass added above the eyebrow, citing `get_metadata` on this exact
@@ -134,16 +135,24 @@ const rest = computed(() => props.posts.data.slice(2))
       <div class="flex flex-col gap-16 lg:gap-[144px]">
         <div v-if="props.featured" class="relative">
           <!-- 456:6721 — a hand-drawn paperclip clipped onto the card's top
-               edge: its rotated ~77px bounding box (x=690, y=557) sits mostly
-               above the card but overlaps ~31px into it (card top is y=603),
-               not floating in the header-to-grid gap. -->
+               edge. get_metadata reports the node box at x=690, but that box is
+               the pre-rotation one and does not match what the frame paints: on
+               a 1:1 render of 268:4158 the artwork occupies x 639-695, y
+               567-624. So its centre is (667, 595.5) — 53px LEFT of the 1440
+               frame's centre (i.e. 45.75% across the 1248 content column, hence
+               the percentage so it holds as the column narrows) and 7.5px ABOVE
+               the card's top edge (y=603), overlapping ~21px into the card.
+               Offsets are physical on purpose: the Figma frame is already the
+               RTL layout, so its coordinates map straight across. -->
           <div
             aria-hidden="true"
-            class="pointer-events-none absolute inset-x-0 top-0 hidden -translate-y-1/2 justify-center lg:flex"
+            class="pointer-events-none absolute left-[45.75%] top-0 hidden -translate-x-1/2 translate-y-[calc(-50%-8px)] lg:block"
           >
             <!-- The export is already rotated (78x78 box, rotated clip
-                 matrix), so no CSS transform here - a second rotation threw
-                 the artwork off-centre inside its box. -->
+                 matrix), so never add a CSS rotation here - a second rotation
+                 threw the artwork off-centre inside its box. The artwork sits
+                 at 10-68 / 9-68 inside that box, so the box centre doubles as
+                 the artwork centre and the wrapper's -50% offsets land it. -->
             <img :src="paperclipUrl" alt="" width="78" height="78" />
           </div>
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from 'vue'
 import { useForm } from '@inertiajs/vue3'
-import { X } from 'lucide-vue-next'
+import IconClose from '@/Components/Icons/IconClose.vue'
 import { route } from 'ziggy-js'
 import CtaButton from '@/Components/CtaButton.vue'
 import { useTranslations } from '@/Composables/useTranslations'
@@ -151,7 +151,7 @@ watch(
           :aria-label="t('common.close')"
           @click="close"
         >
-          <X class="size-5" aria-hidden="true" />
+          <IconClose class="size-5" />
         </button>
 
         <template v-if="!succeeded">

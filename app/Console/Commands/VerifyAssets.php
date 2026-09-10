@@ -83,14 +83,26 @@ final class VerifyAssets extends Command
 
         $this->newLine();
 
-        // Doran is licensed separately; report as a warning, never a failure.
-        $doran = base_path('public/fonts/doran');
-        $doranCount = File::isDirectory($doran) ? count(File::files($doran)) : 0;
+        /*
+         | Licensed faces are not in the repo's asset manifest and are not
+         | fetched by scripts/fetch-fonts.sh — a clone without them still has
+         | to boot, so these report as warnings and never as failures. Each
+         | one degrades to the fallback named in its @font-face stack.
+         */
+        $licensed = [
+            'doran' => [3, 'Doran FaNum not installed — FA/AR fall back to Vazirmatn.'],
+            'lahzeh' => [8, 'Lahzeh not installed — digit runs fall back to Peyda.'],
+        ];
 
-        if ($doranCount < 3) {
-            $this->warn('  Doran FaNum not installed — FA/AR fall back to Vazirmatn.');
-            $this->line('  See docs/ASSET-MANIFEST.md §10 (commercial licence required).');
-            $this->newLine();
+        foreach ($licensed as $family => [$min, $message]) {
+            $path = base_path("public/fonts/{$family}");
+            $count = File::isDirectory($path) ? count(File::glob("{$path}/*.woff2")) : 0;
+
+            if ($count < $min) {
+                $this->warn("  {$message}");
+                $this->line('  See docs/ASSET-MANIFEST.md §10 (commercial licence required).');
+                $this->newLine();
+            }
         }
 
         if ($failures > 0) {

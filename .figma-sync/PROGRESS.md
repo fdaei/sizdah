@@ -5,7 +5,7 @@
 
 ## Previously completed unit: case study (`/work/{project}`, Figma `336:5374`) — fresh phase-8 re-pull, see GAPS G55. The page was marked faithful by G19 and was not: Figma reports auto-layout in LTR even for an RTL frame, so `alignItems: flex-end` had been read as CSS `items-end` (which is the LEFT in RTL) and row children had been kept in Figma order. That mirrored the goal/deliverable cards, the meta chip row, the before/after pair and the next-project block. Also rebuilt: the strategy block is a three-column quadrant whose first column IS the heading (spanning both rows) with 3px brand-200 rules between the two card columns, not a 2x2 grid under a heading; deliverables are 3-across at r24 against goals' 4-across at r16; banner and before/after plates got their exact ratios (1248x624 and 612x306), radii and casts; glow angles corrected to -44deg from 0%. Two schema gaps closed rather than skipped: the five result-tile glyphs now ride `section_items.icon` (exported to `work/result-*.svg`), and `project_images.tag` backs the showcase FilterChips row (430:5201), which stays hidden until an image is tagged. Verified 1440/1280/1024/834/768/390/360; typecheck, lint and build clean.
 ## Next unit: continue the page-by-page loop in manifest order — Work index (`/work`, Figma `222:1989`) is still outstanding, then services, about, insights index, contact, legal, 404 (insights SHOW is done, see above). Carry G55's RTL rule into every one of them: Figma `flex-end` maps to CSS-logical `start`, and a row's Figma child order is the REVERSE of the DOM order you want. Do not trust this file's old "done" statuses — G53 and now G55 have each proved a page can be marked faithful and not be.
-## Stack: Laravel 12.61 + Inertia 2 + Vue 3.5 (TS, strict) + Tailwind 3.4 + Vite 6; Filament 3 admin. Locales: fa (RTL) only — en/ar sit under `locales.inactive` (G15); the machinery stays. Assets → resources/images (via `~img` alias) + public/fonts. Fonts self-hosted (poppins, vazirmatn, doran, idealist).
+## Stack: Laravel 12.61 + Inertia 2 + Vue 3.5 (TS, strict) + Tailwind 3.4 + Vite 6; Filament 3 admin. Locales: fa (RTL) only — en/ar sit under `locales.inactive` (G15); the machinery stays. Assets → resources/images (via `~img` alias) + public/fonts. Fonts self-hosted (poppins, vazirmatn, doran, idealist, peyda, maneli, lahzeh — the last is the numeric face, G63).
 ## Blockers: none for design work. Environment: `pdo_sqlite` is not built into this PHP 8.5 install, so `php artisan test` cannot run (pre-existing, see CLAUDE.md); WebKit system libraries are missing, so the `mobile-390` Playwright project cannot launch. Both need root.
 
 ## Context (user, 2026-08-21)
@@ -46,6 +46,29 @@ as sound and the Vue layer as the deliverable.
   headlines are 1.27 (`hero-line`, `hero-accent`, `section-line`).
 
 ## Done this run
+- Icon package dropped (G67): the last four `lucide-vue-next` glyphs are gone
+  and the dependency is out of `package.json`. `Components/Icons/IconClose.vue`
+  is the file's own `cross 1` (`165:1533`, icon sheet `149:2691`), inlined with
+  `currentColor` because all four call sites drive the glyph colour from the
+  button; the export is NOT centred in its 64x64 box, so it carries the glyph's
+  own squared bbox as its viewBox. `IconMenu` and `IconCheck` are drawn locally
+  at the family's 6.25% stroke weight — the file has no mobile frame and no
+  flash-banner state, so a hamburger and a tick were never designed and no
+  amount of searching the file will surface them. The error state reuses the
+  Figma cross rather than inventing a fourth glyph.
+- Smart font selection (G63, corrected by G64): Lahzeh (لحظه) installed as the
+  numeric face — the FaNum cut, 8 weights, `public/fonts/lahzeh/`. Every figure
+  on the site now renders in it, delivered by a `unicode-range` on the faces
+  plus Lahzeh leading the `arabic` and `display` stacks — no component opts in,
+  and Filament-authored content is covered untouched. Because the cut is FaNum,
+  an ASCII "1402" is drawn as ۱۴۰۲ (display-layer only; the DOM keeps ASCII, so
+  `App\Support\Numerals` is still the tool wherever the text must genuinely BE
+  Persian digits). `sans` is deliberately excluded — it is the `en` stack.
+  Digit tracking is -0.04em, but only on marked-up runs: CSS cannot letter-space
+  a subset of glyphs. `lib/typeface.ts` + `useSmartFont()` + `<SmartText>` cover
+  those runs and give RTL `<bdi>` isolation. 25 Playwright assertions.
+  Outstanding: no existing page migrated onto `<SmartText>`, so the site's KPIs
+  and prices get the face but not the tracking.
 - Phase 2 tokens: `section-line`, the `display` font family, and the whole type
   scale re-measured off the frames (G14 — the big one).
 - Phase 3 assets: 8 About files + 4 woff2 display faces (see ASSETS.md).
@@ -92,6 +115,19 @@ Git tag `pre-figma-rebuild-2026-08-20` at HEAD `8079e60`. Revert any file with
 `git checkout pre-figma-rebuild-2026-08-20 -- <path>`. Repo root is $HOME —
 scope every git command to project paths.
 
+## 2026-09-11 — Sketched frame promoted to the site-wide card outline (G68)
+
+`.sketch-frame` now draws the rule on every card surface, not just the two
+contact cards: FAQ items, the insights lead post, the large lead-magnet banner,
+About's value cards, the CTA card and the case-study goals row. Outline only —
+each card keeps its measured ground (user's call). `Work/Show.vue`'s
+`frame`/`radius` block flags are gone with it. Not framed: blog/project cards
+(bare stacks, the hairline is on the image), toasts.
+
+**Next unit of work:** `FilterChips.vue` — deferred by the user. Needs a
+scaled-corner variant (`border-image: … 32 / 16px`) because a 44px chip is
+shorter than two 32px corner slices.
+
 ## Figma source
 - File: `v1l4ANft5Wtb8wPThyP7P9` (SizdahMarketing)
 - Single page: `0:1` "User Interface" (the template's stated root; also the only page)
@@ -106,3 +142,11 @@ scope every git command to project paths.
       header, footer, CTA, header item, KPIs, blog card, process card and
       testimonial all corrected (G25). Member card + project cards outstanding.
 - [x] Phase 5 — Pages (one at a time) — every page frame done/verified/superseded
+
+- 2026-09-11 — Social chips (contact "follow us", `279:6486`) corrected: the
+  sketched outline is now the chip's own 57px drawing masked by
+  `.sketch-frame-social` (the filter-chip drawing stretched into the square had
+  visibly tightened its radius), `x.svg` re-exported with a normalised viewBox,
+  and the glyph img sized on width so the 24 x 18 youtube mark stops being
+  stretched to a square. See G71 — and note that G71 was resolved through the
+  Figma REST API directly, the MCP server having failed to connect.

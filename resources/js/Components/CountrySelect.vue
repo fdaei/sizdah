@@ -68,7 +68,7 @@ function toggle(): void {
     <div
       v-show="open"
       id="country-options"
-      class="absolute inline-start-0 top-full z-20 mt-2 w-72 rounded-lg border-3 border-brand-200 bg-white p-2 shadow-[4px_4px_12px_0px_rgba(0,0,0,0.15)]"
+      class="absolute inline-start-0 top-full z-20 mt-2 w-72 rounded-lg border-3 border-brand-200 bg-brand-50 p-2 shadow-[4px_4px_12px_0px_rgba(0,0,0,0.15)]"
     >
       <input
         v-model="query"

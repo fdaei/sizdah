@@ -6,7 +6,14 @@ import SectionHeading from '@/Components/SectionHeading.vue'
 import SeoHead from '@/Components/SeoHead.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
 import { useTranslations } from '@/Composables/useTranslations'
-import type { CardItem, FilterOption, PageSectionData, ProjectDetail, ResultStat, SeoMeta } from '@/types'
+import type {
+  CardItem,
+  FilterOption,
+  PageSectionData,
+  ProjectDetail,
+  ResultStat,
+  SeoMeta,
+} from '@/types'
 import servicesIconUrl from '~img/sizdah/work/meta-services.svg'
 import instagramIconUrl from '~img/sizdah/work/meta-instagram.svg'
 import yearIconUrl from '~img/sizdah/work/meta-year.svg'
@@ -40,10 +47,11 @@ import strategyRuleVerticalUrl from '~img/sizdah/work/strategy-rule-v.svg'
  * Figma's property name to the Tailwind class of the same name.
  *
  * Three distinct card treatments, deliberately kept apart:
- *   - goals (423:4973) — `.surface-case-card`, 3px ink-200 border, radius 16,
- *     four across; brand number at 36/600 above a 24-gap title/body pair.
- *   - deliverables (429:5099) — the same card at radius 24, three across in
- *     two rows. The frame's own heading on this block reads "اهداف پروژه", a
+ *   - goals (423:4973) — `.surface-case-card` under the shared `.sketch-frame`
+ *     rule, four across; brand number at 36/600 above a 24-gap title/body pair.
+ *     The frame measures it at radius 16 with a 3px ink-200 border; the site-
+ *     wide sketched frame overrides both (see the note on `cardBlocks`).
+ *   - deliverables (429:5099) — the same card, three across in two rows. The frame's own heading on this block reads "اهداف پروژه", a
  *     copy-paste of the goals heading; `work.deliverables` is used instead.
  *   - strategy (428:5041-428:5088) — no fill or border. A three-column
  *     quadrant: the heading block occupies the first (right-hand) column and
@@ -98,14 +106,21 @@ const meta = [
 ].filter((item) => item.value)
 
 /*
- | Both blocks use `.surface-case-card`; only the radius and the column count
- | differ, and both are the frame's (423:4972 is four across at r16, 429:5092
- | and 429:5117 are three across at r24).
+ | Both blocks use `.surface-case-card` and `.sketch-frame`; only the column
+ | count differs, and it is the frame's (423:4972 is four across, 429:5092 and
+ | 429:5117 are three across).
  */
 const cardBlocks: {
   key: string
   items: CardItem[]
-  radius: string
+  /*
+   | The sketched card frame (.sketch-frame) is a fixed radius-24 drawing and
+   | sets the radius itself, so both blocks now wear it. The goals row was
+   | measured at r16 with a 3px ink-200 rule; it is deliberately overridden to
+   | the shared frame (user decision 2026-09-11 — every card surface on the site
+   | wears the sketched rule) and rounds up to 24 so the artwork's corners
+   | cannot out-curve the card's own clip.
+   */
   columns: string
   /** Step above the block; see the rhythm table on the track. */
   lead: string
@@ -113,7 +128,6 @@ const cardBlocks: {
   {
     key: 'goals',
     items: props.project.goals,
-    radius: 'rounded-lg',
     // Single row, so the 16 gutter is the only gap the frame draws.
     columns: 'gap-4 sm:grid-cols-2 lg:grid-cols-4',
     lead: 'mt-20 md:mt-[136px]',
@@ -121,7 +135,6 @@ const cardBlocks: {
   {
     key: 'deliverables',
     items: props.project.deliverables,
-    radius: 'rounded-xl',
     // 429:5092 -> 429:5117 is 40 between the rows against 16 between columns.
     columns: 'gap-x-4 gap-y-10 sm:grid-cols-2 lg:grid-cols-3',
     lead: 'mt-20 md:mt-[233px]',
@@ -145,18 +158,19 @@ const resultIconAliases: Record<string, keyof typeof resultIcons> = {
   roi: 'roi',
   'بازگشت سرمایه': 'roi',
   reach: 'reach',
-  'دسترسی': 'reach',
+  دسترسی: 'reach',
   interaction: 'interaction',
-  'تعامل': 'interaction',
+  تعامل: 'interaction',
   follower: 'follower',
-  'دنبال‌کننده': 'follower',
+  دنبال‌کننده: 'follower',
   view: 'view',
-  'بازدید': 'view',
+  بازدید: 'view',
 }
 
 function resultIcon(result: ResultStat): (typeof resultIcons)[string] | undefined {
-  const key = resultIconAliases[result.icon?.trim().toLowerCase() ?? '']
-    ?? resultIconAliases[result.label.trim().toLowerCase()]
+  const key =
+    resultIconAliases[result.icon?.trim().toLowerCase() ?? ''] ??
+    resultIconAliases[result.label.trim().toLowerCase()]
 
   return key ? resultIcons[key] : undefined
 }
@@ -271,11 +285,10 @@ const strategyLead = computed(() =>
         </div>
 
         <!--
-          Meta row 411:8568. The label/value stack leads and the 24px glyph
-          follows it, so in RTL the text hugs the right edge and the glyph sits
-          at the inline END (visually left) — 411:8569 orders them that way and
-          the frame renders it that way. An earlier pass had the glyph first,
-          which mirrored every chip.
+          Meta row 411:8568. The 24px glyph leads and the label/value stack
+          follows it, so in RTL the glyph sits at the inline START (visually
+          right) and the text runs after it — user decision 2026-09-11, taken
+          against the earlier reading of 411:8569 (see .figma-sync/GAPS.md).
         -->
         <dl v-if="meta.length" class="flex flex-wrap justify-center gap-4">
           <div
@@ -283,6 +296,14 @@ const strategyLead = computed(() =>
             :key="item.key"
             class="surface-meta-chip flex items-start gap-2 rounded-lg border-2 border-brand-300 px-6 py-3"
           >
+            <img
+              :src="item.icon"
+              alt=""
+              aria-hidden="true"
+              width="24"
+              height="24"
+              class="size-6 shrink-0"
+            />
             <div class="flex flex-col justify-center gap-2 whitespace-nowrap">
               <dt class="text-label-lg text-ink-50">{{ t(`work.${item.key}`) }}</dt>
               <dd
@@ -292,14 +313,6 @@ const strategyLead = computed(() =>
                 {{ item.value }}
               </dd>
             </div>
-            <img
-              :src="item.icon"
-              alt=""
-              aria-hidden="true"
-              width="24"
-              height="24"
-              class="size-6 shrink-0"
-            />
           </div>
         </dl>
       </header>
@@ -368,8 +381,7 @@ const strategyLead = computed(() =>
           <li
             v-for="(item, index) in block.items"
             :key="item.title"
-            class="surface-case-card flex h-full flex-col items-start justify-center gap-10 border-3 border-ink-200 px-6 py-14"
-            :class="block.radius"
+            class="surface-case-card sketch-frame flex h-full flex-col items-start justify-center gap-10 px-6 py-14"
             data-reveal
           >
             <span class="latin-nums text-display-sm font-semibold text-brand" aria-hidden="true">

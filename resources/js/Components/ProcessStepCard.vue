@@ -7,7 +7,7 @@ import productionUrl from '~img/sizdah/home/step-production.svg'
 import publishingUrl from '~img/sizdah/home/step-publishing.svg'
 import campaignUrl from '~img/sizdah/home/step-campaign.svg'
 import optimizationUrl from '~img/sizdah/home/step-optimization.svg'
-import approvalUrl from '~img/sizdah/home/why-quality.svg'
+import approvalUrl from '~img/sizdah/home/step-approval.svg'
 
 /**
  * Process step card — Figma 523:5646, one cell of the six-up grid at 523:5798.

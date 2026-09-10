@@ -177,9 +177,23 @@ export default {
          | now licensed and self-hosted (public/fonts/peyda/, all 9 weights),
          | with Vazirmatn kept as the fallback (near-identical metrics — see
          | G8 in .figma-sync/GAPS.md). Latin copy uses Poppins.
+         |
+         | Lahzeh leads the Persian-facing stacks and takes nothing away from
+         | them: its @font-face rules carry a `unicode-range` covering only the
+         | digit blocks, so it claims the figures and hands every letter
+         | straight back to Peyda / Maneli (G63). Leading is what makes it
+         | work — a face further down the stack is only consulted for glyphs
+         | the ones before it lack, and Peyda has digits of its own.
+         |
+         | `sans` is deliberately NOT one of them. It is the Latin stack that
+         | app.blade.php puts on <html> for `font: 'sans'` locales, i.e. `en`,
+         | and Lahzeh's FaNum cut draws ASCII 0-9 as Persian numerals — on an
+         | English page that is simply wrong. Keeping it off `sans` is what
+         | lets config/locales.php keep its promise that moving `en` back into
+         | `supported` needs no other code change.
          */
         sans: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        arabic: ['Peyda', 'Vazirmatn', 'Tahoma', 'sans-serif'],
+        arabic: ['Lahzeh', 'Peyda', 'Vazirmatn', 'Tahoma', 'sans-serif'],
 
         /*
          | Eyebrows and display accents. The frames set these in "Maneli",
@@ -190,7 +204,46 @@ export default {
          | directly — a bare `Idealist, serif` drops fa/ar onto a generic
          | serif.
          */
-        display: ['Maneli', 'Idealist', 'Doran FaNum', 'Vazirmatn', 'serif'],
+        display: ['Lahzeh', 'Maneli', 'Idealist', 'Doran FaNum', 'Vazirmatn', 'serif'],
+
+        /*
+         | Explicit digit runs. Rarely needed now that the three stacks above
+         | lead with Lahzeh — every figure on the site already renders in it.
+         | Reach for this token (or <SmartText>, which applies it) only where
+         | a numeric run needs to be marked up in its own element anyway: the
+         | `<bdi>` isolation that keeps a trailing number from reordering
+         | around punctuation in RTL is the real reason to, not the face.
+         |
+         | Identical stack to `arabic`, so a numeric run inside Persian copy
+         | keeps the same fallback behaviour as the copy around it.
+         */
+        numeric: ['Lahzeh', 'Peyda', 'Vazirmatn', 'Tahoma', 'sans-serif'],
+      },
+
+      /*
+       | Digit tracking (user, 2026-09-11). Now a no-op, deliberately, and kept
+       | in step with `.latin-nums` (app.css) — which also stopped tracking.
+       |
+       | Negative tracking was only ever compensating for `lining-nums`, which
+       | in the Lahzeh FaNum cut selects full-em (1.0em/digit) Latin lining
+       | forms. Removing that feature request returns the face to its designed
+       | 0.36em advance, which reads correctly on its own; app.css carries the
+       | measurements. Tracking on top of that only crowds the digits.
+       |
+       | It survives as a token rather than being deleted because
+       | `TYPEFACE_CLASS.numeric` in resources/js/lib/typeface.ts emits
+       | `tracking-numeric` on every <SmartText> digit run — this is the one
+       | knob for that path, and a future design change may want it non-zero.
+       |
+       | If it is ever set negative again, note the scope limit measured
+       | 2026-09-10: it reaches Latin-codepoint digits only. Chromium
+       | suppresses letter-spacing inside runs the shaper treats as Arabic
+       | script, so genuine Persian figures U+06F0-06F9 do not move at all.
+       | `getComputedStyle` reports the value either way, so it resolving is
+       | NOT evidence that it landed — measure the advance.
+       */
+      letterSpacing: {
+        numeric: '0em',
       },
 
       fontSize: {

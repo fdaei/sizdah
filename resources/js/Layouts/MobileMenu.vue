@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
-import { X } from 'lucide-vue-next'
+import IconClose from '@/Components/Icons/IconClose.vue'
 import BrandLogo from '@/Components/BrandLogo.vue'
 import CtaButton from '@/Components/CtaButton.vue'
 import LanguageSwitcher from '@/Components/LanguageSwitcher.vue'
@@ -65,7 +65,7 @@ watch(
             :aria-label="$t('common.close_menu')"
             @click="emit('close')"
           >
-            <X class="size-6" aria-hidden="true" />
+            <IconClose class="size-6" />
           </button>
         </div>
 

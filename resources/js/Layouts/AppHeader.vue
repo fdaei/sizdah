@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
-import { Menu } from 'lucide-vue-next'
+import IconMenu from '@/Components/Icons/IconMenu.vue'
 import BrandLogo from '@/Components/BrandLogo.vue'
 import CtaButton from '@/Components/CtaButton.vue'
 import LanguageSwitcher from '@/Components/LanguageSwitcher.vue'
@@ -131,7 +131,7 @@ function isActive(item: NavItem): boolean {
           :aria-label="$t('common.open_menu')"
           @click="$emit('openMenu')"
         >
-          <Menu class="size-6" aria-hidden="true" />
+          <IconMenu class="size-6" />
         </button>
       </div>
     </div>

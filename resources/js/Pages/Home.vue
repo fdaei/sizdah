@@ -14,7 +14,7 @@ import TestimonialCard from '@/Components/TestimonialCard.vue'
 import InsightsShowcase from '@/Components/InsightsShowcase.vue'
 import FaqAccordion from '@/Components/FaqAccordion.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
-import HeroJourney from '@/Components/HeroJourney.vue'
+import heroBgUrl from '~img/sizdah/home/hero-bg.png'
 import trustMarkUrl from '~img/sizdah/clients/trust-divider.svg'
 import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
 import heroNoteArrowUrl from '~img/sizdah/shared/hero-note-icon.svg'
@@ -63,6 +63,14 @@ const props = defineProps<{
 }>()
 
 const hero = computed(() => props.sections.hero)
+
+/**
+ * The hero's ground. The shipped art already has the hairline mesh, the warm
+ * corner glow and the four journey marks baked into it, so nothing draws those
+ * separately any more — the whole block just sits on top of the image. An
+ * editor can still swap it per locale through the hero section's image field.
+ */
+const heroBackground = computed(() => hero.value?.image?.src ?? heroBgUrl)
 const kpi = computed(() => props.sections.kpi)
 const trustProof = computed(() => props.sections.trust_proof)
 const servicesCloud = computed(() => props.sections.services_cloud)
@@ -81,115 +89,96 @@ const finalCta = computed(() => props.sections.final_cta)
 
   <!--
     Hero — 268:2962 y=0..1113. Text column sits at the inline start (right in
-    RTL, matching the frame) with the illustration opposite; below `lg` the two
-    stack and the illustration follows the copy.
+    RTL, matching the frame) over the art, whose marks occupy the opposite
+    side; below `lg` the copy is full width and the art crops behind it.
   -->
-  <section class="section-first relative overflow-hidden pb-24">
-    <!-- Decorative hairline mesh, Figma "Group" 268:2966 — 884x778, not square. -->
-    <div
-      class="grid-mesh grid-mesh-edge-fade pointer-events-none absolute block-start-[122px] inline-start-16 hidden h-[778px] w-[884px] lg:block"
-      aria-hidden="true"
-    />
-
+  <!--
+    The ground is one full-bleed image (`heroBackground`) rather than a stack of
+    layers: the mesh, the corner glow and the four journey marks are all baked
+    into the art, so nothing is drawn over it and the copy simply sits on top.
+    `bg-top` keeps the marks anchored when `bg-cover` crops the bottom on short
+    viewports; the `lg` min-height is the art's own 2560x1393 ratio at the
+    1440 frame width, so the marks are never cropped on desktop.
+  -->
+  <section
+    class="section-first relative overflow-hidden bg-cover bg-top bg-no-repeat pb-24 lg:min-h-[783px]"
+    :style="{ backgroundImage: `url(${heroBackground})` }"
+  >
     <div class="container-sizdah relative">
-      <div
-        class="grid items-center gap-12 lg:grid-cols-[minmax(0,566px)_minmax(0,1fr)] lg:items-start lg:gap-16"
-      >
-        <div class="flex flex-col gap-6 lg:gap-0 lg:pt-4" data-reveal-group>
+      <div class="flex flex-col gap-6 lg:max-w-[566px] lg:gap-0 lg:pt-4" data-reveal-group>
+        <!--
+          394:4964 — a 221px label over a 2px brand rule. Not the dotted
+          `.eyebrow` used by the section headers further down the page; this
+          one is the agency line and is underlined instead of bulleted.
+        -->
+        <p
+          v-if="hero?.eyebrow"
+          class="flex w-fit max-w-[221px] flex-col gap-px text-label-lg text-ink-100 lg:max-w-none lg:whitespace-nowrap"
+        >
+          <span>{{ hero.eyebrow }}</span>
+          <img
+            :src="underlineUrl"
+            alt=""
+            aria-hidden="true"
+            class="mt-1 h-[5px] w-full max-w-none"
+          />
+        </p>
+
+        <h1 v-if="hero" class="flex flex-col gap-4 text-start lg:mt-[47.5px]">
+          <span class="text-hero-line text-paper">{{ hero.title }}</span>
+          <span class="text-hero-accent text-brand">{{ hero.subtitle }}</span>
+          <span class="text-hero-line text-paper">{{ hero.description }}</span>
+        </h1>
+
+        <p v-if="hero?.content" class="max-w-[506px] text-title-sm text-ink-200 lg:mt-[59px]">
+          {{ hero.content }}
+        </p>
+
+        <div v-if="hero" class="flex flex-wrap items-center gap-4 lg:mt-[109px]">
+          <CtaButton
+            v-if="hero.primaryCta"
+            :label="hero.primaryCta.label"
+            :href="hero.primaryCta.url"
+            size="lg"
+            with-arrow
+          />
           <!--
-            394:4964 — a 221px label over a 2px brand rule. Not the dotted
-            `.eyebrow` used by the section headers further down the page; this
-            one is the agency line and is underlined instead of bulleted.
+            268:2989 is a white fill with a 1px brand rule and an ink label —
+            not the dark outline the other pages use, so it takes `light`
+            plus the frame's border rather than `outline`. Both hero CTAs
+            measure 57px (268:2990, 268:2989 are both lg-BW/lg-WB instances,
+            32/16 padding + 20px Medium) — `size` was missing, so this was
+            silently rendering at the smaller default (24/12, 18px).
           -->
-          <p
-            v-if="hero?.eyebrow"
-            class="flex w-fit max-w-[221px] flex-col gap-px text-label-lg text-ink-100 lg:max-w-none lg:whitespace-nowrap"
-          >
-            <span>{{ hero.eyebrow }}</span>
-            <img
-              :src="underlineUrl"
-              alt=""
-              aria-hidden="true"
-              class="mt-1 h-[5px] w-full max-w-none"
-            />
-          </p>
-
-          <h1 v-if="hero" class="flex flex-col gap-4 text-start lg:mt-[47.5px]">
-            <span class="text-hero-line text-paper">{{ hero.title }}</span>
-            <span class="text-hero-accent text-brand">{{ hero.subtitle }}</span>
-            <span class="text-hero-line text-paper">{{ hero.description }}</span>
-          </h1>
-
-          <p v-if="hero?.content" class="max-w-[506px] text-title-sm text-ink-200 lg:mt-[59px]">
-            {{ hero.content }}
-          </p>
-
-          <div v-if="hero" class="flex flex-wrap items-center gap-4 lg:mt-[109px]">
-            <CtaButton
-              v-if="hero.primaryCta"
-              :label="hero.primaryCta.label"
-              :href="hero.primaryCta.url"
-              size="lg"
-              with-arrow
-            />
-            <!--
-              268:2989 is a white fill with a 1px brand rule and an ink label —
-              not the dark outline the other pages use, so it takes `light`
-              plus the frame's border rather than `outline`. Both hero CTAs
-              measure 57px (268:2990, 268:2989 are both lg-BW/lg-WB instances,
-              32/16 padding + 20px Medium) — `size` was missing, so this was
-              silently rendering at the smaller default (24/12, 18px).
-            -->
-            <CtaButton
-              v-if="hero.secondaryCta"
-              :label="hero.secondaryCta.label"
-              :href="hero.secondaryCta.url"
-              variant="light"
-              size="lg"
-              class="ring-1 ring-inset ring-brand"
-            />
-          </div>
-
-          <!--
-            268:2997 — the handwritten aside under the buttons, with the
-            up-right doodle (268:3024) beside it. Fixed chrome rather than
-            authored copy, so it comes from lang/{locale}/home.php.
-          -->
-          <p
-            v-if="hero"
-            class="flex items-start gap-2 text-body-lg text-ink-300 lg:ms-[65px] lg:mt-[49px] lg:gap-[13px]"
-          >
-            <img
-              :src="heroNoteArrowUrl"
-              alt=""
-              aria-hidden="true"
-              width="56"
-              height="56"
-              class="size-10 shrink-0 lg:-mt-[35px] lg:size-14"
-            />
-            <span class="max-w-[173px]">{{ $t('home.hero.note') }}</span>
-          </p>
+          <CtaButton
+            v-if="hero.secondaryCta"
+            :label="hero.secondaryCta.label"
+            :href="hero.secondaryCta.url"
+            variant="light"
+            size="lg"
+            class="ring-1 ring-inset ring-brand"
+          />
         </div>
 
         <!--
-          The frame draws this as loose vectors, not a raster, so it is composed
-          in HeroJourney rather than shipped as one image. An editor can still
-          override it per locale through the hero section's image field.
+          268:2997 — the handwritten aside under the buttons, with the
+          up-right doodle (268:3024) beside it. Fixed chrome rather than
+          authored copy, so it comes from lang/{locale}/home.php.
         -->
-        <img
-          v-if="hero?.image"
-          :src="hero.image.src"
-          :srcset="hero.image.srcset"
-          :alt="hero.image.alt"
-          width="700"
-          height="673"
-          class="h-auto w-full max-w-[700px] justify-self-center"
-        />
-        <!--
-          88 from the frame's inline-end gutter and 36 below the section top,
-          which is where 268:2962 puts the composition box.
-        -->
-        <HeroJourney v-else class="justify-self-center lg:me-[88px] lg:ms-auto lg:mt-9" />
+        <p
+          v-if="hero"
+          class="flex items-start gap-2 text-body-lg text-ink-300 lg:ms-[65px] lg:mt-[49px] lg:gap-[13px]"
+        >
+          <img
+            :src="heroNoteArrowUrl"
+            alt=""
+            aria-hidden="true"
+            width="56"
+            height="56"
+            class="size-10 shrink-0 lg:-mt-[35px] lg:size-14"
+          />
+          <span class="max-w-[173px]">{{ $t('home.hero.note') }}</span>
+        </p>
       </div>
     </div>
   </section>

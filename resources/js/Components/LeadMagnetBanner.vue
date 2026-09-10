@@ -19,9 +19,11 @@ import leadMagnetScribbleUrl from '~img/sizdah/home/lead-magnet-scribble.svg'
  *   - `sm` — 303:4455, 826 x 139 mid-article. space32 padding, radiusSM, no
  *            rule, and a filled brand button.
  *   - `lg` — 391:4795, Home. 1036 wide inside the 1248 track, space64 padding,
- *            24px corners, a 3px brand rule drawn INSIDE the box (so the card
- *            stays 1036 x 194), and a hollow brand button instead of the
- *            filled one.
+ *            and a hollow brand button instead of the filled one. The frame
+ *            measures a 3px brand rule at 24px corners, drawn INSIDE the box;
+ *            since 2026-09-11 (GAPS G68) it wears the site-wide
+ *            `.sketch-frame` instead, which is likewise inset and so keeps the
+ *            card at 1036 x 194. `sm` stays unruled.
  *
  * Re-read against the live frame 2026-09-08. Four things had drifted on `sm`
  * and are corrected: the fill was Yellow/200 under a raking brand gradient
@@ -59,7 +61,7 @@ const modalOpen = ref(false)
     class="relative flex flex-col items-center gap-6 overflow-hidden"
     :class="
       props.size === 'lg'
-        ? 'mx-auto max-w-[1036px] rounded-xl bg-brand-50 p-8 ring-[3px] ring-inset ring-brand lg:flex-row lg:justify-between lg:p-16'
+        ? 'sketch-frame mx-auto max-w-[1036px] bg-brand-50 p-8 lg:flex-row lg:justify-between lg:p-16'
         : 'w-full max-w-[826px] rounded-sm bg-brand-50 p-8 md:flex-row md:items-center md:justify-between md:gap-6'
     "
   >

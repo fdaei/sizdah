@@ -60,12 +60,42 @@
   }
 
   /*
-   | Keeps a numeric run reading as one unit inside RTL copy (e.g. "+۷۰ هزار").
-   | It selects lining figures — it does NOT force Latin digits. Digit system
-   | is a data concern, handled by App\Support\Numerals in the transformer.
+   | Numeric runs (dates, KPIs, ordinals, phone numbers, reading times).
+   |
+   | This rule now does nothing but mark the run. That is the fix, not an
+   | oversight — every property it used to set was making the figures gappy
+   | (user, 2026-09-10 and 2026-09-11).
+   |
+   | THE ACTUAL CAUSE was `lining-nums`. Measured in Chromium against the
+   | shipped Lahzeh FaNum Regular at 100px, the string `01` sets:
+   |
+   |     font-variant-numeric: normal              ->  72px  (0.36em/digit)
+   |     font-variant-numeric: proportional-nums   -> 109px  (0.545em/digit)
+   |     font-variant-numeric: lining-nums         -> 200px  (1.0em/digit)
+   |     font-variant-numeric: tabular-nums        -> 200px  (1.0em/digit)
+   |
+   | In this cut `lnum` selects full-em Latin lining forms, so asking for
+   | `lining-nums proportional-nums` landed on the *widest* option available —
+   | 1.0em advances carrying narrow Persian digit shapes. That is the gap, and
+   | it is why no amount of negative tracking ever closed it: -0.18em still
+   | left 0.82em of advance per digit. The font's default (`normal`) is the
+   | Persian numeral set at its designed 0.36em advance, which needs no
+   | correction at all.
+   |
+   | So: no `font-variant-numeric`, and consequently no `letter-spacing` and no
+   | `word-spacing` counterpart to undo it. Do not reintroduce `lining-nums`
+   | here — selecting Latin *digit shapes* is a data concern and is handled
+   | server-side by App\Support\Numerals in the transformer, not by a font
+   | feature. `tabular-nums` is equally wrong inline: it only earns its full-em
+   | advance when digits align down a column, and every run here is inline.
+   |
+   | The class is kept because markup and JS both key off it (`.latin-nums` is
+   | the hook the KPI counters and several dir="ltr" runs are selected by), and
+   | because it is the documented place to put numeric-run styling if a real
+   | need appears later.
    */
   .latin-nums {
-    font-variant-numeric: lining-nums tabular-nums;
+    font-variant-numeric: normal;
   }
 }
 
@@ -103,12 +133,19 @@
   }
 
   /*
-   | The warm corner wash every dark page frame paints over the ink-1000
-   | ground as a second fill. Transparent for the first 80% of its run, so it
-   | reads as a faint glow in one corner rather than a tint.
+   | The warm corner wash some dark page frames paint over the ink-1000 ground
+   | as a second fill. Transparent for the first 80% of its run, so it reads as
+   | a faint glow in one corner rather than a tint.
    |
    | Angle and peak opacity drift per frame (222:1989 and 266:2825 are
    | -42deg/10%; 336:5623 is -11deg/7%) — the dominant value stands in for all.
+   |
+   | The gradient box is pinned to a 1600px band at the top of the page, NOT to
+   | the element's full height. In the file the wash is a fill on a 1024–4502px
+   | frame, where the last 20% of a -42deg run is a corner; left unbounded on a
+   | page wrapper that is ~10000px tall it becomes a multi-thousand-pixel tint
+   | instead. 1600px is the measured extent on the tallest frame that has one
+   | (blog list 268:4158, 4502px tall — the wash dies out by y=1608).
    */
   .page-wash {
     background-image: linear-gradient(
@@ -116,6 +153,9 @@
       rgba(248, 185, 55, 0) 80%,
       rgba(248, 185, 55, 0.1) 100%
     );
+    background-repeat: no-repeat;
+    background-size: 100% 1600px;
+    background-position: top center;
   }
 
   /*
@@ -206,6 +246,135 @@
         rgb(248 185 55 / 10%) 100%
       ),
       linear-gradient(0deg, rgb(20 20 20 / 80%), rgb(20 20 20 / 80%));
+  }
+
+  /*
+   | Site-wide sketched card frame — the "contact us" frame the file draws
+   | around its outlined cards. Four layers, and only the last needs an asset:
+   |
+   |   backdrop   blur(7.5px) of whatever the card sits on, clipped to radius24
+   |   glow       a raking Yellow/1000 wash 0 -> 10% at 312.2deg. The frame's
+   |              gradient runs (404.055, 505.143) -> (-67.885, 77.761) over its
+   |              426x507 box, i.e. up and to the left; CSS measures clockwise
+   |              from "to top", so atan2(-471.94, 427.38) puts it at 312.2deg.
+   |   wash       a flat 20% black over the glow, as the frame stacks it
+   |   outline    the hand-drawn 1.5px Black/300 #B9B9B9 rule
+   |
+   | The outline is the whole reason this is not four Tailwind utilities. It is
+   | an irregular sketched path, not a stroke, so `border`/`ring` cannot draw it
+   | and painting the source SVG as a stretched background (the trick
+   | kpi-card-bg.svg uses, where the card and the frame are the same 339x167
+   | shape) is wrong here: this frame has to sit on cards from a 300-wide
+   | testimonial to a 1248-wide banner, and `preserveAspectRatio="none"` scales
+   | the vertical strokes' THICKNESS with the width — a 1.5px edge becomes 4.4px
+   | on the wide cards while the horizontals stay hairlines.
+   |
+   | So it is drawn as a nine-slice `border-image` instead: the 32px corner
+   | slices are placed at native size at every card size, and only the four edge
+   | strips are stretched, along their own length, where scaling cannot change
+   | how thick the line reads. `stretch` (not `round`) on the repeat because the
+   | edges are near-straight — a round tiling would seam mid-wobble.
+   |
+   | It rides on ::after rather than the element's own border so the frame costs
+   | no padding: cards keep the frame's space24/space16 insets and can be given
+   | the class without re-measuring their content box.
+   */
+  .sketch-frame {
+    position: relative;
+    border-radius: 24px;
+  }
+
+  .sketch-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    border: 32px solid transparent;
+    border-image: url('../images/sizdah/shared/sketch-frame.svg') 32 stretch;
+  }
+
+  /*
+   | The rule and the fill are separate classes on purpose. As of 2026-09-11 the
+   | sketched rule is the site-wide card outline (user decision): every card
+   | SURFACE wears .sketch-frame in place of whatever border/ring the Figma
+   | frame measured it with. The FILL was explicitly not part of that — several
+   | cards already carry a ground measured off their own frame (.testimonial-
+   | wash's hairline texture, .surface-case-card, the cream #FFF8EB lead post,
+   | gold-100 FAQ, brand-50 lead magnet, surface-raised) and those grounds are
+   | verified work the rule must not overwrite. They take .sketch-frame alone
+   | and keep their fill. Only the cards that ARE this frame (the two contact
+   | cards, 279:6409 / 279:6439) take .sketch-frame-fill as well.
+   |
+   | Not card surfaces, so deliberately left alone: image thumbnails that carry
+   | only a hairline (blog/project cards are bare stacks under their picture),
+   | and toasts. The FilterChips row was deferred here for a while because a
+   | 44px chip is shorter than this frame's two 32px corner slices, so the
+   | nine-slice collapses; it now has its own chip-sized drawing and its own
+   | rule, .sketch-frame-chip below.
+   */
+  /*
+   | The FilterChips outline (105 x 46 chip drawing, not the 426 x 507 card
+   | one). Two reasons it is a mask rather than a border-image like the cards:
+   | the chip drawing is short enough that a nine-slice has no room for its
+   | corners, and the chip outline is tinted per state (ink-300, paper on
+   | hover, brand when active) — a border-image cannot be recoloured. The call
+   | site puts the colour on `background-color`; the SVG carries
+   | preserveAspectRatio="none" so one drawing stretches to any chip width.
+   */
+  .sketch-frame-chip {
+    -webkit-mask-image: url('../images/sizdah/shared/filter-chip-frame.svg');
+    mask-image: url('../images/sizdah/shared/filter-chip-frame.svg');
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  /*
+   | The social chip outline (SocialIcon.vue). This is its OWN 57 x 57 drawing,
+   | traced off 279:6487, not the filter chip's — the frame draws these chips
+   | with a hand-drawn rule too, but squarer and at radius 16. Stretching the
+   | 105 x 46 chip drawing into a 56px square instead (the first attempt here)
+   | squeezed its corners to ~53% horizontally, which read as a much tighter
+   | radius than the frame's.
+   |
+   | A mask for the same reason as the chip rule: the outline is tinted per
+   | state (ink-400, brand on hover) and a border-image cannot be recoloured.
+   | The drawing keeps its aspect, so mask-size 100% 100% only scales 57 -> 56.
+   */
+  .sketch-frame-social {
+    -webkit-mask-image: url('../images/sizdah/shared/social-chip-frame.svg');
+    mask-image: url('../images/sizdah/shared/social-chip-frame.svg');
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  .sketch-frame-fill {
+    background-image:
+      linear-gradient(0deg, rgb(0 0 0 / 20%), rgb(0 0 0 / 20%)),
+      linear-gradient(312.2deg, rgb(248 185 55 / 0) 0%, rgb(248 185 55 / 10%) 100%);
+  }
+
+  /*
+   | Split out again because `backdrop-filter` establishes a containing block
+   | for fixed/absolute descendants and forces the card onto its own layer.
+   | Cards that overflow art past their own box, or that carry a popover, must
+   | not take it.
+   */
+  .sketch-frame-blur {
+    backdrop-filter: blur(7.5px);
+  }
+
+  /*
+   | A card whose own content must paint over the rule (an image bleeding to the
+   | card's edge, say) puts .sketch-frame-behind on the frame and the content
+   | keeps a positive z-index of its own.
+   */
+  .sketch-frame-behind::after {
+    z-index: 0;
   }
 
   /*
@@ -431,6 +600,18 @@
 
   /* Directional glyphs mirror under RTL. */
   [dir='rtl'] .flip-rtl {
+    transform: scaleX(-1);
+  }
+
+  /*
+  | The converse, for a glyph whose master orientation belongs to the RTL
+  | reading. Services' spark needs both: the frame mirrors it according to
+  | which physical side the block's image sits on, and that side is a product
+  | of the element's flow order AND the direction, so neither parity alone
+  | picks the right orientation. `dir` is always written explicitly on <html>
+  | (never left to the UA default), so both selectors always match.
+  */
+  [dir='ltr'] .flip-ltr {
     transform: scaleX(-1);
   }
 }

@@ -72,7 +72,7 @@
       "size": "1440x5333",
       "status": "implemented",
       "assets": [],
-      "notes": "Four numbered blocks alternating image side, each: 64px numeral, underlined 36px title, 20px paragraph, and the service's feature bullets as 'small title' rows with a glowing brand dot. Ends with the shared final CTA card. Numbering is positional and generated, so reordering services in Filament renumbers them. Images come from Service.image (CMS), not from the frame. DEVIATIONS: numerals are set in Maneli in the frame — not licensed, so they fall back to the display stack at 64px; the hand-drawn flourishes (322:5207) and the 'Group 21' badge (315:4998, 'جایی که هویت مسیر می‌سازد') are not placed."
+      "notes": "Four numbered blocks alternating image side, each: 64px numeral, underlined 36px title, 20px paragraph, and the service's feature bullets as 'small title' rows with a glowing brand dot. Ends with the shared final CTA card. Numbering is positional and generated, so reordering services in Filament renumbers them. Images come from Service.image (CMS), not from the frame. DEVIATIONS: numerals are set in Maneli in the frame — not licensed, so they fall back to the display stack at 64px; the 'Group 21' badge (315:4998) is not placed. The rings and the four sparks ARE placed; the sparks hang on the inner vertical edge of each block's image (322:5230, 511:9195, 322:5242, 511:9200) and flip side with it — see GAPS G69, which also corrects a mirrored spark export and the earlier 'clipped' call on 322:5230."
     },
     {
       "nodeId": "268:4158",

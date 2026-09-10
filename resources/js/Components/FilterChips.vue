@@ -22,6 +22,13 @@ import type { FilterOption } from '@/types'
  * default is `outline` (insights) since that was the original, more common
  * call site.
  *
+ * The chip outline is the hand-drawn sketch frame, not a CSS border:
+ * `.sketch-frame-chip` (app.css) masks the chip-sized drawing onto an overlay
+ * span, so the one asset stretches to any chip width and takes its colour from
+ * this component — ink-300, paper on hover, brand when active, mirroring the
+ * borders it replaced. Padding is 26/14px rather than the token 24/12 so the
+ * chip keeps the exact box size it had while that outline was a 2px border.
+ *
  * Navigation is real links, not buttons, so a filtered listing is shareable and
  * works without JavaScript. An option that carries no `href` renders a
  * `<button>` and emits `select` instead — the case-study content showcase
@@ -44,15 +51,26 @@ const props = withDefaults(
 
 const emit = defineEmits<{ select: [value: string | null] }>()
 
+/** Tint of the sketch outline, mirroring the old border colours. */
+function frameClass(value: string | null): (string | false)[] {
+  const active = value === props.active
+
+  return [
+    'sketch-frame-chip pointer-events-none absolute inset-0 transition-colors duration-200 ease-brand',
+    !active && 'bg-ink-300 group-hover:bg-paper',
+    active && 'bg-brand',
+  ]
+}
+
 /** Shared between the Link and button branches so the two cannot drift. */
 function chipClass(value: string | null): (string | false)[] {
   const active = value === props.active
 
   return [
-    'inline-flex items-center justify-center rounded-lg px-6 py-3 text-body-lg transition-colors duration-200 ease-brand',
-    !active && 'border-2 border-ink-300 text-paper hover:border-paper',
-    active && props.variant === 'solid' && 'border-3 border-brand bg-brand text-ink-1000',
-    active && props.variant === 'outline' && 'border-3 border-brand bg-ink-900 text-brand',
+    'group relative inline-flex items-center justify-center rounded-lg px-[26px] py-[14px] text-body-lg transition-colors duration-200 ease-brand',
+    !active && 'text-paper',
+    active && props.variant === 'solid' && 'bg-brand text-ink-1000',
+    active && props.variant === 'outline' && 'bg-ink-900 text-brand',
   ]
 }
 </script>
@@ -78,7 +96,8 @@ function chipClass(value: string | null): (string | false)[] {
           :aria-current="option.value === props.active ? 'page' : undefined"
           :class="chipClass(option.value)"
         >
-          {{ option.label }}
+          <span aria-hidden="true" :class="frameClass(option.value)" />
+          <span class="relative">{{ option.label }}</span>
         </Link>
 
         <button
@@ -88,7 +107,8 @@ function chipClass(value: string | null): (string | false)[] {
           :class="chipClass(option.value)"
           @click="emit('select', option.value)"
         >
-          {{ option.label }}
+          <span aria-hidden="true" :class="frameClass(option.value)" />
+          <span class="relative">{{ option.label }}</span>
         </button>
       </li>
     </ul>

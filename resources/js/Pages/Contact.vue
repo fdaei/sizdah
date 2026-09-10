@@ -180,7 +180,7 @@ const fieldClass =
         <div class="grid gap-6 lg:grid-cols-[801fr_423fr]">
           <!-- Form card — 279:6439 -->
           <form
-            class="flex min-w-0 flex-col gap-6 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tr from-brand/10 to-transparent p-[29px]"
+            class="sketch-frame sketch-frame-fill sketch-frame-blur flex min-w-0 flex-col gap-6 p-8"
             novalidate
             @submit.prevent="submit"
           >
@@ -348,7 +348,7 @@ const fieldClass =
                       <fieldset
                         v-show="servicesOpen"
                         id="service-options"
-                        class="absolute inset-inline-0 z-10 mt-2 flex max-h-64 flex-col gap-2 overflow-y-auto rounded-lg border-3 border-brand-200 bg-white p-3"
+                        class="absolute inset-inline-0 z-10 mt-2 flex max-h-64 flex-col gap-2 overflow-y-auto rounded-lg border-3 border-brand-200 bg-brand-50 p-3"
                       >
                         <legend class="sr-only">{{ t('forms.contact.services') }}</legend>
                         <label
@@ -401,7 +401,7 @@ const fieldClass =
 
           <!-- Details card — 279:6409 -->
           <div
-            class="relative flex min-w-0 flex-col gap-10 rounded-xl border-3 border-ink-300 bg-ink-1000/20 bg-gradient-to-tl from-brand/10 to-transparent p-8"
+            class="sketch-frame sketch-frame-fill sketch-frame-blur flex min-w-0 flex-col gap-10 p-8"
           >
             <!--
               The pin (`279:6521`, 40x50, mirrored on X) is a sibling of this

@@ -48,18 +48,22 @@ import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
  * same size. The hand-drawn flourishes are placed: a brand-yellow 163x109.12
  * ring behind each numeral (511:9188/9193/9518, 607:5917 — one master asset
  * instanced four times, not four unique strokes: their path data is
- * byte-identical, only the Figma node id differs) and a 20x25 spark 20px above
- * blocks 2-4 (511:9195/9200, 322:5242, also one shared asset — same
- * byte-identical situation). Both flourishes are page-level absolute
+ * byte-identical, only the Figma node id differs) and a spark on the top inner
+ * corner of every block's image (322:5230, 511:9195, 322:5242, 511:9200 — also
+ * one shared asset, same byte-identical situation). 322:5230 is block 01's
+ * instance: not a fifth piece of artwork but the same master scaled on y alone
+ * to 20x29.043 (GAPS G62). It went unplaced until 2026-09-11 on the reading
+ * that its negative y put it above the frame's top edge and clipped it, the
+ * same reasoning as the footer's invisible SAHRA wordmark (GAPS G24) — but
+ * that y is relative to its own parent frame 321:5085, which does not clip,
+ * and on the page it renders exactly like the other three. The frame also
+ * mirrors the spark on x by which side its block's image sits on; the export
+ * carries one of the two orientations and the other is a CSS flip, see the
+ * call site. Both flourishes are page-level absolute
  * decorations in the frame, so they are positioned rather than laid out; the
  * ring is anchored off the copy column's start edge rather than centred on the
  * glyph, for the reason given at its call site. The "Group 21" badge at
- * 315:4998 is still not placed, and neither is 322:5230 — not a fifth piece of
- * artwork but the same master spark scaled on y to 20x29.043 (GAPS G62), which
- * sits mostly above the frame's own top edge (y=-19.542 of 29.043 tall) so it
- * is treated as clipped/not meant to render, same reasoning as the footer's
- * invisible SAHRA wordmark (GAPS G24). Both recorded in FIGMA/state.json and
- * GAPS G29.
+ * 315:4998 is still not placed. Recorded in FIGMA/state.json and GAPS G29.
  *
  * The file ships desktop (1440) frames only, so every measured value above is
  * pinned from `lg` up and the smaller tiers keep the derived rhythm — see
@@ -130,26 +134,6 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
           class="relative flex flex-col items-center gap-8 lg:flex-row lg:justify-center lg:gap-[135px]"
         >
           <!--
-            511:9195/9200, 322:5242 — a spark 20px above the top edge of every
-            block after the first, NOT centred on the track: it hugs whichever
-            side that block's image sits on. Measured off the frame, spark
-            centres land at x 751/709/749 against a track centred at x 720 —
-            i.e. +30px off centre for blocks 2/4 (image right) and -11px for
-            block 3 (image left), matching the same `index % 2` split that
-            drives the image's own order below. Absolute, because the frame
-            draws it over the block rather than between them: its box
-            overlaps the block it sits on.
-          -->
-          <img
-            v-if="index > 0"
-            :src="sparkUrl"
-            alt=""
-            aria-hidden="true"
-            class="pointer-events-none absolute -top-[20px] left-1/2 h-[25px] w-[20px] max-w-none"
-            :class="index % 2 === 0 ? 'translate-x-[calc(-50%-11px)]' : 'translate-x-[calc(-50%+30px)]'"
-          />
-
-          <!--
             The frame alternates which side the image sits on: left for blocks
             01/03, right for 02/04. Under RTL the first flex item lands at the
             right, so an even index has to be ordered *last* to reach the left.
@@ -157,20 +141,66 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
             services are published.
           -->
           <div
-            class="w-full overflow-hidden rounded-sm lg:min-w-0 lg:basis-[604px]"
+            class="relative w-full lg:min-w-0 lg:basis-[604px]"
             :class="index % 2 === 0 ? 'lg:order-last' : 'lg:order-first'"
           >
+            <div class="overflow-hidden rounded-sm">
+              <img
+                v-if="service.image"
+                :src="service.image.src"
+                :srcset="service.image.srcset"
+                :alt="service.image.alt"
+                :width="service.image.width"
+                :height="service.image.height"
+                loading="lazy"
+                class="aspect-square w-full object-cover"
+              />
+              <div v-else class="aspect-square w-full bg-ink-900" aria-hidden="true" />
+            </div>
+
+            <!--
+              322:5230, 511:9195, 322:5242, 511:9200 — a spark hung just off
+              the TOP INNER CORNER of every block's image: the corner on the
+              vertical edge that faces the copy column, so it changes side with
+              the image instead of sitting near the track centre.
+
+              Read off the RENDERED frame, not the metadata — 511:9195 and
+              511:9200 carry a negative x scale, so the `x` Figma reports for
+              them is the box's right edge and taking it as the left edge puts
+              them 20px off. Rendered spark centres are 707/731/709/729
+              against image inner edges 701.84/738.16/701.84/738.16: 5.2/7.2/
+              7.2/9.2 OUTSIDE the edge in every case. Symmetric, so one value
+              (-17px inset on a 20-wide box = 7px clear of the edge) serves
+              both sides. The mark never sits over the photograph.
+
+              That same negative scale is the point of the flip classes: the
+              frame MIRRORS the glyph by which physical side the image is on
+              (01/03 one way, 02/04 the other). Physical side is the product of
+              flow order and direction, so neither parity alone picks the
+              orientation — the master art is the RTL-left reading, so the
+              even blocks (image at the flow end) mirror under LTR and the odd
+              ones under RTL. See the `.flip-ltr` note in app.css.
+
+              `bottom-full` rather than a negative top: the frame sits the
+              mark's bottom on the image's top edge (rendered gaps 0 and -1 on
+              blocks 03/04, +3 on 02, +9 on 01's taller instance), and pinning
+              the bottom keeps that true without restating it per height.
+
+              It overhangs the image on both axes, so it lives here as a
+              sibling of the `overflow-hidden` crop rather than inside it, and
+              `inline-start`/`inline-end` keep the anchor on the logical edge
+              that the image's `order` actually lands on.
+            -->
             <img
-              v-if="service.image"
-              :src="service.image.src"
-              :srcset="service.image.srcset"
-              :alt="service.image.alt"
-              :width="service.image.width"
-              :height="service.image.height"
-              loading="lazy"
-              class="aspect-square w-full object-cover"
+              :src="sparkUrl"
+              alt=""
+              aria-hidden="true"
+              class="pointer-events-none absolute bottom-full w-[20px] max-w-none"
+              :class="[
+                index % 2 === 0 ? 'inline-start-[-17px] flip-ltr' : 'inline-end-[-17px] flip-rtl',
+                index === 0 ? 'h-[29.04px]' : 'h-[23.75px]',
+              ]"
             />
-            <div v-else class="aspect-square w-full bg-ink-900" aria-hidden="true" />
           </div>
 
           <div class="flex w-full flex-col gap-2 lg:min-w-0 lg:basis-[505.313px]">

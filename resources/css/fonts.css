@@ -5,6 +5,8 @@
  | FA/AR body  -> Peyda, fallback Vazirmatn (both self-hosted)
  | FA/AR/EN
  |   display   -> Maneli, fallback Idealist / Doran FaNum / Vazirmatn
+ | numerals    -> Lahzeh (FaNum cut), claimed site-wide by unicode-range
+ |                from the head of the three stacks above
  |
  | The Figma variables name "Peyda" for every FA-Desktop text style and
  | "Maneli" for eyebrows / display accents — both are now licensed and
@@ -220,4 +222,117 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+}
+
+/* ----------------------------------------------------------------- Lahzeh
+   The numeric face. Every digit on the site is set in Lahzeh rather than in
+   the surrounding body face, and the mechanism is the `unicode-range` below
+   rather than a class anyone has to remember: the faces only claim the three
+   digit blocks, so putting Lahzeh at the head of the `sans` / `arabic` /
+   `display` stacks in tailwind.config.js hands it the digits and leaves every
+   letter to Peyda. No component markup changes, and content authored in
+   Filament is covered without being touched.
+
+   Two consequences worth knowing.
+
+   Because the installed cut is FaNum, an ASCII "1402" is DRAWN as ۱۴۰۲ once
+   Lahzeh claims those codepoints. That is a display-layer effect: the DOM text
+   is still ASCII, so copy-paste, Ctrl+F and screen readers all get "1402".
+   `App\Support\Numerals` is still the right tool wherever the text must
+   genuinely BE Persian digits — an `alt`, a `<title>`, a meta description, an
+   Open Graph tag — and its docblock's "CSS cannot help" line is about
+   `font-variant-numeric`, which is a different thing and remains true.
+
+   Separators are deliberately NOT claimed. A decimal point or a thousands
+   comma is also ordinary sentence punctuation, and claiming U+002C/U+002E
+   would pull every full stop in Persian prose into Lahzeh. U+066B/U+066C are
+   the exception — those two are numeric-only — so they are in the range.
+
+   The installed cut is Lahzeh **FaNum**, which draws ASCII 0-9 with the
+   Persian numeral glyphs, so a record stored as "1402" renders as ۱۴۰۲
+   without any transliteration in PHP or JS. That is the whole reason this
+   cut was chosen over plain Lahzeh — do not swap the files for the
+   `Lahzeh-*.ttf` originals without also re-checking every numeric frame.
+
+   Commercially licensed, like Doran / Peyda / Maneli: NOT fetched by
+   scripts/fetch-fonts.sh — the licensed files are copied into
+   public/fonts/lahzeh/ by hand.
+
+   Weight note: the embedded OS/2 weight values in the source TTFs are
+   unreliable (Lahzeh-FaNum-SemiBold and -ExtraBold both report 80, i.e.
+   Regular). The `font-weight` below is taken from the filename, which is
+   correct, so the browser never sees the bad embedded value. Lahzeh ships
+   no Thin (100) cut — 100 deliberately has no @font-face and falls back to
+   the 200 file. */
+
+@font-face {
+  font-family: 'Lahzeh';
+  src: url('/fonts/lahzeh/LahzehFaNum-ExtraLight.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039, U+0660-0669, U+06F0-06F9, U+066B-066C;
+}
+
+@font-face {
+  font-family: 'Lahzeh';
+  src: url('/fonts/lahzeh/LahzehFaNum-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039, U+0660-0669, U+06F0-06F9, U+066B-066C;
+}
+
+@font-face {
+  font-family: 'Lahzeh';
+  src: url('/fonts/lahzeh/LahzehFaNum-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039, U+0660-0669, U+06F0-06F9, U+066B-066C;
+}
+
+@font-face {
+  font-family: 'Lahzeh';
+  src: url('/fonts/lahzeh/LahzehFaNum-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039, U+0660-0669, U+06F0-06F9, U+066B-066C;
+}
+
+@font-face {
+  font-family: 'Lahzeh';
+  src: url('/fonts/lahzeh/LahzehFaNum-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039, U+0660-0669, U+06F0-06F9, U+066B-066C;
+}
+
+@font-face {
+  font-family: 'Lahzeh';
+  src: url('/fonts/lahzeh/LahzehFaNum-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039, U+0660-0669, U+06F0-06F9, U+066B-066C;
+}
+
+@font-face {
+  font-family: 'Lahzeh';
+  src: url('/fonts/lahzeh/LahzehFaNum-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039, U+0660-0669, U+06F0-06F9, U+066B-066C;
+}
+
+@font-face {
+  font-family: 'Lahzeh';
+  src: url('/fonts/lahzeh/LahzehFaNum-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039, U+0660-0669, U+06F0-06F9, U+066B-066C;
 }

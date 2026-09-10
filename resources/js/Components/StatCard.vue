@@ -3,18 +3,20 @@ import { computed } from 'vue'
 import engagementUrl from '~img/sizdah/home/kpi-engagement.svg'
 import audienceUrl from '~img/sizdah/home/kpi-audience.svg'
 import retentionUrl from '~img/sizdah/home/kpi-retention.svg'
+import cardBgUrl from '~img/sizdah/home/kpi-card-bg.svg'
 
 /**
  * The file's "KPIs" component (71:2145) — three across on Home (268:3026).
  *
- * Figma: 4px border at Yellow/1000 40%, radiusSM, space12 inline / space24
- * block padding, over a 117.4deg wash that fades the same yellow from 6% to 0.
- * Value is Display/Small on Yellow/50, label is title/Medium on Yellow/1000,
- * and caption is title/Small on Black/300.
+ * Figma: the frame's own hand-drawn rule and wash, exported verbatim as
+ * kpi-card-bg.svg (339x167) rather than reconstructed in CSS — the stroke is
+ * an irregular sketched outline that `ring`/`border` cannot reproduce. The SVG
+ * carries `preserveAspectRatio="none"` and is painted at `100% 100%`, so it
+ * stretches to whatever the grid gives the card instead of forcing 339x167.
  *
- * The 4px rule is an inset ring, not a border: Figma draws strokes inside the
- * frame, so the card measures 153 including its rule. A CSS border sits outside
- * the padding box and pushed every card to 161.
+ * Content keeps the frame's space12 inline / space24 block padding. Value is
+ * Display/Small on Yellow/50, label is title/Medium on Yellow/1000, and
+ * caption is title/Small on Black/300.
  */
 const props = defineProps<{
   /** Authored verbatim by the editor — already in the locale's digits. */
@@ -42,14 +44,8 @@ const iconUrl = computed(() => (props.icon ? ICONS[props.icon] : undefined))
 
 <template>
   <div
-    class="flex flex-col items-center justify-center gap-2 rounded-sm px-3 py-6 text-center ring-4 ring-inset ring-brand/40"
-    style="
-      background-image: linear-gradient(
-        117.4deg,
-        rgb(245 185 64 / 6%) 28.79%,
-        rgb(245 185 64 / 0%) 100.08%
-      );
-    "
+    class="flex min-h-[153px] flex-col items-center justify-center gap-2 bg-[length:100%_100%] bg-center bg-no-repeat px-3 py-6 text-center"
+    :style="{ backgroundImage: `url(${cardBgUrl})` }"
   >
     <!--
       71:2135 sits the value and its glyph on space8, not space16. The glyph

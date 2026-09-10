@@ -28,7 +28,7 @@ const { t } = useTranslations()
 
 <template>
   <article
-    class="surface-glow flex flex-col gap-8 rounded-xl border-3 border-ink-400 p-4 lg:flex-row lg:items-center"
+    class="surface-glow sketch-frame flex flex-col gap-8 p-4 lg:flex-row lg:items-center"
     style="--glow-angle: -20.03deg"
   >
     <Link

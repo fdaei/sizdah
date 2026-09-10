@@ -52,7 +52,7 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
           <li v-for="(faq, index) in props.faqs" :key="faq.question">
             <details
               name="faq-accordion"
-              class="group rounded-lg border border-gold-200 bg-gold-100 p-8 transition-colors duration-200 ease-brand open:bg-brand"
+              class="sketch-frame group bg-gold-100 p-8 transition-colors duration-200 ease-brand open:bg-brand"
               :open="index === 0"
             >
               <summary

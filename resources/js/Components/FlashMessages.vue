@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { usePage } from '@inertiajs/vue3'
-import { CheckCircle2, X, XCircle } from 'lucide-vue-next'
+import IconCheck from '@/Components/Icons/IconCheck.vue'
+import IconClose from '@/Components/Icons/IconClose.vue'
 import type { SharedProps } from '@/types'
 
 /**
@@ -44,11 +45,12 @@ watch(message, () => {
             : 'border-brand/40 bg-ink-900 text-brand'
         "
       >
-        <component
-          :is="isError ? XCircle : CheckCircle2"
-          class="size-5 shrink-0"
-          aria-hidden="true"
-        />
+        <!--
+          Error reuses the Figma cross (`IconClose`) rather than a third
+          invented glyph; the dismiss control beside it is the same drawing at
+          size-4 in a muted ink, so the two do not read as one control.
+        -->
+        <component :is="isError ? IconClose : IconCheck" class="size-5 shrink-0" />
         <p>{{ message }}</p>
         <button
           type="button"
@@ -56,7 +58,7 @@ watch(message, () => {
           :aria-label="$t('common.close_menu')"
           @click="dismissed = true"
         >
-          <X class="size-4" aria-hidden="true" />
+          <IconClose class="size-4" />
         </button>
       </div>
     </div>

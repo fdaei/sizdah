@@ -9,9 +9,15 @@ import calendarUrl from '~img/sizdah/shared/calendar.svg'
 /**
  * Article header chips — Figma "info" (292:7522 / 292:7507 / 287:5095).
  *
- * 2px Yellow/300 (#FDEAC3) outline over a faint raking brand wash, label above
- * value, and a 24px glyph at the inline start. A chip is dropped when the post
- * has no such value rather than rendering an empty row.
+ * A brand-300 outline over a faint raking brand wash, label above value, and a
+ * 24px glyph at the inline start. A chip is dropped when the post has no such
+ * value rather than rendering an empty row.
+ *
+ * 2026-09-11: the outline is the hand-drawn `.sketch-frame-chip` drawing (see
+ * app.css) rather than the 2px CSS border the frame measured — the same rule
+ * the filter chips took, at the user's request. It keeps brand-300 as its
+ * colour and the wash underneath is untouched; padding is 26/14px rather than
+ * 24/12 so the chip keeps the box size the border gave it.
  *
  * CORRECTED 2026-09-04 (PARITY Phase 1): this docblock used to claim Yellow/300
  * "has no slot in the `brand` scale, so it's an arbitrary value rather than a
@@ -56,7 +62,7 @@ const chips = computed(() =>
     <li
       v-for="chip in chips"
       :key="chip.key"
-      class="flex items-start gap-2 rounded-lg border-2 border-brand-300 px-6 py-3"
+      class="relative flex items-start gap-2 rounded-lg px-[26px] py-[14px]"
       style="
         background-image: linear-gradient(
           -15deg,
@@ -65,6 +71,10 @@ const chips = computed(() =>
         );
       "
     >
+      <span
+        aria-hidden="true"
+        class="sketch-frame-chip pointer-events-none absolute inset-0 bg-brand-300"
+      />
       <img
         :src="chip.icon"
         alt=""

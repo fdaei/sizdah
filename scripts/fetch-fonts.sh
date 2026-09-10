@@ -5,8 +5,12 @@
 #   Poppins    (OFL) — Latin, used by the `en` locale
 #   Vazirmatn  (OFL) — Arabic/Persian, fallback for `fa` and `ar`
 #
-# Doran FaNum is commercially licensed and is NOT fetched here. Place the
-# licensed .woff2 files in public/fonts/doran/ — see docs/ASSET-MANIFEST.md §10.
+# Doran FaNum, Peyda, Maneli and Lahzeh are commercially licensed and are NOT
+# fetched here. Place the licensed .woff2 files in public/fonts/<family>/ —
+# see docs/ASSET-MANIFEST.md §10. Lahzeh is the numeric face (the FaNum cut,
+# see G63 in .figma-sync/GAPS.md); `php artisan sizdah:verify-assets` warns
+# when one of them is missing, and each degrades to its @font-face fallback
+# rather than failing.
 
 set -euo pipefail
 

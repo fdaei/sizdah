@@ -20,7 +20,8 @@
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
     
-    <link rel="icon" href="<?php echo e(Vite::asset('resources/images/sizdah/shared/logo.svg')); ?>" type="image/svg+xml">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="/favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     
     <meta name="theme-color" content="#141414">
