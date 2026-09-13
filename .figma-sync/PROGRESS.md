@@ -150,3 +150,10 @@ shorter than two 32px corner slices.
   and the glyph img sized on width so the 24 x 18 youtube mark stops being
   stretched to a square. See G71 — and note that G71 was resolved through the
   Figma REST API directly, the MCP server having failed to connect.
+
+- 2026-09-11 — Case-study meta row (`411:8568`): the 24px glyph now leads each
+  chip instead of trailing it, so in RTL it sits at the inline start (visually
+  right) on the label's line — which is how the frame renders, despite the
+  child order the node metadata reports. See G72.
+  Follow-up the same day: the chip outline now uses the shared hand-drawn
+  `filter-chip-frame.svg` mask instead of a CSS border, matching `ArticleMeta`.

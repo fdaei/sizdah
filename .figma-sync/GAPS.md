@@ -2876,3 +2876,29 @@ byte-identical to what is already on disk. Two real defects:
 - The reported "youtube doesn't match Figma" was not the asset: youtube is
   24 x **18**, and `SocialIcon` rendered every glyph at `size-6` (24 x 24),
   stretching it 1.33x vertically. The img is now sized on width with `h-auto`.
+
+## G72 — Case-study meta chips: the glyph leads, it does not trail  (2026-09-11)  (severity: low)
+
+**Node.** `411:8568` (meta row) / `411:8569` (one chip).
+
+The chip was built label-stack-first with the 24px glyph trailing, on the
+reading that `411:8569` orders its children that way (Figma reports the row
+LTR, so the trailing child lands at the inline END — visually left in RTL).
+The render says otherwise: `get_screenshot` on `411:8568` puts the glyph hard
+against the **right** edge of every chip, on the label's line, with the
+label/value stack running left from it. Same class of mistake as G69/G70 —
+child order in the metadata is not paint order once the row is mirrored.
+
+Fixed by moving the `<img>` ahead of the text stack in `Work/Show.vue`; the
+existing `flex items-start gap-2` keeps the glyph baseline-aligned to the
+label rather than centred against the two-line stack. Confirmed by the user
+against the frame on 2026-09-11.
+
+**Follow-up (same day).** The chip was still drawing its outline as
+`border-2 border-brand-300` — the 105 x 46 `filter-chip-frame.svg` that G68 /
+G-chip established as the site-wide chip rule was never applied here, even
+though `ArticleMeta` (the article-page twin of this chip) already wore it.
+Replaced with the standard overlay: `relative` box + a masked
+`.sketch-frame-chip bg-brand-300` span at `inset-0`, padding moved to
+`px-[26px] py-[14px]` so the box measures the same as 24px + a 2px border did.
+The `.surface-meta-chip` gradient ground is unchanged.

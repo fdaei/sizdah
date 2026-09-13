@@ -294,8 +294,18 @@ const strategyLead = computed(() =>
           <div
             v-for="item in meta"
             :key="item.key"
-            class="surface-meta-chip flex items-start gap-2 rounded-lg border-2 border-brand-300 px-6 py-3"
+            class="surface-meta-chip relative flex items-start gap-2 rounded-lg px-[26px] py-[14px]"
           >
+            <!--
+              The outline is the hand-drawn chip drawing (.sketch-frame-chip),
+              the same one FilterChips and ArticleMeta wear — not the 2px CSS
+              border the node data reports. Padding is 26/14 so the box matches
+              what 24px + a 2px border measured before.
+            -->
+            <span
+              aria-hidden="true"
+              class="sketch-frame-chip pointer-events-none absolute inset-0 bg-brand-300"
+            />
             <img
               :src="item.icon"
               alt=""
