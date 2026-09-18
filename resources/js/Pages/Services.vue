@@ -108,7 +108,10 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
         309:4754 — a 638-wide centred stack, gap 40 to the title block
         (309:4758), which is itself gap 24. The lede is tite/Large (22/500).
       -->
-      <header class="mx-auto flex w-fit max-w-full flex-col items-center gap-10 text-center">
+      <header
+        class="mx-auto flex w-fit max-w-full flex-col items-center gap-10 text-center"
+        data-reveal
+      >
         <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
         <div class="flex flex-col items-center gap-6">
@@ -132,6 +135,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
           v-for="(service, index) in props.services"
           :key="service.slug"
           class="relative flex flex-col items-center gap-8 lg:flex-row lg:justify-center lg:gap-[135px]"
+          data-reveal
         >
           <!--
             The frame alternates which side the image sits on: left for blocks
@@ -205,19 +209,23 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
 
           <div class="flex w-full flex-col gap-2 lg:min-w-0 lg:basis-[505.313px]">
             <!--
-              The ring overhangs the copy column's start edge by 40 in the frame
-              (35.85/40.85/38.85/43.85 across the four blocks) and centres on the
-              145 numeral box. It is anchored to that edge rather than centred on
-              the glyph because Idealist sets "01" 43px narrower than Maneli
-              does, and centring on the substitute would drag the ring ~20px
-              off the frame's position.
+              The ring overhangs the copy column's start edge by a per-block
+              amount (59.85/59.85/38.85/43.85 across the four blocks — 01/02
+              tuned wider to keep the ring centred on Idealist's narrower
+              glyphs) and centres on the 145 numeral box. It is anchored to
+              that edge rather than centred on the glyph because Idealist sets
+              "01" 43px narrower than Maneli does, and centring on the
+              substitute would drag the ring ~20px off the frame's position.
             -->
             <p class="relative w-fit">
               <img
                 :src="ringUrl"
                 alt=""
                 aria-hidden="true"
-                class="pointer-events-none absolute inline-start-[-40px] top-1/2 -z-10 h-[109.12px] w-[163px] max-w-none -translate-y-1/2"
+                class="pointer-events-none absolute top-1/2 -z-10 h-[109.12px] w-[163px] max-w-none -translate-y-1/2"
+                :style="{
+                  insetInlineStart: `-${[59.85, 59.85, 38.85, 43.85][index % 4]}px`,
+                }"
               />
               <span
                 class="font-display text-display-xl leading-[145px] text-paper latin-nums"
@@ -263,7 +271,12 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
         </section>
       </div>
 
-      <StartTogetherCard v-if="finalCta" :section="finalCta" class="mt-24 lg:mt-[224px]" />
+      <StartTogetherCard
+        v-if="finalCta"
+        :section="finalCta"
+        class="mt-24 lg:mt-[224px]"
+        data-reveal
+      />
     </div>
   </div>
 </template>

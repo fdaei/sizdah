@@ -44,7 +44,7 @@ const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${
       <li class="relative">
         <button
           type="button"
-          class="flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-opacity duration-200 ease-brand hover:opacity-80"
+          class="group flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-colors duration-200 ease-brand hover:bg-brand"
           @click="copyLink"
         >
           <span class="sr-only">{{ t('blog.copy_link') }}</span>
@@ -54,7 +54,7 @@ const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${
             aria-hidden="true"
             width="24"
             height="9.93"
-            class="h-[9.93px] w-6"
+            class="h-[9.93px] w-6 transition-[filter] duration-200 ease-brand group-hover:brightness-0"
           />
         </button>
 
@@ -79,10 +79,17 @@ const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${
           :href="xShareUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-opacity duration-200 ease-brand hover:opacity-80"
+          class="group flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-colors duration-200 ease-brand hover:bg-brand"
         >
           <span class="sr-only">X</span>
-          <img :src="xUrl" alt="" aria-hidden="true" width="24" height="24" class="size-6" />
+          <img
+            :src="xUrl"
+            alt=""
+            aria-hidden="true"
+            width="24"
+            height="24"
+            class="size-6 transition-[filter] duration-200 ease-brand group-hover:brightness-0"
+          />
         </a>
       </li>
 
@@ -91,10 +98,17 @@ const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${
           :href="linkedinShareUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-opacity duration-200 ease-brand hover:opacity-80"
+          class="group flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-colors duration-200 ease-brand hover:bg-brand"
         >
           <span class="sr-only">LinkedIn</span>
-          <img :src="linkedinUrl" alt="" aria-hidden="true" width="24" height="24" class="size-6" />
+          <img
+            :src="linkedinUrl"
+            alt=""
+            aria-hidden="true"
+            width="24"
+            height="24"
+            class="size-6 transition-[filter] duration-200 ease-brand group-hover:brightness-0"
+          />
         </a>
       </li>
     </ul>

@@ -73,7 +73,7 @@ const props = defineProps<{
         Title and intro sit in a 612px column at the inline start of the 1250
         track (279:5998); the body blocks below run the full track width.
       -->
-      <header class="flex max-w-measure flex-col gap-6">
+      <header class="flex max-w-measure flex-col gap-6" data-reveal>
         <h1 class="text-display-lg text-ink-50">{{ props.title }}</h1>
         <p v-if="props.subtitle" class="text-title-md text-ink-200">
           {{ props.subtitle }}

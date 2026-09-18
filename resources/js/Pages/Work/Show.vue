@@ -276,7 +276,7 @@ const strategyLead = computed(() =>
         at 612: the meta row is its own 740-wide frame in the file and would
         wrap early if it inherited the track.
       -->
-      <header class="flex flex-col items-center gap-16">
+      <header class="flex flex-col items-center gap-16" data-reveal>
         <div class="flex w-full max-w-measure flex-col items-center gap-6 text-center">
           <h1 class="text-display-md text-ink-50">{{ props.project.title }}</h1>
           <p v-if="props.project.excerpt" class="text-title-sm text-ink-200">
@@ -331,6 +331,7 @@ const strategyLead = computed(() =>
       <figure
         v-if="props.project.banner ?? props.project.image"
         class="mt-20 overflow-hidden rounded-xl md:mt-[153px]"
+        data-reveal
       >
         <img
           :src="(props.project.banner ?? props.project.image)!.src"
@@ -346,6 +347,7 @@ const strategyLead = computed(() =>
       <section
         v-if="props.project.challenge"
         class="mt-20 flex flex-col items-center gap-10 md:mt-[163px]"
+        data-reveal
       >
         <h2 class="relative mx-auto w-fit text-center text-section-line text-brand-50">
           {{ t('work.challenge') }}
@@ -595,11 +597,13 @@ const strategyLead = computed(() =>
       <section
         v-if="props.project.beforeAfter.before && props.project.beforeAfter.after"
         class="mt-20 grid gap-6 md:mt-[127px] md:grid-cols-2"
+        data-reveal-group
       >
         <figure
           v-for="side in ['before', 'after'] as const"
           :key="side"
           class="flex flex-col gap-6"
+          data-reveal
         >
           <figcaption class="text-center text-heading-xl font-bold text-ink-50">
             {{ t(`work.${side}`) }}
@@ -618,6 +622,7 @@ const strategyLead = computed(() =>
       <section
         v-if="props.project.next"
         class="mt-20 flex flex-col items-start gap-8 md:mt-[270px]"
+        data-reveal
       >
         <p class="text-heading-sm text-ink-200">{{ t('work.next_case_study') }}</p>
         <Link
@@ -644,6 +649,7 @@ const strategyLead = computed(() =>
         v-if="props.finalCta"
         :section="props.finalCta"
         class="mt-20 md:mt-[172px]"
+        data-reveal
       />
     </div>
   </article>

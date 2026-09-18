@@ -19,6 +19,16 @@ import calendarUrl from '~img/sizdah/shared/calendar.svg'
  * colour and the wash underneath is untouched; padding is 26/14px rather than
  * 24/12 so the chip keeps the box size the border gave it.
  *
+ * 2026-09-17: switched to the same manual 9-slice FilterChips.vue uses
+ * (`.sketch-frame-chip-cap-start` / `-middle` / `-cap-end`, still the same
+ * filter-chip-frame.svg) instead of the single stretched `.sketch-frame-chip`
+ * mask — an article's category/author value can be long enough to widen the
+ * chip well past the 105x46 source drawing, which stretched the drawn 16px
+ * corner arcs into ellipses exactly like the filter chips did. Only the
+ * straight middle slice stretches now; the two corner caps stay circular.
+ * Cap order is swapped (`-cap-end` at the visual start) to match the RTL fix
+ * applied to FilterChips.vue.
+ *
  * CORRECTED 2026-09-04 (PARITY Phase 1): this docblock used to claim Yellow/300
  * "has no slot in the `brand` scale, so it's an arbitrary value rather than a
  * token". That was wrong. Yellow/300 IS a Figma variable — it just does not
@@ -73,7 +83,15 @@ const chips = computed(() =>
     >
       <span
         aria-hidden="true"
-        class="sketch-frame-chip pointer-events-none absolute inset-0 bg-brand-300"
+        class="sketch-frame-chip-cap-end pointer-events-none absolute inset-y-0 start-0 w-6 bg-brand-300"
+      />
+      <span
+        aria-hidden="true"
+        class="sketch-frame-chip-middle pointer-events-none absolute inset-y-0 inset-x-6 bg-brand-300"
+      />
+      <span
+        aria-hidden="true"
+        class="sketch-frame-chip-cap-start pointer-events-none absolute inset-y-0 end-0 w-6 bg-brand-300"
       />
       <img
         :src="chip.icon"

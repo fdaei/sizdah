@@ -43,11 +43,13 @@ const rest = computed(() => props.posts.slice(1, 3))
       >
         <!-- 430:5311 — the lead post, cream on the dark ground. -->
         <article
-          class="sketch-frame flex flex-col gap-4 p-4 shadow-card sm:flex-row sm:justify-between"
+          class="sketch-frame flex flex-col gap-4 p-4 shadow-card sm:flex-row sm:justify-between bg-brand-50"
           style="
-            background-image:
-              linear-gradient(-32.7deg, rgb(248 185 55 / 0) 2.3248%, rgb(248 185 55 / 10%) 100%),
-              linear-gradient(0deg, #fff8eb, #fff8eb);
+            background-image: linear-gradient(
+              -32.7deg,
+              rgb(248 185 55 / 0) 2.3248%,
+              rgb(248 185 55 / 10%) 100%
+            );
           "
         >
           <img
@@ -94,7 +96,7 @@ const rest = computed(() => props.posts.slice(1, 3))
             -->
             <Link
               :href="lead.url"
-              class="flex size-12 shrink-0 self-end items-center justify-center rounded-round border border-warm-800 bg-warm-1000 text-warm-100 transition-colors hover:bg-warm-900 hover:text-brand"
+              class="flex size-12 shrink-0 self-end items-center justify-center rounded-round border border-warm-800 bg-warm-1000 text-warm-100 transition-colors hover:border-brand hover:bg-brand hover:text-warm-1000"
               :aria-label="lead.title"
             >
               <svg
@@ -133,7 +135,7 @@ const rest = computed(() => props.posts.slice(1, 3))
               />
 
               <div class="flex min-w-0 flex-col gap-6">
-                <p class="flex items-center gap-2 text-body-md text-ink-200">
+                <p class="flex items-center gap-2 text-body-md text-brand-50">
                   <img
                     :src="calendarUrl"
                     alt=""
@@ -145,7 +147,7 @@ const rest = computed(() => props.posts.slice(1, 3))
                   <time :datetime="post.publishedAtIso">{{ post.publishedAt }}</time>
                 </p>
 
-                <h3 class="text-title-md text-ink-200">
+                <h3 class="text-title-md text-brand-50">
                   <Link :href="post.url" class="transition-colors hover:text-brand">
                     {{ post.title }}
                   </Link>

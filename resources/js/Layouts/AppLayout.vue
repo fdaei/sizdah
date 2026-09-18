@@ -27,6 +27,8 @@ import type { SharedProps } from '@/types'
  */
 const page = usePage<SharedProps>()
 
+const gridPages = ['Work/Index', 'Services', 'Insights/Index']
+
 /**
  * Home is the exception: 268:2962 has NO page wash. Sampled down the full
  * 9919px of the frame, its ground is a flat #141414 — the warm glow visible in
@@ -35,13 +37,18 @@ const page = usePage<SharedProps>()
  * MASKS the shared wash, so leaving Home washed produced a hard seam at the
  * hero's bottom edge: #141414 above, a gold-tinted #1f1c15 below.
  */
-const washed = computed(() => page.component !== 'Home')
+const washed = computed(() => page.component !== 'Home' && !gridPages.includes(page.component))
+
+const gridBackground = computed(() => gridPages.includes(page.component))
 
 const menuOpen = ref(false)
 </script>
 
 <template>
-  <div class="flex min-h-screen-safe flex-col bg-ink-1000" :class="{ 'page-wash': washed }">
+  <div
+    class="flex min-h-screen-safe flex-col bg-ink-1000"
+    :class="{ 'page-wash': washed, 'grid-background': gridBackground }"
+  >
     <AppHeader @open-menu="menuOpen = true" />
     <MobileMenu :open="menuOpen" @close="menuOpen = false" />
 

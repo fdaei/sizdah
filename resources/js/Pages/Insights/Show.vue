@@ -98,7 +98,7 @@ const articleContent = computed(() => {
         so the gap between them is the frame's own 465-377 = 88 — the 64 this
         carried came from reading 285:5061's internal gap instead.
       -->
-      <header class="mx-auto flex max-w-[670px] flex-col items-center gap-[88px]">
+      <header class="mx-auto flex max-w-[670px] flex-col items-center gap-[88px]" data-reveal>
         <div class="flex w-full max-w-measure flex-col items-center gap-6 text-center">
           <h1 class="text-display-md text-ink-50">{{ props.post.title }}</h1>
           <p v-if="props.post.subtitle" class="text-title-sm text-ink-200">
@@ -117,6 +117,7 @@ const articleContent = computed(() => {
         :width="props.post.image.width"
         :height="props.post.image.height"
         class="mt-16 aspect-[1248/624] w-full rounded-lg object-cover"
+        data-reveal
       />
 
       <!--
@@ -192,12 +193,17 @@ const articleContent = computed(() => {
             class="pointer-events-none absolute inline-end-0 top-full mt-1 hidden w-32 sm:block"
           />
         </h2>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
           <BlogCard v-for="related in props.post.related" :key="related.slug" :post="related" />
         </div>
       </section>
 
-      <StartTogetherCard v-if="props.finalCta" :section="props.finalCta" class="mt-[224px]" />
+      <StartTogetherCard
+        v-if="props.finalCta"
+        :section="props.finalCta"
+        class="mt-[224px]"
+        data-reveal
+      />
     </div>
   </article>
 </template>

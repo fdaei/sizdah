@@ -158,6 +158,15 @@
     background-position: top center;
   }
 
+  .grid-background {
+    background-image:
+      linear-gradient(-42deg, rgb(248 185 55 / 0) 80%, rgb(248 185 55 / 0.1) 100%),
+      url('/grid1.png');
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: 100% auto;
+  }
+
   /*
    | Figma "small title": a label followed, at the inline start, by an 8px
    | brand square rotated 45deg (the file stores it as an 11.31px rounded
@@ -325,6 +334,52 @@
   .sketch-frame-chip {
     -webkit-mask-image: url('../images/sizdah/shared/filter-chip-frame.svg');
     mask-image: url('../images/sizdah/shared/filter-chip-frame.svg');
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  /*
+   | 2026-09-17: FilterChips.vue's labels vary a lot in width (Persian category
+   | names), and a wide chip stretched via .sketch-frame-chip above scales the
+   | drawn 16px corner arcs far more on x than y, turning them into ellipses.
+   | These three classes are a manual 9-slice of the SAME filter-chip-frame.svg
+   | (still a mask + background-color, so per-state recolouring still works,
+   | same reasoning as .sketch-frame-chip): the two end caps reference named
+   | <view> fragments in that file (#chip-cap-start / #chip-cap-end) and are
+   | drawn at their native, unstretched aspect so the corner curves stay
+   | circular; the middle slice (#chip-cap-middle) is the near-straight run
+   | between the corners and is the only piece that stretches, along the
+   | chip's length. FilterChips.vue positions the two caps at each end (fixed
+   | 24px width, matching the view's viewBox) and the middle to fill the gap
+   | between them.
+   */
+  .sketch-frame-chip-cap-start,
+  .sketch-frame-chip-cap-end {
+    -webkit-mask-size: auto 100%;
+    mask-size: auto 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  .sketch-frame-chip-cap-start {
+    -webkit-mask-image: url('../images/sizdah/shared/filter-chip-frame.svg#chip-cap-start');
+    mask-image: url('../images/sizdah/shared/filter-chip-frame.svg#chip-cap-start');
+    -webkit-mask-position: left;
+    mask-position: left;
+  }
+
+  .sketch-frame-chip-cap-end {
+    -webkit-mask-image: url('../images/sizdah/shared/filter-chip-frame.svg#chip-cap-end');
+    mask-image: url('../images/sizdah/shared/filter-chip-frame.svg#chip-cap-end');
+    -webkit-mask-position: right;
+    mask-position: right;
+  }
+
+  .sketch-frame-chip-middle {
+    -webkit-mask-image: url('../images/sizdah/shared/filter-chip-frame.svg#chip-cap-middle');
+    mask-image: url('../images/sizdah/shared/filter-chip-frame.svg#chip-cap-middle');
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
     -webkit-mask-repeat: no-repeat;

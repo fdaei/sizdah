@@ -75,7 +75,7 @@ function toggle(): void {
         type="text"
         :aria-label="t('forms.contact.country_search')"
         :placeholder="t('forms.contact.country_search')"
-        class="mb-2 w-full rounded-md border border-ink-300 bg-white px-3 py-2 text-body-sm text-ink-1000 placeholder:text-ink-600 focus:border-brand focus:outline-none focus:ring-0"
+        class="mb-2 w-full rounded-md border border-ink-300 bg-brand-50 px-3 py-2 text-body-sm text-ink-1000 placeholder:text-ink-600 focus:border-brand focus:outline-none focus:ring-0"
       />
 
       <ul class="max-h-56 overflow-y-auto" role="listbox">

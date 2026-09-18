@@ -52,10 +52,10 @@ const source = computed(() => props.client.logo || EXPORTS[props.client.name] ||
     <img
       :src="source"
       :alt="props.client.name"
-      width="80"
+      width="128"
       loading="lazy"
       decoding="async"
-      class="h-auto w-20 object-contain grayscale transition-[filter] duration-300 ease-brand hover:grayscale-0"
+      class="h-auto w-32 object-contain grayscale transition-[filter] duration-300 ease-brand hover:grayscale-0"
     />
   </span>
   <span v-else class="text-title-sm text-ink-400">{{ props.client.name }}</span>

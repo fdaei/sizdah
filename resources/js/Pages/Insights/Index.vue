@@ -103,7 +103,10 @@ const rest = computed(() => props.posts.data.slice(2))
       />
 
       <!-- 268:5233 — 670 track, 64 to the chip row; 268:5234 is the 612 column. -->
-      <header class="relative mx-auto flex max-w-[1000px] flex-col items-center gap-16 text-center">
+      <header
+        class="relative mx-auto flex max-w-[1000px] flex-col items-center gap-16 text-center"
+        data-reveal
+      >
         <div class="flex w-full max-w-measure flex-col items-center gap-10">
           <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
@@ -146,7 +149,7 @@ const rest = computed(() => props.posts.data.slice(2))
                RTL layout, so its coordinates map straight across. -->
           <div
             aria-hidden="true"
-            class="pointer-events-none absolute left-[45.75%] top-0 hidden -translate-x-1/2 translate-y-[calc(-50%-8px)] lg:block"
+            class="pointer-events-none absolute left-[45.75%] top-0 z-10 hidden -translate-x-1/2 translate-y-[calc(-50%-8px)] lg:block"
           >
             <!-- The export is already rotated (78x78 box, rotated clip
                  matrix), so never add a CSS rotation here - a second rotation
@@ -167,7 +170,7 @@ const rest = computed(() => props.posts.data.slice(2))
           }}
         </p>
 
-        <div v-if="wide.length" class="grid gap-6 md:grid-cols-2">
+        <div v-if="wide.length" class="grid gap-6 md:grid-cols-2" data-reveal-group>
           <BlogCard
             v-for="post in wide"
             :key="post.slug"
@@ -180,6 +183,7 @@ const rest = computed(() => props.posts.data.slice(2))
         <div
           v-if="rest.length"
           class="grid gap-x-6 gap-y-16 sm:grid-cols-2 lg:grid-cols-3 lg:gap-y-24"
+          data-reveal-group
         >
           <BlogCard v-for="post in rest" :key="post.slug" :post="post" heading-level="h2" />
         </div>
@@ -216,7 +220,7 @@ const rest = computed(() => props.posts.data.slice(2))
 
     <!-- 577:9485 — the shared closing card the frame ends on, 190 below the grid. -->
     <div v-if="finalCta" class="container-sizdah mt-16 lg:mt-[190px]">
-      <StartTogetherCard :section="finalCta" />
+      <StartTogetherCard :section="finalCta" data-reveal />
     </div>
   </section>
 </template>

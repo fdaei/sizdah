@@ -151,7 +151,10 @@ const fieldClass =
         The headline is Display/Large (48/700) and the lede is tite/Medium
         (20/500), not the 40/18 pair this header carried.
       -->
-      <header class="mx-auto flex w-[612px] max-w-full flex-col items-center gap-10 text-center">
+      <header
+        class="mx-auto flex w-[612px] max-w-full flex-col items-center gap-10 text-center"
+        data-reveal
+      >
         <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
         <div class="flex w-full flex-col gap-6">
@@ -177,7 +180,7 @@ const fieldClass =
         form row ~75px above where the frame has it.
       -->
       <div class="flex flex-col gap-12">
-        <div class="grid gap-6 lg:grid-cols-[801fr_423fr]">
+        <div class="grid gap-6 lg:grid-cols-[801fr_423fr]" data-reveal-group>
           <!-- Form card — 279:6439 -->
           <form
             class="sketch-frame sketch-frame-fill sketch-frame-blur flex min-w-0 flex-col gap-6 p-8"
@@ -459,7 +462,10 @@ const fieldClass =
           frame; the follow-text <p> has to be the first DOM child so it lands
           on the right (see the card-row note above).
         -->
-        <div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+        <div
+          class="flex flex-col gap-8 md:flex-row md:items-center md:justify-between"
+          data-reveal
+        >
           <div class="relative">
             <p class="flex items-center gap-2 text-body-lg font-medium text-ink-100">
               <img

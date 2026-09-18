@@ -293,16 +293,17 @@ function iconFor(item: SectionItem, index: number): string | undefined {
           </p>
         </div>
 
-        <ul class="grid gap-[26px] grid-cols-2 sm:grid-cols-3 lg:grid-cols-5" data-reveal-group>
+        <ul class="flex flex-nowrap gap-[26px] overflow-x-auto" data-reveal-group>
           <!--
             The component ships a hover variant (598:5733): the cream card and
-            its two copy steps all swap to brand. Border and fill are the same
-            colour, so the 4px rule reads as bleed around the photo.
+            its two copy steps all swap to brand. Framed with the site's shared
+            hand-drawn `.sketch-frame` rule, same as every other card, instead of
+            a plain Tailwind border.
           -->
           <li
             v-for="member in props.team"
             :key="member.name"
-            class="group flex flex-col overflow-hidden rounded-lg border-4 border-brand-200 bg-brand-200 transition-colors duration-200 ease-brand hover:border-brand hover:bg-brand"
+            class="sketch-frame group flex w-[220px] shrink-0 flex-col overflow-hidden rounded-lg bg-brand-200 transition-colors duration-200 ease-brand hover:bg-brand"
           >
             <img
               v-if="member.image"

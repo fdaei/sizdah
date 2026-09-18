@@ -58,7 +58,7 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
               <summary
                 class="flex cursor-pointer list-none items-center justify-between gap-6 [&::-webkit-details-marker]:hidden"
               >
-                <span class="text-title-sm text-warm-900">{{ faq.question }}</span>
+                <span class="text-title-md text-ink-1000">{{ faq.question }}</span>
 
                 <img
                   :src="plusUrl"

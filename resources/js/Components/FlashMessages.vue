@@ -38,7 +38,7 @@ watch(message, () => {
       class="fixed inset-x-0 top-[108px] z-overlay mx-auto w-fit max-w-[90vw] px-4"
     >
       <div
-        class="flex items-center gap-3 rounded-sm border px-6 py-3 text-label-lg shadow-card"
+        class="group flex items-center gap-3 rounded-sm border px-6 py-3 text-label-lg shadow-card"
         :class="
           isError
             ? 'border-red-500/40 bg-ink-900 text-red-300'
@@ -50,7 +50,11 @@ watch(message, () => {
           invented glyph; the dismiss control beside it is the same drawing at
           size-4 in a muted ink, so the two do not read as one control.
         -->
-        <component :is="isError ? IconClose : IconCheck" class="size-5 shrink-0" />
+        <span
+          class="flex shrink-0 items-center justify-center rounded-round p-1 transition-colors duration-200 ease-brand group-hover:bg-brand group-hover:text-ink-1000"
+        >
+          <component :is="isError ? IconClose : IconCheck" class="size-5" />
+        </span>
         <p>{{ message }}</p>
         <button
           type="button"
