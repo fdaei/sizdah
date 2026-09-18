@@ -139,13 +139,6 @@ const fieldClass =
       space-between does.
     -->
     <div class="container-sizdah relative isolate flex flex-col justify-between lg:min-h-[920px]">
-      <!-- 279:6376 — the same 109px mesh the other frames use, 872 tall, from y=212. -->
-      <div
-        class="grid-mesh pointer-events-none absolute inline-start-0 block-start-[32px] -z-10 hidden h-[872px] w-full max-w-container lg:block"
-        style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
-        aria-hidden="true"
-      />
-
       <!--
         279:6399 — a 612 column on gap 40; the title block (279:6403) is gap 24.
         The headline is Display/Large (48/700) and the lede is tite/Medium
@@ -229,6 +222,7 @@ const fieldClass =
                         required
                         :class="[fieldClass, 'ps-12']"
                         :placeholder="t('forms.contact.name_placeholder')"
+                        style="background-color: #FDFCFA;"
                         autocomplete="name"
                       />
                     </div>
@@ -256,6 +250,7 @@ const fieldClass =
                         type="text"
                         :class="[fieldClass, 'ps-12']"
                         :placeholder="t('forms.contact.brand_placeholder')"
+                        style="background-color: #FDFCFA;"
                         autocomplete="organization"
                       />
                     </div>
@@ -280,6 +275,7 @@ const fieldClass =
                     -->
                     <div
                       class="flex items-stretch rounded-lg border-3 border-brand-200 bg-white/80 focus-within:border-brand"
+                      style="background-color: #FDFCFA;"
                     >
                       <span class="flex shrink-0 items-center gap-2 ps-3">
                         <CountrySelect v-model="selectedCountry" />
@@ -315,6 +311,7 @@ const fieldClass =
                       <button
                         type="button"
                         :class="[fieldClass, 'flex items-center gap-3 text-start']"
+                        style="background-color: #FDFCFA;"
                         :aria-expanded="servicesOpen"
                         aria-controls="service-options"
                         @click="servicesOpen = !servicesOpen"
@@ -386,6 +383,7 @@ const fieldClass =
                   rows="5"
                   :class="[fieldClass, 'h-[125.5px] resize-none']"
                   :placeholder="t('forms.contact.message_placeholder')"
+                  style="background-color: #FDFCFA;"
                 />
                 <p v-if="form.errors.message" class="text-label-md text-brand">
                   {{ form.errors.message }}
@@ -422,7 +420,7 @@ const fieldClass =
               aria-hidden="true"
               width="40"
               height="50"
-              class="pointer-events-none absolute block-start-[-39px] inline-start-[-31px] h-[50px] w-10 -scale-x-100"
+              class="pointer-events-none absolute z-10 block-start-[-35px] inline-start-[-1px] h-[50px] w-10 -scale-x-100"
             />
 
             <h2 class="text-title-lg text-brand-50">{{ t('forms.details.title') }}</h2>

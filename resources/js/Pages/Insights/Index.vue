@@ -95,13 +95,6 @@ const rest = computed(() => props.posts.data.slice(2))
   <section class="section-first pb-[199.24px]">
     <!-- Header sits 96 above the content block; 270:5252 then runs on 144. -->
     <div class="container-sizdah relative isolate flex flex-col gap-16 lg:gap-24">
-      <!-- 691:7297 — the mesh starts level with the content, at frame y=180. -->
-      <div
-        class="grid-mesh pointer-events-none absolute inline-start-0 block-start-0 -z-10 hidden h-[1200px] w-full max-w-container lg:block"
-        style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
-        aria-hidden="true"
-      />
-
       <!-- 268:5233 — 670 track, 64 to the chip row; 268:5234 is the 612 column. -->
       <header
         class="relative mx-auto flex max-w-[1000px] flex-col items-center gap-16 text-center"

@@ -91,20 +91,6 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
   <div class="section-first pb-24 md:pt-[188px] lg:pb-[224px]">
     <div class="container-sizdah relative isolate">
       <!--
-        511:9147 — the shared 109px mesh, 1200x872 from frame (120, 202), i.e.
-        inset 24 from both edges of the 1248 content track rather than flush to
-        it. `.container-sizdah` is the full 1440 box with the gutter as padding,
-        so an absolute child resolves against the padding box: the inset is
-        gutter + 24, and the max-width subtracts both gutters so narrower
-        viewports cannot push the 1200 out past the frame.
-      -->
-      <div
-        class="grid-mesh pointer-events-none absolute block-start-[14px] -z-10 hidden h-[872px] w-[1200px] max-w-[calc(100%-176px)] lg:inline-start-[88px] lg:block xl:inline-start-[120px] xl:max-w-[calc(100%-240px)]"
-        style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
-        aria-hidden="true"
-      />
-
-      <!--
         309:4754 — a 638-wide centred stack, gap 40 to the title block
         (309:4758), which is itself gap 24. The lede is tite/Large (22/500).
       -->

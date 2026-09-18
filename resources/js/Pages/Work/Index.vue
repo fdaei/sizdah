@@ -71,12 +71,6 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
   -->
   <section class="section-first pb-[177.24px]">
     <div class="container-sizdah relative isolate">
-      <!-- 266:2771 — the mesh starts level with the content, at frame y=180. -->
-      <div
-        class="grid-mesh pointer-events-none absolute inline-start-0 block-start-0 -z-10 hidden h-[1200px] w-full max-w-container lg:block"
-        style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
-        aria-hidden="true"
-      />
       <header
         class="mx-auto flex max-w-full flex-col items-center gap-16 text-center"
         data-reveal
