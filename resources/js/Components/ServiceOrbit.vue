@@ -228,7 +228,11 @@ const nodes = computed(() => {
             :height="node.slot.size[1]"
             class="w-full"
           />
-          <p class="text-center text-heading-sm text-ink-1000">{{ node.service!.title }}</p>
+          <p
+            class="max-w-full break-words text-center text-[clamp(16px,1.667vw,24px)] font-medium leading-[1.25] text-ink-1000"
+          >
+            {{ node.service!.title }}
+          </p>
         </div>
       </div>
     </div>

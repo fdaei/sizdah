@@ -293,40 +293,47 @@ function iconFor(item: SectionItem, index: number): string | undefined {
           </p>
         </div>
 
-        <ul class="flex flex-nowrap gap-[26px] overflow-x-auto" data-reveal-group>
-          <!--
-            The component ships a hover variant (598:5733): the cream card and
-            its two copy steps all swap to brand. Framed with the site's shared
-            hand-drawn `.sketch-frame` rule, same as every other card, instead of
-            a plain Tailwind border.
-          -->
-          <li
-            v-for="member in props.team"
-            :key="member.name"
-            class="sketch-frame group flex w-[220px] shrink-0 flex-col overflow-hidden rounded-lg bg-brand-200 transition-colors duration-200 ease-brand hover:bg-brand"
+        <div class="team-carousel w-full overflow-hidden" data-reveal>
+          <div
+            class="team-carousel-track flex w-max"
+            :class="{ 'team-carousel-animated': props.team.length > 1 }"
           >
-            <img
-              v-if="member.image"
-              :src="member.image.src"
-              :srcset="member.image.srcset"
-              :alt="member.image.alt"
-              :width="member.image.width"
-              :height="member.image.height"
-              loading="lazy"
-              class="aspect-square w-full rounded-lg object-cover object-bottom"
-            />
-            <div v-else class="aspect-square w-full rounded-lg bg-warm-200" aria-hidden="true" />
+            <ul
+              v-for="copyIndex in props.team.length > 1 ? 2 : 1"
+              :key="copyIndex"
+              :aria-hidden="copyIndex === 2 ? 'true' : undefined"
+              class="team-carousel-list flex shrink-0 gap-[26px] pe-[26px]"
+              :class="{ 'team-carousel-copy': copyIndex === 2 }"
+            >
+              <li
+                v-for="member in props.team"
+                :key="member.name"
+                class="sketch-frame group flex w-[220px] shrink-0 flex-col overflow-hidden rounded-lg bg-brand-200 transition-colors duration-200 ease-brand hover:bg-brand"
+              >
+                <img
+                  v-if="member.image"
+                  :src="member.image.src"
+                  :srcset="member.image.srcset"
+                  :alt="copyIndex === 2 ? '' : member.image.alt"
+                  :width="member.image.width"
+                  :height="member.image.height"
+                  loading="lazy"
+                  class="aspect-square w-full rounded-lg object-cover object-bottom grayscale transition-[filter] duration-300 ease-brand group-hover:grayscale-0"
+                />
+                <div v-else class="aspect-square w-full rounded-lg bg-warm-200" aria-hidden="true" />
 
-            <div class="flex flex-col gap-1 p-4 text-start">
-              <p class="text-heading-sm text-warm-900 group-hover:text-ink-1000">
-                {{ member.name }}
-              </p>
-              <p class="text-title-md text-ink-700 group-hover:text-ink-800">
-                {{ member.role }}
-              </p>
-            </div>
-          </li>
-        </ul>
+                <div class="flex flex-col gap-1 p-4 text-start">
+                  <p class="text-heading-sm text-warm-900 group-hover:text-ink-1000">
+                    {{ member.name }}
+                  </p>
+                  <p class="text-title-md text-ink-700 group-hover:text-ink-800">
+                    {{ member.role }}
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </section>
 
       <!--
@@ -339,3 +346,35 @@ function iconFor(item: SectionItem, index: number): string | undefined {
     </div>
   </div>
 </template>
+
+<style scoped>
+.team-carousel-animated {
+  animation: team-carousel-rtl 40s linear infinite;
+}
+
+:global([dir='ltr']) .team-carousel-animated {
+  animation-name: team-carousel-ltr;
+}
+
+.team-carousel:hover .team-carousel-track {
+  animation-play-state: paused;
+}
+
+@keyframes team-carousel-rtl {
+  to { transform: translateX(50%); }
+}
+
+@keyframes team-carousel-ltr {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-carousel { overflow-x: auto; }
+  .team-carousel-track { animation: none !important; }
+  .team-carousel-copy { display: none; }
+}
+
+:global(.reduced-motion) .team-carousel { overflow-x: auto; }
+:global(.reduced-motion) .team-carousel-track { animation: none !important; }
+:global(.reduced-motion) .team-carousel-copy { display: none; }
+</style>
