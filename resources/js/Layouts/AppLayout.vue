@@ -27,7 +27,7 @@ import type { SharedProps } from '@/types'
  */
 const page = usePage<SharedProps>()
 
-const gridPages = ['Work/Index', 'Services', 'Insights/Index', 'Contact']
+const gridPages = ['Work/Index', 'Services', 'Insights/Index', 'Contact', 'About']
 
 /**
  * Home is the exception: 268:2962 has NO page wash. Sampled down the full

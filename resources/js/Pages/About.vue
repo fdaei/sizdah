@@ -118,43 +118,6 @@ function iconFor(item: SectionItem, index: number): string | undefined {
         v-if="hero"
         class="relative isolate grid items-center gap-12 lg:grid-cols-[minmax(0,466px)_minmax(0,1fr)] lg:gap-[86px]"
       >
-        <!--
-          One continuous hairline mesh behind the hero and the story block.
-
-          The frame authored this as two groups plus a stray rule — 691:7320
-          (109 x 92.34) whose horizontal rules start 45px into its own box,
-          691:7331 (a lone rule at y=182.14) and 359:9560 (109 x 118.1) — which
-          left the hero band running bare verticals with a single rule above
-          them. The background for this section is an EVEN grid top to bottom,
-          so the three are collapsed into 359:9560's 109.33 x 118.1 cell and
-          extended up over the hero. See GAPS G64.
-
-          It is anchored (and `isolate`d) on hero rather than on the block it
-          sits behind, so its negative z-index stays behind the hero
-          illustration and copy too, and it is positioned against hero
-          specifically (not the padded container) because hero's own box has no
-          inline padding — so inline-start-0 lines up exactly with the content
-          edge story aligns to, where anchoring on the padded container would
-          shift it by the container's gutter.
-
-          Vertical run: 227 -> 1211 in frame px, i.e. a 109.33 cell inset 131
-          from the 1248 container's edge. That inset is the 22px x-offset below
-          (131 mod 109.33) — without it a repeat from the container edge drifts
-          a full 84px off the frame by the far side.
-
-          The box starts one whole cell above the old hero rule (-118.6) so the
-          rules still land where 359:9560 put them (590, 708.1, ...) rather
-          than shifting the story band, and runs to that group's own tail at
-          1494. Without the story block below there is nothing to run into, so
-          it stops under the hero instead.
-        -->
-        <div
-          class="grid-mesh grid-mesh-fade pointer-events-none absolute inline-start-0 block-start-[-118.6px] -z-10 hidden w-full max-w-container lg:block"
-          :class="story ? 'h-[1613px]' : 'h-[760px]'"
-          style="--mesh-cell-x: 109.33px; --mesh-cell-y: 118.1px; background-position: 22px 0"
-          aria-hidden="true"
-        />
-
         <div class="flex flex-col items-start gap-6 text-start" data-reveal>
           <h1 class="flex flex-wrap items-center gap-x-2 text-hero-line font-bold text-ink-50">
             <span>{{ hero.title }}</span>
