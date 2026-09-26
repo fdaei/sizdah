@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { countries, flagEmoji, type Country } from '@/lib/countries'
+import { countries, flagUrl, type Country } from '@/lib/countries'
 import { useTranslations } from '@/Composables/useTranslations'
 import caretUrl from '~img/sizdah/contact/field-caret.svg'
 
@@ -53,6 +53,15 @@ function toggle(): void {
       @click="toggle"
     >
       <img
+        :src="flagUrl(model.iso2)"
+        alt=""
+        aria-hidden="true"
+        width="24"
+        height="18"
+        class="h-[18px] w-6 shrink-0 rounded-sm object-cover"
+      />
+      <span class="sr-only">{{ model.nameFa }}</span>
+      <img
         :src="caretUrl"
         alt=""
         aria-hidden="true"
@@ -61,8 +70,6 @@ function toggle(): void {
         class="size-4 shrink-0 transition-transform duration-200"
         :class="open && 'rotate-180'"
       />
-      <span aria-hidden="true" class="text-lg leading-none">{{ flagEmoji(model.iso2) }}</span>
-      <span class="sr-only">{{ model.nameFa }}</span>
     </button>
 
     <div
@@ -88,9 +95,15 @@ function toggle(): void {
             :class="country.iso2 === model.iso2 && 'bg-brand-200'"
             @click="select(country)"
           >
-            <span aria-hidden="true" class="text-base leading-none">{{
-              flagEmoji(country.iso2)
-            }}</span>
+            <img
+              :src="flagUrl(country.iso2)"
+              alt=""
+              aria-hidden="true"
+              width="20"
+              height="15"
+              loading="lazy"
+              class="h-[15px] w-5 shrink-0 rounded-sm object-cover"
+            />
             <span class="flex-1 truncate">{{ country.nameFa }}</span>
             <span class="latin-nums text-ink-600" dir="ltr">{{ country.dialCode }}</span>
           </button>

@@ -56,7 +56,14 @@ function isActive(item: NavItem): boolean {
 
       <!-- Primary navigation -->
       <nav :aria-label="$t('common.primary_navigation')" class="hidden lg:block">
-        <ul class="flex items-center gap-6">
+        <!--
+          items-baseline, not items-center: the selected item is shorter (18px
+          label + 2px rule vs 20px label + 9.676px spacer), so centring the
+          boxes dropped the active label ~4px below its neighbours. Aligning on
+          the text baseline keeps every label on one line whatever the
+          decoration underneath.
+        -->
+        <ul class="flex items-baseline gap-6">
           <li v-for="item in links" :key="item.id">
             <Link
               :href="item.url"
@@ -79,10 +86,9 @@ function isActive(item: NavItem): boolean {
                     scale. Item height: 4 + 25 + 2 + 4 = 35, the master exactly.
                   default 27:2357 — a 45.276 x 9.676 squiggle exported with
                     opacity="0" baked in, i.e. deliberately invisible. It is a
-                    spacer, and it is load-bearing: it is what makes an unselected
-                    item 42.676 tall against the selected item's 35, which the
-                    menu's items-center then offsets. Rendering nothing here would
-                    shift every inactive label down ~3.8px.
+                    spacer that keeps an unselected item 42.676 tall against the
+                    selected item's 35. The menu aligns items on their text
+                    baseline, so this height difference no longer moves labels.
                 The file ships no hover variant, so hover stays a colour change.
               -->
               <span v-if="isActive(item)" class="relative block h-[2px] w-full">

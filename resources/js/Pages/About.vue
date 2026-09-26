@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
 import SeoHead from '@/Components/SeoHead.vue'
@@ -93,6 +93,120 @@ function iconFor(item: SectionItem, index: number): string | undefined {
 
   return ICON_ORDER[index]
 }
+
+/*
+ | Team carousel: an endless marquee the visitor can also drag. The track holds
+ | two copies of the list, so its position `pos` wraps within one copy's width
+ | and the seam never shows. Auto-scroll runs one copy per 40s and pauses on
+ | hover, while dragging, and entirely under reduced motion — dragging itself
+ | still works there, since it only moves when the visitor moves it.
+ */
+const TEAM_LOOP_SECONDS = 40
+
+const teamTrack = ref<HTMLElement | null>(null)
+const teamList = ref<HTMLElement[]>([])
+const teamDragging = ref(false)
+
+let teamPos = 0
+let teamLoopWidth = 0
+let teamHovered = false
+let teamDragX = 0
+let teamPointerId: number | null = null
+let teamFrame = 0
+let teamLastTime = 0
+let teamResize: ResizeObserver | null = null
+
+/** RTL tracks travel right, LTR tracks travel left. */
+function teamDirection(): 1 | -1 {
+  return teamTrack.value && getComputedStyle(teamTrack.value).direction === 'rtl' ? 1 : -1
+}
+
+function renderTeamTrack(): void {
+  if (!teamTrack.value) {
+    return
+  }
+
+  if (teamLoopWidth > 0) {
+    teamPos = ((teamPos % teamLoopWidth) + teamLoopWidth) % teamLoopWidth
+  }
+
+  teamTrack.value.style.transform = `translate3d(${teamDirection() * teamPos}px, 0, 0)`
+}
+
+function tickTeam(time: number): void {
+  // Clamp so a backgrounded tab doesn't jump the row on return.
+  const dt = teamLastTime ? Math.min(time - teamLastTime, 100) : 0
+  teamLastTime = time
+
+  if (!teamHovered && !teamDragging.value && teamLoopWidth > 0) {
+    teamPos += (teamLoopWidth / TEAM_LOOP_SECONDS) * (dt / 1000)
+    renderTeamTrack()
+  }
+
+  teamFrame = requestAnimationFrame(tickTeam)
+}
+
+/** Only a resting mouse pauses the row; a touch "hover" is just the drag. */
+function onTeamHover(event: PointerEvent, hovered: boolean): void {
+  if (event.pointerType === 'mouse') {
+    teamHovered = hovered
+  }
+}
+
+function onTeamPointerDown(event: PointerEvent): void {
+  if (props.team.length < 2 || (event.pointerType === 'mouse' && event.button !== 0)) {
+    return
+  }
+
+  teamPointerId = event.pointerId
+  teamDragX = event.clientX
+  teamDragging.value = true
+  ;(event.currentTarget as HTMLElement).setPointerCapture(event.pointerId)
+}
+
+function onTeamPointerMove(event: PointerEvent): void {
+  if (event.pointerId !== teamPointerId) {
+    return
+  }
+
+  const dx = event.clientX - teamDragX
+  teamDragX = event.clientX
+  teamPos += teamDirection() * dx
+  renderTeamTrack()
+}
+
+function onTeamPointerUp(event: PointerEvent): void {
+  if (event.pointerId !== teamPointerId) {
+    return
+  }
+
+  teamPointerId = null
+  teamDragging.value = false
+}
+
+onMounted(() => {
+  const first = teamList.value[0]
+
+  if (!first || props.team.length < 2) {
+    return
+  }
+
+  teamLoopWidth = first.offsetWidth
+  teamResize = new ResizeObserver(() => {
+    teamLoopWidth = first.offsetWidth
+    renderTeamTrack()
+  })
+  teamResize.observe(first)
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    teamFrame = requestAnimationFrame(tickTeam)
+  }
+})
+
+onBeforeUnmount(() => {
+  cancelAnimationFrame(teamFrame)
+  teamResize?.disconnect()
+})
 </script>
 
 <template>
@@ -256,22 +370,33 @@ function iconFor(item: SectionItem, index: number): string | undefined {
           </p>
         </div>
 
-        <div class="team-carousel w-full overflow-hidden" data-reveal>
-          <div
-            class="team-carousel-track flex w-max"
-            :class="{ 'team-carousel-animated': props.team.length > 1 }"
-          >
+        <div
+          class="team-carousel w-full select-none overflow-hidden"
+          :class="{ 'is-draggable': props.team.length > 1, 'is-dragging': teamDragging }"
+          data-reveal
+          @pointerenter="onTeamHover($event, true)"
+          @pointerleave="onTeamHover($event, false)"
+          @pointerdown="onTeamPointerDown"
+          @pointermove="onTeamPointerMove"
+          @pointerup="onTeamPointerUp"
+          @pointercancel="onTeamPointerUp"
+        >
+          <div ref="teamTrack" class="team-carousel-track flex w-max">
             <ul
               v-for="copyIndex in props.team.length > 1 ? 2 : 1"
               :key="copyIndex"
+              ref="teamList"
               :aria-hidden="copyIndex === 2 ? 'true' : undefined"
               class="team-carousel-list flex shrink-0 gap-[26px] pe-[26px]"
-              :class="{ 'team-carousel-copy': copyIndex === 2 }"
             >
+              <!--
+                No radius utility here: .sketch-frame's own 24px must win, or a
+                tighter clip lets the hover fill poke out past the drawn corners.
+              -->
               <li
                 v-for="member in props.team"
                 :key="member.name"
-                class="sketch-frame group flex w-[220px] shrink-0 flex-col overflow-hidden rounded-lg bg-brand-200 transition-colors duration-200 ease-brand hover:bg-brand"
+                class="sketch-frame group flex w-[220px] shrink-0 flex-col overflow-hidden bg-brand-200 transition-colors duration-200 ease-brand hover:bg-brand"
               >
                 <img
                   v-if="member.image"
@@ -281,6 +406,7 @@ function iconFor(item: SectionItem, index: number): string | undefined {
                   :width="member.image.width"
                   :height="member.image.height"
                   loading="lazy"
+                  draggable="false"
                   class="aspect-square w-full rounded-lg object-cover object-bottom grayscale transition-[filter] duration-300 ease-brand group-hover:grayscale-0"
                 />
                 <div v-else class="aspect-square w-full rounded-lg bg-warm-200" aria-hidden="true" />
@@ -311,33 +437,17 @@ function iconFor(item: SectionItem, index: number): string | undefined {
 </template>
 
 <style scoped>
-.team-carousel-animated {
-  animation: team-carousel-rtl 40s linear infinite;
+.team-carousel-track {
+  will-change: transform;
 }
 
-:global([dir='ltr']) .team-carousel-animated {
-  animation-name: team-carousel-ltr;
+/* Vertical page scroll stays native on touch; horizontal swipes drag the row. */
+.team-carousel.is-draggable {
+  cursor: grab;
+  touch-action: pan-y;
 }
 
-.team-carousel:hover .team-carousel-track {
-  animation-play-state: paused;
+.team-carousel.is-dragging {
+  cursor: grabbing;
 }
-
-@keyframes team-carousel-rtl {
-  to { transform: translateX(50%); }
-}
-
-@keyframes team-carousel-ltr {
-  to { transform: translateX(-50%); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .team-carousel { overflow-x: auto; }
-  .team-carousel-track { animation: none !important; }
-  .team-carousel-copy { display: none; }
-}
-
-:global(.reduced-motion) .team-carousel { overflow-x: auto; }
-:global(.reduced-motion) .team-carousel-track { animation: none !important; }
-:global(.reduced-motion) .team-carousel-copy { display: none; }
 </style>

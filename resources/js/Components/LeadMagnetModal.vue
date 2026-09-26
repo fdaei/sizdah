@@ -147,11 +147,11 @@ watch(
       >
         <button
           type="button"
-          class="absolute end-4 top-4 inline-flex size-9 items-center justify-center rounded-sm text-ink-300 transition-colors duration-200 ease-brand hover:text-paper"
+          class="absolute end-4 top-4 inline-flex size-9 items-center justify-center rounded-full bg-brand text-ink-1000 transition-colors duration-200 ease-brand hover:bg-brand-900"
           :aria-label="t('common.close')"
           @click="close"
         >
-          <IconClose class="size-5" />
+          <IconClose class="size-4" />
         </button>
 
         <template v-if="!succeeded">
@@ -193,7 +193,7 @@ watch(
                   type="text"
                   autocomplete="name"
                   :placeholder="t('forms.newsletter.name_placeholder')"
-                  class="w-full min-w-0 bg-transparent text-end text-body-md text-ink-1000 placeholder:text-ink-600 focus:outline-none"
+                  class="w-full min-w-0 border-0 bg-transparent p-0 text-start text-body-md text-ink-1000 placeholder:text-ink-600 focus:outline-none focus:ring-0 focus:ring-offset-0"
                 />
                 <img
                   :src="userFieldUrl"
@@ -222,7 +222,7 @@ watch(
                   type="email"
                   autocomplete="email"
                   :placeholder="t('forms.newsletter.email_placeholder')"
-                  class="w-full min-w-0 bg-transparent text-end text-body-md text-ink-1000 placeholder:text-ink-600 focus:outline-none"
+                  class="w-full min-w-0 border-0 bg-transparent p-0 text-start text-body-md text-ink-1000 placeholder:text-ink-600 focus:outline-none focus:ring-0 focus:ring-offset-0"
                 />
                 <img
                   :src="envelopeIconUrl"
@@ -230,7 +230,7 @@ watch(
                   aria-hidden="true"
                   width="24"
                   height="18"
-                  class="size-6 shrink-0"
+                  class="h-[18px] w-6 shrink-0"
                 />
               </div>
               <p v-if="form.errors.email" class="text-label-md text-brand">

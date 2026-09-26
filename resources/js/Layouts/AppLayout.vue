@@ -33,7 +33,7 @@ const gridPages = ['Work/Index', 'Services', 'Insights/Index', 'Contact', 'About
  * Home is the exception: 268:2962 has NO page wash. Sampled down the full
  * 9919px of the frame, its ground is a flat #141414 — the warm glow visible in
  * the hero belongs to the hero art itself and is already baked into
- * `home/hero-bg.png`. Because that art is an opaque full-bleed raster it also
+ * `home/hero-bg.jpg`. Because that art is an opaque full-bleed raster it also
  * MASKS the shared wash, so leaving Home washed produced a hard seam at the
  * hero's bottom edge: #141414 above, a gold-tinted #1f1c15 below.
  */

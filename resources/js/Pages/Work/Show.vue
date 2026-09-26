@@ -144,10 +144,10 @@ const cardBlocks: {
 /** Tile glyphs 615:6045…615:6160, keyed by `ResultStat.icon`. */
 const resultIcons: Record<string, { src: string; width: number; height: number }> = {
   roi: { src: resultRoiUrl, width: 32, height: 32 },
-  reach: { src: resultReachUrl, width: 32, height: 22 },
-  interaction: { src: resultInteractionUrl, width: 24, height: 24 },
-  follower: { src: resultFollowerUrl, width: 32, height: 20 },
-  view: { src: resultViewUrl, width: 32, height: 19 },
+  reach: { src: resultReachUrl, width: 32, height: 32 },
+  interaction: { src: resultInteractionUrl, width: 28, height: 28 },
+  follower: { src: resultFollowerUrl, width: 32, height: 32 },
+  view: { src: resultViewUrl, width: 32, height: 32 },
 }
 
 // `icon` is persisted as a stable English key, but older rows may have been

@@ -9,17 +9,18 @@
    | Direction and font family are driven by the active locale. `dir` is set on
    | <html> by resources/views/app.blade.php; the font class comes from the
    | shared `locale.font` prop so no component hardcodes a family.
+   |
+   | No global `scroll-behavior: smooth` here: Inertia resets to the top on
+   | every visit with `window.scrollTo(0, 0)`, and a smooth root turns that
+   | into an animated scroll that runs while the new page is swapped in — so
+   | the next page appeared at (or drifting from) the previous page's scroll
+   | position instead of starting at the top.
    */
   html {
     -webkit-text-size-adjust: 100%;
-    scroll-behavior: smooth;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
-
     *,
     *::before,
     *::after {
@@ -592,6 +593,15 @@
     will-change: transform;
   }
 
+  /*
+   | In RTL the track hangs off the right edge and the duplicate list sits to
+   | the left of the original, so the loop must travel rightwards — the LTR
+   | -50% would scroll into empty space and visibly snap back each cycle.
+   */
+  [dir='rtl'] .marquee-track {
+    animation-name: marquee-rtl;
+  }
+
   .marquee-mask:hover .marquee-track,
   .marquee-mask:focus-within .marquee-track {
     animation-play-state: paused;
@@ -668,5 +678,15 @@
   */
   [dir='ltr'] .flip-ltr {
     transform: scaleX(-1);
+  }
+}
+
+/* RTL counterpart of the `marquee` keyframe in tailwind.config.js. */
+@keyframes marquee-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(50%);
   }
 }

@@ -270,8 +270,16 @@ export const defaultCountry: Country =
   countries.find((c) => c.iso2 === 'OM') ?? countries[0]
 
 /** Unicode regional-indicator flag, derived from the ISO alpha-2 code — no per-country asset needed. */
-export function flagEmoji(iso2: string): string {
-  return String.fromCodePoint(
-    ...[...iso2.toUpperCase()].map((c) => 127397 + c.charCodeAt(0)),
-  )
+// Real SVG flags (flag-icons, MIT) instead of regional-indicator emoji —
+// Windows and most Linux fonts have no flag glyphs and fall back to the
+// bare letters ("OM"). Eager URL imports only; each file is fetched when
+// its <img> is actually rendered.
+const flagUrls = import.meta.glob<string>('/node_modules/flag-icons/flags/4x3/*.svg', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+})
+
+export function flagUrl(iso2: string): string | undefined {
+  return flagUrls[`/node_modules/flag-icons/flags/4x3/${iso2.toLowerCase()}.svg`]
 }

@@ -14,7 +14,7 @@ import TestimonialCard from '@/Components/TestimonialCard.vue'
 import InsightsShowcase from '@/Components/InsightsShowcase.vue'
 import FaqAccordion from '@/Components/FaqAccordion.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
-import heroBgUrl from '~img/sizdah/home/hero-bg.png'
+import heroBgUrl from '~img/sizdah/home/hero-bg.jpg'
 import trustMarkUrl from '~img/sizdah/clients/trust-divider.svg'
 import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
 import heroNoteArrowUrl from '~img/sizdah/shared/hero-note-icon.svg'
@@ -69,6 +69,17 @@ const hero = computed(() => props.sections.hero)
  * corner glow and the four journey marks baked into it, so nothing draws those
  * separately any more — the whole block just sits on top of the image. An
  * editor can still swap it per locale through the hero section's image field.
+ *
+ * `hero-bg.jpg` replaces the earlier `hero-bg.png` (which was JPEG data under
+ * a .png name) trimmed from 2560x1393 to 2560x1390. Its last two rows were a
+ * JPEG edge artefact — ~#4B3F25/#524631 against the ~#171410 interior, i.e.
+ * three times brighter than the art around them. With `bg-cover bg-top` that
+ * band is flush with the section's bottom edge at `lg` (where
+ * `min-h-[783px]` matches the 2560x1393 ratio at the 1440 frame) and so is
+ * invisible; below that the section grows taller than the art's ratio, cover
+ * scales by height, and the band lands INSIDE the section — the thin gold
+ * rule that used to appear between the hero and the KPI row on narrow
+ * viewports. Nothing in CSS drew it, so nothing in CSS could remove it.
  */
 const heroBackground = computed(() => hero.value?.image?.src ?? heroBgUrl)
 const kpi = computed(() => props.sections.kpi)

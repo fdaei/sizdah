@@ -23,7 +23,11 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            // Root-relative on purpose: an absolute APP_URL-based URL breaks
+            // every image (admin previews + public site) whenever the app is
+            // served from a different host/port than APP_URL (e.g. `artisan
+            // serve` falling back to :8001). Set PUBLIC_DISK_URL for a CDN.
+            'url' => env('PUBLIC_DISK_URL', '/storage'),
             'visibility' => 'public',
             'throw' => false,
         ],

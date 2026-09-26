@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import SectionHeading from '@/Components/SectionHeading.vue'
 import type { PageSectionData, ProjectSummary } from '@/types'
-import industryUrl from '~img/sizdah/home/project-industry.svg'
 import arrowUrl from '~img/sizdah/shared/cta-arrow.svg'
 import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
 
@@ -23,7 +22,12 @@ import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
  * DEVIATION: the frame sets the open row's "مشاهده جزئیات پروژه" link in
  * Black/1000 (#141414) — near-black on the near-black page ground, i.e.
  * invisible. Read as a slip; it takes the brand colour so the link can be seen
- * and used.
+ * and used. The label is "جزییات پروژه" (per review) unless the section's
+ * `content` field overrides it — never the project title, which already sits
+ * beside it.
+ *
+ * The heading's split grid is re-cut at `lg` to the same 615/530 columns as
+ * the rows and image below, so the subtitle lines up with the image's edge.
  */
 const props = defineProps<{
   section: PageSectionData
@@ -41,6 +45,7 @@ const active = ref(0)
         :eyebrow="props.section.eyebrow"
         :title="props.section.title"
         :subtitle="props.section.subtitle || props.section.description"
+        split-class="lg:grid-cols-[minmax(0,615px)_minmax(0,530px)] lg:justify-between lg:gap-x-16"
       />
 
       <div
@@ -95,7 +100,7 @@ const active = ref(0)
                     height="24"
                     class="size-6 flip-rtl"
                   />
-                  <span>{{ props.section.content || project.title }}</span>
+                  <span>{{ props.section.content || 'جزییات پروژه' }}</span>
                 </Link>
               </div>
 
@@ -105,19 +110,8 @@ const active = ref(0)
               >
                 <div class="overflow-hidden">
                   <div class="flex flex-col gap-4">
-                    <p
-                      v-if="project.industry"
-                      class="flex items-center gap-2 text-label-lg text-ink-300"
-                    >
-                      <img
-                        :src="industryUrl"
-                        alt=""
-                        aria-hidden="true"
-                        width="24"
-                        height="24"
-                        class="size-6"
-                      />
-                      <span>{{ project.industry }}</span>
+                    <p v-if="project.industry" class="text-label-lg text-brand">
+                      {{ project.industry }}
                     </p>
                     <p v-if="project.excerpt" class="text-body-lg text-ink-200">
                       {{ project.excerpt }}

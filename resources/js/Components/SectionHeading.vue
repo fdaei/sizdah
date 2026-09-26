@@ -43,6 +43,11 @@ withDefaults(
      * 430 is what the split instances measured at before they were re-read.
      */
     subtitleWidth?: string
+    /**
+     * Extra classes for the `split` grid, e.g. to re-cut its columns so the
+     * subtitle aligns with content further down the section.
+     */
+    splitClass?: string
   }>(),
   {
     eyebrow: '',
@@ -51,21 +56,23 @@ withDefaults(
     tone: 'dark',
     gap: 'sm',
     subtitleWidth: '',
+    splitClass: '',
   },
 )
 </script>
 
 <template>
   <div class="flex flex-col items-start" :class="gap === 'lg' ? 'gap-12' : 'gap-6'">
-    <Eyebrow
-      v-if="eyebrow"
-      :text="eyebrow"
-      :marker-ring="tone === 'dark' ? 'paper' : 'ink'"
-    />
+    <Eyebrow v-if="eyebrow" :text="eyebrow" :marker-ring="tone === 'dark' ? 'paper' : 'ink'" />
 
     <div
       class="flex w-full flex-col gap-6"
-      :class="layout === 'split' && 'md:grid md:grid-cols-[minmax(0,505px)_minmax(0,1fr)] md:items-start md:gap-x-[132px] md:gap-y-6'"
+      :class="
+        layout === 'split' && [
+          'md:grid md:grid-cols-[minmax(0,505px)_minmax(0,1fr)] md:items-start md:gap-x-[132px] md:gap-y-6',
+          splitClass,
+        ]
+      "
     >
       <h2
         class="whitespace-pre-line text-section-line font-bold"

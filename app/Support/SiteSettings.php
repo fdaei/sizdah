@@ -134,6 +134,7 @@ final class SiteSettings
             return null;
         }
 
-        return Storage::disk('public')->url($path);
+        // og:image must be absolute; url() resolves against the current request host.
+        return url(Storage::disk('public')->url($path));
     }
 }

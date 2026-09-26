@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3'
 import type { ProjectSummary } from '@/types'
-import industryIconUrl from '~img/sizdah/home/project-industry.svg'
 import titleUnderlineUrl from '~img/sizdah/work/project-title-underline.svg'
 
 /**
@@ -14,8 +13,8 @@ import titleUnderlineUrl from '~img/sizdah/work/project-title-underline.svg'
  * then the service tag row.
  *
  * The title row is a space-between pair: the project title sits at the inline
- * start with a hand-drawn underline beneath it, the industry with its icon at
- * the inline end. The frame also carries a `Layer_1` mark over the title — it
+ * start with a hand-drawn underline beneath it, the industry label (brand
+ * yellow, no icon — per review) at the inline end. The frame also carries a `Layer_1` mark over the title — it
  * is `visible: false` in the file, so it is deliberately not rendered here.
  *
  * Service tags are separated by 4px brand dots. The dots are decorative, so
@@ -78,9 +77,8 @@ const props = defineProps<{ project: ProjectSummary }>()
               <img :src="titleUnderlineUrl" alt="" aria-hidden="true" class="mt-1 h-[5px] w-full" />
             </h3>
 
-            <p v-if="props.project.industry" class="flex shrink-0 items-center gap-2 pt-3">
-              <span class="text-label-lg text-ink-50">{{ props.project.industry }}</span>
-              <img :src="industryIconUrl" alt="" aria-hidden="true" width="24" height="24" />
+            <p v-if="props.project.industry" class="shrink-0 pt-3 text-label-lg text-brand">
+              {{ props.project.industry }}
             </p>
           </div>
 

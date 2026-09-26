@@ -6,7 +6,7 @@
 
     Inline rather than an `<img>` (the usual choice here, per `AppFooter.vue`)
     because all three call sites drive the colour from the button — `text-paper`
-    in `MobileMenu`, `text-ink-300 hover:text-paper` in `LeadMagnetModal`,
+    in `MobileMenu`, `text-ink-1000` on a brand-yellow disc in `LeadMagnetModal`,
     `text-ink-400 hover:text-paper` in `FlashMessages`. `currentColor` is what
     makes those hovers reach the glyph.
 

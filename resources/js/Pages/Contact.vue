@@ -117,7 +117,7 @@ function submit(): void {
 // default to `min-width: auto`. Without it the narrowest column the card can
 // form is 346px, which overflows the viewport below ~400px.
 const fieldClass =
-  'w-full min-w-0 rounded-lg border-3 border-brand-200 bg-white/80 p-3 text-body-md text-ink-1000 placeholder:text-ink-600 focus:border-brand focus:outline-none focus:ring-0'
+  'w-full min-w-0 rounded-lg border-3 border-brand-200 bg-white/80 p-3 text-body-md text-ink-1000 placeholder:text-ink-600 focus:border-brand focus:outline-none focus:ring-0 focus:ring-offset-0'
 </script>
 
 <template>
@@ -274,6 +274,7 @@ const fieldClass =
                       every one of CountrySelect's ~250 codes.
                     -->
                     <div
+                      dir="ltr"
                       class="flex items-stretch rounded-lg border-3 border-brand-200 bg-white/80 focus-within:border-brand"
                       style="background-color: #FDFCFA;"
                     >
@@ -288,7 +289,7 @@ const fieldClass =
                         v-model="phoneNumber"
                         type="tel"
                         dir="ltr"
-                        class="w-full min-w-0 bg-transparent p-3 text-body-md text-ink-1000 placeholder:text-ink-600 focus:outline-none focus:ring-0"
+                        class="w-full min-w-0 bg-transparent p-3 text-body-md text-ink-1000 placeholder:text-ink-600 focus:outline-none focus:ring-0 focus:ring-offset-0"
                         :placeholder="t('forms.contact.phone_placeholder')"
                         autocomplete="tel"
                       />
