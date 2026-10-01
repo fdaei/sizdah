@@ -14,6 +14,7 @@ import TestimonialCard from '@/Components/TestimonialCard.vue'
 import InsightsShowcase from '@/Components/InsightsShowcase.vue'
 import FaqAccordion from '@/Components/FaqAccordion.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
+import heroDesktopBgUrl from '~img/sizdah/home/hero-bg.jpg'
 import heroMobileBgUrl from '~img/sizdah/home/hero-bg-mobile.webp'
 import trustMarkUrl from '~img/sizdah/clients/trust-divider.svg'
 import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
@@ -73,13 +74,9 @@ const hero = computed(() => props.sections.hero)
  * `hero-bg.jpg` replaces the earlier `hero-bg.png` (which was JPEG data under
  * a .png name) trimmed from 2560x1393 to 2560x1390. Its last two rows were a
  * JPEG edge artefact — ~#4B3F25/#524631 against the ~#171410 interior, i.e.
- * three times brighter than the art around them. With `bg-cover bg-top` that
- * band is flush with the section's bottom edge at `lg` (where
- * `min-h-[783px]` matches the 2560x1393 ratio at the 1440 frame) and so is
- * invisible; below that the section grows taller than the art's ratio, cover
- * scales by height, and the band lands INSIDE the section — the thin gold
- * rule that used to appear between the hero and the KPI row on narrow
- * viewports. Nothing in CSS drew it, so nothing in CSS could remove it.
+ * three times brighter than the art around them. The image is rendered from
+ * the top at its natural aspect ratio so that band stays at the image edge
+ * instead of being stretched across the hero.
  */
 const kpi = computed(() => props.sections.kpi)
 const trustProof = computed(() => props.sections.trust_proof)
@@ -211,16 +208,17 @@ function endTestimonialSwipe(event: TouchEvent) {
     side; below `lg` the copy is full width and the art crops behind it.
   -->
   <!--
-    The ground is one full-bleed image (`heroBackground`) rather than a stack of
-    layers: the mesh, the corner glow and the four journey marks are all baked
-    into the art, so nothing is drawn over it and the copy simply sits on top.
-    `bg-top` keeps the marks anchored when `bg-cover` crops the bottom on short
-    viewports; the `lg` min-height is the art's own 2560x1393 ratio at the
-    1440 frame width, so the marks are never cropped on desktop.
+    The ground is a responsive image rather than a stack of layers: the mesh,
+    corner glow and four journey marks are baked into the supplied desktop and
+    mobile art. Both versions stay anchored at the top and keep their aspect
+    ratio while the copy sits on top.
   -->
   <section
-    class="home-hero section-first relative overflow-hidden bg-cover bg-top bg-no-repeat pb-12 sm:pb-16 max-md:h-[619px] lg:min-h-[783px] lg:pb-24"
-    :style="{ backgroundImage: `url(${heroMobileBgUrl})` }"
+    class="home-hero relative overflow-hidden bg-top bg-no-repeat pt-[132px] pb-12 sm:pb-16 md:pt-[180px] max-md:h-[619px] lg:min-h-[783px] lg:pb-24"
+    :style="{
+      '--hero-bg-desktop': `url(${heroDesktopBgUrl})`,
+      '--hero-bg-mobile': `url(${heroMobileBgUrl})`,
+    }"
   >
     <div class="container-sizdah relative">
       <div class="flex min-w-0 flex-col gap-5 sm:gap-6 lg:max-w-[566px] lg:gap-0 lg:pt-4" data-reveal-group>
@@ -495,6 +493,17 @@ function endTestimonialSwipe(event: TouchEvent) {
 
 <style scoped>
 .home-hero {
-  background-size: 100% 100%;
+  background-image: var(--hero-bg-desktop);
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
+
+/* The mobile header/menu is active below the lg breakpoint (1024px). */
+@media (max-width: 1023px) {
+  .home-hero {
+    background-image: var(--hero-bg-mobile) !important;
+    background-size: 100% auto;
+  }
 }
 </style>

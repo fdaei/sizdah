@@ -258,17 +258,6 @@ const strategyLead = computed(() =>
     -->
     <div class="container-sizdah relative isolate flex flex-col">
       <!--
-        511:9519 — a 109px hairline mesh, 1200x872, inset 24 from the content
-        track (frame x=120 against a 96 gutter) and starting 22px below the
-        content top.
-      -->
-      <div
-        class="grid-mesh pointer-events-none absolute inline-start-6 block-start-[22px] -z-10 hidden h-[872px] w-[1200px] max-w-[calc(100%-theme(spacing.6))] lg:block"
-        style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
-        aria-hidden="true"
-      />
-
-      <!--
         411:8560 — a centred 612 column (411:8561) inside a 670 track, gap 64
         down to the meta row and gap 24 inside the title block (411:8565). Both
         text runs are CENTER in the frame, and it carries no eyebrow, so this
@@ -290,11 +279,14 @@ const strategyLead = computed(() =>
           right) and the text runs after it — user decision 2026-09-11, taken
           against the earlier reading of 411:8569 (see .figma-sync/GAPS.md).
         -->
-        <dl v-if="meta.length" class="flex flex-wrap justify-center gap-4">
+        <dl
+          v-if="meta.length"
+          class="scrollbar-hidden flex w-full flex-nowrap justify-start gap-4 overflow-x-auto md:w-auto md:justify-center md:overflow-visible"
+        >
           <div
             v-for="item in meta"
             :key="item.key"
-            class="surface-meta-chip relative flex items-start gap-2 rounded-lg px-[26px] py-[14px]"
+            class="surface-meta-chip relative flex shrink-0 items-start gap-2 rounded-lg px-[26px] py-[14px]"
           >
             <!--
               The outline is the hand-drawn chip drawing (.sketch-frame-chip),

@@ -62,7 +62,7 @@ const modalOpen = ref(false)
     :class="
       props.size === 'lg'
         ? 'sketch-frame mx-auto max-w-[1036px] bg-brand-50 p-8 max-md:h-[148px] max-md:flex-row max-md:items-center max-md:gap-4 max-md:px-4 max-md:py-6 lg:flex-row lg:justify-between lg:p-16'
-          : 'w-full max-w-[826px] rounded-sm bg-brand-50 p-8 md:flex-row md:items-center md:justify-between md:gap-6'
+        : 'w-full max-w-[826px] rounded-sm bg-brand-50 p-8 md:flex-row md:items-center md:justify-between md:gap-6'
     "
   >
     <img
@@ -97,7 +97,7 @@ const modalOpen = ref(false)
         aria-hidden="true"
         width="48"
         height="26"
-        class="pointer-events-none absolute left-[66px] top-[26px] hidden h-[26px] w-[48px] lg:block"
+        class="pointer-events-none absolute left-[66px] top-[26px] hidden h-[26px] w-[48px] max-md:left-[47px] max-md:top-[32px] max-md:block max-md:h-[13px] max-md:w-6 md:hidden lg:block"
       />
       <img
         :src="leadMagnetScribbleUrl"
@@ -105,7 +105,7 @@ const modalOpen = ref(false)
         aria-hidden="true"
         width="56"
         height="56"
-        class="pointer-events-none absolute left-[308px] top-[130px] hidden size-14 lg:block"
+        class="pointer-events-none absolute left-[308px] top-[130px] hidden size-14 max-md:left-[108px] max-md:top-[108px] max-md:block max-md:size-7 md:hidden lg:block"
       />
     </template>
 

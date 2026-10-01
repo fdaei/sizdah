@@ -208,13 +208,13 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
                 :src="ringUrl"
                 alt=""
                 aria-hidden="true"
-                class="pointer-events-none absolute top-1/2 -z-10 h-[109.12px] w-[163px] max-w-none -translate-y-1/2"
+                class="service-number-ring pointer-events-none absolute top-1/2 -z-10 h-[109.12px] w-[163px] max-w-none -translate-y-1/2"
                 :style="{
                   insetInlineStart: `-${[59.85, 59.85, 38.85, 43.85][index % 4]}px`,
                 }"
               />
               <span
-                class="font-display text-display-xl leading-[145px] text-paper latin-nums"
+                class="service-number font-display text-display-xl leading-[145px] text-paper latin-nums"
                 aria-hidden="true"
               >
                 {{ String(index + 1).padStart(2, '0') }}
@@ -266,3 +266,19 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
     </div>
   </div>
 </template>
+
+<style scoped>
+@media (max-width: 767px) {
+  /* Keep the hand-drawn number badge inside the narrow mobile content track. */
+  .service-number-ring {
+    width: 76px;
+    height: 51px;
+    inset-inline-start: -18px !important;
+  }
+
+  .service-number {
+    font-size: 32px;
+    line-height: 72px;
+  }
+}
+</style>

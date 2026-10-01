@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import SectionHeading from '@/Components/SectionHeading.vue'
 import type { PageSectionData, ProjectSummary } from '@/types'
@@ -38,6 +38,8 @@ const props = defineProps<{
 
 const active = ref(0)
 const touchStartX = ref<number | null>(null)
+const AUTO_ADVANCE_MS = 5000
+let autoAdvanceTimer: number | null = null
 
 function startSwipe(event: TouchEvent) {
   touchStartX.value = event.touches[0]?.clientX ?? null
@@ -59,6 +61,22 @@ function finishSwipe(event: TouchEvent) {
   const direction = distance > 0 ? -1 : 1
   active.value = (active.value + direction + props.projects.length) % props.projects.length
 }
+
+function advanceProject() {
+  if (props.projects.length < 2 || document.visibilityState === 'hidden') return
+
+  active.value = (active.value + 1) % props.projects.length
+}
+
+onMounted(() => {
+  if (props.projects.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+  autoAdvanceTimer = window.setInterval(advanceProject, AUTO_ADVANCE_MS)
+})
+
+onBeforeUnmount(() => {
+  if (autoAdvanceTimer !== null) window.clearInterval(autoAdvanceTimer)
+})
 </script>
 
 <template>
@@ -134,9 +152,10 @@ function finishSwipe(event: TouchEvent) {
               >
                 <div class="overflow-hidden">
                   <div class="flex flex-col gap-4">
-                    <p v-if="project.industry" class="text-label-lg text-brand">
-                      {{ project.industry }}
-                    </p>
+                    <div v-if="project.industry" class="flex w-full items-center justify-start gap-1 text-right">
+                      <img :src="projectCategoryUrl" alt="" aria-hidden="true" width="20" height="20" class="size-5" />
+                      <p class="text-label-lg text-brand">{{ project.industry }}</p>
+                    </div>
                     <p v-if="project.excerpt" class="text-body-lg text-ink-200">
                       {{ project.excerpt }}
                     </p>
@@ -182,12 +201,12 @@ function finishSwipe(event: TouchEvent) {
               {{ props.projects[active].title }}
             </Link>
           </div>
-          <div class="flex flex-col items-end gap-2 text-right">
-            <div class="flex w-full items-center justify-end gap-1">
+          <div class="flex flex-col items-start gap-2 text-right">
+            <div class="flex w-full items-center justify-start gap-1">
+              <img :src="projectCategoryUrl" alt="" aria-hidden="true" width="20" height="20" class="size-5" />
               <p v-if="props.projects[active].industry" class="text-[12px] font-medium leading-[20px] text-brand">
                 {{ props.projects[active].industry }}
               </p>
-              <img :src="projectCategoryUrl" alt="" aria-hidden="true" width="20" height="20" class="size-5" />
             </div>
             <p v-if="props.projects[active].excerpt" class="w-full text-[14px] leading-[20px] text-ink-200">
               {{ props.projects[active].excerpt }}

@@ -38,8 +38,6 @@ const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${
 
 <template>
   <div class="flex flex-col items-center gap-6 max-md:gap-4">
-    <p class="text-label-lg text-paper max-md:text-[14px] max-md:leading-[17px]">{{ t('blog.share') }}</p>
-
     <ul class="flex flex-col items-center gap-4 max-md:flex-row max-md:gap-4">
       <li class="relative">
         <button

@@ -100,7 +100,7 @@ const iconUrl = computed(() => (props.item.icon ? ICONS[props.item.icon] : undef
       </h3>
       <p
         v-if="props.item.description"
-        class="text-title-sm text-ink-200 transition-colors duration-200 ease-brand group-hover:text-ink-800"
+        class="text-title-sm text-ink-200 transition-colors duration-200 ease-brand group-hover:text-ink-1000"
       >
         {{ props.item.description }}
       </p>
@@ -108,14 +108,22 @@ const iconUrl = computed(() => (props.item.icon ? ICONS[props.item.icon] : undef
 
     <div class="hidden max-md:flex max-md:w-full max-md:items-center max-md:justify-between max-md:gap-4">
       <div class="flex min-w-0 flex-1 flex-col gap-1 text-right">
-        <h3 class="truncate text-[18px] font-medium leading-[25px] text-paper">
+        <h3
+          class="truncate text-[18px] font-medium leading-[25px] text-paper transition-colors duration-200 ease-brand group-hover:text-ink-1000"
+        >
           {{ props.item.title }}
         </h3>
-        <p v-if="props.item.description" class="line-clamp-2 text-[14px] leading-[17px] text-ink-200">
+        <p
+          v-if="props.item.description"
+          class="line-clamp-2 text-[14px] leading-[17px] text-ink-200 transition-colors duration-200 ease-brand group-hover:text-ink-1000"
+        >
           {{ props.item.description }}
         </p>
       </div>
-      <p class="latin-nums shrink-0 font-display text-[36px] font-normal leading-[36px] text-brand" aria-hidden="true">
+      <p
+        class="latin-nums shrink-0 font-display text-[36px] font-normal leading-[36px] text-brand transition-colors duration-200 ease-brand group-hover:text-ink-1000"
+        aria-hidden="true"
+      >
         {{ String(props.index + 1).padStart(2, '0') }}
       </p>
     </div>

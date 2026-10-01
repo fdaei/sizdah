@@ -72,7 +72,7 @@ const chips = computed(() =>
     <li
       v-for="chip in chips"
       :key="chip.key"
-      class="relative flex items-start gap-2 rounded-lg px-[26px] py-[14px] max-md:h-[57px] max-md:px-4 max-md:py-3"
+      class="relative flex items-start gap-2 rounded-lg px-[26px] py-[14px] max-md:h-[57px] max-md:gap-1 max-md:px-3 max-md:py-2"
       style="
         background-image: linear-gradient(
           -15deg,
@@ -101,9 +101,13 @@ const chips = computed(() =>
         height="24"
         class="size-6 shrink-0"
       />
-      <span class="flex flex-col justify-center gap-2 whitespace-nowrap">
-        <span class="text-label-lg text-ink-50">{{ chip.label }}</span>
-        <span class="text-body-md text-ink-200">{{ chip.value }}</span>
+      <span class="flex flex-col justify-center gap-2 whitespace-nowrap max-md:gap-0.5">
+        <span class="text-label-lg text-ink-50 max-md:text-[12px] max-md:leading-[15px]">{{
+          chip.label
+        }}</span>
+        <span class="text-body-md text-ink-200 max-md:text-[12px] max-md:leading-[15px]">{{
+          chip.value
+        }}</span>
       </span>
     </li>
   </ul>
@@ -111,8 +115,15 @@ const chips = computed(() =>
 
 <style scoped>
 @media (max-width: 767px) {
-  li:nth-child(1) { width: 172px; }
-  li:nth-child(2) { width: 182px; }
-  li:nth-child(3) { width: 172px; margin-inline-end: 190px; }
+  li:nth-child(1) {
+    width: 172px;
+  }
+  li:nth-child(2) {
+    width: 182px;
+  }
+  li:nth-child(3) {
+    width: 172px;
+    margin-inline-end: 190px;
+  }
 }
 </style>

@@ -28,7 +28,17 @@ import siteBackgroundUrl from '~img/sizdah/shared/site-background.webp'
  */
 const page = usePage<SharedProps>()
 
-const gridPages = ['Work/Index', 'Services', 'Insights/Index', 'Contact', 'About']
+const gridPages = [
+  'Work/Index',
+  'Work/Show',
+  'Services',
+  'Insights/Index',
+  'Insights/Show',
+  'Contact',
+  'About',
+  'Legal',
+  'Error',
+]
 
 /**
  * Home is the exception: 268:2962 has NO page wash. Sampled down the full
@@ -42,6 +52,7 @@ const washed = computed(() => page.component !== 'Home' && !gridPages.includes(p
 
 const gridBackground = computed(() => gridPages.includes(page.component))
 const nonHomeBackground = computed(() => page.component !== 'Home')
+const workTopBackground = computed(() => page.component === 'Work/Index')
 
 const menuOpen = ref(false)
 </script>
@@ -49,7 +60,7 @@ const menuOpen = ref(false)
 <template>
   <div
     class="site-shell flex min-h-screen-safe flex-col bg-ink-1000"
-    :class="{ 'page-wash': washed, 'grid-background': gridBackground, 'non-home-background': nonHomeBackground, 'error-shell': page.component === 'Error', 'plain-mobile-background': ['Work/Index', 'Insights/Show'].includes(page.component) }"
+    :class="{ 'page-wash': washed, 'grid-background': gridBackground, 'non-home-background': nonHomeBackground, 'work-top-background': workTopBackground, 'error-shell': page.component === 'Error' }"
     :style="{ '--site-background': `url(${siteBackgroundUrl})` }"
   >
     <AppHeader @open-menu="menuOpen = true" />
@@ -74,27 +85,27 @@ const menuOpen = ref(false)
 </template>
 
 <style scoped>
-.non-home-background {
+.non-home-background:not(.grid-background) {
   background-image: var(--site-background) !important;
   background-position: top center;
   background-repeat: repeat-y;
   background-size: 100% auto;
 }
 
+@media (min-width: 768px) {
+  .site-shell.work-top-background {
+    background-repeat: no-repeat;
+    background-size: 100% 800px;
+  }
+}
+
 @media (max-width: 767px) {
-  .site-shell.non-home-background {
+  .site-shell.non-home-background:not(.grid-background) {
     background-image: var(--site-background) !important;
     background-position: top center;
     background-repeat: repeat-y;
     background-size: 100% auto;
   }
 
-  .site-shell.error-shell {
-    background-image: none !important;
-  }
-
-  .site-shell.plain-mobile-background {
-    background-image: none !important;
-  }
 }
 </style>

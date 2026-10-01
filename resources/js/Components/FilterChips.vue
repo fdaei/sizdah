@@ -82,7 +82,7 @@ function chipClass(value: string | null): (string | false)[] {
     :class="props.singleLine && 'scrollbar-hidden min-w-0 w-full max-w-full overflow-x-auto'"
   >
     <ul
-      class="flex items-start gap-3"
+      class="mx-auto flex items-start gap-3"
       :class="props.singleLine ? 'w-max flex-nowrap' : 'flex-wrap'"
     >
       <li

@@ -18,8 +18,6 @@ import pathIconUrl from '~img/sizdah/about/principle-path.svg'
 import impactIconUrl from '~img/sizdah/about/principle-impact.svg'
 import identityIconUrl from '~img/sizdah/about/principle-identity.svg'
 import discoveryIconUrl from '~img/sizdah/about/principle-discovery.svg'
-import figmaMohammadUrl from '~img/sizdah/about/figma-mohammad.png'
-import figmaAminUrl from '~img/sizdah/about/figma-amin.png'
 import figmaStoryIconUrl from '~img/sizdah/about/figma-story-icon.svg'
 
 /**
@@ -433,12 +431,6 @@ onBeforeUnmount(() => {
             </ul>
           </div>
         </div>
-        <div class="about-mobile-team-cards hidden max-md:flex">
-          <div v-for="member in [{ name: 'محمد', role: 'گرافیک دیزاینر', image: figmaMohammadUrl }, { name: 'امین', role: 'مدیرعامل', image: figmaAminUrl }]" :key="member.name" class="h-[247px] w-[173px] shrink-0 rounded-xl border-[3px] border-brand-100 bg-brand-100 p-0 text-right">
-            <img :src="member.image" alt="" class="h-[164px] w-full rounded-xl object-cover" />
-            <div class="p-3 text-ink-900"><p class="text-[18px]">{{ member.name }}</p><p class="text-[14px]">{{ member.role }}</p></div>
-          </div>
-        </div>
       </section>
 
       <!--
@@ -476,7 +468,7 @@ onBeforeUnmount(() => {
   .about-team,
   .about-cta {
     position: absolute;
-    inset-inline: 0;
+    inset-inline: 20px;
   }
 
   .about-hero {
@@ -539,7 +531,6 @@ onBeforeUnmount(() => {
   .about-think > ul > li {
     position: absolute;
     inset-inline: 0;
-    width: 362px;
     height: 208px;
     padding: 32px;
     gap: 24px;
@@ -581,16 +572,6 @@ onBeforeUnmount(() => {
     position: absolute;
     top: 130px;
     inset-inline: 0;
-    display: none;
-  }
-
-  .about-mobile-team-cards {
-    position: absolute;
-    top: 130px;
-    inset-inline: 0;
-    gap: 16px;
-    direction: ltr;
-    transform: translateX(20px);
   }
 
   .about-team .team-carousel-list {
@@ -603,19 +584,16 @@ onBeforeUnmount(() => {
   }
 
   .about-team .team-carousel-list > li img {
-    width: 164px;
-    height: 164px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    margin-inline: auto;
   }
 
   .about-cta {
     top: 2824px;
     inset-inline: 20px;
     padding: 32px 16px;
-  }
-
-  .about-cta::after,
-  .about-cta :deep(.grid-mesh) {
-    display: none !important;
   }
 
   .about-cta > div.relative {

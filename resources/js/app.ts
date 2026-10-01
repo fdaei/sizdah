@@ -36,6 +36,12 @@ createInertiaApp({
     installTranslations(app)
 
     app.mount(el)
+
+    // The initial page is mounted asynchronously by createInertiaApp. Running
+    // this before mount meant the first page had no reveal targets; initialize
+    // after Vue has rendered so Chrome's responsive/inspect view gets the same
+    // motion as a normal viewport.
+    initMotion()
   },
 
   progress: {
@@ -62,6 +68,3 @@ router.on('navigate', () => {
     requestAnimationFrame(() => initMotion())
   })
 })
-
-// First load.
-initMotion()

@@ -65,8 +65,8 @@ const rest = computed(() => props.posts.slice(1, 3))
             class="w-full rounded-lg object-cover max-md:h-[220px] max-md:shrink-0 sm:order-first sm:w-[279px] sm:shrink-0"
           />
 
-          <div class="flex flex-col justify-between gap-6 p-2 sm:w-[270px] sm:shrink-0">
-            <div class="flex flex-col gap-[80px]">
+          <div class="flex flex-col justify-between gap-6 p-2 max-md:gap-3 max-md:p-1 sm:w-[270px] sm:shrink-0">
+            <div class="flex flex-col gap-[80px] max-md:gap-5">
               <p class="flex items-center gap-2 text-body-md text-ink-600">
                 <img
                   :src="calendarUrl"
@@ -79,7 +79,7 @@ const rest = computed(() => props.posts.slice(1, 3))
                 <time :datetime="lead.publishedAtIso">{{ lead.publishedAt }}</time>
               </p>
 
-              <div class="flex flex-col gap-[32px]">
+              <div class="flex flex-col gap-[32px] max-md:gap-3">
                 <h3 class="text-title-md text-gold">
                   <Link :href="lead.url" class="transition-opacity hover:opacity-80">
                     {{ lead.title }}

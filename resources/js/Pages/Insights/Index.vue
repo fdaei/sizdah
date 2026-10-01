@@ -142,14 +142,21 @@ const rest = computed(() => props.posts.data.slice(2))
                RTL layout, so its coordinates map straight across. -->
           <div
             aria-hidden="true"
-            class="pointer-events-none absolute left-[45.75%] top-0 z-10 hidden -translate-x-1/2 translate-y-[calc(-50%-8px)] lg:block"
+            class="pointer-events-none absolute left-[45.75%] top-0 z-10 block -translate-x-1/2 translate-y-[calc(-50%-8px)]"
           >
-            <!-- The export is already rotated (78x78 box, rotated clip
-                 matrix), so never add a CSS rotation here - a second rotation
-                 threw the artwork off-centre inside its box. The artwork sits
-                 at 10-68 / 9-68 inside that box, so the box centre doubles as
-                 the artwork centre and the wrapper's -50% offsets land it. -->
-            <img :src="paperclipUrl" alt="" width="78" height="78" />
+            <!-- The export is already rotated (78x78 desktop box, scaled down
+                 on mobile), so never add a CSS rotation here - a second
+                 rotation threw the artwork off-centre inside its box. The
+                 artwork sits at 10-68 / 9-68 inside that box, so the box
+                 centre doubles as the artwork centre and the wrapper's -50%
+                 offsets land it. -->
+            <img
+              :src="paperclipUrl"
+              alt=""
+              width="78"
+              height="78"
+              class="size-14 md:size-[78px]"
+            />
           </div>
 
           <FeaturedPostCard :post="props.featured" />

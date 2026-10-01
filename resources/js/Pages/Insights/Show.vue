@@ -113,18 +113,10 @@ const articleContent = computed(() => {
     72px `section-first` assumes for the other pages.
   -->
   <article
-    class="section-first overflow-x-hidden max-md:pt-[188px] md:pt-[207px]"
+    class="section-first overflow-x-clip max-md:pt-[188px] md:pt-[207px]"
     :class="isFigmaArticle ? 'pb-[149px]' : 'pb-[123px]'"
   >
     <div class="container-sizdah relative isolate flex flex-col">
-      <!-- 299:7865 — the shared 109px mesh, 872 tall, from frame y=202,
-           i.e. 5px above the content column's own top edge. -->
-      <div
-        class="grid-mesh pointer-events-none absolute inline-start-0 block-start-[-5px] -z-10 hidden h-[872px] w-full max-w-container lg:block"
-        style="--mesh-cell-x: 109.095px; --mesh-cell-y: 109.095px"
-        aria-hidden="true"
-      />
-
       <!--
         285:5060 — a 670 track wrapping the 612 column (285:5061) whose title
         block (285:5065) is gap 24. The headline is Display/Medium (40/700).
@@ -161,7 +153,10 @@ const articleContent = computed(() => {
         data-reveal
       />
 
-      <div v-if="isFigmaArticle" class="ms-auto mt-10 hidden w-[176px] max-md:block">
+      <div
+        v-if="isFigmaArticle"
+        class="ms-auto mt-10 hidden w-[176px] max-md:sticky max-md:top-[124px] max-md:z-40 max-md:block"
+      >
         <ArticleShare :url="props.seo.canonical" :title="figmaArticle.title" />
       </div>
 
@@ -186,7 +181,7 @@ const articleContent = computed(() => {
           <ArticleShare
             :url="props.seo.canonical"
             :title="figmaArticle.title"
-            class="pointer-events-auto sticky top-32"
+            class="pointer-events-auto sticky top-[108px]"
           />
         </div>
 

@@ -75,7 +75,7 @@ const { t } = useTranslations()
           <p class="text-body-lg text-ink-300">{{ props.post.excerpt }}</p>
         </div>
 
-        <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center justify-between gap-4 max-md:[justify-content:right]">
           <PostMeta :post="props.post" />
 
           <Link
