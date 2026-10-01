@@ -176,7 +176,7 @@
         "textDecorationLine": "none",
         "color": "rgb(185, 185, 185)",
         "backgroundColor": "rgb(20, 20, 20)",
-        "backgroundImage": "url(\"http://127.0.0.1:5175/resources/images/sizdah/shared/site-background.webp\")",
+        "backgroundImage": "url(\"http://localhost:8000/build/assets/site-background-BWHHdGLS.webp\")",
         "borderTopWidth": "0px",
         "borderRightWidth": "0px",
         "borderBottomWidth": "0px",
@@ -5006,7 +5006,7 @@
         "x": 20,
         "y": 2824,
         "w": 362,
-        "h": 700.86
+        "h": 723.39
       },
       "style": {
         "display": "block",
@@ -5019,9 +5019,9 @@
         "rowGap": "normal",
         "columnGap": "normal",
         "paddingTop": "32px",
-        "paddingRight": "32px",
+        "paddingRight": "16px",
         "paddingBottom": "32px",
-        "paddingLeft": "32px",
+        "paddingLeft": "16px",
         "marginTop": "0px",
         "marginRight": "0px",
         "marginBottom": "0px",
@@ -5066,7 +5066,7 @@
         "x": 173.97,
         "y": 2824,
         "w": 208.03,
-        "h": 700.86
+        "h": 723.39
       },
       "style": {
         "display": "block",
@@ -5123,10 +5123,10 @@
       "cls": "relative z-10 flex flex-col items-center gap-10 lg:flex-row lg:justify-between lg:gap-6",
       "text": "",
       "box": {
-        "x": 52,
+        "x": 36,
         "y": 2856,
-        "w": 298,
-        "h": 636.86
+        "w": 330,
+        "h": 659.39
       },
       "style": {
         "display": "flex",
@@ -5183,9 +5183,9 @@
       "cls": "flex w-full flex-col items-start gap-12 text-start lg:max-w-[554px]",
       "text": "",
       "box": {
-        "x": 52,
+        "x": 36,
         "y": 2856,
-        "w": 298,
+        "w": 330,
         "h": 386.95
       },
       "style": {
@@ -5243,9 +5243,9 @@
       "cls": "flex flex-col items-start gap-12",
       "text": "",
       "box": {
-        "x": 52,
+        "x": 36,
         "y": 2856,
-        "w": 298,
+        "w": 330,
         "h": 298.95
       },
       "style": {
@@ -5303,9 +5303,9 @@
       "cls": "flex flex-col items-start gap-2",
       "text": "",
       "box": {
-        "x": 52,
+        "x": 36,
         "y": 2856,
-        "w": 298,
+        "w": 330,
         "h": 193.95
       },
       "style": {
@@ -5363,7 +5363,7 @@
       "cls": "font-display text-title-md text-brand",
       "text": "شروع همکاری",
       "box": {
-        "x": 241,
+        "x": 257,
         "y": 2856,
         "w": 109,
         "h": 25
@@ -5423,9 +5423,9 @@
       "cls": "flex flex-col gap-6",
       "text": "",
       "box": {
-        "x": 52,
+        "x": 36,
         "y": 2889,
-        "w": 298,
+        "w": 330,
         "h": 160.95
       },
       "style": {
@@ -5483,9 +5483,9 @@
       "cls": "text-section-line text-ink-1000",
       "text": "آماده‌اید برندتان را به مسیر درست هدایت کنید؟",
       "box": {
-        "x": 52,
+        "x": 36,
         "y": 2889,
-        "w": 298,
+        "w": 330,
         "h": 71.09
       },
       "style": {
@@ -5543,9 +5543,9 @@
       "cls": "text-title-sm text-ink-800",
       "text": "با ما درباره هدف‌ها، چالش‌ها و مسیر پیش روی برندتان صحبت کنید تا بهترین قدم بعدی را پیدا کنیم.",
       "box": {
-        "x": 52,
+        "x": 36,
         "y": 2984.09,
-        "w": 298,
+        "w": 330,
         "h": 65.86
       },
       "style": {
@@ -5603,7 +5603,7 @@
       "cls": "inline-flex items-center justify-center gap-1 rounded-sm transition-colors duration-200 ease-brand gap-2 px-8 py-4 text-title-md bg-brand text-ink-1000 hover:bg-brand-900",
       "text": "",
       "box": {
-        "x": 164,
+        "x": 180,
         "y": 3097.95,
         "w": 186,
         "h": 57
@@ -5663,7 +5663,7 @@
       "cls": "",
       "text": "شروع گفتگو",
       "box": {
-        "x": 228,
+        "x": 244,
         "y": 3113.95,
         "w": 90,
         "h": 25
@@ -5723,7 +5723,7 @@
       "cls": "size-6 flip-rtl",
       "text": "",
       "box": {
-        "x": 196,
+        "x": 212,
         "y": 3114.45,
         "w": 24,
         "h": 24
@@ -5783,9 +5783,9 @@
       "cls": "text-body-lg text-ink-700",
       "text": "برندینگ · مارکتینگ دیزاین · تولید محتوا · پشتیبانی شبکه‌های اجتماعی",
       "box": {
-        "x": 52,
+        "x": 36,
         "y": 3202.95,
-        "w": 298,
+        "w": 330,
         "h": 40
       },
       "style": {
@@ -5843,10 +5843,10 @@
       "cls": "w-full max-w-[592px]",
       "text": "",
       "box": {
-        "x": 52,
+        "x": 36,
         "y": 3282.95,
-        "w": 298,
-        "h": 209.91
+        "w": 330,
+        "h": 232.44
       },
       "style": {
         "display": "block",
