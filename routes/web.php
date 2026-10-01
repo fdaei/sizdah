@@ -62,6 +62,7 @@ Route::prefix('{locale}')
         // 4 — Services                   Figma 308:4492
         // Single page, four sections. No detail routes — see FIGMA-AUDIT §4.
         Route::get('services', ServiceController::class)->name('services');
+        Route::get('services/{service}', [ServiceController::class, 'show'])->name('services.show');
 
         // 5 — About                      Figma 336:5623
         Route::get('about', AboutController::class)->name('about');

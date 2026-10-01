@@ -21,6 +21,23 @@ use Inertia\Response;
  */
 final class ServiceController extends Controller
 {
+    public function show(Request $request, string $service): Response
+    {
+        $record = Service::query()->forDisplay()->whereHas('translations', fn ($query) =>
+            $query->where('locale', app()->getLocale())->where('slug', $service)
+        )->firstOrFail();
+        $title = (string) $record->getTranslation('title');
+        $description = (string) $record->getTranslation('description');
+
+        return Inertia::render('Services/Show', [
+            'service' => ['title' => $title, 'description' => $description, 'features' => $record->getTranslation('features') ?? []],
+            'seo' => array_merge(SeoBuilder::forPage(null, $request->url()), [
+                'title' => $title, 'description' => $description,
+                'schema' => ['@context' => 'https://schema.org', '@type' => 'Service', 'name' => $title, 'description' => $description, 'url' => $request->url()],
+            ]),
+        ]);
+    }
+
     public function __invoke(Request $request): Response
     {
         $page = Page::query()

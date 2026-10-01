@@ -31,7 +31,7 @@ const message = computed(() => t(`errors.${key.value}.message`))
 <template>
   <Head :title="title" />
 
-  <section class="section-first flex flex-col items-center pb-24 text-center">
+  <section class="section-first flex min-h-[874px] flex-col items-center pb-0 text-center max-md:pt-[239px]">
     <div class="container-sizdah flex flex-col items-center">
       <!--
         725x544 in the frame, exported at 2x. The negative block-end margin is
@@ -44,12 +44,12 @@ const message = computed(() => t(`errors.${key.value}.message`))
         aria-hidden="true"
         width="725"
         height="544"
-        class="mb-[-40px] h-auto w-full max-w-[725px]"
+        class="mb-[-40px] h-auto w-full max-w-[725px] max-md:mb-[-24px] max-md:h-[279.87px] max-md:w-[373.162px] max-md:object-cover"
       />
 
-      <div class="flex w-full max-w-[506px] flex-col items-center gap-8">
-        <div class="flex flex-col items-center gap-4">
-          <h1 class="text-heading-xl text-brand-50">
+      <div class="flex w-full max-w-[506px] flex-col items-center gap-8 max-md:max-w-[362px] max-md:gap-5">
+        <div class="flex flex-col items-center gap-4 max-md:gap-3">
+          <h1 class="text-heading-xl text-brand-50 max-md:text-[20px] max-md:leading-6">
             {{ title }}
           </h1>
           <!--
@@ -57,12 +57,17 @@ const message = computed(() => t(`errors.${key.value}.message`))
             between the two clauses; the other statuses are single-line, so it
             is inert for them.
           -->
-          <p class="whitespace-pre-line text-title-sm text-ink-200">
+          <p class="whitespace-pre-line text-title-sm text-ink-200 max-md:text-[16px] max-md:leading-[20px]">
             {{ message }}
           </p>
         </div>
 
-        <CtaButton :label="t('errors.back_home')" :href="route('home')" size="lg" with-arrow />
+        <CtaButton
+          :label="t('errors.back_home')"
+          :href="route('home')"
+          size="md"
+          class="max-md:!px-[18px] max-md:!py-3 max-md:!text-[16px] max-md:!leading-[22px]"
+        />
       </div>
     </div>
   </section>

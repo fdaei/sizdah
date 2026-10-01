@@ -184,6 +184,17 @@
     line-height: 2.25;
   }
 
+@media (max-width: 767px) {
+  .section-first {
+    background-image: none !important;
+  }
+
+  .eyebrow {
+      @apply text-[14px];
+      line-height: 32px;
+    }
+  }
+
   .eyebrow::before {
     content: '';
     @apply inline-block h-2 w-2 shrink-0 rotate-45 rounded-[1px] bg-brand;
@@ -588,6 +599,27 @@
     margin-block-start: 22px;
   }
 
+  @media (max-width: 767px) {
+  /* Mobile article frame 1077:7197 — the authored copy uses a tighter
+     rhythm than the general article template. */
+  .figma-article-prose > h3 {
+    margin-block: 0 30px;
+    font-size: 22px;
+    line-height: 1.2;
+  }
+
+  .figma-article-prose > h3:not(:first-child) {
+    margin-block: 48px 24px;
+    font-size: 20px;
+  }
+
+  .figma-article-prose > p {
+    margin-block: 0;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  }
+
   .marquee-track {
     @apply flex w-max animate-marquee items-center;
     will-change: transform;
@@ -610,6 +642,19 @@
   .marquee-mask {
     -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
     mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .client-carousel {
+    cursor: grab;
+    touch-action: pan-y;
+  }
+
+  .client-carousel.is-dragging {
+    cursor: grabbing;
+  }
+
+  .client-carousel-track {
+    animation: none !important;
   }
 
   /*
@@ -656,6 +701,55 @@
     -webkit-mask-image: radial-gradient(ellipse at center, #000 38%, rgb(0 0 0 / 0) 100%);
     mask-image: radial-gradient(ellipse at center, #000 38%, rgb(0 0 0 / 0) 100%);
   }
+
+  /* Why-us separators use the same warm yellow as the brand accents. */
+  .why-rule {
+    filter: brightness(0) saturate(100%) invert(74%) sepia(89%) saturate(899%) hue-rotate(343deg)
+      brightness(101%) contrast(94%);
+  }
+}
+
+
+@media (max-width: 1023px) {
+  .testimonial-carousel {
+    --testimonial-index: 0;
+    transform: translateX(calc(var(--testimonial-index) * (100% + 26px)));
+    transition: transform 560ms cubic-bezier(.22, .8, .25, 1);
+    will-change: transform;
+  }
+
+  [dir='rtl'] .testimonial-carousel {
+    transform: translateX(calc(var(--testimonial-index) * (100% + 26px)));
+  }
+
+  .testimonial-carousel > li,
+  .testimonial-carousel > * {
+    flex: 0 0 100%;
+    min-width: 100%;
+    animation: testimonial-settle 560ms cubic-bezier(.22, .8, .25, 1);
+  }
+
+  .testimonial-arrow {
+    @apply flex size-9 items-center justify-center rounded-full border border-ink-700 text-lg text-brand transition-colors;
+  }
+
+  .testimonial-arrow:active,
+  .testimonial-arrow:hover {
+    @apply border-brand bg-brand text-ink-1000;
+  }
+
+  .testimonial-dot {
+    @apply size-2 rounded-full bg-ink-700 transition-all duration-300;
+  }
+
+  .testimonial-dot.is-active {
+    @apply w-6 bg-brand;
+  }
+}
+
+@keyframes testimonial-settle {
+  0% { opacity: .55; transform: rotate(1.2deg) scale(.985); }
+  100% { opacity: 1; transform: rotate(0) scale(1); }
 }
 
 @layer utilities {

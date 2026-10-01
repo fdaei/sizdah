@@ -36,14 +36,21 @@ const page = await ctx.newPage()
 // Belt and braces: motion.ts respects prefers-reduced-motion, but any stray
 // CSS transition would still drift between runs.
 await page.addStyleTag({
-  content: `*,*::before,*::after{animation:none!important;transition:none!important}`,
+  content: `*,*::before,*::after{animation:none!important;transition:none!important}.will-reveal{opacity:1!important;transform:none!important}`,
 }).catch(() => {})
 
 await page.goto(BASE + urlPath, { waitUntil: 'networkidle' })
 await page.addStyleTag({
-  content: `*,*::before,*::after{animation:none!important;transition:none!important}`,
+  content: `*,*::before,*::after{animation:none!important;transition:none!important}.will-reveal{opacity:1!important;transform:none!important}`,
 })
 await page.evaluate(() => document.fonts.ready)
+await page.waitForFunction(() => [...document.images].every((img) => img.complete), null, { timeout: 5000 }).catch(() => {})
+await page.evaluate(() => {
+  document.querySelectorAll('.will-reveal').forEach((el) => {
+    el.style.setProperty('opacity', '1', 'important')
+    el.style.setProperty('transform', 'none', 'important')
+  })
+})
 // Reveal animations set opacity:0 pre-animation via html.motion-ready; with
 // reduced motion they resolve, but give the class a beat to settle.
 await page.waitForTimeout(400)
@@ -114,6 +121,13 @@ const data = await page.evaluate(() => {
 })
 
 writeFileSync(`PARITY/measure/${slug}.json`, JSON.stringify(data, null, 2))
+await page.evaluate(() => {
+  document.querySelectorAll('.will-reveal').forEach((el) => {
+    el.style.setProperty('opacity', '1', 'important')
+    el.style.setProperty('transform', 'none', 'important')
+  })
+})
+await page.waitForTimeout(100)
 await page.screenshot({ path: `PARITY/diff/${slug}.code.png`, fullPage: true })
 await browser.close()
 

@@ -37,14 +37,14 @@ const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${
 </script>
 
 <template>
-  <div class="flex flex-col items-center gap-6">
-    <p class="text-label-lg text-paper">{{ t('blog.share') }}</p>
+  <div class="flex flex-col items-center gap-6 max-md:gap-4">
+    <p class="text-label-lg text-paper max-md:text-[14px] max-md:leading-[17px]">{{ t('blog.share') }}</p>
 
-    <ul class="flex flex-col items-center gap-4">
+    <ul class="flex flex-col items-center gap-4 max-md:flex-row max-md:gap-4">
       <li class="relative">
         <button
           type="button"
-          class="group flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-colors duration-200 ease-brand hover:bg-brand"
+          class="group flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-colors duration-200 ease-brand hover:bg-brand max-md:size-12"
           @click="copyLink"
         >
           <span class="sr-only">{{ t('blog.copy_link') }}</span>
@@ -79,7 +79,7 @@ const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${
           :href="xShareUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="group flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-colors duration-200 ease-brand hover:bg-brand"
+          class="group flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-colors duration-200 ease-brand hover:bg-brand max-md:size-12"
         >
           <span class="sr-only">X</span>
           <img
@@ -98,7 +98,7 @@ const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${
           :href="linkedinShareUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="group flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-colors duration-200 ease-brand hover:bg-brand"
+          class="group flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-colors duration-200 ease-brand hover:bg-brand max-md:size-12"
         >
           <span class="sr-only">LinkedIn</span>
           <img

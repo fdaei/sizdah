@@ -29,6 +29,8 @@ import { useTranslations } from '@/Composables/useTranslations'
  * fragments, which is a drawing tool artefact and not worth 50 requests.
  */
 const { t } = useTranslations()
+
+const props = withDefaults(defineProps<{ mobile?: boolean }>(), { mobile: false })
 </script>
 
 <template>
@@ -37,13 +39,16 @@ const { t } = useTranslations()
     so it is also the cap: at the old max-w-[560px] every offset below scaled
     with it and the whole trail rendered ~20% oversized.
   -->
-  <div class="relative aspect-[466/500] w-full max-w-[466px]" aria-hidden="true">
+  <div
+    :class="props.mobile ? 'relative h-[280px] w-full max-w-none' : 'relative aspect-[466/500] w-full max-w-[466px]'"
+    aria-hidden="true"
+  >
     <!--
       Dotted trail, Black/600 in the frame. viewBox matches the composition box
       so the paths land on the marks at any scale.
     -->
     <svg
-      class="absolute inset-0 size-full"
+      :class="props.mobile ? 'hidden' : 'absolute inset-0 size-full'"
       viewBox="0 0 466 500"
       fill="none"
       preserveAspectRatio="none"
@@ -67,7 +72,7 @@ const { t } = useTranslations()
       alt=""
       width="47"
       height="172"
-      class="absolute left-[2.36%] top-[19.83%] w-[10.17%]"
+      :class="props.mobile ? 'hidden' : 'absolute left-[2.36%] top-[19.83%] w-[10.17%]'"
     />
 
     <img
@@ -75,40 +80,40 @@ const { t } = useTranslations()
       alt=""
       width="129"
       height="96"
-      class="absolute left-0 top-[1.79%] w-[27.53%]"
+      :class="props.mobile ? 'absolute left-[91px] top-[211px] w-[50px]' : 'absolute left-0 top-[1.79%] w-[27.53%]'"
     />
     <img
       :src="identityUrl"
       alt=""
       width="104"
       height="111"
-      class="absolute left-[72.75%] top-0 w-[22.31%]"
+      :class="props.mobile ? 'absolute left-[128px] top-[106px] w-[40px]' : 'absolute left-[72.75%] top-0 w-[22.31%]'"
     />
     <img
       :src="contentUrl"
       alt=""
       width="124"
       height="93"
-      class="absolute left-[0.21%] top-[53.59%] w-[26.5%]"
+      :class="props.mobile ? 'absolute left-[20px] top-[211px] w-[50px]' : 'absolute left-[0.21%] top-[53.59%] w-[26.5%]'"
     />
     <img
       :src="growthUrl"
       alt=""
       width="95"
       height="111"
-      class="absolute left-[74.68%] top-[51.98%] w-[20.3%]"
+      :class="props.mobile ? 'absolute left-[20px] top-[106px] w-[40px]' : 'absolute left-[74.68%] top-[51.98%] w-[20.3%]'"
     />
 
-    <p class="absolute left-[6.65%] top-[32.8%] text-title-md font-semibold text-paper">
+    <p :class="props.mobile ? 'hidden' : 'absolute left-[6.65%] top-[32.8%] text-title-md font-semibold text-paper'">
       {{ t('home.journey.strategy') }}
     </p>
-    <p class="absolute left-[82.19%] top-[34.42%] text-title-md font-semibold text-paper">
+    <p :class="props.mobile ? 'hidden' : 'absolute left-[82.19%] top-[34.42%] text-title-md font-semibold text-paper'">
       {{ t('home.journey.identity') }}
     </p>
-    <p class="absolute left-[10.73%] top-[94.92%] text-title-md font-semibold text-paper">
+    <p :class="props.mobile ? 'hidden' : 'absolute left-[10.73%] top-[94.92%] text-title-md font-semibold text-paper'">
       {{ t('home.journey.content') }}
     </p>
-    <p class="absolute left-[84.12%] top-[96.55%] text-title-md font-semibold text-paper">
+    <p :class="props.mobile ? 'hidden' : 'absolute left-[84.12%] top-[96.55%] text-title-md font-semibold text-paper'">
       {{ t('home.journey.growth') }}
     </p>
   </div>

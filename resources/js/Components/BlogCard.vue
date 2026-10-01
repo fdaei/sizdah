@@ -35,16 +35,21 @@ const props = withDefaults(
         class="overflow-hidden rounded-lg border border-warm-100 shadow-card"
         :class="props.variant === 'wide' ? 'aspect-[612/400]' : 'aspect-square'"
       >
-        <img
-          v-if="props.post.image"
-          :src="props.post.image.src"
-          :srcset="props.post.image.srcset"
-          :alt="props.post.image.alt"
-          :width="props.post.image.width"
-          :height="props.post.image.height"
-          loading="lazy"
-          class="size-full object-cover transition-transform duration-500 ease-brand group-hover:scale-105"
-        />
+        <picture v-if="props.post.image">
+          <source v-if="props.post.image.avif" :srcset="props.post.image.avif" type="image/avif" />
+          <source v-if="props.post.image.webp" :srcset="props.post.image.webp" type="image/webp" />
+          <img
+            :src="props.post.image.src"
+            :srcset="props.post.image.srcset"
+            :sizes="props.post.image.sizes"
+            :alt="props.post.image.alt"
+            :width="props.post.image.width"
+            :height="props.post.image.height"
+            loading="eager"
+            decoding="async"
+            class="size-full object-cover transition-transform duration-500 ease-brand group-hover:scale-105"
+          />
+        </picture>
         <div v-else class="size-full bg-ink-900" aria-hidden="true" />
       </div>
 
@@ -54,7 +59,7 @@ const props = withDefaults(
         <component
           :is="props.headingLevel"
           class="text-ink-50 transition-colors duration-200 ease-brand group-hover:text-brand"
-          :class="props.variant === 'wide' ? 'text-heading-md' : 'text-heading-sm'"
+          :class="props.variant === 'wide' ? 'text-heading-md max-md:text-[24px] max-md:leading-[30px]' : 'text-heading-sm max-md:text-[20px] max-md:leading-[25px]'"
         >
           {{ props.post.title }}
         </component>

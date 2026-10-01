@@ -57,9 +57,9 @@ const claims = computed(() =>
 </script>
 
 <template>
-  <section class="section">
+  <section class="section max-md:-mt-[47px]">
     <div class="container-sizdah">
-      <div class="grid gap-12 xl:grid-cols-[401px_680px] xl:justify-between xl:gap-0">
+      <div class="grid gap-12 max-md:gap-[58px] xl:grid-cols-[401px_680px] xl:justify-between xl:gap-0">
         <SectionHeading
           data-reveal
           :eyebrow="props.section.eyebrow"
@@ -69,7 +69,7 @@ const claims = computed(() =>
         />
 
         <div
-          class="relative grid gap-x-10 gap-y-12 sm:grid-cols-2 xl:mt-[51px] xl:h-[400px] xl:w-[680px] xl:block"
+          class="relative grid gap-x-10 gap-y-12 max-md:gap-y-4 sm:grid-cols-2 xl:mt-[51px] xl:h-[400px] xl:w-[680px] xl:block"
           data-reveal-group
         >
           <img
@@ -78,7 +78,7 @@ const claims = computed(() =>
             aria-hidden="true"
             width="4"
             height="400"
-            class="pointer-events-none absolute top-0 hidden h-[400px] w-1 xl:left-[330px] xl:block"
+            class="why-rule pointer-events-none absolute top-0 hidden h-[400px] w-1 xl:left-[330px] xl:block"
           />
           <img
             :src="ruleTopUrl"
@@ -86,7 +86,7 @@ const claims = computed(() =>
             aria-hidden="true"
             width="320"
             height="4"
-            class="pointer-events-none absolute hidden h-1 w-[320px] xl:left-[344px] xl:top-[190px] xl:block"
+            class="why-rule pointer-events-none absolute hidden h-1 w-[320px] xl:left-[344px] xl:top-[190px] xl:block"
           />
           <img
             :src="ruleBottomUrl"
@@ -94,35 +94,48 @@ const claims = computed(() =>
             aria-hidden="true"
             width="320"
             height="4"
-            class="pointer-events-none absolute hidden h-1 w-[320px] xl:left-[-26px] xl:top-[246px] xl:block"
+            class="why-rule pointer-events-none absolute hidden h-1 w-[320px] xl:left-[-26px] xl:top-[246px] xl:block"
           />
 
           <!--
             268:3717 — glyph at the inline start with the copy right-aligned
             against it, so DOM order is glyph first.
           -->
-          <div
-            v-for="({ item, glyph }, index) in claims"
-            :key="item.id"
-            class="relative flex items-start gap-4 xl:absolute xl:gap-0"
-            :class="[index % 2 === 0 ? 'sm:pe-10 xl:pe-0' : 'sm:ps-0', DESKTOP_POSITIONS[index]]"
-          >
+          <template v-for="({ item, glyph }, index) in claims" :key="item.id">
+            <div
+              class="relative flex items-start gap-4 max-md:min-h-[64px] xl:absolute xl:gap-0"
+              :class="[
+                index % 2 === 0 ? 'sm:pe-10 xl:pe-0' : 'sm:ps-0',
+                DESKTOP_POSITIONS[index],
+              ]"
+            >
+                <img
+                :src="glyph"
+                alt=""
+                aria-hidden="true"
+                width="40"
+                height="40"
+                class="size-10 shrink-0 max-md:size-8"
+              />
+
+              <div class="flex w-[212px] flex-col gap-2 text-right max-md:flex-1 max-md:gap-1 max-md:w-auto">
+                <h3 class="text-heading-sm text-ink-50 max-md:text-[18px] max-md:leading-[25px]">{{ item.title }}</h3>
+                <p v-if="item.description" class="text-title-sm text-ink-300 max-md:text-[12px] max-md:leading-[17px]">
+                  {{ item.description }}
+                </p>
+              </div>
+            </div>
+
             <img
-              :src="glyph"
+              v-if="index < claims.length - 1"
+              :src="ruleTopUrl"
               alt=""
               aria-hidden="true"
-              width="40"
-              height="40"
-              class="size-10 shrink-0"
+              width="320"
+              height="4"
+              class="why-rule col-span-full h-1 w-full sm:hidden"
             />
-
-            <div class="flex w-[212px] flex-col gap-2 text-right">
-              <h3 class="text-heading-sm text-ink-50">{{ item.title }}</h3>
-              <p v-if="item.description" class="text-title-sm text-ink-300">
-                {{ item.description }}
-              </p>
-            </div>
-          </div>
+          </template>
         </div>
       </div>
     </div>

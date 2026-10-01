@@ -17,6 +17,14 @@ const page = usePage<SharedProps>()
 
 const settings = computed(() => page.props.settings)
 const ogLocale = computed(() => page.props.locale.htmlLang.replace('-', '_'))
+const schemaJson = computed(() => {
+  if (!props.seo.schema) {
+    return undefined
+  }
+
+  // Keep JSON-LD from terminating the script element if a value contains HTML.
+  return JSON.stringify(props.seo.schema).replace(/</g, '\\u003c')
+})
 </script>
 
 <template>
@@ -24,6 +32,12 @@ const ogLocale = computed(() => page.props.locale.htmlLang.replace('-', '_'))
     <meta name="description" :content="props.seo.description" />
     <link rel="canonical" :href="props.seo.canonical" />
     <meta v-if="props.seo.noindex" name="robots" content="noindex, nofollow" />
+    <component
+      v-if="schemaJson"
+      :is="'script'"
+      type="application/ld+json"
+      v-html="schemaJson"
+    />
 
     <meta property="og:type" :content="props.seo.type" />
     <meta property="og:title" :content="props.seo.title" />

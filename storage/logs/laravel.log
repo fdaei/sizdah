@@ -100711,3 +100711,2349 @@ Stack trace:
 #8 /home/fdaei/workspace/mine/phc-frontend/artisan(14): Illuminate\\Foundation\\Application->handleCommand()
 #9 {main}
 "} 
+[2026-09-28 11:14:35] local.ERROR: The process "'/usr/bin/php' 'artisan' 'queue:work' '--once' '--name=default' '--queue=default' '--backoff=0' '--memory=128' '--sleep=3' '--tries=1'" exceeded the timeout of 60 seconds. {"exception":"[object] (Symfony\\Component\\Process\\Exception\\ProcessTimedOutException(code: 0): The process \"'/usr/bin/php' 'artisan' 'queue:work' '--once' '--name=default' '--queue=default' '--backoff=0' '--memory=128' '--sleep=3' '--tries=1'\" exceeded the timeout of 60 seconds. at /home/fdaei/project/my/sizdah/vendor/symfony/process/Process.php:1215)
+[stacktrace]
+#0 /home/fdaei/project/my/sizdah/vendor/symfony/process/Process.php(481): Symfony\\Component\\Process\\Process->checkTimeout()
+#1 /home/fdaei/project/my/sizdah/vendor/symfony/process/Process.php(265): Symfony\\Component\\Process\\Process->wait()
+#2 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Queue/Listener.php(180): Symfony\\Component\\Process\\Process->run()
+#3 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Queue/Listener.php(91): Illuminate\\Queue\\Listener->runProcess()
+#4 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Queue/Console/ListenCommand.php(74): Illuminate\\Queue\\Listener->listen()
+#5 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Queue\\Console\\ListenCommand->handle()
+#6 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#7 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(96): Illuminate\\Container\\Util::unwrapIfClosure()
+#8 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#9 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Container.php(799): Illuminate\\Container\\BoundMethod::call()
+#10 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(211): Illuminate\\Container\\Container->call()
+#11 /home/fdaei/project/my/sizdah/vendor/symfony/console/Command/Command.php(341): Illuminate\\Console\\Command->execute()
+#12 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#13 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(1117): Illuminate\\Console\\Command->run()
+#14 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(356): Symfony\\Component\\Console\\Application->doRunCommand()
+#15 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(195): Symfony\\Component\\Console\\Application->doRun()
+#16 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony\\Component\\Console\\Application->run()
+#17 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#18 /home/fdaei/project/my/sizdah/artisan(14): Illuminate\\Foundation\\Application->handleCommand()
+#19 {main}
+"} 
+[2026-09-28 12:49:07] local.ERROR: The process "'/usr/bin/php' 'artisan' 'queue:work' '--once' '--name=default' '--queue=default' '--backoff=0' '--memory=128' '--sleep=3' '--tries=1'" exceeded the timeout of 60 seconds. {"exception":"[object] (Symfony\\Component\\Process\\Exception\\ProcessTimedOutException(code: 0): The process \"'/usr/bin/php' 'artisan' 'queue:work' '--once' '--name=default' '--queue=default' '--backoff=0' '--memory=128' '--sleep=3' '--tries=1'\" exceeded the timeout of 60 seconds. at /home/fdaei/project/my/sizdah/vendor/symfony/process/Process.php:1215)
+[stacktrace]
+#0 /home/fdaei/project/my/sizdah/vendor/symfony/process/Process.php(481): Symfony\\Component\\Process\\Process->checkTimeout()
+#1 /home/fdaei/project/my/sizdah/vendor/symfony/process/Process.php(265): Symfony\\Component\\Process\\Process->wait()
+#2 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Queue/Listener.php(180): Symfony\\Component\\Process\\Process->run()
+#3 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Queue/Listener.php(91): Illuminate\\Queue\\Listener->runProcess()
+#4 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Queue/Console/ListenCommand.php(74): Illuminate\\Queue\\Listener->listen()
+#5 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Queue\\Console\\ListenCommand->handle()
+#6 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#7 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(96): Illuminate\\Container\\Util::unwrapIfClosure()
+#8 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#9 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Container.php(799): Illuminate\\Container\\BoundMethod::call()
+#10 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(211): Illuminate\\Container\\Container->call()
+#11 /home/fdaei/project/my/sizdah/vendor/symfony/console/Command/Command.php(341): Illuminate\\Console\\Command->execute()
+#12 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#13 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(1117): Illuminate\\Console\\Command->run()
+#14 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(356): Symfony\\Component\\Console\\Application->doRunCommand()
+#15 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(195): Symfony\\Component\\Console\\Application->doRun()
+#16 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony\\Component\\Console\\Application->run()
+#17 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#18 /home/fdaei/project/my/sizdah/artisan(14): Illuminate\\Foundation\\Application->handleCommand()
+#19 {main}
+"} 
+[2026-10-01 08:13:59] local.ERROR: [Vue warn]: Unhandled error during execution of render function 
+  at <Error errors= {} translations= {
+  admin: {
+    language: { english: 'English', persian: 'فارسی' },
+    navigation: { groups: [Object], items: [Object] },
+    models: {
+      page: 'صفحه',
+      service: 'خدمت',
+      testimonial: 'نظر مشتری',
+      faq: 'پرسش',
+      client: 'لوگوی مشتری',
+      team_member: 'عضو تیم',
+      project: 'پروژه',
+      industry: 'دسته‌بندی پروژه',
+      post: 'مقاله',
+      post_category: 'دسته‌بندی مقاله',
+      post_tag: 'برچسب مقاله',
+      contact_submission: 'پیام تماس',
+      newsletter_subscription: 'عضو خبرنامه',
+      menu: 'منوی سایت',
+      social_link: 'لینک شبکه اجتماعی',
+      redirect: 'انتقال آدرس',
+      user: 'کاربر پنل'
+    },
+    models_plural: {
+      page: 'صفحه‌ها',
+      service: 'خدمات',
+      testimonial: 'نظرهای مشتریان',
+      faq: 'پرسش‌ها',
+      client: 'لوگوهای مشتریان',
+      team_member: 'اعضای تیم',
+      project: 'پروژه‌ها',
+      industry: 'دسته‌بندی‌های پروژه',
+      post: 'مقاله‌ها',
+      post_category: 'دسته‌بندی‌های مقاله',
+      post_tag: 'برچسب‌های مقاله',
+      contact_submission: 'پیام‌های تماس',
+      newsletter_subscription: 'اعضای خبرنامه',
+      menu: 'منوهای سایت',
+      social_link: 'لینک‌های شبکه اجتماعی',
+      redirect: 'انتقال آدرس‌ها',
+      user: 'کاربران پنل'
+    }
+  },
+  blog: {
+    reading_time: 'زمان مطالعه : :minutes دقیقه',
+    published_on: 'انتشار در :date',
+    written_by: 'نویسنده',
+    subject: 'موضوع',
+    date: 'تاریخ',
+    share: 'اشتراک‌گذاری این مقاله',
+    related: 'مقالات مرتبط',
+    categories: 'دسته‌بندی‌ها',
+    tags: 'برچسب‌ها',
+    copy_link: 'کپی لینک',
+    link_copied: 'لینک کپی شد'
+  },
+  common: {
+    skip_to_content: 'رفتن به محتوا',
+    primary_navigation: 'ناوبری اصلی',
+    change_language: 'تغییر زبان',
+    open_menu: 'باز کردن منو',
+    close_menu: 'بستن منو',
+    close: 'بستن',
+    read_more: 'ادامه مطلب',
+    read_article: 'مطالعه مقاله',
+    view_all: 'مشاهده همه',
+    load_more: 'نمونه‌کارهای بیشتر',
+    back: 'بازگشت',
+    next: 'بعدی',
+    previous: 'قبلی',
+    pagination: 'صفحه‌بندی',
+    all: 'همه',
+    team: 'تیم ما',
+    search: 'جستجو',
+    loading: 'در حال بارگذاری…',
+    sending: 'در حال ارسال…',
+    last_updated: 'آخرین به‌روزرسانی: :date',
+    get_checklist: 'دریافت چک‌لیست',
+    start_conversation: 'شروع گفتگو',
+    lets_talk: 'گفتگو کنیم',
+    empty_projects: 'هنوز پروژه‌ای برای نمایش وجود ندارد.',
+    empty_posts: 'هنوز مقاله‌ای منتشر نشده است.',
+    empty_results: 'موردی با فیلترهای شما مطابقت نداشت.'
+  },
+  errors: {
+    '403': {
+      title: 'دسترسی محدود',
+      message: 'شما اجازه مشاهده این صفحه را ندارید.'
+    },
+    '404': {
+      title: 'مسیر را گم کردید؟',
+      message: 'صفحه‌ای که دنبال آن بودید پیدا نشد،
+' +
+        'اما با هم می‌توانیم مسیر درست را پیدا کنیم.'
+    },
+    '429': {
+      title: 'کمی آهسته‌تر',
+      message: 'درخواست‌های شما بیش از حد مجاز بوده است. لطفاً کمی صبر کنید و دوباره تلاش کنید.'
+    },
+    '500': {
+      title: 'مشکلی پیش آمد',
+      message: 'خطایی غیرمنتظره از سمت ما رخ داد. در حال بررسی هستیم.'
+    },
+    '503': {
+      title: 'به‌زودی بازمی‌گردیم',
+      message: 'در حال انجام تعمیرات کوتاه هستیم. لطفاً چند دقیقه دیگر سر بزنید.'
+    },
+    session_expired: 'نشست شما منقضی شد. لطفاً دوباره تلاش کنید.',
+    back_home: 'بازگشت به خانه'
+  },
+  footer: {
+    info: 'اطلاعات',
+    quick_links: 'دسترسی سریع',
+    social_links: 'شبکه‌های اجتماعی',
+    privacy_policy: 'سیاست حفظ حریم خصوصی',
+    terms: 'شرایط و قوانین',
+    copyright: '© :year :name. تمامی حقوق محفوظ است.'
+  },
+  forms: {
+    contact: {
+      name: 'نام',
+      name_placeholder: 'نام شما',
+      brand: 'نام برند',
+      brand_placeholder: 'نام برند شما',
+      phone: 'شماره تماس',
+      phone_placeholder: '۱۲۳ ۴۵۶ ۷۸',
+      country_search: 'جستجوی کشور...',
+      country_not_found: 'کشوری یافت نشد',
+      services: 'خدمات',
+      services_placeholder: 'یک یا چند خدمت را انتخاب کنید',
+      message: 'پیام کوتاه',
+      message_placeholder: 'پیام خود را بنویسید...',
+      submit: 'شروع گفتگو',
+      success: 'سپاسگزاریم — پیام شما دریافت شد و به‌زودی با شما تماس می‌گیریم.',
+      error: 'مشکلی پیش آمد. لطفاً دوباره تلاش کنید.'
+    },
+    details: {
+      title: 'اطلاعات تماس',
+      whatsapp: 'واتس‌اپ',
+      location: 'موقعیت',
+      email: 'ایمیل',
+      working_with: 'همکاری با',
+      follow: 'را برای ایده‌های خلاقانه و نگاه‌های تازه به برند در شبکه‌های اجتماعی دنبال کنید:'
+    },
+    newsletter: {
+      title: 'چک‌لیست مسیر محتوا را دریافت کنید',
+      description: 'یک چک‌لیست کوتاه برای اینکه ببینید محتوای شما با یک مسیر روشن و مشخص پیش می‌رود یا نه.',
+      name: 'نام و نام خانوادگی',
+      name_placeholder: 'نام شما',
+      email: 'ایمیل',
+      email_placeholder: 'آدرس ایمیل شما',
+      submit: 'دریافت چک‌لیست',
+      disclaimer: 'بدون پیام‌های اضافی؛ فقط نکته‌های کاربردی درباره برند و محتوا',
+      success: 'چک‌لیست مسیر فایل با موفقیت دانلود شد.
+' +
+        'یک نسخه هم به ایمیلتان ارسال کردیم.',
+      already: 'شما قبلاً در فهرست هستید.',
+      dialog_label: 'دریافت چک‌لیست رایگان'
+    }
+  },
+  home: {
+    hero: { note: 'بیایید درباره مسیر برندتان با هم صحبت کنیم' },
+    journey: {
+      strategy: 'استراتژی',
+      identity: 'هویت برند',
+      content: 'محتوا',
+      growth: 'رشد'
+    }
+  },
+  validation: {
+    required: 'وارد کردن :attribute الزامی است.',
+    email: 'لطفاً یک نشانی ایمیل معتبر وارد کنید.',
+    max: {
+      string: ':attribute نباید بیش از :max نویسه باشد.',
+      array: 'حداکثر می‌توانید :max مورد انتخاب کنید.'
+    },
+    min: { string: ':attribute باید حداقل :min نویسه باشد.' },
+    regex: 'قالب :attribute معتبر نیست.',
+    exists: ':attribute انتخاب‌شده معتبر نیست.',
+    array: ':attribute باید یک فهرست باشد.',
+    integer: ':attribute باید عدد باشد.',
+    in: ':attribute انتخاب‌شده معتبر نیست.',
+    prohibited: 'فیلد :attribute مجاز نیست.',
+    custom: { contact: [Object] },
+    attributes: []
+  },
+  work: {
+    eyebrow: 'پروژه ها',
+    industry: 'صنعت',
+    year: 'سال همکاری',
+    instagram: 'اینستاگرام',
+    services: 'خدمات',
+    challenge: 'چالش اصلی کجا بود',
+    goals: 'اهداف پروژه',
+    strategy_eyebrow: 'چرا سیزده',
+    strategy_title: 'مسیرهای مشخص برای رشد برند',
+    strategy_subtitle: 'سه پکیج متناسب با نیاز، مرحله رشد و میزان همراهی موردنیاز کسب‌وکار شما',
+    deliverables: 'چه چیزی تحویل دادیم',
+    showcase: 'محتوا های منتخب',
+    before: 'قبل',
+    after: 'بعد',
+    results: 'نتایج',
+    next_case_study: 'پروژه بعدی'
+  }
+} locale= {
+  current: 'fa',
+  direction: 'rtl',
+  font: 'arabic',
+  htmlLang: 'fa-IR',
+  supported: [
+    { code: 'fa', name: 'Persian', native: 'فارسی', direction: 'rtl' }
+  ]
+}  ... > 
+  at <AppLayout errors= {} translations= {
+  admin: {
+    language: { english: 'English', persian: 'فارسی' },
+    navigation: { groups: [Object], items: [Object] },
+    models: {
+      page: 'صفحه',
+      service: 'خدمت',
+      testimonial: 'نظر مشتری',
+      faq: 'پرسش',
+      client: 'لوگوی مشتری',
+      team_member: 'عضو تیم',
+      project: 'پروژه',
+      industry: 'دسته‌بندی پروژه',
+      post: 'مقاله',
+      post_category: 'دسته‌بندی مقاله',
+      post_tag: 'برچسب مقاله',
+      contact_submission: 'پیام تماس',
+      newsletter_subscription: 'عضو خبرنامه',
+      menu: 'منوی سایت',
+      social_link: 'لینک شبکه اجتماعی',
+      redirect: 'انتقال آدرس',
+      user: 'کاربر پنل'
+    },
+    models_plural: {
+      page: 'صفحه‌ها',
+      service: 'خدمات',
+      testimonial: 'نظرهای مشتریان',
+      faq: 'پرسش‌ها',
+      client: 'لوگوهای مشتریان',
+      team_member: 'اعضای تیم',
+      project: 'پروژه‌ها',
+      industry: 'دسته‌بندی‌های پروژه',
+      post: 'مقاله‌ها',
+      post_category: 'دسته‌بندی‌های مقاله',
+      post_tag: 'برچسب‌های مقاله',
+      contact_submission: 'پیام‌های تماس',
+      newsletter_subscription: 'اعضای خبرنامه',
+      menu: 'منوهای سایت',
+      social_link: 'لینک‌های شبکه اجتماعی',
+      redirect: 'انتقال آدرس‌ها',
+      user: 'کاربران پنل'
+    }
+  },
+  blog: {
+    reading_time: 'زمان مطالعه : :minutes دقیقه',
+    published_on: 'انتشار در :date',
+    written_by: 'نویسنده',
+    subject: 'موضوع',
+    date: 'تاریخ',
+    share: 'اشتراک‌گذاری این مقاله',
+    related: 'مقالات مرتبط',
+    categories: 'دسته‌بندی‌ها',
+    tags: 'برچسب‌ها',
+    copy_link: 'کپی لینک',
+    link_copied: 'لینک کپی شد'
+  },
+  common: {
+    skip_to_content: 'رفتن به محتوا',
+    primary_navigation: 'ناوبری اصلی',
+    change_language: 'تغییر زبان',
+    open_menu: 'باز کردن منو',
+    close_menu: 'بستن منو',
+    close: 'بستن',
+    read_more: 'ادامه مطلب',
+    read_article: 'مطالعه مقاله',
+    view_all: 'مشاهده همه',
+    load_more: 'نمونه‌کارهای بیشتر',
+    back: 'بازگشت',
+    next: 'بعدی',
+    previous: 'قبلی',
+    pagination: 'صفحه‌بندی',
+    all: 'همه',
+    team: 'تیم ما',
+    search: 'جستجو',
+    loading: 'در حال بارگذاری…',
+    sending: 'در حال ارسال…',
+    last_updated: 'آخرین به‌روزرسانی: :date',
+    get_checklist: 'دریافت چک‌لیست',
+    start_conversation: 'شروع گفتگو',
+    lets_talk: 'گفتگو کنیم',
+    empty_projects: 'هنوز پروژه‌ای برای نمایش وجود ندارد.',
+    empty_posts: 'هنوز مقاله‌ای منتشر نشده است.',
+    empty_results: 'موردی با فیلترهای شما مطابقت نداشت.'
+  },
+  errors: {
+    '403': {
+      title: 'دسترسی محدود',
+      message: 'شما اجازه مشاهده این صفحه را ندارید.'
+    },
+    '404': {
+      title: 'مسیر را گم کردید؟',
+      message: 'صفحه‌ای که دنبال آن بودید پیدا نشد،
+' +
+        'اما با هم می‌توانیم مسیر درست را پیدا کنیم.'
+    },
+    '429': {
+      title: 'کمی آهسته‌تر',
+      message: 'درخواست‌های شما بیش از حد مجاز بوده است. لطفاً کمی صبر کنید و دوباره تلاش کنید.'
+    },
+    '500': {
+      title: 'مشکلی پیش آمد',
+      message: 'خطایی غیرمنتظره از سمت ما رخ داد. در حال بررسی هستیم.'
+    },
+    '503': {
+      title: 'به‌زودی بازمی‌گردیم',
+      message: 'در حال انجام تعمیرات کوتاه هستیم. لطفاً چند دقیقه دیگر سر بزنید.'
+    },
+    session_expired: 'نشست شما منقضی شد. لطفاً دوباره تلاش کنید.',
+    back_home: 'بازگشت به خانه'
+  },
+  footer: {
+    info: 'اطلاعات',
+    quick_links: 'دسترسی سریع',
+    social_links: 'شبکه‌های اجتماعی',
+    privacy_policy: 'سیاست حفظ حریم خصوصی',
+    terms: 'شرایط و قوانین',
+    copyright: '© :year :name. تمامی حقوق محفوظ است.'
+  },
+  forms: {
+    contact: {
+      name: 'نام',
+      name_placeholder: 'نام شما',
+      brand: 'نام برند',
+      brand_placeholder: 'نام برند شما',
+      phone: 'شماره تماس',
+      phone_placeholder: '۱۲۳ ۴۵۶ ۷۸',
+      country_search: 'جستجوی کشور...',
+      country_not_found: 'کشوری یافت نشد',
+      services: 'خدمات',
+      services_placeholder: 'یک یا چند خدمت را انتخاب کنید',
+      message: 'پیام کوتاه',
+      message_placeholder: 'پیام خود را بنویسید...',
+      submit: 'شروع گفتگو',
+      success: 'سپاسگزاریم — پیام شما دریافت شد و به‌زودی با شما تماس می‌گیریم.',
+      error: 'مشکلی پیش آمد. لطفاً دوباره تلاش کنید.'
+    },
+    details: {
+      title: 'اطلاعات تماس',
+      whatsapp: 'واتس‌اپ',
+      location: 'موقعیت',
+      email: 'ایمیل',
+      working_with: 'همکاری با',
+      follow: 'را برای ایده‌های خلاقانه و نگاه‌های تازه به برند در شبکه‌های اجتماعی دنبال کنید:'
+    },
+    newsletter: {
+      title: 'چک‌لیست مسیر محتوا را دریافت کنید',
+      description: 'یک چک‌لیست کوتاه برای اینکه ببینید محتوای شما با یک مسیر روشن و مشخص پیش می‌رود یا نه.',
+      name: 'نام و نام خانوادگی',
+      name_placeholder: 'نام شما',
+      email: 'ایمیل',
+      email_placeholder: 'آدرس ایمیل شما',
+      submit: 'دریافت چک‌لیست',
+      disclaimer: 'بدون پیام‌های اضافی؛ فقط نکته‌های کاربردی درباره برند و محتوا',
+      success: 'چک‌لیست مسیر فایل با موفقیت دانلود شد.
+' +
+        'یک نسخه هم به ایمیلتان ارسال کردیم.',
+      already: 'شما قبلاً در فهرست هستید.',
+      dialog_label: 'دریافت چک‌لیست رایگان'
+    }
+  },
+  home: {
+    hero: { note: 'بیایید درباره مسیر برندتان با هم صحبت کنیم' },
+    journey: {
+      strategy: 'استراتژی',
+      identity: 'هویت برند',
+      content: 'محتوا',
+      growth: 'رشد'
+    }
+  },
+  validation: {
+    required: 'وارد کردن :attribute الزامی است.',
+    email: 'لطفاً یک نشانی ایمیل معتبر وارد کنید.',
+    max: {
+      string: ':attribute نباید بیش از :max نویسه باشد.',
+      array: 'حداکثر می‌توانید :max مورد انتخاب کنید.'
+    },
+    min: { string: ':attribute باید حداقل :min نویسه باشد.' },
+    regex: 'قالب :attribute معتبر نیست.',
+    exists: ':attribute انتخاب‌شده معتبر نیست.',
+    array: ':attribute باید یک فهرست باشد.',
+    integer: ':attribute باید عدد باشد.',
+    in: ':attribute انتخاب‌شده معتبر نیست.',
+    prohibited: 'فیلد :attribute مجاز نیست.',
+    custom: { contact: [Object] },
+    attributes: []
+  },
+  work: {
+    eyebrow: 'پروژه ها',
+    industry: 'صنعت',
+    year: 'سال همکاری',
+    instagram: 'اینستاگرام',
+    services: 'خدمات',
+    challenge: 'چالش اصلی کجا بود',
+    goals: 'اهداف پروژه',
+    strategy_eyebrow: 'چرا سیزده',
+    strategy_title: 'مسیرهای مشخص برای رشد برند',
+    strategy_subtitle: 'سه پکیج متناسب با نیاز، مرحله رشد و میزان همراهی موردنیاز کسب‌وکار شما',
+    deliverables: 'چه چیزی تحویل دادیم',
+    showcase: 'محتوا های منتخب',
+    before: 'قبل',
+    after: 'بعد',
+    results: 'نتایج',
+    next_case_study: 'پروژه بعدی'
+  }
+} locale= {
+  current: 'fa',
+  direction: 'rtl',
+  font: 'arabic',
+  htmlLang: 'fa-IR',
+  supported: [
+    { code: 'fa', name: 'Persian', native: 'فارسی', direction: 'rtl' }
+  ]
+}  ... > 
+  at <Inertia initialPage= {
+  component: 'Error',
+  props: {
+    errors: {},
+    translations: {
+      admin: [Object],
+      blog: [Object],
+      common: [Object],
+      errors: [Object],
+      footer: [Object],
+      forms: [Object],
+      home: [Object],
+      validation: [Object],
+      work: [Object]
+    },
+    locale: {
+      current: 'fa',
+      direction: 'rtl',
+      font: 'arabic',
+      htmlLang: 'fa-IR',
+      supported: [Array]
+    },
+    alternates: { fa: 'http://127.0.0.1:8000/fa/en/services/brand-strategy' },
+    navigation: { header: [Array], footer: [Array] },
+    settings: {
+      siteName: 'سیزده',
+      tagline: 'افق را ببین',
+      description: 'ما به برندها کمک می‌کنیم از محتوای پراکنده به مسیری ساختارمند برسند.',
+      contact: [Object],
+      socialLinks: [Array],
+      seo: [Object]
+    },
+    flash: { success: null, error: null },
+    auth: { user: null },
+    ziggy: {
+      url: 'http://127.0.0.1:8000',
+      port: 8000,
+      defaults: [Object],
+      routes: [Object],
+      location: 'http://127.0.0.1:8000/fa/en/services/brand-strategy'
+    },
+    status: 404
+  },
+  url: '/fa/en/services/brand-strategy',
+  version: '1489cb56caf4d12d1e000cec5bf735ae',
+  clearHistory: false,
+  encryptHistory: false
+} initialComponent= {
+  __name: 'Error',
+  __ssrInlineRender: true,
+  props: { status: {} },
+  setup: [Function (anonymous)],
+  layout: {
+    __name: 'AppLayout',
+    __ssrInlineRender: true,
+    setup: [Function (anonymous)],
+    inheritAttrs: false
+  },
+  inheritAttrs: false
+} resolveComponent=fn<resolveComponent>  ... > 
+  at <App>
+ {"exception":"[object] (Inertia\\Ssr\\SsrException(code: 0): [Vue warn]: Unhandled error during execution of render function 
+  at <Error errors= {} translations= {
+  admin: {
+    language: { english: 'English', persian: 'فارسی' },
+    navigation: { groups: [Object], items: [Object] },
+    models: {
+      page: 'صفحه',
+      service: 'خدمت',
+      testimonial: 'نظر مشتری',
+      faq: 'پرسش',
+      client: 'لوگوی مشتری',
+      team_member: 'عضو تیم',
+      project: 'پروژه',
+      industry: 'دسته‌بندی پروژه',
+      post: 'مقاله',
+      post_category: 'دسته‌بندی مقاله',
+      post_tag: 'برچسب مقاله',
+      contact_submission: 'پیام تماس',
+      newsletter_subscription: 'عضو خبرنامه',
+      menu: 'منوی سایت',
+      social_link: 'لینک شبکه اجتماعی',
+      redirect: 'انتقال آدرس',
+      user: 'کاربر پنل'
+    },
+    models_plural: {
+      page: 'صفحه‌ها',
+      service: 'خدمات',
+      testimonial: 'نظرهای مشتریان',
+      faq: 'پرسش‌ها',
+      client: 'لوگوهای مشتریان',
+      team_member: 'اعضای تیم',
+      project: 'پروژه‌ها',
+      industry: 'دسته‌بندی‌های پروژه',
+      post: 'مقاله‌ها',
+      post_category: 'دسته‌بندی‌های مقاله',
+      post_tag: 'برچسب‌های مقاله',
+      contact_submission: 'پیام‌های تماس',
+      newsletter_subscription: 'اعضای خبرنامه',
+      menu: 'منوهای سایت',
+      social_link: 'لینک‌های شبکه اجتماعی',
+      redirect: 'انتقال آدرس‌ها',
+      user: 'کاربران پنل'
+    }
+  },
+  blog: {
+    reading_time: 'زمان مطالعه : :minutes دقیقه',
+    published_on: 'انتشار در :date',
+    written_by: 'نویسنده',
+    subject: 'موضوع',
+    date: 'تاریخ',
+    share: 'اشتراک‌گذاری این مقاله',
+    related: 'مقالات مرتبط',
+    categories: 'دسته‌بندی‌ها',
+    tags: 'برچسب‌ها',
+    copy_link: 'کپی لینک',
+    link_copied: 'لینک کپی شد'
+  },
+  common: {
+    skip_to_content: 'رفتن به محتوا',
+    primary_navigation: 'ناوبری اصلی',
+    change_language: 'تغییر زبان',
+    open_menu: 'باز کردن منو',
+    close_menu: 'بستن منو',
+    close: 'بستن',
+    read_more: 'ادامه مطلب',
+    read_article: 'مطالعه مقاله',
+    view_all: 'مشاهده همه',
+    load_more: 'نمونه‌کارهای بیشتر',
+    back: 'بازگشت',
+    next: 'بعدی',
+    previous: 'قبلی',
+    pagination: 'صفحه‌بندی',
+    all: 'همه',
+    team: 'تیم ما',
+    search: 'جستجو',
+    loading: 'در حال بارگذاری…',
+    sending: 'در حال ارسال…',
+    last_updated: 'آخرین به‌روزرسانی: :date',
+    get_checklist: 'دریافت چک‌لیست',
+    start_conversation: 'شروع گفتگو',
+    lets_talk: 'گفتگو کنیم',
+    empty_projects: 'هنوز پروژه‌ای برای نمایش وجود ندارد.',
+    empty_posts: 'هنوز مقاله‌ای منتشر نشده است.',
+    empty_results: 'موردی با فیلترهای شما مطابقت نداشت.'
+  },
+  errors: {
+    '403': {
+      title: 'دسترسی محدود',
+      message: 'شما اجازه مشاهده این صفحه را ندارید.'
+    },
+    '404': {
+      title: 'مسیر را گم کردید؟',
+      message: 'صفحه‌ای که دنبال آن بودید پیدا نشد،\\n' +
+        'اما با هم می‌توانیم مسیر درست را پیدا کنیم.'
+    },
+    '429': {
+      title: 'کمی آهسته‌تر',
+      message: 'درخواست‌های شما بیش از حد مجاز بوده است. لطفاً کمی صبر کنید و دوباره تلاش کنید.'
+    },
+    '500': {
+      title: 'مشکلی پیش آمد',
+      message: 'خطایی غیرمنتظره از سمت ما رخ داد. در حال بررسی هستیم.'
+    },
+    '503': {
+      title: 'به‌زودی بازمی‌گردیم',
+      message: 'در حال انجام تعمیرات کوتاه هستیم. لطفاً چند دقیقه دیگر سر بزنید.'
+    },
+    session_expired: 'نشست شما منقضی شد. لطفاً دوباره تلاش کنید.',
+    back_home: 'بازگشت به خانه'
+  },
+  footer: {
+    info: 'اطلاعات',
+    quick_links: 'دسترسی سریع',
+    social_links: 'شبکه‌های اجتماعی',
+    privacy_policy: 'سیاست حفظ حریم خصوصی',
+    terms: 'شرایط و قوانین',
+    copyright: '© :year :name. تمامی حقوق محفوظ است.'
+  },
+  forms: {
+    contact: {
+      name: 'نام',
+      name_placeholder: 'نام شما',
+      brand: 'نام برند',
+      brand_placeholder: 'نام برند شما',
+      phone: 'شماره تماس',
+      phone_placeholder: '۱۲۳ ۴۵۶ ۷۸',
+      country_search: 'جستجوی کشور...',
+      country_not_found: 'کشوری یافت نشد',
+      services: 'خدمات',
+      services_placeholder: 'یک یا چند خدمت را انتخاب کنید',
+      message: 'پیام کوتاه',
+      message_placeholder: 'پیام خود را بنویسید...',
+      submit: 'شروع گفتگو',
+      success: 'سپاسگزاریم — پیام شما دریافت شد و به‌زودی با شما تماس می‌گیریم.',
+      error: 'مشکلی پیش آمد. لطفاً دوباره تلاش کنید.'
+    },
+    details: {
+      title: 'اطلاعات تماس',
+      whatsapp: 'واتس‌اپ',
+      location: 'موقعیت',
+      email: 'ایمیل',
+      working_with: 'همکاری با',
+      follow: 'را برای ایده‌های خلاقانه و نگاه‌های تازه به برند در شبکه‌های اجتماعی دنبال کنید:'
+    },
+    newsletter: {
+      title: 'چک‌لیست مسیر محتوا را دریافت کنید',
+      description: 'یک چک‌لیست کوتاه برای اینکه ببینید محتوای شما با یک مسیر روشن و مشخص پیش می‌رود یا نه.',
+      name: 'نام و نام خانوادگی',
+      name_placeholder: 'نام شما',
+      email: 'ایمیل',
+      email_placeholder: 'آدرس ایمیل شما',
+      submit: 'دریافت چک‌لیست',
+      disclaimer: 'بدون پیام‌های اضافی؛ فقط نکته‌های کاربردی درباره برند و محتوا',
+      success: 'چک‌لیست مسیر فایل با موفقیت دانلود شد.\\n' +
+        'یک نسخه هم به ایمیلتان ارسال کردیم.',
+      already: 'شما قبلاً در فهرست هستید.',
+      dialog_label: 'دریافت چک‌لیست رایگان'
+    }
+  },
+  home: {
+    hero: { note: 'بیایید درباره مسیر برندتان با هم صحبت کنیم' },
+    journey: {
+      strategy: 'استراتژی',
+      identity: 'هویت برند',
+      content: 'محتوا',
+      growth: 'رشد'
+    }
+  },
+  validation: {
+    required: 'وارد کردن :attribute الزامی است.',
+    email: 'لطفاً یک نشانی ایمیل معتبر وارد کنید.',
+    max: {
+      string: ':attribute نباید بیش از :max نویسه باشد.',
+      array: 'حداکثر می‌توانید :max مورد انتخاب کنید.'
+    },
+    min: { string: ':attribute باید حداقل :min نویسه باشد.' },
+    regex: 'قالب :attribute معتبر نیست.',
+    exists: ':attribute انتخاب‌شده معتبر نیست.',
+    array: ':attribute باید یک فهرست باشد.',
+    integer: ':attribute باید عدد باشد.',
+    in: ':attribute انتخاب‌شده معتبر نیست.',
+    prohibited: 'فیلد :attribute مجاز نیست.',
+    custom: { contact: [Object] },
+    attributes: []
+  },
+  work: {
+    eyebrow: 'پروژه ها',
+    industry: 'صنعت',
+    year: 'سال همکاری',
+    instagram: 'اینستاگرام',
+    services: 'خدمات',
+    challenge: 'چالش اصلی کجا بود',
+    goals: 'اهداف پروژه',
+    strategy_eyebrow: 'چرا سیزده',
+    strategy_title: 'مسیرهای مشخص برای رشد برند',
+    strategy_subtitle: 'سه پکیج متناسب با نیاز، مرحله رشد و میزان همراهی موردنیاز کسب‌وکار شما',
+    deliverables: 'چه چیزی تحویل دادیم',
+    showcase: 'محتوا های منتخب',
+    before: 'قبل',
+    after: 'بعد',
+    results: 'نتایج',
+    next_case_study: 'پروژه بعدی'
+  }
+} locale= {
+  current: 'fa',
+  direction: 'rtl',
+  font: 'arabic',
+  htmlLang: 'fa-IR',
+  supported: [
+    { code: 'fa', name: 'Persian', native: 'فارسی', direction: 'rtl' }
+  ]
+}  ... > 
+  at <AppLayout errors= {} translations= {
+  admin: {
+    language: { english: 'English', persian: 'فارسی' },
+    navigation: { groups: [Object], items: [Object] },
+    models: {
+      page: 'صفحه',
+      service: 'خدمت',
+      testimonial: 'نظر مشتری',
+      faq: 'پرسش',
+      client: 'لوگوی مشتری',
+      team_member: 'عضو تیم',
+      project: 'پروژه',
+      industry: 'دسته‌بندی پروژه',
+      post: 'مقاله',
+      post_category: 'دسته‌بندی مقاله',
+      post_tag: 'برچسب مقاله',
+      contact_submission: 'پیام تماس',
+      newsletter_subscription: 'عضو خبرنامه',
+      menu: 'منوی سایت',
+      social_link: 'لینک شبکه اجتماعی',
+      redirect: 'انتقال آدرس',
+      user: 'کاربر پنل'
+    },
+    models_plural: {
+      page: 'صفحه‌ها',
+      service: 'خدمات',
+      testimonial: 'نظرهای مشتریان',
+      faq: 'پرسش‌ها',
+      client: 'لوگوهای مشتریان',
+      team_member: 'اعضای تیم',
+      project: 'پروژه‌ها',
+      industry: 'دسته‌بندی‌های پروژه',
+      post: 'مقاله‌ها',
+      post_category: 'دسته‌بندی‌های مقاله',
+      post_tag: 'برچسب‌های مقاله',
+      contact_submission: 'پیام‌های تماس',
+      newsletter_subscription: 'اعضای خبرنامه',
+      menu: 'منوهای سایت',
+      social_link: 'لینک‌های شبکه اجتماعی',
+      redirect: 'انتقال آدرس‌ها',
+      user: 'کاربران پنل'
+    }
+  },
+  blog: {
+    reading_time: 'زمان مطالعه : :minutes دقیقه',
+    published_on: 'انتشار در :date',
+    written_by: 'نویسنده',
+    subject: 'موضوع',
+    date: 'تاریخ',
+    share: 'اشتراک‌گذاری این مقاله',
+    related: 'مقالات مرتبط',
+    categories: 'دسته‌بندی‌ها',
+    tags: 'برچسب‌ها',
+    copy_link: 'کپی لینک',
+    link_copied: 'لینک کپی شد'
+  },
+  common: {
+    skip_to_content: 'رفتن به محتوا',
+    primary_navigation: 'ناوبری اصلی',
+    change_language: 'تغییر زبان',
+    open_menu: 'باز کردن منو',
+    close_menu: 'بستن منو',
+    close: 'بستن',
+    read_more: 'ادامه مطلب',
+    read_article: 'مطالعه مقاله',
+    view_all: 'مشاهده همه',
+    load_more: 'نمونه‌کارهای بیشتر',
+    back: 'بازگشت',
+    next: 'بعدی',
+    previous: 'قبلی',
+    pagination: 'صفحه‌بندی',
+    all: 'همه',
+    team: 'تیم ما',
+    search: 'جستجو',
+    loading: 'در حال بارگذاری…',
+    sending: 'در حال ارسال…',
+    last_updated: 'آخرین به‌روزرسانی: :date',
+    get_checklist: 'دریافت چک‌لیست',
+    start_conversation: 'شروع گفتگو',
+    lets_talk: 'گفتگو کنیم',
+    empty_projects: 'هنوز پروژه‌ای برای نمایش وجود ندارد.',
+    empty_posts: 'هنوز مقاله‌ای منتشر نشده است.',
+    empty_results: 'موردی با فیلترهای شما مطابقت نداشت.'
+  },
+  errors: {
+    '403': {
+      title: 'دسترسی محدود',
+      message: 'شما اجازه مشاهده این صفحه را ندارید.'
+    },
+    '404': {
+      title: 'مسیر را گم کردید؟',
+      message: 'صفحه‌ای که دنبال آن بودید پیدا نشد،\\n' +
+        'اما با هم می‌توانیم مسیر درست را پیدا کنیم.'
+    },
+    '429': {
+      title: 'کمی آهسته‌تر',
+      message: 'درخواست‌های شما بیش از حد مجاز بوده است. لطفاً کمی صبر کنید و دوباره تلاش کنید.'
+    },
+    '500': {
+      title: 'مشکلی پیش آمد',
+      message: 'خطایی غیرمنتظره از سمت ما رخ داد. در حال بررسی هستیم.'
+    },
+    '503': {
+      title: 'به‌زودی بازمی‌گردیم',
+      message: 'در حال انجام تعمیرات کوتاه هستیم. لطفاً چند دقیقه دیگر سر بزنید.'
+    },
+    session_expired: 'نشست شما منقضی شد. لطفاً دوباره تلاش کنید.',
+    back_home: 'بازگشت به خانه'
+  },
+  footer: {
+    info: 'اطلاعات',
+    quick_links: 'دسترسی سریع',
+    social_links: 'شبکه‌های اجتماعی',
+    privacy_policy: 'سیاست حفظ حریم خصوصی',
+    terms: 'شرایط و قوانین',
+    copyright: '© :year :name. تمامی حقوق محفوظ است.'
+  },
+  forms: {
+    contact: {
+      name: 'نام',
+      name_placeholder: 'نام شما',
+      brand: 'نام برند',
+      brand_placeholder: 'نام برند شما',
+      phone: 'شماره تماس',
+      phone_placeholder: '۱۲۳ ۴۵۶ ۷۸',
+      country_search: 'جستجوی کشور...',
+      country_not_found: 'کشوری یافت نشد',
+      services: 'خدمات',
+      services_placeholder: 'یک یا چند خدمت را انتخاب کنید',
+      message: 'پیام کوتاه',
+      message_placeholder: 'پیام خود را بنویسید...',
+      submit: 'شروع گفتگو',
+      success: 'سپاسگزاریم — پیام شما دریافت شد و به‌زودی با شما تماس می‌گیریم.',
+      error: 'مشکلی پیش آمد. لطفاً دوباره تلاش کنید.'
+    },
+    details: {
+      title: 'اطلاعات تماس',
+      whatsapp: 'واتس‌اپ',
+      location: 'موقعیت',
+      email: 'ایمیل',
+      working_with: 'همکاری با',
+      follow: 'را برای ایده‌های خلاقانه و نگاه‌های تازه به برند در شبکه‌های اجتماعی دنبال کنید:'
+    },
+    newsletter: {
+      title: 'چک‌لیست مسیر محتوا را دریافت کنید',
+      description: 'یک چک‌لیست کوتاه برای اینکه ببینید محتوای شما با یک مسیر روشن و مشخص پیش می‌رود یا نه.',
+      name: 'نام و نام خانوادگی',
+      name_placeholder: 'نام شما',
+      email: 'ایمیل',
+      email_placeholder: 'آدرس ایمیل شما',
+      submit: 'دریافت چک‌لیست',
+      disclaimer: 'بدون پیام‌های اضافی؛ فقط نکته‌های کاربردی درباره برند و محتوا',
+      success: 'چک‌لیست مسیر فایل با موفقیت دانلود شد.\\n' +
+        'یک نسخه هم به ایمیلتان ارسال کردیم.',
+      already: 'شما قبلاً در فهرست هستید.',
+      dialog_label: 'دریافت چک‌لیست رایگان'
+    }
+  },
+  home: {
+    hero: { note: 'بیایید درباره مسیر برندتان با هم صحبت کنیم' },
+    journey: {
+      strategy: 'استراتژی',
+      identity: 'هویت برند',
+      content: 'محتوا',
+      growth: 'رشد'
+    }
+  },
+  validation: {
+    required: 'وارد کردن :attribute الزامی است.',
+    email: 'لطفاً یک نشانی ایمیل معتبر وارد کنید.',
+    max: {
+      string: ':attribute نباید بیش از :max نویسه باشد.',
+      array: 'حداکثر می‌توانید :max مورد انتخاب کنید.'
+    },
+    min: { string: ':attribute باید حداقل :min نویسه باشد.' },
+    regex: 'قالب :attribute معتبر نیست.',
+    exists: ':attribute انتخاب‌شده معتبر نیست.',
+    array: ':attribute باید یک فهرست باشد.',
+    integer: ':attribute باید عدد باشد.',
+    in: ':attribute انتخاب‌شده معتبر نیست.',
+    prohibited: 'فیلد :attribute مجاز نیست.',
+    custom: { contact: [Object] },
+    attributes: []
+  },
+  work: {
+    eyebrow: 'پروژه ها',
+    industry: 'صنعت',
+    year: 'سال همکاری',
+    instagram: 'اینستاگرام',
+    services: 'خدمات',
+    challenge: 'چالش اصلی کجا بود',
+    goals: 'اهداف پروژه',
+    strategy_eyebrow: 'چرا سیزده',
+    strategy_title: 'مسیرهای مشخص برای رشد برند',
+    strategy_subtitle: 'سه پکیج متناسب با نیاز، مرحله رشد و میزان همراهی موردنیاز کسب‌وکار شما',
+    deliverables: 'چه چیزی تحویل دادیم',
+    showcase: 'محتوا های منتخب',
+    before: 'قبل',
+    after: 'بعد',
+    results: 'نتایج',
+    next_case_study: 'پروژه بعدی'
+  }
+} locale= {
+  current: 'fa',
+  direction: 'rtl',
+  font: 'arabic',
+  htmlLang: 'fa-IR',
+  supported: [
+    { code: 'fa', name: 'Persian', native: 'فارسی', direction: 'rtl' }
+  ]
+}  ... > 
+  at <Inertia initialPage= {
+  component: 'Error',
+  props: {
+    errors: {},
+    translations: {
+      admin: [Object],
+      blog: [Object],
+      common: [Object],
+      errors: [Object],
+      footer: [Object],
+      forms: [Object],
+      home: [Object],
+      validation: [Object],
+      work: [Object]
+    },
+    locale: {
+      current: 'fa',
+      direction: 'rtl',
+      font: 'arabic',
+      htmlLang: 'fa-IR',
+      supported: [Array]
+    },
+    alternates: { fa: 'http://127.0.0.1:8000/fa/en/services/brand-strategy' },
+    navigation: { header: [Array], footer: [Array] },
+    settings: {
+      siteName: 'سیزده',
+      tagline: 'افق را ببین',
+      description: 'ما به برندها کمک می‌کنیم از محتوای پراکنده به مسیری ساختارمند برسند.',
+      contact: [Object],
+      socialLinks: [Array],
+      seo: [Object]
+    },
+    flash: { success: null, error: null },
+    auth: { user: null },
+    ziggy: {
+      url: 'http://127.0.0.1:8000',
+      port: 8000,
+      defaults: [Object],
+      routes: [Object],
+      location: 'http://127.0.0.1:8000/fa/en/services/brand-strategy'
+    },
+    status: 404
+  },
+  url: '/fa/en/services/brand-strategy',
+  version: '1489cb56caf4d12d1e000cec5bf735ae',
+  clearHistory: false,
+  encryptHistory: false
+} initialComponent= {
+  __name: 'Error',
+  __ssrInlineRender: true,
+  props: { status: {} },
+  setup: [Function (anonymous)],
+  layout: {
+    __name: 'AppLayout',
+    __ssrInlineRender: true,
+    setup: [Function (anonymous)],
+    inheritAttrs: false
+  },
+  inheritAttrs: false
+} resolveComponent=fn<resolveComponent>  ... > 
+  at <App>
+ at /home/fdaei/project/my/sizdah/vendor/inertiajs/inertia-laravel/src/Commands/StartSsr.php:84)
+[stacktrace]
+#0 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Inertia\\Commands\\StartSsr->handle()
+#1 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#2 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(96): Illuminate\\Container\\Util::unwrapIfClosure()
+#3 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#4 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Container.php(799): Illuminate\\Container\\BoundMethod::call()
+#5 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(211): Illuminate\\Container\\Container->call()
+#6 /home/fdaei/project/my/sizdah/vendor/symfony/console/Command/Command.php(341): Illuminate\\Console\\Command->execute()
+#7 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#8 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(1117): Illuminate\\Console\\Command->run()
+#9 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(356): Symfony\\Component\\Console\\Application->doRunCommand()
+#10 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(195): Symfony\\Component\\Console\\Application->doRun()
+#11 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony\\Component\\Console\\Application->run()
+#12 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#13 /home/fdaei/project/my/sizdah/artisan(14): Illuminate\\Foundation\\Application->handleCommand()
+#14 {main}
+"} 
+[2026-10-01 08:13:59] local.ERROR: [Vue warn]: Unhandled error during execution of render function 
+  at <AppFooter> 
+  at <AppLayout errors= {} translations= {
+  admin: {
+    language: { english: 'English', persian: 'فارسی' },
+    navigation: { groups: [Object], items: [Object] },
+    models: {
+      page: 'صفحه',
+      service: 'خدمت',
+      testimonial: 'نظر مشتری',
+      faq: 'پرسش',
+      client: 'لوگوی مشتری',
+      team_member: 'عضو تیم',
+      project: 'پروژه',
+      industry: 'دسته‌بندی پروژه',
+      post: 'مقاله',
+      post_category: 'دسته‌بندی مقاله',
+      post_tag: 'برچسب مقاله',
+      contact_submission: 'پیام تماس',
+      newsletter_subscription: 'عضو خبرنامه',
+      menu: 'منوی سایت',
+      social_link: 'لینک شبکه اجتماعی',
+      redirect: 'انتقال آدرس',
+      user: 'کاربر پنل'
+    },
+    models_plural: {
+      page: 'صفحه‌ها',
+      service: 'خدمات',
+      testimonial: 'نظرهای مشتریان',
+      faq: 'پرسش‌ها',
+      client: 'لوگوهای مشتریان',
+      team_member: 'اعضای تیم',
+      project: 'پروژه‌ها',
+      industry: 'دسته‌بندی‌های پروژه',
+      post: 'مقاله‌ها',
+      post_category: 'دسته‌بندی‌های مقاله',
+      post_tag: 'برچسب‌های مقاله',
+      contact_submission: 'پیام‌های تماس',
+      newsletter_subscription: 'اعضای خبرنامه',
+      menu: 'منوهای سایت',
+      social_link: 'لینک‌های شبکه اجتماعی',
+      redirect: 'انتقال آدرس‌ها',
+      user: 'کاربران پنل'
+    }
+  },
+  blog: {
+    reading_time: 'زمان مطالعه : :minutes دقیقه',
+    published_on: 'انتشار در :date',
+    written_by: 'نویسنده',
+    subject: 'موضوع',
+    date: 'تاریخ',
+    share: 'اشتراک‌گذاری این مقاله',
+    related: 'مقالات مرتبط',
+    categories: 'دسته‌بندی‌ها',
+    tags: 'برچسب‌ها',
+    copy_link: 'کپی لینک',
+    link_copied: 'لینک کپی شد'
+  },
+  common: {
+    skip_to_content: 'رفتن به محتوا',
+    primary_navigation: 'ناوبری اصلی',
+    change_language: 'تغییر زبان',
+    open_menu: 'باز کردن منو',
+    close_menu: 'بستن منو',
+    close: 'بستن',
+    read_more: 'ادامه مطلب',
+    read_article: 'مطالعه مقاله',
+    view_all: 'مشاهده همه',
+    load_more: 'نمونه‌کارهای بیشتر',
+    back: 'بازگشت',
+    next: 'بعدی',
+    previous: 'قبلی',
+    pagination: 'صفحه‌بندی',
+    all: 'همه',
+    team: 'تیم ما',
+    search: 'جستجو',
+    loading: 'در حال بارگذاری…',
+    sending: 'در حال ارسال…',
+    last_updated: 'آخرین به‌روزرسانی: :date',
+    get_checklist: 'دریافت چک‌لیست',
+    start_conversation: 'شروع گفتگو',
+    lets_talk: 'گفتگو کنیم',
+    empty_projects: 'هنوز پروژه‌ای برای نمایش وجود ندارد.',
+    empty_posts: 'هنوز مقاله‌ای منتشر نشده است.',
+    empty_results: 'موردی با فیلترهای شما مطابقت نداشت.'
+  },
+  errors: {
+    '403': {
+      title: 'دسترسی محدود',
+      message: 'شما اجازه مشاهده این صفحه را ندارید.'
+    },
+    '404': {
+      title: 'مسیر را گم کردید؟',
+      message: 'صفحه‌ای که دنبال آن بودید پیدا نشد،
+' +
+        'اما با هم می‌توانیم مسیر درست را پیدا کنیم.'
+    },
+    '429': {
+      title: 'کمی آهسته‌تر',
+      message: 'درخواست‌های شما بیش از حد مجاز بوده است. لطفاً کمی صبر کنید و دوباره تلاش کنید.'
+    },
+    '500': {
+      title: 'مشکلی پیش آمد',
+      message: 'خطایی غیرمنتظره از سمت ما رخ داد. در حال بررسی هستیم.'
+    },
+    '503': {
+      title: 'به‌زودی بازمی‌گردیم',
+      message: 'در حال انجام تعمیرات کوتاه هستیم. لطفاً چند دقیقه دیگر سر بزنید.'
+    },
+    session_expired: 'نشست شما منقضی شد. لطفاً دوباره تلاش کنید.',
+    back_home: 'بازگشت به خانه'
+  },
+  footer: {
+    info: 'اطلاعات',
+    quick_links: 'دسترسی سریع',
+    social_links: 'شبکه‌های اجتماعی',
+    privacy_policy: 'سیاست حفظ حریم خصوصی',
+    terms: 'شرایط و قوانین',
+    copyright: '© :year :name. تمامی حقوق محفوظ است.'
+  },
+  forms: {
+    contact: {
+      name: 'نام',
+      name_placeholder: 'نام شما',
+      brand: 'نام برند',
+      brand_placeholder: 'نام برند شما',
+      phone: 'شماره تماس',
+      phone_placeholder: '۱۲۳ ۴۵۶ ۷۸',
+      country_search: 'جستجوی کشور...',
+      country_not_found: 'کشوری یافت نشد',
+      services: 'خدمات',
+      services_placeholder: 'یک یا چند خدمت را انتخاب کنید',
+      message: 'پیام کوتاه',
+      message_placeholder: 'پیام خود را بنویسید...',
+      submit: 'شروع گفتگو',
+      success: 'سپاسگزاریم — پیام شما دریافت شد و به‌زودی با شما تماس می‌گیریم.',
+      error: 'مشکلی پیش آمد. لطفاً دوباره تلاش کنید.'
+    },
+    details: {
+      title: 'اطلاعات تماس',
+      whatsapp: 'واتس‌اپ',
+      location: 'موقعیت',
+      email: 'ایمیل',
+      working_with: 'همکاری با',
+      follow: 'را برای ایده‌های خلاقانه و نگاه‌های تازه به برند در شبکه‌های اجتماعی دنبال کنید:'
+    },
+    newsletter: {
+      title: 'چک‌لیست مسیر محتوا را دریافت کنید',
+      description: 'یک چک‌لیست کوتاه برای اینکه ببینید محتوای شما با یک مسیر روشن و مشخص پیش می‌رود یا نه.',
+      name: 'نام و نام خانوادگی',
+      name_placeholder: 'نام شما',
+      email: 'ایمیل',
+      email_placeholder: 'آدرس ایمیل شما',
+      submit: 'دریافت چک‌لیست',
+      disclaimer: 'بدون پیام‌های اضافی؛ فقط نکته‌های کاربردی درباره برند و محتوا',
+      success: 'چک‌لیست مسیر فایل با موفقیت دانلود شد.
+' +
+        'یک نسخه هم به ایمیلتان ارسال کردیم.',
+      already: 'شما قبلاً در فهرست هستید.',
+      dialog_label: 'دریافت چک‌لیست رایگان'
+    }
+  },
+  home: {
+    hero: { note: 'بیایید درباره مسیر برندتان با هم صحبت کنیم' },
+    journey: {
+      strategy: 'استراتژی',
+      identity: 'هویت برند',
+      content: 'محتوا',
+      growth: 'رشد'
+    }
+  },
+  validation: {
+    required: 'وارد کردن :attribute الزامی است.',
+    email: 'لطفاً یک نشانی ایمیل معتبر وارد کنید.',
+    max: {
+      string: ':attribute نباید بیش از :max نویسه باشد.',
+      array: 'حداکثر می‌توانید :max مورد انتخاب کنید.'
+    },
+    min: { string: ':attribute باید حداقل :min نویسه باشد.' },
+    regex: 'قالب :attribute معتبر نیست.',
+    exists: ':attribute انتخاب‌شده معتبر نیست.',
+    array: ':attribute باید یک فهرست باشد.',
+    integer: ':attribute باید عدد باشد.',
+    in: ':attribute انتخاب‌شده معتبر نیست.',
+    prohibited: 'فیلد :attribute مجاز نیست.',
+    custom: { contact: [Object] },
+    attributes: []
+  },
+  work: {
+    eyebrow: 'پروژه ها',
+    industry: 'صنعت',
+    year: 'سال همکاری',
+    instagram: 'اینستاگرام',
+    services: 'خدمات',
+    challenge: 'چالش اصلی کجا بود',
+    goals: 'اهداف پروژه',
+    strategy_eyebrow: 'چرا سیزده',
+    strategy_title: 'مسیرهای مشخص برای رشد برند',
+    strategy_subtitle: 'سه پکیج متناسب با نیاز، مرحله رشد و میزان همراهی موردنیاز کسب‌وکار شما',
+    deliverables: 'چه چیزی تحویل دادیم',
+    showcase: 'محتوا های منتخب',
+    before: 'قبل',
+    after: 'بعد',
+    results: 'نتایج',
+    next_case_study: 'پروژه بعدی'
+  }
+} locale= {
+  current: 'fa',
+  direction: 'rtl',
+  font: 'arabic',
+  htmlLang: 'fa-IR',
+  supported: [
+    { code: 'fa', name: 'Persian', native: 'فارسی', direction: 'rtl' }
+  ]
+}  ... > 
+  at <Inertia initialPage= {
+  component: 'Error',
+  props: {
+    errors: {},
+    translations: {
+      admin: [Object],
+      blog: [Object],
+      common: [Object],
+      errors: [Object],
+      footer: [Object],
+      forms: [Object],
+      home: [Object],
+      validation: [Object],
+      work: [Object]
+    },
+    locale: {
+      current: 'fa',
+      direction: 'rtl',
+      font: 'arabic',
+      htmlLang: 'fa-IR',
+      supported: [Array]
+    },
+    alternates: { fa: 'http://127.0.0.1:8000/fa/en/services/brand-strategy' },
+    navigation: { header: [Array], footer: [Array] },
+    settings: {
+      siteName: 'سیزده',
+      tagline: 'افق را ببین',
+      description: 'ما به برندها کمک می‌کنیم از محتوای پراکنده به مسیری ساختارمند برسند.',
+      contact: [Object],
+      socialLinks: [Array],
+      seo: [Object]
+    },
+    flash: { success: null, error: null },
+    auth: { user: null },
+    ziggy: {
+      url: 'http://127.0.0.1:8000',
+      port: 8000,
+      defaults: [Object],
+      routes: [Object],
+      location: 'http://127.0.0.1:8000/fa/en/services/brand-strategy'
+    },
+    status: 404
+  },
+  url: '/fa/en/services/brand-strategy',
+  version: '1489cb56caf4d12d1e000cec5bf735ae',
+  clearHistory: false,
+  encryptHistory: false
+} initialComponent= {
+  __name: 'Error',
+  __ssrInlineRender: true,
+  props: { status: {} },
+  setup: [Function (anonymous)],
+  layout: {
+    __name: 'AppLayout',
+    __ssrInlineRender: true,
+    setup: [Function (anonymous)],
+    inheritAttrs: false
+  },
+  inheritAttrs: false
+} resolveComponent=fn<resolveComponent>  ... > 
+  at <App>
+TypeError: Cannot read properties of undefined (reading 'home')
+    at new i (file:///home/fdaei/project/my/sizdah/node_modules/ziggy-js/dist/index.js:1:2581)
+    at s (file:///home/fdaei/project/my/sizdah/node_modules/ziggy-js/dist/index.js:1:5561)
+    at file:///home/fdaei/project/my/sizdah/bootstrap/ssr/assets/Error-B_zCCyow.js:33:27
+    at renderComponentSubTree (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:493:9)
+    at renderComponentVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:439:14)
+    at renderVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:559:14)
+    at renderVNodeChildren (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:575:5)
+    at ssrRenderSlotInner (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:141:9)
+    at ssrRenderSlot (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:114:3)
+    at file:///home/fdaei/project/my/sizdah/bootstrap/ssr/ssr.js:594:7
+ {"exception":"[object] (Inertia\\Ssr\\SsrException(code: 0): [Vue warn]: Unhandled error during execution of render function 
+  at <AppFooter> 
+  at <AppLayout errors= {} translations= {
+  admin: {
+    language: { english: 'English', persian: 'فارسی' },
+    navigation: { groups: [Object], items: [Object] },
+    models: {
+      page: 'صفحه',
+      service: 'خدمت',
+      testimonial: 'نظر مشتری',
+      faq: 'پرسش',
+      client: 'لوگوی مشتری',
+      team_member: 'عضو تیم',
+      project: 'پروژه',
+      industry: 'دسته‌بندی پروژه',
+      post: 'مقاله',
+      post_category: 'دسته‌بندی مقاله',
+      post_tag: 'برچسب مقاله',
+      contact_submission: 'پیام تماس',
+      newsletter_subscription: 'عضو خبرنامه',
+      menu: 'منوی سایت',
+      social_link: 'لینک شبکه اجتماعی',
+      redirect: 'انتقال آدرس',
+      user: 'کاربر پنل'
+    },
+    models_plural: {
+      page: 'صفحه‌ها',
+      service: 'خدمات',
+      testimonial: 'نظرهای مشتریان',
+      faq: 'پرسش‌ها',
+      client: 'لوگوهای مشتریان',
+      team_member: 'اعضای تیم',
+      project: 'پروژه‌ها',
+      industry: 'دسته‌بندی‌های پروژه',
+      post: 'مقاله‌ها',
+      post_category: 'دسته‌بندی‌های مقاله',
+      post_tag: 'برچسب‌های مقاله',
+      contact_submission: 'پیام‌های تماس',
+      newsletter_subscription: 'اعضای خبرنامه',
+      menu: 'منوهای سایت',
+      social_link: 'لینک‌های شبکه اجتماعی',
+      redirect: 'انتقال آدرس‌ها',
+      user: 'کاربران پنل'
+    }
+  },
+  blog: {
+    reading_time: 'زمان مطالعه : :minutes دقیقه',
+    published_on: 'انتشار در :date',
+    written_by: 'نویسنده',
+    subject: 'موضوع',
+    date: 'تاریخ',
+    share: 'اشتراک‌گذاری این مقاله',
+    related: 'مقالات مرتبط',
+    categories: 'دسته‌بندی‌ها',
+    tags: 'برچسب‌ها',
+    copy_link: 'کپی لینک',
+    link_copied: 'لینک کپی شد'
+  },
+  common: {
+    skip_to_content: 'رفتن به محتوا',
+    primary_navigation: 'ناوبری اصلی',
+    change_language: 'تغییر زبان',
+    open_menu: 'باز کردن منو',
+    close_menu: 'بستن منو',
+    close: 'بستن',
+    read_more: 'ادامه مطلب',
+    read_article: 'مطالعه مقاله',
+    view_all: 'مشاهده همه',
+    load_more: 'نمونه‌کارهای بیشتر',
+    back: 'بازگشت',
+    next: 'بعدی',
+    previous: 'قبلی',
+    pagination: 'صفحه‌بندی',
+    all: 'همه',
+    team: 'تیم ما',
+    search: 'جستجو',
+    loading: 'در حال بارگذاری…',
+    sending: 'در حال ارسال…',
+    last_updated: 'آخرین به‌روزرسانی: :date',
+    get_checklist: 'دریافت چک‌لیست',
+    start_conversation: 'شروع گفتگو',
+    lets_talk: 'گفتگو کنیم',
+    empty_projects: 'هنوز پروژه‌ای برای نمایش وجود ندارد.',
+    empty_posts: 'هنوز مقاله‌ای منتشر نشده است.',
+    empty_results: 'موردی با فیلترهای شما مطابقت نداشت.'
+  },
+  errors: {
+    '403': {
+      title: 'دسترسی محدود',
+      message: 'شما اجازه مشاهده این صفحه را ندارید.'
+    },
+    '404': {
+      title: 'مسیر را گم کردید؟',
+      message: 'صفحه‌ای که دنبال آن بودید پیدا نشد،\\n' +
+        'اما با هم می‌توانیم مسیر درست را پیدا کنیم.'
+    },
+    '429': {
+      title: 'کمی آهسته‌تر',
+      message: 'درخواست‌های شما بیش از حد مجاز بوده است. لطفاً کمی صبر کنید و دوباره تلاش کنید.'
+    },
+    '500': {
+      title: 'مشکلی پیش آمد',
+      message: 'خطایی غیرمنتظره از سمت ما رخ داد. در حال بررسی هستیم.'
+    },
+    '503': {
+      title: 'به‌زودی بازمی‌گردیم',
+      message: 'در حال انجام تعمیرات کوتاه هستیم. لطفاً چند دقیقه دیگر سر بزنید.'
+    },
+    session_expired: 'نشست شما منقضی شد. لطفاً دوباره تلاش کنید.',
+    back_home: 'بازگشت به خانه'
+  },
+  footer: {
+    info: 'اطلاعات',
+    quick_links: 'دسترسی سریع',
+    social_links: 'شبکه‌های اجتماعی',
+    privacy_policy: 'سیاست حفظ حریم خصوصی',
+    terms: 'شرایط و قوانین',
+    copyright: '© :year :name. تمامی حقوق محفوظ است.'
+  },
+  forms: {
+    contact: {
+      name: 'نام',
+      name_placeholder: 'نام شما',
+      brand: 'نام برند',
+      brand_placeholder: 'نام برند شما',
+      phone: 'شماره تماس',
+      phone_placeholder: '۱۲۳ ۴۵۶ ۷۸',
+      country_search: 'جستجوی کشور...',
+      country_not_found: 'کشوری یافت نشد',
+      services: 'خدمات',
+      services_placeholder: 'یک یا چند خدمت را انتخاب کنید',
+      message: 'پیام کوتاه',
+      message_placeholder: 'پیام خود را بنویسید...',
+      submit: 'شروع گفتگو',
+      success: 'سپاسگزاریم — پیام شما دریافت شد و به‌زودی با شما تماس می‌گیریم.',
+      error: 'مشکلی پیش آمد. لطفاً دوباره تلاش کنید.'
+    },
+    details: {
+      title: 'اطلاعات تماس',
+      whatsapp: 'واتس‌اپ',
+      location: 'موقعیت',
+      email: 'ایمیل',
+      working_with: 'همکاری با',
+      follow: 'را برای ایده‌های خلاقانه و نگاه‌های تازه به برند در شبکه‌های اجتماعی دنبال کنید:'
+    },
+    newsletter: {
+      title: 'چک‌لیست مسیر محتوا را دریافت کنید',
+      description: 'یک چک‌لیست کوتاه برای اینکه ببینید محتوای شما با یک مسیر روشن و مشخص پیش می‌رود یا نه.',
+      name: 'نام و نام خانوادگی',
+      name_placeholder: 'نام شما',
+      email: 'ایمیل',
+      email_placeholder: 'آدرس ایمیل شما',
+      submit: 'دریافت چک‌لیست',
+      disclaimer: 'بدون پیام‌های اضافی؛ فقط نکته‌های کاربردی درباره برند و محتوا',
+      success: 'چک‌لیست مسیر فایل با موفقیت دانلود شد.\\n' +
+        'یک نسخه هم به ایمیلتان ارسال کردیم.',
+      already: 'شما قبلاً در فهرست هستید.',
+      dialog_label: 'دریافت چک‌لیست رایگان'
+    }
+  },
+  home: {
+    hero: { note: 'بیایید درباره مسیر برندتان با هم صحبت کنیم' },
+    journey: {
+      strategy: 'استراتژی',
+      identity: 'هویت برند',
+      content: 'محتوا',
+      growth: 'رشد'
+    }
+  },
+  validation: {
+    required: 'وارد کردن :attribute الزامی است.',
+    email: 'لطفاً یک نشانی ایمیل معتبر وارد کنید.',
+    max: {
+      string: ':attribute نباید بیش از :max نویسه باشد.',
+      array: 'حداکثر می‌توانید :max مورد انتخاب کنید.'
+    },
+    min: { string: ':attribute باید حداقل :min نویسه باشد.' },
+    regex: 'قالب :attribute معتبر نیست.',
+    exists: ':attribute انتخاب‌شده معتبر نیست.',
+    array: ':attribute باید یک فهرست باشد.',
+    integer: ':attribute باید عدد باشد.',
+    in: ':attribute انتخاب‌شده معتبر نیست.',
+    prohibited: 'فیلد :attribute مجاز نیست.',
+    custom: { contact: [Object] },
+    attributes: []
+  },
+  work: {
+    eyebrow: 'پروژه ها',
+    industry: 'صنعت',
+    year: 'سال همکاری',
+    instagram: 'اینستاگرام',
+    services: 'خدمات',
+    challenge: 'چالش اصلی کجا بود',
+    goals: 'اهداف پروژه',
+    strategy_eyebrow: 'چرا سیزده',
+    strategy_title: 'مسیرهای مشخص برای رشد برند',
+    strategy_subtitle: 'سه پکیج متناسب با نیاز، مرحله رشد و میزان همراهی موردنیاز کسب‌وکار شما',
+    deliverables: 'چه چیزی تحویل دادیم',
+    showcase: 'محتوا های منتخب',
+    before: 'قبل',
+    after: 'بعد',
+    results: 'نتایج',
+    next_case_study: 'پروژه بعدی'
+  }
+} locale= {
+  current: 'fa',
+  direction: 'rtl',
+  font: 'arabic',
+  htmlLang: 'fa-IR',
+  supported: [
+    { code: 'fa', name: 'Persian', native: 'فارسی', direction: 'rtl' }
+  ]
+}  ... > 
+  at <Inertia initialPage= {
+  component: 'Error',
+  props: {
+    errors: {},
+    translations: {
+      admin: [Object],
+      blog: [Object],
+      common: [Object],
+      errors: [Object],
+      footer: [Object],
+      forms: [Object],
+      home: [Object],
+      validation: [Object],
+      work: [Object]
+    },
+    locale: {
+      current: 'fa',
+      direction: 'rtl',
+      font: 'arabic',
+      htmlLang: 'fa-IR',
+      supported: [Array]
+    },
+    alternates: { fa: 'http://127.0.0.1:8000/fa/en/services/brand-strategy' },
+    navigation: { header: [Array], footer: [Array] },
+    settings: {
+      siteName: 'سیزده',
+      tagline: 'افق را ببین',
+      description: 'ما به برندها کمک می‌کنیم از محتوای پراکنده به مسیری ساختارمند برسند.',
+      contact: [Object],
+      socialLinks: [Array],
+      seo: [Object]
+    },
+    flash: { success: null, error: null },
+    auth: { user: null },
+    ziggy: {
+      url: 'http://127.0.0.1:8000',
+      port: 8000,
+      defaults: [Object],
+      routes: [Object],
+      location: 'http://127.0.0.1:8000/fa/en/services/brand-strategy'
+    },
+    status: 404
+  },
+  url: '/fa/en/services/brand-strategy',
+  version: '1489cb56caf4d12d1e000cec5bf735ae',
+  clearHistory: false,
+  encryptHistory: false
+} initialComponent= {
+  __name: 'Error',
+  __ssrInlineRender: true,
+  props: { status: {} },
+  setup: [Function (anonymous)],
+  layout: {
+    __name: 'AppLayout',
+    __ssrInlineRender: true,
+    setup: [Function (anonymous)],
+    inheritAttrs: false
+  },
+  inheritAttrs: false
+} resolveComponent=fn<resolveComponent>  ... > 
+  at <App>
+TypeError: Cannot read properties of undefined (reading 'home')
+    at new i (file:///home/fdaei/project/my/sizdah/node_modules/ziggy-js/dist/index.js:1:2581)
+    at s (file:///home/fdaei/project/my/sizdah/node_modules/ziggy-js/dist/index.js:1:5561)
+    at file:///home/fdaei/project/my/sizdah/bootstrap/ssr/assets/Error-B_zCCyow.js:33:27
+    at renderComponentSubTree (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:493:9)
+    at renderComponentVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:439:14)
+    at renderVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:559:14)
+    at renderVNodeChildren (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:575:5)
+    at ssrRenderSlotInner (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:141:9)
+    at ssrRenderSlot (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:114:3)
+    at file:///home/fdaei/project/my/sizdah/bootstrap/ssr/ssr.js:594:7
+ at /home/fdaei/project/my/sizdah/vendor/inertiajs/inertia-laravel/src/Commands/StartSsr.php:84)
+[stacktrace]
+#0 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Inertia\\Commands\\StartSsr->handle()
+#1 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#2 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(96): Illuminate\\Container\\Util::unwrapIfClosure()
+#3 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#4 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Container.php(799): Illuminate\\Container\\BoundMethod::call()
+#5 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(211): Illuminate\\Container\\Container->call()
+#6 /home/fdaei/project/my/sizdah/vendor/symfony/console/Command/Command.php(341): Illuminate\\Console\\Command->execute()
+#7 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#8 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(1117): Illuminate\\Console\\Command->run()
+#9 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(356): Symfony\\Component\\Console\\Application->doRunCommand()
+#10 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(195): Symfony\\Component\\Console\\Application->doRun()
+#11 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony\\Component\\Console\\Application->run()
+#12 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#13 /home/fdaei/project/my/sizdah/artisan(14): Illuminate\\Foundation\\Application->handleCommand()
+#14 {main}
+"} 
+[2026-10-01 08:13:59] local.ERROR: file:///home/fdaei/project/my/sizdah/node_modules/ziggy-js/dist/index.js:1
+import{parse as t,stringify as e}from"qs-esm";function r(){return r=Object.assign?Object.assign.bind():function(t){for(var e=1;e<arguments.length;e++){var r=arguments[e];for(var n in r)({}).hasOwnProperty.call(r,n)&&(t[n]=r[n])}return t},r.apply(null,arguments)}class n{constructor(t,e,r){var n,i;this.name=t,this.definition=e,this.bindings=null!=(n=e.bindings)?n:{},this.wheres=null!=(i=e.wheres)?i:{},this.config=r}get template(){const t=`${this.origin}/${this.definition.uri}`.replace(/\/+$/,"");return""===t?"/":t}get origin(){return this.config.absolute?this.definition.domain?`${this.config.url.match(/^\w+:\/\//)[0]}${this.definition.domain}${this.config.port?`:${this.config.port}`:""}`:this.config.url:""}get parameterSegments(){var t,e;return null!=(t=null==(e=this.template.match(/{[^}?]+\??}/g))?void 0:e.map(t=>({name:t.replace(/{|\??}/g,""),required:!/\?}$/.test(t)})))?t:[]}matchesUrl(e){var r;if(!this.definition.methods.includes("GET"))return!1;const n=this.template.replace(/[.*+$()[\]]/g,"\\$&").replace(/(\/?){([^}?]*)(\??)}/g,(t,e,r,n)=>{var i;const s=`(?<${r}>${(null==(i=this.wheres[r])?void 0:i.replace(/(^\^)|(\$$)/g,""))||"[^/?]+"})`;return n?`(${e}${s})?`:`${e}${s}`}).replace(/^\w+:\/\//,""),[i,s]=e.replace(/^\w+:\/\//,"").split("?"),o=null!=(r=new RegExp(`^${n}/?$`).exec(i))?r:new RegExp(`^${n}/?$`).exec(decodeURI(i));if(o){for(const t in o.groups)o.groups[t]="string"==typeof o.groups[t]?decodeURIComponent(o.groups[t]):o.groups[t];return{params:o.groups,query:t(s)}}return!1}compile(t){return this.parameterSegments.length?this.template.replace(/{([^}?]+)(\??)}/g,(e,r,n)=>{var i,s;if(!n&&[null,void 0].includes(t[r]))throw new Error(`Ziggy error: '${r}' parameter is required for route '${this.name}'.`);if(this.wheres[r]&&!new RegExp(`^${n?`(${this.wheres[r]})?`:this.wheres[r]}$`).test(null!=(s=t[r])?s:""))throw new Error(`Ziggy error: '${r}' parameter '${t[r]}' does not match required format '${this.wheres[r]}' for route '${this.name}'.`);return encodeURI(null!=(i=t[r])?i:"").replace(/%7C/g,"|").replace(/%25/g,"%").replace(/\$/g,"%24")}).replace(this.config.absolute?/(\.[^/]+?)(\/\/)/:/(^)(\/\/)/,"$1/").replace(/\/+$/,""):this.template}}class i extends String{constructor(t,e,i=!0,s){if(super(),this.t=null!=s?s:"undefined"!=typeof Ziggy?Ziggy:null==globalThis?void 0:globalThis.Ziggy,!this.t&&"undefined"!=typeof document&&document.getElementById("ziggy-routes-json")&&(globalThis.Ziggy=JSON.parse(document.getElementById("ziggy-routes-json").textContent),this.t=globalThis.Ziggy),this.t=r({},this.t,{absolute:i}),t){if(!this.t.routes[t])throw new Error(`Ziggy error: route '${t}' is not in the route list.`);this.i=new n(t,this.t.routes[t],this.t),this.o=this.u(e)}}toString(){const t=Object.keys(this.o).filter(t=>!this.i.parameterSegments.some(({name:e})=>e===t)).filter(t=>"_query"!==t).reduce((t,e)=>r({},t,{[e]:this.o[e]}),{});return this.i.compile(this.o)+e(r({},t,this.o._query),{addQueryPrefix:!0,arrayFormat:"indices",encodeValuesOnly:!0,skipNulls:!0,encoder:(t,e)=>"boolean"==typeof t?Number(t):e(t)})}h(t){t?this.t.absolute&&t.startsWith("/")&&(t=this.l().host+t):t=this.m();let e={};const[i,s]=Object.entries(this.t.routes).find(([r,i])=>e=new n(r,i,this.t).matchesUrl(t))||[void 0,void 0];return r({name:i},e,{route:s})}m(){const{host:t,pathname:e,search:r}=this.l();return(this.t.absolute?t+e:e.replace(this.t.url.replace(/^\w*:\/\/[^/]+/,""),"").replace(/^\/+/,"/"))+r}current(t,e){const{name:i,params:s,query:o,route:u}=this.h();if(!t)return i;const h=new RegExp(`^${t.replace(/\./g,"\\.").replace(/\*/g,".*")}$`).test(i);if([null,void 0].includes(e)||!h)return h;const a=new n(i,u,this.t);e=this.u(e,a);const l=r({},s,o);if(Object.values(e).every(t=>!t)&&!Object.values(l).some(t=>void 0!==t))return!0;const c=(t,e)=>Object.entries(t).every(([t,r])=>Array.isArray(r)&&Array.isArray(e[t])?r.every(r=>e[t].includes(r)||e[t].includes(decodeURIComponent(r))):"object"==typeof r&&"object"==typeof e[t]&&null!==r&&null!==e[t]?c(r,e[t]):e[t]==r||e[t]==decodeURIComponent(r));return c(e,l)}l(){var t,e,r,n,i,s;const{host:o="",pathname:u="",search:h=""}="undefined"!=typeof window?window.location:{};return{host:null!=(t=null==(e=this.t.location)?void 0:e.host)?t:o,pathname:null!=(r=null==(n=this.t.location)?void 0:n.pathname)?r:u,search:null!=(i=null==(s=this.t.location)?void 0:s.search)?i:h}}get params(){const{params:t,query:e}=this.h();return r({},t,e)}get routeParams(){return this.h().params}get queryParams(){return this.h().query}has(t){return this.t.routes.hasOwnProperty(t)}u(t={},e=this.i){null!=t||(t={}),t=["string","number"].includes(typeof t)?[t]:t;const n=e.parameterSegments.filter(({name:t})=>!this.t.defaults[t]);return Array.isArray(t)?t=t.reduce((t,e,i)=>r({},t,n[i]?{[n[i].name]:e}:"object"==typeof e?e:{[e]:""}),{}):1!==n.length||t.hasOwnProperty(n[0].name)||!t.hasOwnProperty(Object.values(e.bindings)[0])&&!t.hasOwnProperty("id")||(t={[n[0].name]:t}),r({},this.p(e),this.$(t,e))}p(t){return t.parameterSegments.filter(({name:t})=>this.t.defaults[t]).reduce((t,{name:e},n)=>r({},t,{[e]:this.t.defaults[e]}),{})}$(t,{bindings:e,parameterSegments:n}){return Object.entries(t).reduce((t,[i,s])=>{if(!s||"object"!=typeof s||Array.isArray(s)||!n.some(({name:t})=>t===i))return r({},t,{[i]:s});const o=s.hasOwnProperty(e[i])?e[i]:s.hasOwnProperty("id")?"id":void 0;if(void 0===o)throw new Error(`Ziggy error: object passed as '${i}' parameter is missing route model binding key '${e[i]}'.`);return r({},t,{[i]:s[o]})},{})}valueOf(){return this.toString()}}function s(t,e,r,n){const s=new i(t,e,r,n);return t?s.toString():s}const o={install(t,e){const r=(t,r,n,i=e)=>s(t,r,n,i);parseInt(t.version)>2?(t.config.globalProperties.route=r,t.provide("route",r)):t.mixin({methods:{route:r}})}};function u(t){if(!t&&!globalThis.Ziggy&&"undefined"==typeof Ziggy&&!document.getElementById("ziggy-routes-json"))throw new Error("Ziggy error: missing configuration. Ensure that a `Ziggy` variable is defined globally or pass a config object into the useRoute hook.");return(e,r,n,i=t)=>s(e,r,n,i)}export{o as ZiggyVue,s as route,u as useRoute};
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+TypeError: Cannot read properties of undefined (reading 'legal.terms')
+    at new i (file:///home/fdaei/project/my/sizdah/node_modules/ziggy-js/dist/index.js:1:2581)
+    at s (file:///home/fdaei/project/my/sizdah/node_modules/ziggy-js/dist/index.js:1:5561)
+    at file:///home/fdaei/project/my/sizdah/bootstrap/ssr/ssr.js:376:27
+    at renderComponentSubTree (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:493:9)
+    at renderComponentVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:439:14)
+    at ssrRenderComponent (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:104:10)
+    at file:///home/fdaei/project/my/sizdah/bootstrap/ssr/ssr.js:596:13
+    at renderComponentSubTree (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:493:9)
+    at renderComponentVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:439:14)
+    at renderVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:559:14)
+
+Node.js v22.17.1
+ {"exception":"[object] (Inertia\\Ssr\\SsrException(code: 0): file:///home/fdaei/project/my/sizdah/node_modules/ziggy-js/dist/index.js:1
+import{parse as t,stringify as e}from\"qs-esm\";function r(){return r=Object.assign?Object.assign.bind():function(t){for(var e=1;e<arguments.length;e++){var r=arguments[e];for(var n in r)({}).hasOwnProperty.call(r,n)&&(t[n]=r[n])}return t},r.apply(null,arguments)}class n{constructor(t,e,r){var n,i;this.name=t,this.definition=e,this.bindings=null!=(n=e.bindings)?n:{},this.wheres=null!=(i=e.wheres)?i:{},this.config=r}get template(){const t=`${this.origin}/${this.definition.uri}`.replace(/\\/+$/,\"\");return\"\"===t?\"/\":t}get origin(){return this.config.absolute?this.definition.domain?`${this.config.url.match(/^\\w+:\\/\\//)[0]}${this.definition.domain}${this.config.port?`:${this.config.port}`:\"\"}`:this.config.url:\"\"}get parameterSegments(){var t,e;return null!=(t=null==(e=this.template.match(/{[^}?]+\\??}/g))?void 0:e.map(t=>({name:t.replace(/{|\\??}/g,\"\"),required:!/\\?}$/.test(t)})))?t:[]}matchesUrl(e){var r;if(!this.definition.methods.includes(\"GET\"))return!1;const n=this.template.replace(/[.*+$()[\\]]/g,\"\\\\$&\").replace(/(\\/?){([^}?]*)(\\??)}/g,(t,e,r,n)=>{var i;const s=`(?<${r}>${(null==(i=this.wheres[r])?void 0:i.replace(/(^\\^)|(\\$$)/g,\"\"))||\"[^/?]+\"})`;return n?`(${e}${s})?`:`${e}${s}`}).replace(/^\\w+:\\/\\//,\"\"),[i,s]=e.replace(/^\\w+:\\/\\//,\"\").split(\"?\"),o=null!=(r=new RegExp(`^${n}/?$`).exec(i))?r:new RegExp(`^${n}/?$`).exec(decodeURI(i));if(o){for(const t in o.groups)o.groups[t]=\"string\"==typeof o.groups[t]?decodeURIComponent(o.groups[t]):o.groups[t];return{params:o.groups,query:t(s)}}return!1}compile(t){return this.parameterSegments.length?this.template.replace(/{([^}?]+)(\\??)}/g,(e,r,n)=>{var i,s;if(!n&&[null,void 0].includes(t[r]))throw new Error(`Ziggy error: '${r}' parameter is required for route '${this.name}'.`);if(this.wheres[r]&&!new RegExp(`^${n?`(${this.wheres[r]})?`:this.wheres[r]}$`).test(null!=(s=t[r])?s:\"\"))throw new Error(`Ziggy error: '${r}' parameter '${t[r]}' does not match required format '${this.wheres[r]}' for route '${this.name}'.`);return encodeURI(null!=(i=t[r])?i:\"\").replace(/%7C/g,\"|\").replace(/%25/g,\"%\").replace(/\\$/g,\"%24\")}).replace(this.config.absolute?/(\\.[^/]+?)(\\/\\/)/:/(^)(\\/\\/)/,\"$1/\").replace(/\\/+$/,\"\"):this.template}}class i extends String{constructor(t,e,i=!0,s){if(super(),this.t=null!=s?s:\"undefined\"!=typeof Ziggy?Ziggy:null==globalThis?void 0:globalThis.Ziggy,!this.t&&\"undefined\"!=typeof document&&document.getElementById(\"ziggy-routes-json\")&&(globalThis.Ziggy=JSON.parse(document.getElementById(\"ziggy-routes-json\").textContent),this.t=globalThis.Ziggy),this.t=r({},this.t,{absolute:i}),t){if(!this.t.routes[t])throw new Error(`Ziggy error: route '${t}' is not in the route list.`);this.i=new n(t,this.t.routes[t],this.t),this.o=this.u(e)}}toString(){const t=Object.keys(this.o).filter(t=>!this.i.parameterSegments.some(({name:e})=>e===t)).filter(t=>\"_query\"!==t).reduce((t,e)=>r({},t,{[e]:this.o[e]}),{});return this.i.compile(this.o)+e(r({},t,this.o._query),{addQueryPrefix:!0,arrayFormat:\"indices\",encodeValuesOnly:!0,skipNulls:!0,encoder:(t,e)=>\"boolean\"==typeof t?Number(t):e(t)})}h(t){t?this.t.absolute&&t.startsWith(\"/\")&&(t=this.l().host+t):t=this.m();let e={};const[i,s]=Object.entries(this.t.routes).find(([r,i])=>e=new n(r,i,this.t).matchesUrl(t))||[void 0,void 0];return r({name:i},e,{route:s})}m(){const{host:t,pathname:e,search:r}=this.l();return(this.t.absolute?t+e:e.replace(this.t.url.replace(/^\\w*:\\/\\/[^/]+/,\"\"),\"\").replace(/^\\/+/,\"/\"))+r}current(t,e){const{name:i,params:s,query:o,route:u}=this.h();if(!t)return i;const h=new RegExp(`^${t.replace(/\\./g,\"\\\\.\").replace(/\\*/g,\".*\")}$`).test(i);if([null,void 0].includes(e)||!h)return h;const a=new n(i,u,this.t);e=this.u(e,a);const l=r({},s,o);if(Object.values(e).every(t=>!t)&&!Object.values(l).some(t=>void 0!==t))return!0;const c=(t,e)=>Object.entries(t).every(([t,r])=>Array.isArray(r)&&Array.isArray(e[t])?r.every(r=>e[t].includes(r)||e[t].includes(decodeURIComponent(r))):\"object\"==typeof r&&\"object\"==typeof e[t]&&null!==r&&null!==e[t]?c(r,e[t]):e[t]==r||e[t]==decodeURIComponent(r));return c(e,l)}l(){var t,e,r,n,i,s;const{host:o=\"\",pathname:u=\"\",search:h=\"\"}=\"undefined\"!=typeof window?window.location:{};return{host:null!=(t=null==(e=this.t.location)?void 0:e.host)?t:o,pathname:null!=(r=null==(n=this.t.location)?void 0:n.pathname)?r:u,search:null!=(i=null==(s=this.t.location)?void 0:s.search)?i:h}}get params(){const{params:t,query:e}=this.h();return r({},t,e)}get routeParams(){return this.h().params}get queryParams(){return this.h().query}has(t){return this.t.routes.hasOwnProperty(t)}u(t={},e=this.i){null!=t||(t={}),t=[\"string\",\"number\"].includes(typeof t)?[t]:t;const n=e.parameterSegments.filter(({name:t})=>!this.t.defaults[t]);return Array.isArray(t)?t=t.reduce((t,e,i)=>r({},t,n[i]?{[n[i].name]:e}:\"object\"==typeof e?e:{[e]:\"\"}),{}):1!==n.length||t.hasOwnProperty(n[0].name)||!t.hasOwnProperty(Object.values(e.bindings)[0])&&!t.hasOwnProperty(\"id\")||(t={[n[0].name]:t}),r({},this.p(e),this.$(t,e))}p(t){return t.parameterSegments.filter(({name:t})=>this.t.defaults[t]).reduce((t,{name:e},n)=>r({},t,{[e]:this.t.defaults[e]}),{})}$(t,{bindings:e,parameterSegments:n}){return Object.entries(t).reduce((t,[i,s])=>{if(!s||\"object\"!=typeof s||Array.isArray(s)||!n.some(({name:t})=>t===i))return r({},t,{[i]:s});const o=s.hasOwnProperty(e[i])?e[i]:s.hasOwnProperty(\"id\")?\"id\":void 0;if(void 0===o)throw new Error(`Ziggy error: object passed as '${i}' parameter is missing route model binding key '${e[i]}'.`);return r({},t,{[i]:s[o]})},{})}valueOf(){return this.toString()}}function s(t,e,r,n){const s=new i(t,e,r,n);return t?s.toString():s}const o={install(t,e){const r=(t,r,n,i=e)=>s(t,r,n,i);parseInt(t.version)>2?(t.config.globalProperties.route=r,t.provide(\"route\",r)):t.mixin({methods:{route:r}})}};function u(t){if(!t&&!globalThis.Ziggy&&\"undefined\"==typeof Ziggy&&!document.getElementById(\"ziggy-routes-json\"))throw new Error(\"Ziggy error: missing configuration. Ensure that a `Ziggy` variable is defined globally or pass a config object into the useRoute hook.\");return(e,r,n,i=t)=>s(e,r,n,i)}export{o as ZiggyVue,s as route,u as useRoute};
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+TypeError: Cannot read properties of undefined (reading 'legal.terms')
+    at new i (file:///home/fdaei/project/my/sizdah/node_modules/ziggy-js/dist/index.js:1:2581)
+    at s (file:///home/fdaei/project/my/sizdah/node_modules/ziggy-js/dist/index.js:1:5561)
+    at file:///home/fdaei/project/my/sizdah/bootstrap/ssr/ssr.js:376:27
+    at renderComponentSubTree (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:493:9)
+    at renderComponentVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:439:14)
+    at ssrRenderComponent (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:104:10)
+    at file:///home/fdaei/project/my/sizdah/bootstrap/ssr/ssr.js:596:13
+    at renderComponentSubTree (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:493:9)
+    at renderComponentVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:439:14)
+    at renderVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:559:14)
+
+Node.js v22.17.1
+ at /home/fdaei/project/my/sizdah/vendor/inertiajs/inertia-laravel/src/Commands/StartSsr.php:84)
+[stacktrace]
+#0 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Inertia\\Commands\\StartSsr->handle()
+#1 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#2 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(96): Illuminate\\Container\\Util::unwrapIfClosure()
+#3 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#4 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Container.php(799): Illuminate\\Container\\BoundMethod::call()
+#5 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(211): Illuminate\\Container\\Container->call()
+#6 /home/fdaei/project/my/sizdah/vendor/symfony/console/Command/Command.php(341): Illuminate\\Console\\Command->execute()
+#7 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#8 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(1117): Illuminate\\Console\\Command->run()
+#9 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(356): Symfony\\Component\\Console\\Application->doRunCommand()
+#10 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(195): Symfony\\Component\\Console\\Application->doRun()
+#11 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony\\Component\\Console\\Application->run()
+#12 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#13 /home/fdaei/project/my/sizdah/artisan(14): Illuminate\\Foundation\\Application->handleCommand()
+#14 {main}
+"} 
+[2026-10-01 08:14:50] local.ERROR: [Vue warn]: Unhandled error during execution of render function 
+  at <AppFooter> 
+  at <AppLayout errors= {} translations= {
+  admin: {
+    language: { english: 'English', persian: 'فارسی' },
+    navigation: { groups: [Object], items: [Object] },
+    models: {
+      page: 'صفحه',
+      service: 'خدمت',
+      testimonial: 'نظر مشتری',
+      faq: 'پرسش',
+      client: 'لوگوی مشتری',
+      team_member: 'عضو تیم',
+      project: 'پروژه',
+      industry: 'دسته‌بندی پروژه',
+      post: 'مقاله',
+      post_category: 'دسته‌بندی مقاله',
+      post_tag: 'برچسب مقاله',
+      contact_submission: 'پیام تماس',
+      newsletter_subscription: 'عضو خبرنامه',
+      menu: 'منوی سایت',
+      social_link: 'لینک شبکه اجتماعی',
+      redirect: 'انتقال آدرس',
+      user: 'کاربر پنل'
+    },
+    models_plural: {
+      page: 'صفحه‌ها',
+      service: 'خدمات',
+      testimonial: 'نظرهای مشتریان',
+      faq: 'پرسش‌ها',
+      client: 'لوگوهای مشتریان',
+      team_member: 'اعضای تیم',
+      project: 'پروژه‌ها',
+      industry: 'دسته‌بندی‌های پروژه',
+      post: 'مقاله‌ها',
+      post_category: 'دسته‌بندی‌های مقاله',
+      post_tag: 'برچسب‌های مقاله',
+      contact_submission: 'پیام‌های تماس',
+      newsletter_subscription: 'اعضای خبرنامه',
+      menu: 'منوهای سایت',
+      social_link: 'لینک‌های شبکه اجتماعی',
+      redirect: 'انتقال آدرس‌ها',
+      user: 'کاربران پنل'
+    }
+  },
+  blog: {
+    reading_time: 'زمان مطالعه : :minutes دقیقه',
+    published_on: 'انتشار در :date',
+    written_by: 'نویسنده',
+    subject: 'موضوع',
+    date: 'تاریخ',
+    share: 'اشتراک‌گذاری این مقاله',
+    related: 'مقالات مرتبط',
+    categories: 'دسته‌بندی‌ها',
+    tags: 'برچسب‌ها',
+    copy_link: 'کپی لینک',
+    link_copied: 'لینک کپی شد'
+  },
+  common: {
+    skip_to_content: 'رفتن به محتوا',
+    primary_navigation: 'ناوبری اصلی',
+    change_language: 'تغییر زبان',
+    open_menu: 'باز کردن منو',
+    close_menu: 'بستن منو',
+    close: 'بستن',
+    read_more: 'ادامه مطلب',
+    read_article: 'مطالعه مقاله',
+    view_all: 'مشاهده همه',
+    load_more: 'نمونه‌کارهای بیشتر',
+    back: 'بازگشت',
+    next: 'بعدی',
+    previous: 'قبلی',
+    pagination: 'صفحه‌بندی',
+    all: 'همه',
+    team: 'تیم ما',
+    search: 'جستجو',
+    loading: 'در حال بارگذاری…',
+    sending: 'در حال ارسال…',
+    last_updated: 'آخرین به‌روزرسانی: :date',
+    get_checklist: 'دریافت چک‌لیست',
+    start_conversation: 'شروع گفتگو',
+    lets_talk: 'گفتگو کنیم',
+    empty_projects: 'هنوز پروژه‌ای برای نمایش وجود ندارد.',
+    empty_posts: 'هنوز مقاله‌ای منتشر نشده است.',
+    empty_results: 'موردی با فیلترهای شما مطابقت نداشت.'
+  },
+  errors: {
+    '403': {
+      title: 'دسترسی محدود',
+      message: 'شما اجازه مشاهده این صفحه را ندارید.'
+    },
+    '404': {
+      title: 'مسیر را گم کردید؟',
+      message: 'صفحه‌ای که دنبال آن بودید پیدا نشد،
+' +
+        'اما با هم می‌توانیم مسیر درست را پیدا کنیم.'
+    },
+    '429': {
+      title: 'کمی آهسته‌تر',
+      message: 'درخواست‌های شما بیش از حد مجاز بوده است. لطفاً کمی صبر کنید و دوباره تلاش کنید.'
+    },
+    '500': {
+      title: 'مشکلی پیش آمد',
+      message: 'خطایی غیرمنتظره از سمت ما رخ داد. در حال بررسی هستیم.'
+    },
+    '503': {
+      title: 'به‌زودی بازمی‌گردیم',
+      message: 'در حال انجام تعمیرات کوتاه هستیم. لطفاً چند دقیقه دیگر سر بزنید.'
+    },
+    session_expired: 'نشست شما منقضی شد. لطفاً دوباره تلاش کنید.',
+    back_home: 'بازگشت به خانه'
+  },
+  footer: {
+    info: 'اطلاعات',
+    quick_links: 'دسترسی سریع',
+    social_links: 'شبکه‌های اجتماعی',
+    privacy_policy: 'سیاست حفظ حریم خصوصی',
+    terms: 'شرایط و قوانین',
+    copyright: '© :year :name. تمامی حقوق محفوظ است.'
+  },
+  forms: {
+    contact: {
+      name: 'نام',
+      name_placeholder: 'نام شما',
+      brand: 'نام برند',
+      brand_placeholder: 'نام برند شما',
+      phone: 'شماره تماس',
+      phone_placeholder: '۱۲۳ ۴۵۶ ۷۸',
+      country_search: 'جستجوی کشور...',
+      country_not_found: 'کشوری یافت نشد',
+      services: 'خدمات',
+      services_placeholder: 'یک یا چند خدمت را انتخاب کنید',
+      message: 'پیام کوتاه',
+      message_placeholder: 'پیام خود را بنویسید...',
+      submit: 'شروع گفتگو',
+      success: 'سپاسگزاریم — پیام شما دریافت شد و به‌زودی با شما تماس می‌گیریم.',
+      error: 'مشکلی پیش آمد. لطفاً دوباره تلاش کنید.'
+    },
+    details: {
+      title: 'اطلاعات تماس',
+      whatsapp: 'واتس‌اپ',
+      location: 'موقعیت',
+      email: 'ایمیل',
+      working_with: 'همکاری با',
+      follow: 'را برای ایده‌های خلاقانه و نگاه‌های تازه به برند در شبکه‌های اجتماعی دنبال کنید:'
+    },
+    newsletter: {
+      title: 'چک‌لیست مسیر محتوا را دریافت کنید',
+      description: 'یک چک‌لیست کوتاه برای اینکه ببینید محتوای شما با یک مسیر روشن و مشخص پیش می‌رود یا نه.',
+      name: 'نام و نام خانوادگی',
+      name_placeholder: 'نام شما',
+      email: 'ایمیل',
+      email_placeholder: 'آدرس ایمیل شما',
+      submit: 'دریافت چک‌لیست',
+      disclaimer: 'بدون پیام‌های اضافی؛ فقط نکته‌های کاربردی درباره برند و محتوا',
+      success: 'چک‌لیست مسیر فایل با موفقیت دانلود شد.
+' +
+        'یک نسخه هم به ایمیلتان ارسال کردیم.',
+      already: 'شما قبلاً در فهرست هستید.',
+      dialog_label: 'دریافت چک‌لیست رایگان'
+    }
+  },
+  home: {
+    hero: { note: 'بیایید درباره مسیر برندتان با هم صحبت کنیم' },
+    journey: {
+      strategy: 'استراتژی',
+      identity: 'هویت برند',
+      content: 'محتوا',
+      growth: 'رشد'
+    }
+  },
+  validation: {
+    required: 'وارد کردن :attribute الزامی است.',
+    email: 'لطفاً یک نشانی ایمیل معتبر وارد کنید.',
+    max: {
+      string: ':attribute نباید بیش از :max نویسه باشد.',
+      array: 'حداکثر می‌توانید :max مورد انتخاب کنید.'
+    },
+    min: { string: ':attribute باید حداقل :min نویسه باشد.' },
+    regex: 'قالب :attribute معتبر نیست.',
+    exists: ':attribute انتخاب‌شده معتبر نیست.',
+    array: ':attribute باید یک فهرست باشد.',
+    integer: ':attribute باید عدد باشد.',
+    in: ':attribute انتخاب‌شده معتبر نیست.',
+    prohibited: 'فیلد :attribute مجاز نیست.',
+    custom: { contact: [Object] },
+    attributes: []
+  },
+  work: {
+    eyebrow: 'پروژه ها',
+    industry: 'صنعت',
+    year: 'سال همکاری',
+    instagram: 'اینستاگرام',
+    services: 'خدمات',
+    challenge: 'چالش اصلی کجا بود',
+    goals: 'اهداف پروژه',
+    strategy_eyebrow: 'چرا سیزده',
+    strategy_title: 'مسیرهای مشخص برای رشد برند',
+    strategy_subtitle: 'سه پکیج متناسب با نیاز، مرحله رشد و میزان همراهی موردنیاز کسب‌وکار شما',
+    deliverables: 'چه چیزی تحویل دادیم',
+    showcase: 'محتوا های منتخب',
+    before: 'قبل',
+    after: 'بعد',
+    results: 'نتایج',
+    next_case_study: 'پروژه بعدی'
+  }
+} locale= {
+  current: 'fa',
+  direction: 'rtl',
+  font: 'arabic',
+  htmlLang: 'fa-IR',
+  supported: [
+    { code: 'fa', name: 'Persian', native: 'فارسی', direction: 'rtl' }
+  ]
+}  ... > 
+  at <Inertia initialPage= {
+  component: 'Services',
+  props: {
+    errors: {},
+    translations: {
+      admin: [Object],
+      blog: [Object],
+      common: [Object],
+      errors: [Object],
+      footer: [Object],
+      forms: [Object],
+      home: [Object],
+      validation: [Object],
+      work: [Object]
+    },
+    locale: {
+      current: 'fa',
+      direction: 'rtl',
+      font: 'arabic',
+      htmlLang: 'fa-IR',
+      supported: [Array]
+    },
+    alternates: { fa: 'http://127.0.0.1:8000/fa/services' },
+    navigation: { header: [Array], footer: [Array] },
+    settings: {
+      siteName: 'سیزده',
+      tagline: 'افق را ببین',
+      description: 'ما به برندها کمک می‌کنیم از محتوای پراکنده به مسیری ساختارمند برسند.',
+      contact: [Object],
+      socialLinks: [Array],
+      seo: [Object]
+    },
+    flash: { success: null, error: null },
+    auth: { user: null },
+    ziggy: {
+      url: 'http://127.0.0.1:8000',
+      port: 8000,
+      defaults: [Object],
+      routes: [Object],
+      location: 'http://127.0.0.1:8000/fa/services'
+    },
+    heading: {
+      eyebrow: 'خدمات',
+      title: 'ما برای برند شما سیستم می‌سازیم فرا تر از یک خدمت',
+      description: 'چهار خدمت اصلی برای ساختن مسیری روشن، منسجم و ماندگار برای برند شما'
+    },
+    services: [ [Object], [Object], [Object], [Object] ],
+    sections: { final_cta: [Object] },
+    seo: {
+      title: 'ما برای برند شما سیستم می‌سازیم فرا تر از یک خدمت',
+      description: 'چهار خدمت اصلی برای ساختن مسیری روشن، منسجم و ماندگار برای برند شما',
+      image: null,
+      canonical: 'http://127.0.0.1:8000/fa/services',
+      type: 'website',
+      publishedAt: null,
+      modifiedAt: null,
+      author: null,
+      noindex: false,
+      schema: [Object]
+    }
+  },
+  url: '/fa/services',
+  version: '1489cb56caf4d12d1e000cec5bf735ae',
+  clearHistory: false,
+  encryptHistory: false
+} initialComponent= {
+  __name: 'Services',
+  __ssrInlineRender: true,
+  props: { heading: {}, services: {}, sections: {}, seo: {} },
+  setup: [Function (anonymous)],
+  layout: {
+    __name: 'AppLayout',
+    __ssrInlineRender: true,
+    setup: [Function (anonymous)],
+    inheritAttrs: false
+  },
+  inheritAttrs: false
+} resolveComponent=fn<resolveComponent>  ... > 
+  at <App>
+ {"exception":"[object] (Inertia\\Ssr\\SsrException(code: 0): [Vue warn]: Unhandled error during execution of render function 
+  at <AppFooter> 
+  at <AppLayout errors= {} translations= {
+  admin: {
+    language: { english: 'English', persian: 'فارسی' },
+    navigation: { groups: [Object], items: [Object] },
+    models: {
+      page: 'صفحه',
+      service: 'خدمت',
+      testimonial: 'نظر مشتری',
+      faq: 'پرسش',
+      client: 'لوگوی مشتری',
+      team_member: 'عضو تیم',
+      project: 'پروژه',
+      industry: 'دسته‌بندی پروژه',
+      post: 'مقاله',
+      post_category: 'دسته‌بندی مقاله',
+      post_tag: 'برچسب مقاله',
+      contact_submission: 'پیام تماس',
+      newsletter_subscription: 'عضو خبرنامه',
+      menu: 'منوی سایت',
+      social_link: 'لینک شبکه اجتماعی',
+      redirect: 'انتقال آدرس',
+      user: 'کاربر پنل'
+    },
+    models_plural: {
+      page: 'صفحه‌ها',
+      service: 'خدمات',
+      testimonial: 'نظرهای مشتریان',
+      faq: 'پرسش‌ها',
+      client: 'لوگوهای مشتریان',
+      team_member: 'اعضای تیم',
+      project: 'پروژه‌ها',
+      industry: 'دسته‌بندی‌های پروژه',
+      post: 'مقاله‌ها',
+      post_category: 'دسته‌بندی‌های مقاله',
+      post_tag: 'برچسب‌های مقاله',
+      contact_submission: 'پیام‌های تماس',
+      newsletter_subscription: 'اعضای خبرنامه',
+      menu: 'منوهای سایت',
+      social_link: 'لینک‌های شبکه اجتماعی',
+      redirect: 'انتقال آدرس‌ها',
+      user: 'کاربران پنل'
+    }
+  },
+  blog: {
+    reading_time: 'زمان مطالعه : :minutes دقیقه',
+    published_on: 'انتشار در :date',
+    written_by: 'نویسنده',
+    subject: 'موضوع',
+    date: 'تاریخ',
+    share: 'اشتراک‌گذاری این مقاله',
+    related: 'مقالات مرتبط',
+    categories: 'دسته‌بندی‌ها',
+    tags: 'برچسب‌ها',
+    copy_link: 'کپی لینک',
+    link_copied: 'لینک کپی شد'
+  },
+  common: {
+    skip_to_content: 'رفتن به محتوا',
+    primary_navigation: 'ناوبری اصلی',
+    change_language: 'تغییر زبان',
+    open_menu: 'باز کردن منو',
+    close_menu: 'بستن منو',
+    close: 'بستن',
+    read_more: 'ادامه مطلب',
+    read_article: 'مطالعه مقاله',
+    view_all: 'مشاهده همه',
+    load_more: 'نمونه‌کارهای بیشتر',
+    back: 'بازگشت',
+    next: 'بعدی',
+    previous: 'قبلی',
+    pagination: 'صفحه‌بندی',
+    all: 'همه',
+    team: 'تیم ما',
+    search: 'جستجو',
+    loading: 'در حال بارگذاری…',
+    sending: 'در حال ارسال…',
+    last_updated: 'آخرین به‌روزرسانی: :date',
+    get_checklist: 'دریافت چک‌لیست',
+    start_conversation: 'شروع گفتگو',
+    lets_talk: 'گفتگو کنیم',
+    empty_projects: 'هنوز پروژه‌ای برای نمایش وجود ندارد.',
+    empty_posts: 'هنوز مقاله‌ای منتشر نشده است.',
+    empty_results: 'موردی با فیلترهای شما مطابقت نداشت.'
+  },
+  errors: {
+    '403': {
+      title: 'دسترسی محدود',
+      message: 'شما اجازه مشاهده این صفحه را ندارید.'
+    },
+    '404': {
+      title: 'مسیر را گم کردید؟',
+      message: 'صفحه‌ای که دنبال آن بودید پیدا نشد،\\n' +
+        'اما با هم می‌توانیم مسیر درست را پیدا کنیم.'
+    },
+    '429': {
+      title: 'کمی آهسته‌تر',
+      message: 'درخواست‌های شما بیش از حد مجاز بوده است. لطفاً کمی صبر کنید و دوباره تلاش کنید.'
+    },
+    '500': {
+      title: 'مشکلی پیش آمد',
+      message: 'خطایی غیرمنتظره از سمت ما رخ داد. در حال بررسی هستیم.'
+    },
+    '503': {
+      title: 'به‌زودی بازمی‌گردیم',
+      message: 'در حال انجام تعمیرات کوتاه هستیم. لطفاً چند دقیقه دیگر سر بزنید.'
+    },
+    session_expired: 'نشست شما منقضی شد. لطفاً دوباره تلاش کنید.',
+    back_home: 'بازگشت به خانه'
+  },
+  footer: {
+    info: 'اطلاعات',
+    quick_links: 'دسترسی سریع',
+    social_links: 'شبکه‌های اجتماعی',
+    privacy_policy: 'سیاست حفظ حریم خصوصی',
+    terms: 'شرایط و قوانین',
+    copyright: '© :year :name. تمامی حقوق محفوظ است.'
+  },
+  forms: {
+    contact: {
+      name: 'نام',
+      name_placeholder: 'نام شما',
+      brand: 'نام برند',
+      brand_placeholder: 'نام برند شما',
+      phone: 'شماره تماس',
+      phone_placeholder: '۱۲۳ ۴۵۶ ۷۸',
+      country_search: 'جستجوی کشور...',
+      country_not_found: 'کشوری یافت نشد',
+      services: 'خدمات',
+      services_placeholder: 'یک یا چند خدمت را انتخاب کنید',
+      message: 'پیام کوتاه',
+      message_placeholder: 'پیام خود را بنویسید...',
+      submit: 'شروع گفتگو',
+      success: 'سپاسگزاریم — پیام شما دریافت شد و به‌زودی با شما تماس می‌گیریم.',
+      error: 'مشکلی پیش آمد. لطفاً دوباره تلاش کنید.'
+    },
+    details: {
+      title: 'اطلاعات تماس',
+      whatsapp: 'واتس‌اپ',
+      location: 'موقعیت',
+      email: 'ایمیل',
+      working_with: 'همکاری با',
+      follow: 'را برای ایده‌های خلاقانه و نگاه‌های تازه به برند در شبکه‌های اجتماعی دنبال کنید:'
+    },
+    newsletter: {
+      title: 'چک‌لیست مسیر محتوا را دریافت کنید',
+      description: 'یک چک‌لیست کوتاه برای اینکه ببینید محتوای شما با یک مسیر روشن و مشخص پیش می‌رود یا نه.',
+      name: 'نام و نام خانوادگی',
+      name_placeholder: 'نام شما',
+      email: 'ایمیل',
+      email_placeholder: 'آدرس ایمیل شما',
+      submit: 'دریافت چک‌لیست',
+      disclaimer: 'بدون پیام‌های اضافی؛ فقط نکته‌های کاربردی درباره برند و محتوا',
+      success: 'چک‌لیست مسیر فایل با موفقیت دانلود شد.\\n' +
+        'یک نسخه هم به ایمیلتان ارسال کردیم.',
+      already: 'شما قبلاً در فهرست هستید.',
+      dialog_label: 'دریافت چک‌لیست رایگان'
+    }
+  },
+  home: {
+    hero: { note: 'بیایید درباره مسیر برندتان با هم صحبت کنیم' },
+    journey: {
+      strategy: 'استراتژی',
+      identity: 'هویت برند',
+      content: 'محتوا',
+      growth: 'رشد'
+    }
+  },
+  validation: {
+    required: 'وارد کردن :attribute الزامی است.',
+    email: 'لطفاً یک نشانی ایمیل معتبر وارد کنید.',
+    max: {
+      string: ':attribute نباید بیش از :max نویسه باشد.',
+      array: 'حداکثر می‌توانید :max مورد انتخاب کنید.'
+    },
+    min: { string: ':attribute باید حداقل :min نویسه باشد.' },
+    regex: 'قالب :attribute معتبر نیست.',
+    exists: ':attribute انتخاب‌شده معتبر نیست.',
+    array: ':attribute باید یک فهرست باشد.',
+    integer: ':attribute باید عدد باشد.',
+    in: ':attribute انتخاب‌شده معتبر نیست.',
+    prohibited: 'فیلد :attribute مجاز نیست.',
+    custom: { contact: [Object] },
+    attributes: []
+  },
+  work: {
+    eyebrow: 'پروژه ها',
+    industry: 'صنعت',
+    year: 'سال همکاری',
+    instagram: 'اینستاگرام',
+    services: 'خدمات',
+    challenge: 'چالش اصلی کجا بود',
+    goals: 'اهداف پروژه',
+    strategy_eyebrow: 'چرا سیزده',
+    strategy_title: 'مسیرهای مشخص برای رشد برند',
+    strategy_subtitle: 'سه پکیج متناسب با نیاز، مرحله رشد و میزان همراهی موردنیاز کسب‌وکار شما',
+    deliverables: 'چه چیزی تحویل دادیم',
+    showcase: 'محتوا های منتخب',
+    before: 'قبل',
+    after: 'بعد',
+    results: 'نتایج',
+    next_case_study: 'پروژه بعدی'
+  }
+} locale= {
+  current: 'fa',
+  direction: 'rtl',
+  font: 'arabic',
+  htmlLang: 'fa-IR',
+  supported: [
+    { code: 'fa', name: 'Persian', native: 'فارسی', direction: 'rtl' }
+  ]
+}  ... > 
+  at <Inertia initialPage= {
+  component: 'Services',
+  props: {
+    errors: {},
+    translations: {
+      admin: [Object],
+      blog: [Object],
+      common: [Object],
+      errors: [Object],
+      footer: [Object],
+      forms: [Object],
+      home: [Object],
+      validation: [Object],
+      work: [Object]
+    },
+    locale: {
+      current: 'fa',
+      direction: 'rtl',
+      font: 'arabic',
+      htmlLang: 'fa-IR',
+      supported: [Array]
+    },
+    alternates: { fa: 'http://127.0.0.1:8000/fa/services' },
+    navigation: { header: [Array], footer: [Array] },
+    settings: {
+      siteName: 'سیزده',
+      tagline: 'افق را ببین',
+      description: 'ما به برندها کمک می‌کنیم از محتوای پراکنده به مسیری ساختارمند برسند.',
+      contact: [Object],
+      socialLinks: [Array],
+      seo: [Object]
+    },
+    flash: { success: null, error: null },
+    auth: { user: null },
+    ziggy: {
+      url: 'http://127.0.0.1:8000',
+      port: 8000,
+      defaults: [Object],
+      routes: [Object],
+      location: 'http://127.0.0.1:8000/fa/services'
+    },
+    heading: {
+      eyebrow: 'خدمات',
+      title: 'ما برای برند شما سیستم می‌سازیم فرا تر از یک خدمت',
+      description: 'چهار خدمت اصلی برای ساختن مسیری روشن، منسجم و ماندگار برای برند شما'
+    },
+    services: [ [Object], [Object], [Object], [Object] ],
+    sections: { final_cta: [Object] },
+    seo: {
+      title: 'ما برای برند شما سیستم می‌سازیم فرا تر از یک خدمت',
+      description: 'چهار خدمت اصلی برای ساختن مسیری روشن، منسجم و ماندگار برای برند شما',
+      image: null,
+      canonical: 'http://127.0.0.1:8000/fa/services',
+      type: 'website',
+      publishedAt: null,
+      modifiedAt: null,
+      author: null,
+      noindex: false,
+      schema: [Object]
+    }
+  },
+  url: '/fa/services',
+  version: '1489cb56caf4d12d1e000cec5bf735ae',
+  clearHistory: false,
+  encryptHistory: false
+} initialComponent= {
+  __name: 'Services',
+  __ssrInlineRender: true,
+  props: { heading: {}, services: {}, sections: {}, seo: {} },
+  setup: [Function (anonymous)],
+  layout: {
+    __name: 'AppLayout',
+    __ssrInlineRender: true,
+    setup: [Function (anonymous)],
+    inheritAttrs: false
+  },
+  inheritAttrs: false
+} resolveComponent=fn<resolveComponent>  ... > 
+  at <App>
+ at /home/fdaei/project/my/sizdah/vendor/inertiajs/inertia-laravel/src/Commands/StartSsr.php:84)
+[stacktrace]
+#0 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Inertia\\Commands\\StartSsr->handle()
+#1 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#2 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(96): Illuminate\\Container\\Util::unwrapIfClosure()
+#3 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#4 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Container.php(799): Illuminate\\Container\\BoundMethod::call()
+#5 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(211): Illuminate\\Container\\Container->call()
+#6 /home/fdaei/project/my/sizdah/vendor/symfony/console/Command/Command.php(341): Illuminate\\Console\\Command->execute()
+#7 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#8 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(1117): Illuminate\\Console\\Command->run()
+#9 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(356): Symfony\\Component\\Console\\Application->doRunCommand()
+#10 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(195): Symfony\\Component\\Console\\Application->doRun()
+#11 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony\\Component\\Console\\Application->run()
+#12 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#13 /home/fdaei/project/my/sizdah/artisan(14): Illuminate\\Foundation\\Application->handleCommand()
+#14 {main}
+"} 
+[2026-10-01 08:14:50] local.ERROR: TypeError: Cannot read properties of undefined (reading 'legal.terms')
+    at new i (file:///home/fdaei/project/my/sizdah/node_modules/ziggy-js/dist/index.js:1:2581)
+    at s (file:///home/fdaei/project/my/sizdah/node_modules/ziggy-js/dist/index.js:1:5561)
+    at file:///home/fdaei/project/my/sizdah/bootstrap/ssr/ssr.js:376:27
+    at renderComponentSubTree (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:493:9)
+    at renderComponentVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:439:14)
+    at ssrRenderComponent (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:104:10)
+    at file:///home/fdaei/project/my/sizdah/bootstrap/ssr/ssr.js:596:13
+    at renderComponentSubTree (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:493:9)
+    at renderComponentVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:439:14)
+    at renderVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:559:14)
+ {"exception":"[object] (Inertia\\Ssr\\SsrException(code: 0): TypeError: Cannot read properties of undefined (reading 'legal.terms')
+    at new i (file:///home/fdaei/project/my/sizdah/node_modules/ziggy-js/dist/index.js:1:2581)
+    at s (file:///home/fdaei/project/my/sizdah/node_modules/ziggy-js/dist/index.js:1:5561)
+    at file:///home/fdaei/project/my/sizdah/bootstrap/ssr/ssr.js:376:27
+    at renderComponentSubTree (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:493:9)
+    at renderComponentVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:439:14)
+    at ssrRenderComponent (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:104:10)
+    at file:///home/fdaei/project/my/sizdah/bootstrap/ssr/ssr.js:596:13
+    at renderComponentSubTree (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:493:9)
+    at renderComponentVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:439:14)
+    at renderVNode (/home/fdaei/project/my/sizdah/node_modules/vue/node_modules/@vue/server-renderer/dist/server-renderer.cjs.js:559:14)
+ at /home/fdaei/project/my/sizdah/vendor/inertiajs/inertia-laravel/src/Commands/StartSsr.php:84)
+[stacktrace]
+#0 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Inertia\\Commands\\StartSsr->handle()
+#1 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#2 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(96): Illuminate\\Container\\Util::unwrapIfClosure()
+#3 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#4 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Container.php(799): Illuminate\\Container\\BoundMethod::call()
+#5 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(211): Illuminate\\Container\\Container->call()
+#6 /home/fdaei/project/my/sizdah/vendor/symfony/console/Command/Command.php(341): Illuminate\\Console\\Command->execute()
+#7 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#8 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(1117): Illuminate\\Console\\Command->run()
+#9 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(356): Symfony\\Component\\Console\\Application->doRunCommand()
+#10 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(195): Symfony\\Component\\Console\\Application->doRun()
+#11 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony\\Component\\Console\\Application->run()
+#12 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#13 /home/fdaei/project/my/sizdah/artisan(14): Illuminate\\Foundation\\Application->handleCommand()
+#14 {main}
+"} 
+[2026-10-01 09:35:00] local.ERROR: PHP Parse error: Syntax error, unexpected T_NS_SEPARATOR on line 1 {"exception":"[object] (Psy\\Exception\\ParseErrorException(code: 0): PHP Parse error: Syntax error, unexpected T_NS_SEPARATOR on line 1 at /home/fdaei/project/my/sizdah/vendor/psy/psysh/src/Exception/ParseErrorException.php:44)
+[stacktrace]
+#0 /home/fdaei/project/my/sizdah/vendor/psy/psysh/src/CodeCleaner.php(657): Psy\\Exception\\ParseErrorException::fromParseError()
+#1 /home/fdaei/project/my/sizdah/vendor/psy/psysh/src/CodeCleaner.php(273): Psy\\CodeCleaner->parse()
+#2 /home/fdaei/project/my/sizdah/vendor/psy/psysh/src/Shell.php(1399): Psy\\CodeCleaner->clean()
+#3 /home/fdaei/project/my/sizdah/vendor/psy/psysh/src/Shell.php(1506): Psy\\Shell->appendCode()
+#4 /home/fdaei/project/my/sizdah/vendor/psy/psysh/src/Shell.php(2215): Psy\\Shell->setCode()
+#5 /home/fdaei/project/my/sizdah/vendor/laravel/tinker/src/Console/TinkerCommand.php(77): Psy\\Shell->execute()
+#6 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Laravel\\Tinker\\Console\\TinkerCommand->handle()
+#7 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#8 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(96): Illuminate\\Container\\Util::unwrapIfClosure()
+#9 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#10 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Container/Container.php(799): Illuminate\\Container\\BoundMethod::call()
+#11 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(211): Illuminate\\Container\\Container->call()
+#12 /home/fdaei/project/my/sizdah/vendor/symfony/console/Command/Command.php(341): Illuminate\\Console\\Command->execute()
+#13 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#14 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(1117): Illuminate\\Console\\Command->run()
+#15 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(356): Symfony\\Component\\Console\\Application->doRunCommand()
+#16 /home/fdaei/project/my/sizdah/vendor/symfony/console/Application.php(195): Symfony\\Component\\Console\\Application->doRun()
+#17 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony\\Component\\Console\\Application->run()
+#18 /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#19 /home/fdaei/project/my/sizdah/artisan(14): Illuminate\\Foundation\\Application->handleCommand()
+#20 {main}
+"} 

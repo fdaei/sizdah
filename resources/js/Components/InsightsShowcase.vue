@@ -27,7 +27,7 @@ const rest = computed(() => props.posts.slice(1, 3))
 </script>
 
 <template>
-  <section v-if="lead" class="section">
+  <section v-if="lead" class="section max-md:min-h-[1027px]">
     <div class="container-sizdah">
       <SectionHeading
         data-reveal
@@ -35,6 +35,7 @@ const rest = computed(() => props.posts.slice(1, 3))
         :title="props.section.title"
         :subtitle="props.section.subtitle || props.section.description"
         gap="lg"
+        class="max-md:gap-6 max-md:[&>div>p]:text-[16px] max-md:[&>div>p]:leading-[22px]"
       />
 
       <div
@@ -43,7 +44,7 @@ const rest = computed(() => props.posts.slice(1, 3))
       >
         <!-- 430:5311 — the lead post, cream on the dark ground. -->
         <article
-          class="sketch-frame flex flex-col gap-4 p-4 shadow-card sm:flex-row sm:justify-between bg-brand-50"
+          class="sketch-frame flex flex-col gap-4 bg-brand-50 p-4 shadow-card sm:flex-row sm:justify-between"
           style="
             background-image: linear-gradient(
               -32.7deg,
@@ -59,9 +60,9 @@ const rest = computed(() => props.posts.slice(1, 3))
             :alt="lead.image.alt || lead.title"
             width="279"
             height="392"
-            loading="lazy"
+            loading="eager"
             decoding="async"
-            class="w-full rounded-lg object-cover sm:order-first sm:w-[279px] sm:shrink-0"
+            class="w-full rounded-lg object-cover max-md:h-[220px] max-md:shrink-0 sm:order-first sm:w-[279px] sm:shrink-0"
           />
 
           <div class="flex flex-col justify-between gap-6 p-2 sm:w-[270px] sm:shrink-0">
@@ -129,9 +130,9 @@ const rest = computed(() => props.posts.slice(1, 3))
                 :alt="post.image.alt || post.title"
                 width="188"
                 height="188"
-                loading="lazy"
+                loading="eager"
                 decoding="async"
-                class="size-[120px] shrink-0 rounded-lg object-cover sm:size-[188px]"
+                class="size-[120px] shrink-0 rounded-lg object-cover max-md:size-[80px] sm:size-[188px]"
               />
 
               <div class="flex min-w-0 flex-col gap-6">

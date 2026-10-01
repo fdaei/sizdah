@@ -48,7 +48,7 @@ function isActive(item: NavItem): boolean {
 
 <template>
   <header class="fixed inset-x-0 top-0 z-header bg-white/[0.15] backdrop-blur-header">
-    <div class="container-sizdah flex items-center justify-between gap-6 py-6">
+    <div class="container-sizdah flex items-center justify-between gap-4 py-[40px] pb-[24px] lg:gap-6 lg:py-6">
       <!-- Wordmark — inline start -->
       <Link :href="`/${page.props.locale.current}`" class="shrink-0 lg:ms-9">
         <BrandLogo :width="104" :title="settings.siteName" />
@@ -133,7 +133,7 @@ function isActive(item: NavItem): boolean {
 
         <button
           type="button"
-          class="inline-flex size-11 items-center justify-center rounded-sm text-paper lg:hidden"
+          class="inline-flex size-10 shrink-0 items-center justify-center rounded-sm text-paper lg:hidden"
           :aria-label="$t('common.open_menu')"
           @click="$emit('openMenu')"
         >

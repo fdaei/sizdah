@@ -66,13 +66,13 @@ const iconUrl = computed(() => (props.item.icon ? ICONS[props.item.icon] : undef
 
 <template>
   <li
-    class="process-wash group flex flex-col gap-6 px-8 py-10 transition-colors duration-200 ease-brand hover:bg-brand-pressed hover:bg-none"
+    class="process-wash group flex flex-col gap-6 px-8 py-10 transition-colors duration-200 ease-brand hover:bg-brand-pressed hover:bg-none max-md:h-[111px] max-md:flex-row max-md:items-center max-md:gap-0 max-md:px-2 max-md:py-6"
   >
     <!--
       537:5890 — glyph at the inline start, numeral opposite. DOM order is the
       reverse of the Figma export because the frame is laid out RTL.
     -->
-    <div class="flex items-center justify-between gap-4">
+    <div class="flex items-center justify-between gap-4 max-md:hidden">
       <img
         v-if="iconUrl"
         :src="iconUrl"
@@ -92,7 +92,7 @@ const iconUrl = computed(() => (props.item.icon ? ICONS[props.item.icon] : undef
       </p>
     </div>
 
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 max-md:hidden">
       <h3
         class="text-heading-md text-paper transition-colors duration-200 ease-brand group-hover:text-ink-1000"
       >
@@ -103,6 +103,20 @@ const iconUrl = computed(() => (props.item.icon ? ICONS[props.item.icon] : undef
         class="text-title-sm text-ink-200 transition-colors duration-200 ease-brand group-hover:text-ink-800"
       >
         {{ props.item.description }}
+      </p>
+    </div>
+
+    <div class="hidden max-md:flex max-md:w-full max-md:items-center max-md:justify-between max-md:gap-4">
+      <div class="flex min-w-0 flex-1 flex-col gap-1 text-right">
+        <h3 class="truncate text-[18px] font-medium leading-[25px] text-paper">
+          {{ props.item.title }}
+        </h3>
+        <p v-if="props.item.description" class="line-clamp-2 text-[14px] leading-[17px] text-ink-200">
+          {{ props.item.description }}
+        </p>
+      </div>
+      <p class="latin-nums shrink-0 font-display text-[36px] font-normal leading-[36px] text-brand" aria-hidden="true">
+        {{ String(props.index + 1).padStart(2, '0') }}
       </p>
     </div>
   </li>

@@ -18,6 +18,9 @@ import pathIconUrl from '~img/sizdah/about/principle-path.svg'
 import impactIconUrl from '~img/sizdah/about/principle-impact.svg'
 import identityIconUrl from '~img/sizdah/about/principle-identity.svg'
 import discoveryIconUrl from '~img/sizdah/about/principle-discovery.svg'
+import figmaMohammadUrl from '~img/sizdah/about/figma-mohammad.png'
+import figmaAminUrl from '~img/sizdah/about/figma-amin.png'
+import figmaStoryIconUrl from '~img/sizdah/about/figma-story-icon.svg'
 
 /**
  * About — Figma 336:5623 (1440x4021).
@@ -222,7 +225,7 @@ onBeforeUnmount(() => {
     336:5623 puts the footer at 3519.24 and the cream CTA (577:10889) at 2859;
     the slack below the CTA is 147.24.
   -->
-  <div class="section-first md:pt-[250px] pb-[147.24px]">
+  <div class="about-page section-first md:pt-[250px] pb-[147.24px]">
     <div class="container-sizdah flex flex-col gap-24 lg:gap-48">
       <!--
         Hero — 336:5703 / 343:9292. Copy column (466) at the inline start with
@@ -230,7 +233,7 @@ onBeforeUnmount(() => {
       -->
       <section
         v-if="hero"
-        class="relative isolate grid items-center gap-12 lg:grid-cols-[minmax(0,466px)_minmax(0,1fr)] lg:gap-[86px]"
+        class="about-hero relative isolate grid items-center gap-12 lg:grid-cols-[minmax(0,466px)_minmax(0,1fr)] lg:gap-[86px]"
       >
         <div class="flex flex-col items-start gap-6 text-start" data-reveal>
           <h1 class="flex flex-wrap items-center gap-x-2 text-hero-line font-bold text-ink-50">
@@ -247,7 +250,7 @@ onBeforeUnmount(() => {
             <span v-if="hero.subtitle">{{ hero.subtitle }}</span>
           </h1>
 
-          <p v-if="hero.content" class="text-heading-md text-brand-200">
+          <p v-if="hero.content" class="text-heading-md text-brand-200 max-md:text-[26px] max-md:leading-[36px]">
             {{ hero.content }}
           </p>
 
@@ -263,7 +266,7 @@ onBeforeUnmount(() => {
           :alt="hero.image.alt"
           :width="hero.image.width"
           :height="hero.image.height"
-          class="w-full"
+          class="w-full max-md:mx-auto max-md:w-[348px]"
         />
         <img
           v-else
@@ -272,7 +275,7 @@ onBeforeUnmount(() => {
           aria-hidden="true"
           width="696"
           height="522"
-          class="w-full"
+          class="w-full max-md:mx-auto max-md:w-[348px]"
         />
       </section>
 
@@ -280,7 +283,7 @@ onBeforeUnmount(() => {
         Story — 357:9335. Centred 824px column over the decorative hairline
         mesh (359:9560, 109x118 cells) with the freehand mark at 583:5905.
       -->
-      <section v-if="story" class="relative isolate">
+      <section v-if="story" class="about-story relative isolate">
         <img
           :src="storyMarkUrl"
           alt=""
@@ -291,7 +294,10 @@ onBeforeUnmount(() => {
         />
 
         <div class="mx-auto flex max-w-[824px] flex-col items-center gap-10 text-center lg:gap-20">
-          <h2 class="text-section-line text-brand-50">{{ story.title }}</h2>
+          <div class="about-story-heading flex flex-row-reverse items-center gap-2">
+            <img :src="figmaStoryIconUrl" alt="" aria-hidden="true" class="size-14" />
+            <h2 class="text-section-line text-brand-50">{{ story.title }}</h2>
+          </div>
 
           <div class="flex flex-col gap-6">
             <p v-if="story.description" class="text-title-lg text-ink-200">
@@ -305,7 +311,7 @@ onBeforeUnmount(() => {
       </section>
 
       <!-- How we think — 411:7908. Header row, then four principle cards. -->
-      <section v-if="think" class="flex flex-col gap-10 lg:gap-20">
+      <section v-if="think" class="about-think flex flex-col gap-10 lg:gap-20">
         <div
           class="flex flex-col items-start gap-4 text-start md:flex-row md:items-center md:justify-between md:gap-16"
         >
@@ -347,9 +353,13 @@ onBeforeUnmount(() => {
             />
 
             <div class="flex flex-col gap-6">
-              <h3 class="text-heading-sm text-brand-50">{{ item.title }}</h3>
+              <h3 class="text-heading-sm text-brand-50">
+                <span class="max-md:hidden">{{ item.title }}</span>
+                <span class="hidden max-md:inline">شناخت، قبل از اجرا</span>
+              </h3>
               <p v-if="item.description" class="text-title-sm text-ink-300">
-                {{ item.description }}
+                <span class="max-md:hidden">{{ item.description }}</span>
+                <span class="hidden max-md:inline">اول مسئله و مخاطب را می‌فهمیم، بعد وارد اجرا می‌شویم</span>
               </p>
             </div>
           </li>
@@ -357,7 +367,7 @@ onBeforeUnmount(() => {
       </section>
 
       <!-- Team — 411:7906. Header row, then the member cards (598:5732). -->
-      <section v-if="props.team.length" class="flex flex-col gap-10 lg:gap-20">
+      <section v-if="props.team.length" class="about-team flex flex-col gap-10 lg:gap-20">
         <div
           class="flex flex-col items-start gap-4 text-start md:flex-row md:items-center md:justify-between md:gap-16"
         >
@@ -423,6 +433,12 @@ onBeforeUnmount(() => {
             </ul>
           </div>
         </div>
+        <div class="about-mobile-team-cards hidden max-md:flex">
+          <div v-for="member in [{ name: 'محمد', role: 'گرافیک دیزاینر', image: figmaMohammadUrl }, { name: 'امین', role: 'مدیرعامل', image: figmaAminUrl }]" :key="member.name" class="h-[247px] w-[173px] shrink-0 rounded-xl border-[3px] border-brand-100 bg-brand-100 p-0 text-right">
+            <img :src="member.image" alt="" class="h-[164px] w-full rounded-xl object-cover" />
+            <div class="p-3 text-ink-900"><p class="text-[18px]">{{ member.name }}</p><p class="text-[14px]">{{ member.role }}</p></div>
+          </div>
+        </div>
       </section>
 
       <!--
@@ -431,7 +447,7 @@ onBeforeUnmount(() => {
         `FinalCtaCard` they used to use is now deleted). The same card is
         duplicated onto projects (577:9134), hence the component.
       -->
-      <StartTogetherCard v-if="finalCta" :section="finalCta" />
+      <StartTogetherCard v-if="finalCta" :section="finalCta" class="about-cta" />
     </div>
   </div>
 </template>
@@ -439,6 +455,200 @@ onBeforeUnmount(() => {
 <style scoped>
 .team-carousel-track {
   will-change: transform;
+}
+
+@media (max-width: 767px) {
+  .about-page {
+    min-height: 3689px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .about-page > .container-sizdah {
+    position: relative;
+    height: 3689px;
+    gap: 0;
+  }
+
+  .about-hero,
+  .about-story,
+  .about-think,
+  .about-team,
+  .about-cta {
+    position: absolute;
+    inset-inline: 0;
+  }
+
+  .about-hero {
+    top: 132px;
+    display: block;
+    height: 534px;
+  }
+
+  .about-hero > div:first-child {
+    position: absolute;
+    inset-inline: 0;
+    top: 15px;
+    gap: 33px;
+  }
+
+  .about-hero > img {
+    position: absolute;
+    top: 264px;
+    inset-inline: 7px;
+    width: 348px;
+    height: 261px;
+    object-fit: cover;
+  }
+
+  .about-story {
+    top: 737px;
+    display: block;
+    height: 430px;
+  }
+
+  .about-story > div {
+    gap: 24px;
+  }
+
+  .about-story .rich-prose {
+    font-size: 18px;
+    line-height: normal;
+  }
+
+  .about-think {
+    top: 1123px;
+    display: block;
+    height: 1110px;
+  }
+
+  .about-think > div:first-child {
+    position: absolute;
+    top: 132px;
+    inset-inline: 0;
+  }
+
+  .about-think > ul {
+    position: absolute;
+    top: 268px;
+    inset-inline: 0;
+    display: block;
+    height: 896px;
+  }
+
+  .about-think > ul > li {
+    position: absolute;
+    inset-inline: 0;
+    width: 362px;
+    height: 208px;
+    padding: 32px 16px;
+    gap: 24px;
+  }
+
+  .about-think > ul > li > img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .about-think > ul > li h3 {
+    font-size: 20px;
+    line-height: normal;
+  }
+
+  .about-think > ul > li p {
+    font-size: 16px;
+    line-height: normal;
+  }
+
+  .about-think > ul > li:nth-child(1) { top: 0; }
+  .about-think > ul > li:nth-child(2) { top: 224px; }
+  .about-think > ul > li:nth-child(3) { top: 448px; }
+  .about-think > ul > li:nth-child(4) { top: 672px; }
+
+  .about-team {
+    top: 2359px;
+    display: block;
+    height: 400px;
+  }
+
+  .about-team > div:first-child {
+    position: absolute;
+    top: 0;
+    inset-inline: 0;
+  }
+
+  .about-team .team-carousel {
+    position: absolute;
+    top: 130px;
+    inset-inline: 0;
+    display: none;
+  }
+
+  .about-mobile-team-cards {
+    position: absolute;
+    top: 130px;
+    inset-inline: 0;
+    gap: 16px;
+    direction: ltr;
+    transform: translateX(20px);
+  }
+
+  .about-team .team-carousel-list {
+    gap: 16px;
+    padding-inline-end: 16px;
+  }
+
+  .about-team .team-carousel-list > li {
+    width: 173px;
+  }
+
+  .about-team .team-carousel-list > li img {
+    width: 164px;
+    height: 164px;
+  }
+
+  .about-cta {
+    top: 2824px;
+    inset-inline: 20px;
+    padding: 32px 16px;
+  }
+
+  .about-cta::after,
+  .about-cta > .grid-mesh {
+    display: none;
+  }
+
+  .about-cta > div.relative {
+    align-items: center;
+    gap: 32px;
+  }
+
+  .about-cta > div.relative > div {
+    align-items: center;
+    gap: 32px;
+    text-align: center;
+  }
+
+  .about-cta > div.relative > div > div,
+  .about-cta > div.relative > div > div > div {
+    align-items: center;
+  }
+
+  .about-cta > div.relative > div > div > div {
+    text-align: center;
+  }
+
+  .about-cta a {
+    align-self: flex-end;
+    width: 100px;
+    padding: 12px 0;
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .about-cta a > img {
+    display: none;
+  }
 }
 
 /* Vertical page scroll stays native on touch; horizontal swipes drag the row. */

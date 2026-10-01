@@ -6,6 +6,7 @@ import AppFooter from '@/Layouts/AppFooter.vue'
 import MobileMenu from '@/Layouts/MobileMenu.vue'
 import FlashMessages from '@/Components/FlashMessages.vue'
 import type { SharedProps } from '@/types'
+import siteBackgroundUrl from '~img/sizdah/shared/site-background.webp'
 
 /**
  * Shared chrome. app.ts assigns this to every page unless the page opts out
@@ -40,14 +41,16 @@ const gridPages = ['Work/Index', 'Services', 'Insights/Index', 'Contact', 'About
 const washed = computed(() => page.component !== 'Home' && !gridPages.includes(page.component))
 
 const gridBackground = computed(() => gridPages.includes(page.component))
+const nonHomeBackground = computed(() => page.component !== 'Home')
 
 const menuOpen = ref(false)
 </script>
 
 <template>
   <div
-    class="flex min-h-screen-safe flex-col bg-ink-1000"
-    :class="{ 'page-wash': washed, 'grid-background': gridBackground }"
+    class="site-shell flex min-h-screen-safe flex-col bg-ink-1000"
+    :class="{ 'page-wash': washed, 'grid-background': gridBackground, 'non-home-background': nonHomeBackground, 'error-shell': page.component === 'Error', 'plain-mobile-background': ['Work/Index', 'Insights/Show'].includes(page.component) }"
+    :style="{ '--site-background': `url(${siteBackgroundUrl})` }"
   >
     <AppHeader @open-menu="menuOpen = true" />
     <MobileMenu :open="menuOpen" @close="menuOpen = false" />
@@ -66,6 +69,32 @@ const menuOpen = ref(false)
       </main>
     </Transition>
 
-    <AppFooter />
+    <AppFooter v-if="!['Insights/Show', 'Error'].includes(page.component)" />
   </div>
 </template>
+
+<style scoped>
+.non-home-background {
+  background-image: var(--site-background) !important;
+  background-position: top center;
+  background-repeat: repeat-y;
+  background-size: 100% auto;
+}
+
+@media (max-width: 767px) {
+  .site-shell.non-home-background {
+    background-image: var(--site-background) !important;
+    background-position: top center;
+    background-repeat: repeat-y;
+    background-size: 100% auto;
+  }
+
+  .site-shell.error-shell {
+    background-image: none !important;
+  }
+
+  .site-shell.plain-mobile-background {
+    background-image: none !important;
+  }
+}
+</style>

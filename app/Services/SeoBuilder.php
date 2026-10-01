@@ -94,6 +94,18 @@ final class SeoBuilder
             'modifiedAt' => $modifiedAt,
             'author' => $author,
             'noindex' => $noindex,
+            'schema' => [
+                '@context' => 'https://schema.org',
+                '@type' => $type === 'article' ? 'Article' : 'WebPage',
+                'name' => $title ?: SiteSettings::get('seo_default_title', $locale, 'Sizdah'),
+                'description' => $description ?: SiteSettings::get('seo_default_description', $locale, ''),
+                'url' => $canonical,
+                'isPartOf' => [
+                    '@type' => 'WebSite',
+                    'name' => SiteSettings::get('seo_organization_name', $locale, 'Sizdah'),
+                    'url' => config('app.url'),
+                ],
+            ],
         ];
     }
 }

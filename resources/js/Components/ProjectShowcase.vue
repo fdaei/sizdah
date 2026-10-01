@@ -5,6 +5,8 @@ import SectionHeading from '@/Components/SectionHeading.vue'
 import type { PageSectionData, ProjectSummary } from '@/types'
 import arrowUrl from '~img/sizdah/shared/cta-arrow.svg'
 import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
+import sidewalkProjectUrl from '~img/sizdah/home/sidewalk-project.jpeg'
+import projectCategoryUrl from '~img/sizdah/home/project-category.svg'
 
 /**
  * Projects showcase — Figma 268:3461 (heading), 268:3539 (530x663 image) and
@@ -35,10 +37,32 @@ const props = defineProps<{
 }>()
 
 const active = ref(0)
+const touchStartX = ref<number | null>(null)
+
+function startSwipe(event: TouchEvent) {
+  touchStartX.value = event.touches[0]?.clientX ?? null
+}
+
+function finishSwipe(event: TouchEvent) {
+  if (touchStartX.value === null) return
+
+  const startX = touchStartX.value
+  const endX = event.changedTouches[0]?.clientX
+  touchStartX.value = null
+
+  if (startX === null || endX === undefined) return
+
+  const distance = endX - startX
+
+  if (Math.abs(distance) < 40 || props.projects.length < 2) return
+
+  const direction = distance > 0 ? -1 : 1
+  active.value = (active.value + direction + props.projects.length) % props.projects.length
+}
 </script>
 
 <template>
-  <section class="section">
+  <section class="max-md:bg-transparent max-md:bg-none py-12 max-md:pb-[22px] md:py-24">
     <div class="container-sizdah">
       <SectionHeading
         data-reveal
@@ -49,16 +73,16 @@ const active = ref(0)
       />
 
       <div
-        class="mt-12 grid gap-10 lg:mt-16 lg:grid-cols-[minmax(0,615px)_minmax(0,530px)] lg:justify-between lg:gap-16"
+        class="mt-8 grid gap-8 max-md:mt-[74px] max-md:gap-6 md:mt-12 md:gap-10 lg:mt-16 lg:grid-cols-[minmax(0,615px)_minmax(0,530px)] lg:justify-between lg:gap-16"
       >
         <!--
           Rows lead in DOM so RTL puts them at the inline start (right), which
           is where 268:3540 sits; the image takes the opposite column. On mobile
           the image is pulled above the list instead.
         -->
-        <ul class="flex flex-col justify-between gap-8" data-reveal-group>
+        <ul class="hidden flex-col justify-between gap-8 lg:flex" data-reveal-group>
           <li v-for="(project, index) in props.projects" :key="project.slug">
-            <div class="flex flex-col gap-4" @mouseenter="active = index" @focusin="active = index">
+            <div class="flex flex-col gap-4" @click="active = index" @mouseenter="active = index" @focusin="active = index">
               <div class="flex items-center justify-between gap-4">
                 <div class="flex flex-col items-start">
                   <Link
@@ -145,22 +169,66 @@ const active = ref(0)
           </li>
         </ul>
 
-        <div
-          class="relative order-first aspect-[530/663] w-full overflow-hidden rounded-xl bg-ink-900 lg:order-none"
-        >
-          <img
-            v-for="(project, index) in props.projects"
-            :key="project.slug"
-            :src="project.image?.src"
-            :srcset="project.image?.srcset"
-            :alt="project.image?.alt ?? project.title"
-            width="530"
-            height="663"
-            loading="lazy"
-            decoding="async"
-            class="absolute inset-0 size-full object-cover transition-opacity duration-500 ease-brand"
-            :class="active === index ? 'opacity-100' : 'opacity-0'"
-          />
+        <div v-if="props.projects[active]" class="hidden h-[112px] flex-col gap-3 max-md:flex max-md:order-none">
+          <div class="flex flex-row-reverse items-center justify-between text-right">
+            <Link
+              :href="props.projects[active].url"
+              class="flex items-center gap-1 text-[14px] font-medium leading-[20px] text-paper"
+            >
+              <img :src="arrowUrl" alt="" aria-hidden="true" width="24" height="24" class="size-6 flip-rtl" />
+              <span>{{ props.section.content || 'جزییات پروژه' }}</span>
+            </Link>
+            <Link :href="props.projects[active].url" class="text-[24px] font-semibold leading-[30px] text-paper">
+              {{ props.projects[active].title }}
+            </Link>
+          </div>
+          <div class="flex flex-col items-end gap-2 text-right">
+            <div class="flex items-center gap-1">
+              <p v-if="props.projects[active].industry" class="text-[12px] font-medium leading-[20px] text-brand">
+                {{ props.projects[active].industry }}
+              </p>
+              <img :src="projectCategoryUrl" alt="" aria-hidden="true" width="20" height="20" class="size-5" />
+            </div>
+            <p v-if="props.projects[active].excerpt" class="text-[14px] leading-[20px] text-ink-200">
+              {{ props.projects[active].excerpt }}
+            </p>
+          </div>
+        </div>
+
+        <div class="order-first w-full max-md:order-none max-md:-translate-x-px lg:order-none">
+          <div
+            class="relative aspect-[530/663] w-full touch-pan-y overflow-hidden rounded-xl bg-ink-900"
+            @touchstart="startSwipe"
+            @touchend="finishSwipe"
+          >
+            <img
+              v-for="(project, index) in props.projects"
+              :key="project.slug"
+              :src="index === 0 ? sidewalkProjectUrl : project.image?.src"
+              :srcset="index === 0 ? undefined : project.image?.srcset"
+              :alt="project.image?.alt ?? project.title"
+              width="530"
+              height="663"
+              loading="eager"
+              decoding="async"
+              class="absolute inset-0 size-full object-cover transition-[transform,opacity] duration-500 ease-brand will-change-transform"
+              :style="{ transform: `translateX(${(index - active) * 100}%)` }"
+              :class="active === index ? 'opacity-100' : 'opacity-0'"
+            />
+          </div>
+
+          <div class="mt-5 flex -translate-x-1 items-center justify-center gap-2 lg:hidden" aria-label="انتخاب پروژه">
+            <button
+              v-for="(project, index) in props.projects"
+              :key="`indicator-${project.slug}`"
+              type="button"
+              class="size-2 rounded-full border transition-all duration-300"
+              :class="active === index ? 'border-brand bg-brand' : 'border-ink-500 bg-transparent'"
+              :aria-label="`نمایش ${project.title}`"
+              :aria-current="active === index ? 'true' : undefined"
+              @click="active = index"
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -74,8 +74,8 @@ const props = defineProps<{
         track (279:5998); the body blocks below run the full track width.
       -->
       <header class="flex max-w-measure flex-col gap-6" data-reveal>
-        <h1 class="text-display-lg text-ink-50">{{ props.title }}</h1>
-        <p v-if="props.subtitle" class="text-title-md text-ink-200">
+        <h1 class="text-display-lg text-ink-50 max-md:text-[40px] max-md:leading-[51px]">{{ props.title }}</h1>
+        <p v-if="props.subtitle" class="text-title-md text-ink-200 max-md:text-[16px] max-md:leading-[22px]">
           {{ props.subtitle }}
         </p>
       </header>

@@ -3,6 +3,7 @@ import { Link } from '@inertiajs/vue3'
 import PostMeta from '@/Components/PostMeta.vue'
 import { useTranslations } from '@/Composables/useTranslations'
 import type { PostSummary } from '@/types'
+import mobileBackgroundUrl from '~img/sizdah/insights/mobile-background.jpg'
 
 /**
  * Featured post row — Figma 270:5253 (1248x491).
@@ -27,22 +28,29 @@ const { t } = useTranslations()
 
 <template>
   <article
-    class="surface-glow sketch-frame flex flex-col gap-8 p-4 lg:flex-row lg:items-center"
-    style="--glow-angle: -20.03deg"
+    class="featured-post-card surface-glow sketch-frame flex flex-col gap-8 p-4 lg:flex-row lg:items-center"
+    :style="{ '--glow-angle': '-20.03deg', '--mobile-background': `url(${mobileBackgroundUrl})` }"
   >
     <Link
       :href="props.post.url"
-      class="group block shrink-0 overflow-hidden rounded-lg border border-ink-100 shadow-card lg:w-[612px]"
+      class="group block shrink-0 overflow-hidden rounded-lg border border-ink-100 shadow-card max-md:w-full lg:w-[612px]"
     >
-      <img
-        v-if="props.post.image"
-        :src="props.post.image.src"
-        :srcset="props.post.image.srcset"
-        :alt="props.post.image.alt"
-        :width="props.post.image.width"
-        :height="props.post.image.height"
-        class="aspect-[612/459] w-full object-cover transition-transform duration-500 ease-brand group-hover:scale-105"
-      />
+      <picture v-if="props.post.image">
+        <source v-if="props.post.image.avif" :srcset="props.post.image.avif" type="image/avif" />
+        <source v-if="props.post.image.webp" :srcset="props.post.image.webp" type="image/webp" />
+        <img
+          :src="props.post.image.src"
+          :srcset="props.post.image.srcset"
+          :sizes="props.post.image.sizes"
+          :alt="props.post.image.alt"
+          :width="props.post.image.width"
+          :height="props.post.image.height"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          class="aspect-[612/459] w-full object-cover transition-transform duration-500 ease-brand group-hover:scale-105"
+        />
+      </picture>
       <div v-else class="aspect-[612/459] w-full bg-ink-900" aria-hidden="true" />
     </Link>
 
@@ -56,7 +64,7 @@ const { t } = useTranslations()
 
       <div class="flex flex-col gap-8 lg:gap-24">
         <div class="flex flex-col gap-6">
-          <h2 class="text-heading-xl text-ink-50">
+          <h2 class="text-heading-xl text-ink-50 max-md:text-[24px] max-md:leading-[30px]">
             <Link
               :href="props.post.url"
               class="transition-colors duration-200 ease-brand hover:text-brand"
@@ -96,3 +104,15 @@ const { t } = useTranslations()
     </div>
   </article>
 </template>
+
+<style scoped>
+@media (max-width: 767px) {
+  .featured-post-card {
+    background-color: #141414;
+    background-image: var(--mobile-background);
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+  }
+}
+</style>

@@ -32,7 +32,7 @@ const props = defineProps<{ testimonial: TestimonialItem }>()
 
 <template>
   <li
-    class="testimonial-wash sketch-frame group flex min-h-[350px] h-auto flex-col items-start gap-10 p-6 transition-colors duration-200 ease-brand hover:bg-brand hover:bg-none"
+    class="testimonial-wash sketch-frame group flex h-auto min-h-[350px] flex-col items-start gap-10 p-6 max-md:min-h-0 transition-colors duration-200 ease-brand hover:bg-brand hover:bg-none"
   >
     <img
       :src="quoteUrl"

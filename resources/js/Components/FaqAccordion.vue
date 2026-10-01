@@ -52,13 +52,13 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
           <li v-for="(faq, index) in props.faqs" :key="faq.question">
             <details
               name="faq-accordion"
-              class="sketch-frame group bg-gold-100 p-8 transition-colors duration-200 ease-brand open:bg-brand"
+              class="group rounded-lg border border-gold-200 bg-gold-100 p-8 transition-colors duration-200 ease-brand open:bg-brand max-md:p-4"
               :open="index === 0"
             >
               <summary
                 class="flex cursor-pointer list-none items-center justify-between gap-6 [&::-webkit-details-marker]:hidden"
               >
-                <span class="text-title-md text-ink-1000">{{ faq.question }}</span>
+                <span class="text-title-md text-ink-1000 max-md:text-[14px] max-md:leading-[20px]">{{ faq.question }}</span>
 
                 <img
                   :src="plusUrl"
@@ -66,7 +66,7 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
                   aria-hidden="true"
                   width="24"
                   height="24"
-                  class="size-6 shrink-0 rounded-full bg-white group-open:hidden"
+                  class="size-6 shrink-0 rounded-full bg-white group-open:hidden max-md:size-5"
                 />
                 <img
                   :src="minusUrl"
@@ -74,11 +74,11 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
                   aria-hidden="true"
                   width="24"
                   height="24"
-                  class="hidden size-6 shrink-0 rounded-full bg-brand group-open:block"
+                  class="hidden size-6 shrink-0 rounded-full bg-brand group-open:block max-md:size-5"
                 />
               </summary>
 
-              <p class="mt-4 text-body-lg text-warm-700">{{ faq.answer }}</p>
+              <p class="mt-4 text-body-lg text-warm-700 max-md:mt-2 max-md:text-[12px] max-md:leading-[17px]">{{ faq.answer }}</p>
             </details>
           </li>
         </ul>

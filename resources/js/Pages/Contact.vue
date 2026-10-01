@@ -117,7 +117,7 @@ function submit(): void {
 // default to `min-width: auto`. Without it the narrowest column the card can
 // form is 346px, which overflows the viewport below ~400px.
 const fieldClass =
-  'w-full min-w-0 rounded-lg border-3 border-brand-200 bg-white/80 p-3 text-body-md text-ink-1000 placeholder:text-ink-600 focus:border-brand focus:outline-none focus:ring-0 focus:ring-offset-0'
+  'w-full min-w-0 rounded-lg border-3 border-brand-200 bg-white/80 p-3 text-body-md text-ink-1000 placeholder:text-ink-600 focus:border-brand-200 focus:bg-white/80 focus:outline-none focus:ring-0 focus:ring-offset-0'
 </script>
 
 <template>
@@ -151,8 +151,8 @@ const fieldClass =
         <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
         <div class="flex w-full flex-col gap-6">
-          <h1 class="text-display-lg text-ink-50">{{ props.heading.title }}</h1>
-          <p v-if="props.heading.description" class="text-title-md text-ink-200">
+          <h1 class="text-display-lg text-ink-50 max-md:text-[40px] max-md:leading-[51px]">{{ props.heading.title }}</h1>
+          <p v-if="props.heading.description" class="text-title-md text-ink-200 max-md:text-[16px] max-md:leading-[22px]">
             {{ props.heading.description }}
           </p>
         </div>
@@ -275,7 +275,7 @@ const fieldClass =
                     -->
                     <div
                       dir="ltr"
-                      class="flex items-stretch rounded-lg border-3 border-brand-200 bg-white/80 focus-within:border-brand"
+                      class="flex items-stretch rounded-lg border-3 border-brand-200 bg-white/80 focus-within:border-brand-200 focus-within:bg-white/80"
                       style="background-color: #FDFCFA;"
                     >
                       <span class="flex shrink-0 items-center gap-2 ps-3">

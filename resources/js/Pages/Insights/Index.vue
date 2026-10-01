@@ -92,26 +92,26 @@ const rest = computed(() => props.posts.data.slice(2))
     These frames are absolutely positioned, so the trailing space is
     per-frame rather than a shared section rhythm — same as contact (153.24).
   -->
-  <section class="section-first pb-[199.24px]">
+  <section class="section-first overflow-x-hidden pb-[199.24px] max-md:pb-12">
     <!-- Header sits 96 above the content block; 270:5252 then runs on 144. -->
-    <div class="container-sizdah relative isolate flex flex-col gap-16 lg:gap-24">
+    <div class="container-sizdah relative isolate flex flex-col gap-16 max-md:gap-8 lg:gap-24">
       <!-- 268:5233 — 670 track, 64 to the chip row; 268:5234 is the 612 column. -->
       <header
-        class="relative mx-auto flex max-w-[1000px] flex-col items-center gap-16 text-center"
+        class="relative mx-auto flex w-full max-w-[1000px] flex-col items-center gap-16 text-center max-md:gap-8"
         data-reveal
       >
-        <div class="flex w-full max-w-measure flex-col items-center gap-10">
+        <div class="flex w-full max-w-measure flex-col items-center gap-10 max-md:gap-6 max-md:!max-w-full">
           <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
-          <div class="flex flex-col items-center gap-6">
-            <h1 class="text-display-lg text-ink-50">{{ props.heading.title }}</h1>
-            <p v-if="props.heading.description" class="text-title-sm text-ink-200">
+          <div class="flex flex-col items-center gap-6 max-md:gap-5">
+            <h1 class="text-display-lg text-ink-50 max-md:w-full max-md:text-[40px] max-md:leading-[51px]">{{ props.heading.title }}</h1>
+            <p v-if="props.heading.description" class="text-title-sm text-ink-200 max-md:text-[16px] max-md:leading-[22px]">
               {{ props.heading.description }}
             </p>
           </div>
         </div>
 
-        <div class="flex w-full justify-center">
+        <div class="flex w-full justify-center max-md:justify-start">
           <!-- 268:5241 — the category chips stay on one row in the desktop
                layout; the wider track keeps the localized labels visible. -->
           <FilterChips

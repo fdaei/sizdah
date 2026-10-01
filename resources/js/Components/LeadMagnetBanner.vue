@@ -61,8 +61,8 @@ const modalOpen = ref(false)
     class="relative flex flex-col items-center gap-6 overflow-hidden"
     :class="
       props.size === 'lg'
-        ? 'sketch-frame mx-auto max-w-[1036px] bg-brand-50 p-8 lg:flex-row lg:justify-between lg:p-16'
-        : 'w-full max-w-[826px] rounded-sm bg-brand-50 p-8 md:flex-row md:items-center md:justify-between md:gap-6'
+        ? 'sketch-frame mx-auto max-w-[1036px] bg-brand-50 p-8 max-md:h-[148px] max-md:flex-row max-md:items-center max-md:gap-4 max-md:px-4 max-md:py-6 lg:flex-row lg:justify-between lg:p-16'
+          : 'w-full max-w-[826px] rounded-sm bg-brand-50 p-8 md:flex-row md:items-center md:justify-between md:gap-6'
     "
   >
     <img
@@ -113,7 +113,7 @@ const modalOpen = ref(false)
       class="relative z-10 flex flex-col gap-2"
       :class="
         props.size === 'lg'
-          ? 'max-w-[580px] text-center gap-4 lg:w-[580px]'
+          ? 'max-w-[580px] text-center gap-4 max-md:min-w-0 max-md:max-w-none max-md:flex-1 max-md:text-right lg:w-[580px]'
           : 'w-full max-w-[458px] text-start md:w-[458px]'
       "
     >
@@ -136,7 +136,9 @@ const modalOpen = ref(false)
 
       <p
         :class="
-          props.size === 'lg' ? 'text-heading-sm text-ink-1000' : 'text-title-md text-ink-900'
+          props.size === 'lg'
+            ? 'text-heading-sm text-ink-1000 max-md:text-[18px] max-md:leading-[22px]'
+            : 'text-title-md text-ink-900'
         "
       >
         {{ props.section.title }}
@@ -145,7 +147,7 @@ const modalOpen = ref(false)
         v-if="props.section.description"
         :class="
           props.size === 'lg'
-            ? 'text-body-lg text-ink-600 lg:text-start'
+            ? 'text-body-lg text-ink-600 max-md:text-[12px] max-md:leading-[17px] lg:text-start'
             : 'text-body-md text-ink-600 md:text-start'
         "
       >
@@ -155,9 +157,10 @@ const modalOpen = ref(false)
 
     <div v-if="props.section.primaryCta" class="relative z-10 shrink-0">
       <CtaButton
-        :label="props.section.primaryCta.label"
+        :label="props.size === 'lg' ? 'شروع گفتگو' : props.section.primaryCta.label"
         :variant="props.size === 'lg' ? 'brand-outline' : 'solid'"
         @click="modalOpen = true"
+        class="max-md:px-3 max-md:py-3 max-md:text-[14px]"
       />
       <!--
         303:4482 — the hand-drawn arrow that points at the button. The frame

@@ -68,11 +68,15 @@ export interface SeoMeta {
   modifiedAt?: string | null
   author?: string | null
   noindex?: boolean
+  schema?: Record<string, unknown> | Record<string, unknown>[]
 }
 
 export interface MediaImage {
   src: string
   srcset?: string
+  sizes?: string
+  avif?: string
+  webp?: string
   alt: string
   width: number
   height: number

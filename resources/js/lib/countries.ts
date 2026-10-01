@@ -274,12 +274,12 @@ export const defaultCountry: Country =
 // Windows and most Linux fonts have no flag glyphs and fall back to the
 // bare letters ("OM"). Eager URL imports only; each file is fetched when
 // its <img> is actually rendered.
-const flagUrls = import.meta.glob<string>('/node_modules/flag-icons/flags/4x3/*.svg', {
+const flagUrls = import.meta.glob<string>('../../../node_modules/flag-icons/flags/4x3/*.svg', {
   eager: true,
   query: '?url',
   import: 'default',
 })
 
 export function flagUrl(iso2: string): string | undefined {
-  return flagUrls[`/node_modules/flag-icons/flags/4x3/${iso2.toLowerCase()}.svg`]
+  return flagUrls[`../../../node_modules/flag-icons/flags/4x3/${iso2.toLowerCase()}.svg`]
 }

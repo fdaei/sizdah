@@ -35,13 +35,7 @@ export default defineConfig({
   build: {
     // Long-cached hashed assets; the manifest tells Laravel what to emit.
     rollupOptions: {
-      output: {
-        manualChunks: {
-          // GSAP is ~70kb and only needed once the page is interactive.
-          gsap: ['gsap'],
-          vendor: ['vue', '@inertiajs/vue3'],
-        },
-      },
+      // Keep the SSR bundle compatible with Vite's externalized dependencies.
     },
   },
 

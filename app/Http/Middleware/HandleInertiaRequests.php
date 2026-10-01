@@ -79,7 +79,7 @@ final class HandleInertiaRequests extends Middleware
                     : null,
             ],
 
-            'ziggy' => fn (): array => [
+            'ziggy' => [
                 ...(new \Tighten\Ziggy\Ziggy)->toArray(),
                 'location' => $request->url(),
             ],

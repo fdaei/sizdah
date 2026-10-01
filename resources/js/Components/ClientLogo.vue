@@ -48,14 +48,14 @@ const source = computed(() => props.client.logo || EXPORTS[props.client.name] ||
 </script>
 
 <template>
-  <span v-if="source" class="flex size-32 shrink-0 flex-col items-center justify-center gap-2.5">
+  <span v-if="source" class="flex size-32 shrink-0 flex-col items-center justify-center gap-2.5 max-md:size-20 max-md:gap-0">
     <img
       :src="source"
       :alt="props.client.name"
       width="128"
       loading="lazy"
       decoding="async"
-      class="h-auto w-32 object-contain grayscale transition-[filter] duration-300 ease-brand hover:grayscale-0"
+      class="h-auto w-32 object-contain grayscale transition-[filter] duration-300 ease-brand hover:grayscale-0 max-md:w-20"
     />
   </span>
   <span v-else class="text-title-sm text-ink-400">{{ props.client.name }}</span>

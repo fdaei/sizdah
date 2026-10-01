@@ -44,6 +44,7 @@ const { t } = useTranslations()
 
 const chips = computed(() =>
   [
+    { key: 'date', icon: calendarUrl, label: t('blog.date'), value: props.post.publishedAt },
     props.post.category
       ? {
           key: 'subject',
@@ -60,7 +61,6 @@ const chips = computed(() =>
           value: props.post.author.name,
         }
       : null,
-    { key: 'date', icon: calendarUrl, label: t('blog.date'), value: props.post.publishedAt },
   ].filter(
     (chip): chip is { key: string; icon: string; label: string; value: string } => chip !== null,
   ),
@@ -68,11 +68,11 @@ const chips = computed(() =>
 </script>
 
 <template>
-  <ul class="flex flex-wrap items-center gap-4">
+  <ul class="flex flex-wrap items-center gap-4 max-md:w-[362px] max-md:gap-2">
     <li
       v-for="chip in chips"
       :key="chip.key"
-      class="relative flex items-start gap-2 rounded-lg px-[26px] py-[14px]"
+      class="relative flex items-start gap-2 rounded-lg px-[26px] py-[14px] max-md:h-[57px] max-md:px-4 max-md:py-3"
       style="
         background-image: linear-gradient(
           -15deg,
@@ -108,3 +108,11 @@ const chips = computed(() =>
     </li>
   </ul>
 </template>
+
+<style scoped>
+@media (max-width: 767px) {
+  li:nth-child(1) { width: 172px; }
+  li:nth-child(2) { width: 182px; }
+  li:nth-child(3) { width: 172px; margin-inline-end: 190px; }
+}
+</style>

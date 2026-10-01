@@ -95,12 +95,12 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
         (309:4758), which is itself gap 24. The lede is tite/Large (22/500).
       -->
       <header
-        class="mx-auto flex w-fit max-w-full flex-col items-center gap-10 text-center"
+        class="mx-auto flex w-fit max-w-full flex-col items-center gap-10 text-center max-md:gap-6"
         data-reveal
       >
         <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
-        <div class="flex flex-col items-center gap-6">
+        <div class="flex flex-col items-center gap-6 max-md:gap-5">
           <!--
             309:4759 hugs at 613 inside a 638 block and breaks over two lines;
             capping the headline at the block's 638 reproduces that break. The
@@ -109,8 +109,8 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
             hugs the lede (`w-fit`) instead of pinning a width that would wrap
             it. See the DEVIATIONS note above.
           -->
-          <h1 class="max-w-[638px] text-display-lg text-ink-50">{{ props.heading.title }}</h1>
-          <p v-if="props.heading.description" class="text-title-lg text-ink-200">
+          <h1 class="max-w-[638px] text-display-lg text-ink-50 max-md:text-[40px] max-md:leading-[51px]">{{ props.heading.title }}</h1>
+          <p v-if="props.heading.description" class="text-title-lg text-ink-200 max-md:text-[16px] max-md:leading-[22px]">
             {{ props.heading.description }}
           </p>
         </div>
@@ -229,7 +229,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
                   flush under a 46px text box, not a straight 2px border.
                 -->
                 <div class="w-fit">
-                  <h2 class="text-display-sm font-bold text-paper">{{ service.title }}</h2>
+                  <h2 class="text-display-sm font-bold text-paper max-md:text-[24px] max-md:leading-[30px]">{{ service.title }}</h2>
                   <span class="relative block h-[2px] w-full">
                     <img
                       :src="underlineUrl"
@@ -240,7 +240,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
                   </span>
                 </div>
 
-                <p class="text-title-md text-ink-200">{{ service.description }}</p>
+                <p class="text-title-md text-ink-200 max-md:text-[16px] max-md:leading-[22px]">{{ service.description }}</p>
               </div>
 
               <ul v-if="service.features.length" class="flex flex-col gap-4">

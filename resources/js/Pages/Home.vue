@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import SeoHead from '@/Components/SeoHead.vue'
 import CtaButton from '@/Components/CtaButton.vue'
 import StatCard from '@/Components/StatCard.vue'
@@ -93,6 +93,114 @@ const reviews = computed(() => props.sections.reviews)
 const insights = computed(() => props.sections.insights)
 const faq = computed(() => props.sections.faq)
 const finalCta = computed(() => props.sections.final_cta)
+
+const CLIENT_LOOP_SECONDS = 32
+const clientTrack = ref<HTMLElement | null>(null)
+const clientDragging = ref(false)
+let clientPosition = 0
+let clientLoopWidth = 0
+let clientPointerId: number | null = null
+let clientLastX = 0
+let clientHovered = false
+let clientFrame = 0
+let clientLastTime = 0
+let clientResize: ResizeObserver | null = null
+
+function clientDirection(): 1 | -1 {
+  return document.documentElement.dir === 'rtl' ? 1 : -1
+}
+
+function renderClients() {
+  if (!clientTrack.value) return
+  clientPosition = ((clientPosition % clientLoopWidth) + clientLoopWidth) % clientLoopWidth
+  clientTrack.value.style.transform = `translate3d(${clientDirection() * clientPosition}px, 0, 0)`
+}
+
+function tickClients(time: number) {
+  const delta = clientLastTime ? Math.min(time - clientLastTime, 100) : 0
+  clientLastTime = time
+  if (!clientHovered && !clientDragging.value && clientLoopWidth > 0) {
+    clientPosition += (clientLoopWidth / CLIENT_LOOP_SECONDS) * (delta / 1000)
+    renderClients()
+  }
+  clientFrame = requestAnimationFrame(tickClients)
+}
+
+function onClientHover(event: PointerEvent, hovered: boolean) {
+  if (event.pointerType === 'mouse') clientHovered = hovered
+}
+
+function onClientPointerDown(event: PointerEvent) {
+  if (props.clients.length < 2 || (event.pointerType === 'mouse' && event.button !== 0)) return
+  clientPointerId = event.pointerId
+  clientLastX = event.clientX
+  clientDragging.value = true
+  ;(event.currentTarget as HTMLElement).setPointerCapture(event.pointerId)
+}
+
+function onClientPointerMove(event: PointerEvent) {
+  if (event.pointerId !== clientPointerId) return
+  clientPosition += clientDirection() * (event.clientX - clientLastX)
+  clientLastX = event.clientX
+  renderClients()
+}
+
+function onClientPointerUp(event: PointerEvent) {
+  if (event.pointerId !== clientPointerId) return
+  clientPointerId = null
+  clientDragging.value = false
+}
+
+onMounted(() => {
+  void nextTick(() => {
+    const first = clientTrack.value?.querySelector<HTMLElement>('ul')
+    if (!first || props.clients.length < 2) return
+
+    const measure = () => {
+      clientLoopWidth = first.getBoundingClientRect().width
+      renderClients()
+    }
+
+    measure()
+    clientResize = new ResizeObserver(measure)
+    clientResize.observe(first)
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      clientFrame = requestAnimationFrame(tickClients)
+    }
+  })
+})
+
+onBeforeUnmount(() => {
+  cancelAnimationFrame(clientFrame)
+  clientResize?.disconnect()
+})
+
+const activeTestimonial = ref(0)
+const testimonialTouchStart = ref<number | null>(null)
+
+function showTestimonial(index: number) {
+  activeTestimonial.value = (index + props.testimonials.length) % props.testimonials.length
+}
+
+function nextTestimonial() {
+  showTestimonial(activeTestimonial.value + 1)
+}
+
+function previousTestimonial() {
+  showTestimonial(activeTestimonial.value - 1)
+}
+
+function startTestimonialSwipe(event: TouchEvent) {
+  testimonialTouchStart.value = event.changedTouches[0]?.clientX ?? null
+}
+
+function endTestimonialSwipe(event: TouchEvent) {
+  if (testimonialTouchStart.value === null) return
+  const distance = event.changedTouches[0].clientX - testimonialTouchStart.value
+  if (Math.abs(distance) > 40) distance > 0 ? previousTestimonial() : nextTestimonial()
+  testimonialTouchStart.value = null
+}
 </script>
 
 <template>
@@ -112,11 +220,11 @@ const finalCta = computed(() => props.sections.final_cta)
     1440 frame width, so the marks are never cropped on desktop.
   -->
   <section
-    class="section-first relative overflow-hidden bg-cover bg-top bg-no-repeat pb-24 lg:min-h-[783px]"
+    class="home-hero section-first relative overflow-hidden bg-cover bg-top bg-no-repeat pb-12 sm:pb-16 max-md:h-[619px] lg:min-h-[783px] lg:pb-24"
     :style="{ backgroundImage: `url(${heroBackground})` }"
   >
     <div class="container-sizdah relative">
-      <div class="flex flex-col gap-6 lg:max-w-[566px] lg:gap-0 lg:pt-4" data-reveal-group>
+      <div class="flex min-w-0 flex-col gap-5 sm:gap-6 lg:max-w-[566px] lg:gap-0 lg:pt-4" data-reveal-group>
         <!--
           394:4964 — a 221px label over a 2px brand rule. Not the dotted
           `.eyebrow` used by the section headers further down the page; this
@@ -124,7 +232,7 @@ const finalCta = computed(() => props.sections.final_cta)
         -->
         <p
           v-if="hero?.eyebrow"
-          class="flex w-fit max-w-[221px] flex-col gap-px text-label-lg text-ink-100 lg:max-w-none lg:whitespace-nowrap"
+          class="flex w-fit max-w-full flex-col gap-px text-label-lg text-ink-100 lg:max-w-[221px] lg:whitespace-nowrap max-md:hidden"
         >
           <span>{{ hero.eyebrow }}</span>
           <img
@@ -135,23 +243,25 @@ const finalCta = computed(() => props.sections.final_cta)
           />
         </p>
 
-        <h1 v-if="hero" class="flex flex-col gap-4 text-start lg:mt-[47.5px]">
-          <span class="text-hero-line text-paper">{{ hero.title }}</span>
-          <span class="text-hero-accent text-brand">{{ hero.subtitle }}</span>
-          <span class="text-hero-line text-paper">{{ hero.description }}</span>
+        <h1 v-if="hero" class="me-4 flex w-auto flex-col gap-4 text-start max-md:mt-[32px] sm:gap-3 lg:me-0 lg:mt-[47.5px] lg:gap-4">
+          <span class="text-hero-line text-paper max-md:text-[32px] max-md:leading-[40px]">{{ hero.title }}</span>
+          <span class="text-hero-accent text-brand max-md:text-[40px] max-md:leading-[51px]">{{ hero.subtitle }}</span>
+          <span class="text-hero-line text-paper max-md:text-[32px] max-md:leading-[40px]">{{ hero.description }}</span>
         </h1>
 
-        <p v-if="hero?.content" class="max-w-[506px] text-title-sm text-ink-200 lg:mt-[59px]">
+        <p v-if="hero?.content" class="max-w-[506px] text-title-sm text-ink-200 max-md:mt-[42px] max-md:text-[14px] max-md:leading-[20px] sm:leading-relaxed lg:mt-[59px]">
           {{ hero.content }}
         </p>
 
-        <div v-if="hero" class="flex flex-wrap items-center gap-4 lg:mt-[109px]">
+        <div v-if="hero" dir="ltr" class="flex flex-nowrap items-center justify-end gap-2 max-md:mt-[52px] sm:gap-4 lg:mt-[109px]">
           <CtaButton
             v-if="hero.primaryCta"
             :label="hero.primaryCta.label"
             :href="hero.primaryCta.url"
+            variant="light"
             size="lg"
             with-arrow
+            class="ring-1 ring-brand max-md:w-[134px] max-md:px-0 max-md:py-3 max-md:text-title-sm max-md:[&>img]:hidden"
           />
           <!--
             268:2989 is a white fill with a 1px brand rule and an ink label —
@@ -165,9 +275,8 @@ const finalCta = computed(() => props.sections.final_cta)
             v-if="hero.secondaryCta"
             :label="hero.secondaryCta.label"
             :href="hero.secondaryCta.url"
-            variant="light"
             size="lg"
-            class="ring-1 ring-inset ring-brand"
+            class="max-md:w-[137px] max-md:px-0 max-md:py-3 max-md:text-title-sm"
           />
         </div>
 
@@ -178,7 +287,7 @@ const finalCta = computed(() => props.sections.final_cta)
         -->
         <p
           v-if="hero"
-          class="flex items-start gap-2 text-body-lg text-ink-300 lg:ms-[65px] lg:mt-[49px] lg:gap-[13px]"
+          class="flex items-start gap-2 text-body-lg text-ink-300 max-md:hidden lg:ms-[65px] lg:mt-[49px] lg:gap-[13px]"
         >
           <img
             :src="heroNoteArrowUrl"
@@ -199,25 +308,22 @@ const finalCta = computed(() => props.sections.final_cta)
     narrower than the 1248 content track, so it is capped and centred rather
     than filling `.container-sizdah`; each card then hugs the frame's 334.667.
   -->
-  <section v-if="kpi?.items.length" class="pb-16 md:pb-24">
+  <section v-if="kpi?.items.length" class="pb-16 max-md:pb-[80px] md:pb-24">
     <div class="container-sizdah">
       <h2 v-if="kpi.title" class="sr-only">{{ kpi.title }}</h2>
       <ul
-        class="mx-auto grid max-w-[1036px] gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        class="mx-auto grid w-full max-w-[1036px] grid-cols-3 gap-2 sm:gap-4"
         data-reveal-group
       >
-        <li v-for="item in kpi.items" :key="item.id" class="contents">
-          <!--
-            The gold line is the item's `title`; `label` is the package-card
-            column added for the pricing block and is empty on KPI items.
-          -->
-          <StatCard
-            :value="item.value"
-            :label="item.title"
-            :caption="item.description"
-            :icon="item.icon"
-          />
-        </li>
+        <!-- The gold line is the item's `title`; each card is a direct grid item. -->
+        <StatCard
+          v-for="(item, index) in kpi.items"
+          :key="item.id"
+          :value="['+40%', '+70K', '+90%'][index] ?? item.value"
+          :label="item.title"
+          :caption="item.description"
+          :icon="item.icon"
+        />
       </ul>
     </div>
   </section>
@@ -227,9 +333,9 @@ const finalCta = computed(() => props.sections.final_cta)
     mark (268:3005), then the six client marks. `title` is the run before the
     mark and `subtitle` the run after it, which is how the frame splits it.
   -->
-  <section v-if="trustProof" class="pb-16 md:pb-24 lg:pb-[117px]">
+  <section v-if="trustProof" class="pb-16 max-md:pb-[76px] md:pb-24 lg:pb-[117px]">
     <div class="container-sizdah flex flex-col items-center gap-6 lg:gap-0">
-      <p class="flex flex-wrap items-center justify-center gap-1 text-center" data-reveal>
+      <p class="flex flex-wrap items-center justify-center gap-1 text-center max-md:h-[54px] max-md:w-[258px] max-md:flex-nowrap max-md:whitespace-nowrap max-md:text-[16px]" data-reveal>
         <span class="text-title-lg text-brand-50">{{ trustProof.title }}</span>
         <img
           :src="trustMarkUrl"
@@ -237,7 +343,7 @@ const finalCta = computed(() => props.sections.final_cta)
           aria-hidden="true"
           width="72"
           height="34"
-          class="h-auto w-[72px]"
+          class="h-auto w-[72px] max-md:size-[54px]"
         />
         <span v-if="trustProof.subtitle" class="text-title-md text-brand-50">
           {{ trustProof.subtitle }}
@@ -246,18 +352,25 @@ const finalCta = computed(() => props.sections.final_cta)
 
       <div
         v-if="props.clients.length"
-        class="marquee-mask w-full max-w-[1036px] overflow-hidden"
+        class="marquee-mask client-carousel w-full max-w-[1036px] overflow-hidden select-none max-md:h-[80px]"
+        :class="{ 'is-dragging': clientDragging }"
         data-reveal
+        @pointerenter="onClientHover($event, true)"
+        @pointerleave="onClientHover($event, false)"
+        @pointerdown="onClientPointerDown"
+        @pointermove="onClientPointerMove"
+        @pointerup="onClientPointerUp"
+        @pointercancel="onClientPointerUp"
       >
-        <div class="marquee-track">
-          <ul class="flex shrink-0 items-center gap-x-12 pe-12">
+        <div ref="clientTrack" class="marquee-track client-carousel-track max-md:h-[80px]">
+          <ul class="flex shrink-0 items-center gap-x-12 pe-12 max-md:h-[80px]">
             <li v-for="client in props.clients" :key="client.name" class="shrink-0">
               <ClientLogo :client="client" />
             </li>
           </ul>
 
           <!-- The duplicate completes the continuous loop; assistive tech only needs one set. -->
-          <ul aria-hidden="true" class="flex shrink-0 items-center gap-x-12 pe-12">
+          <ul aria-hidden="true" class="flex shrink-0 items-center gap-x-12 pe-12 max-md:h-[80px]">
             <li v-for="client in props.clients" :key="`duplicate-${client.name}`" class="shrink-0">
               <ClientLogo :client="client" />
             </li>
@@ -272,7 +385,7 @@ const finalCta = computed(() => props.sections.final_cta)
 
   <!-- Lead magnet — 391:4795, the larger of the two strips: 2780..2974, i.e.
        124 below the services band and 146 above the projects heading. -->
-  <section v-if="leadMagnet" class="section lg:pb-[146px] lg:pt-[124px]">
+  <section v-if="leadMagnet" class="section max-md:pb-2 max-md:pt-10 lg:pb-[146px] lg:pt-[124px]">
     <div class="container-sizdah">
       <LeadMagnetBanner :section="leadMagnet" size="lg" source="home" data-reveal />
     </div>
@@ -300,7 +413,7 @@ const finalCta = computed(() => props.sections.final_cta)
       />
 
       <ul
-        class="mt-12 grid gap-[2px] border-2 border-ink-300 bg-ink-300 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3"
+        class="mt-12 grid gap-[2px] border-2 border-ink-300 bg-ink-300 max-md:gap-0 max-md:border-0 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3"
         data-reveal-group
       >
         <ProcessStepCard
@@ -317,28 +430,27 @@ const finalCta = computed(() => props.sections.final_cta)
   <WhyUsGrid v-if="whyUs?.items.length" :section="whyUs" />
 
   <!-- Testimonials — 268:3720 heading over the 268:3729 card row. -->
-  <section v-if="reviews && props.testimonials.length" class="section">
+  <section v-if="reviews && props.testimonials.length" class="section max-md:pb-[50px]">
     <div class="container-sizdah">
       <SectionHeading
         :eyebrow="reviews.eyebrow"
         :title="reviews.title"
         :subtitle="reviews.subtitle || reviews.description"
         gap="lg"
+        class="max-md:gap-6 max-md:[&>div>h2]:whitespace-nowrap max-md:[&>div>h2]:text-[26px] max-md:[&>div>h2]:leading-[36px] max-md:[&>div>p]:text-[16px] max-md:[&>div>p]:leading-[22px]"
       />
 
-      <!--
-        The frame draws four cards. The CMS currently holds one, and stretching
-        a lone card across a four-column track leaves three empty columns, so
-        the track is sized to what actually exists and capped at the frame's
-        four.
-      -->
+      <!-- Mobile becomes a swipeable carousel; desktop keeps the editorial grid. -->
       <ul
-        class="mt-10 grid gap-[26px] lg:mt-10 lg:h-[297px]"
+        class="testimonial-carousel mt-2 flex h-auto touch-pan-y gap-[26px] overflow-hidden max-md:mt-10 lg:mt-2 lg:grid lg:h-[297px] lg:overflow-visible"
+        :style="{ '--testimonial-index': activeTestimonial }"
+        @touchstart="startTestimonialSwipe"
+        @touchend="endTestimonialSwipe"
         :class="[
           props.testimonials.length > 1 && 'sm:grid-cols-2',
           props.testimonials.length > 2 && 'lg:grid-cols-3',
           props.testimonials.length > 3 && 'lg:grid-cols-4',
-          props.testimonials.length === 1 && 'max-w-[300px]',
+          props.testimonials.length === 1 && 'max-w-[300px] max-md:max-w-none max-md:w-full',
         ]"
         data-reveal-group
       >
@@ -348,6 +460,14 @@ const finalCta = computed(() => props.sections.final_cta)
           :testimonial="testimonial"
         />
       </ul>
+
+      <div v-if="props.testimonials.length > 1" class="testimonial-controls mt-6 flex items-center justify-center gap-4 max-md:mt-0 lg:hidden">
+        <button type="button" class="testimonial-arrow" aria-label="نظر قبلی" @click="previousTestimonial">←</button>
+        <div class="flex items-center gap-2" role="tablist" aria-label="انتخاب نظر مشتری">
+          <button v-for="(_, index) in props.testimonials" :key="`testimonial-dot-${index}`" type="button" role="tab" :aria-selected="activeTestimonial === index" :aria-label="`نمایش نظر ${index + 1}`" class="testimonial-dot" :class="activeTestimonial === index && 'is-active'" @click="showTestimonial(index)" />
+        </div>
+        <button type="button" class="testimonial-arrow" aria-label="نظر بعدی" @click="nextTestimonial">→</button>
+      </div>
     </div>
   </section>
 

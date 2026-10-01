@@ -52,12 +52,55 @@ final class MediaTransformer
 
         [$width, $height] = self::DIMENSIONS[$context] ?? self::DIMENSIONS['section'];
 
+        $url = self::url($path);
+        $variants = self::variants($path, $width);
+
         return [
-            'src' => self::url($path),
+            'src' => $url,
+            ...$variants,
             'alt' => $alt ?? '',
             'width' => $width,
             'height' => $height,
         ];
+    }
+
+    /** Return only variants that are already present; never emit broken URLs. */
+    private static function variants(string $path, int $width): array
+    {
+        $disk = Storage::disk('public');
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+        $base = substr($path, 0, -(strlen($extension) + 1));
+        $points = array_values(array_unique([400, 736, 1200, $width]));
+        $result = [];
+
+        foreach (['avif', 'webp'] as $format) {
+            $items = [];
+            foreach ($points as $point) {
+                $candidate = "{$base}-{$point}.{$format}";
+                if ($disk->exists($candidate)) {
+                    $items[] = self::url($candidate) . " {$point}w";
+                }
+            }
+            if ($items !== []) {
+                $result[$format] = implode(', ', $items);
+            }
+        }
+
+        $items = [];
+        foreach ($points as $point) {
+            $candidate = "{$base}-{$point}.{$extension}";
+            if ($disk->exists($candidate)) {
+                $items[] = self::url($candidate) . " {$point}w";
+            }
+        }
+        if ($items !== []) {
+            $result['srcset'] = implode(', ', $items);
+        }
+        $result['sizes'] = $width >= 1000
+            ? '(max-width: 768px) 100vw, 612px'
+            : '(max-width: 768px) 100vw, 400px';
+
+        return $result;
     }
 
     /**

@@ -44,7 +44,7 @@ const iconUrl = computed(() => (props.icon ? ICONS[props.icon] : undefined))
 
 <template>
   <div
-    class="flex min-h-[153px] flex-col items-center justify-center gap-2 bg-[length:100%_100%] bg-center bg-no-repeat px-3 py-6 text-center"
+    class="flex min-h-[153px] min-w-0 w-full flex-col items-center justify-center gap-2 bg-[length:100%_100%] bg-center bg-no-repeat px-3 py-6 text-center max-md:min-h-[83px] max-md:gap-1 max-md:px-1 max-md:py-2"
     :style="{ backgroundImage: `url(${cardBgUrl})` }"
   >
     <!--
@@ -60,21 +60,21 @@ const iconUrl = computed(() => (props.icon ? ICONS[props.icon] : undefined))
         aria-hidden="true"
         width="32"
         height="32"
-        class="size-8 shrink-0"
+        class="size-8 shrink-0 max-md:size-4"
       />
       <!--
         `dir="auto"` as the frame emits it: "+40%" carries no strong character,
         so an RTL paragraph would reorder the sign to the trailing edge and
         render it "40%+".
       -->
-      <p class="latin-nums text-display-sm text-brand-50" dir="auto" :data-counter="value">
+      <p class="latin-nums text-display-sm text-brand-50 max-md:text-[16px] max-md:leading-[20px]" dir="auto" :data-counter="value">
         {{ value }}
       </p>
     </div>
 
     <div class="flex flex-col gap-1">
-      <p class="text-title-md text-brand">{{ label }}</p>
-      <p v-if="caption" class="text-title-sm text-ink-300">{{ caption }}</p>
+      <p class="text-title-md text-brand max-md:text-[10px] max-md:leading-[14px]">{{ label }}</p>
+      <p v-if="caption" class="text-title-sm text-ink-300 max-md:hidden">{{ caption }}</p>
     </div>
   </div>
 </template>

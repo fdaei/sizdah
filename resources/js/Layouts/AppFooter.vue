@@ -92,8 +92,11 @@ const contact = computed(() => settings.value.contact)
 </script>
 
 <template>
-  <footer class="rounded-t-lg border-t border-warm-100 bg-ink-1000 shadow-footer">
-    <div class="container-sizdah relative pb-12 pt-12 xl:pb-[128.76px]">
+  <footer
+    class="rounded-t-lg border-t border-warm-100 bg-ink-1000 shadow-footer"
+    :class="['Work/Index', 'About'].includes(page.component) ? 'max-md:h-[640px] max-md:overflow-hidden' : ''"
+  >
+    <div class="container-sizdah relative pb-12 pt-12 max-md:pb-[30px] xl:pb-[128.76px]">
       <img
         :src="footerBloomUrl"
         alt=""
@@ -146,7 +149,7 @@ const contact = computed(() => settings.value.contact)
                     :src="locationIconUrl"
                     alt=""
                     aria-hidden="true"
-                    class="size-4 shrink-0"
+                    class="h-4 w-auto shrink-0"
                     width="16"
                     height="16"
                   />
@@ -157,7 +160,7 @@ const contact = computed(() => settings.value.contact)
                     :src="phoneIconUrl"
                     alt=""
                     aria-hidden="true"
-                    class="size-4 shrink-0"
+                    class="h-4 w-auto shrink-0"
                     width="16"
                     height="16"
                   />
@@ -174,7 +177,7 @@ const contact = computed(() => settings.value.contact)
                     :src="emailIconUrl"
                     alt=""
                     aria-hidden="true"
-                    class="size-4 shrink-0"
+                    class="h-4 w-auto shrink-0"
                     width="16"
                     height="16"
                   />

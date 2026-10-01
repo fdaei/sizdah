@@ -16,6 +16,7 @@ import gridDoodleUrl from '~img/sizdah/home/orbit-grid.svg'
 import scribbleUrl from '~img/sizdah/home/orbit-scribble.svg'
 import crossUrl from '~img/sizdah/home/orbit-cross.svg'
 import dotsUrl from '~img/sizdah/home/orbit-dots.svg'
+import mobileOrbitUrl from '~img/sizdah/home/hero-mobile.svg'
 
 /**
  * Services band — Figma 268:3032, the one cream (#FDFCFA) section on Home.
@@ -115,8 +116,8 @@ const nodes = computed(() => {
 </script>
 
 <template>
-  <section class="bg-surface-raised py-16 lg:pb-20 lg:pt-[91px]">
-    <div class="container-sizdah">
+  <section class="bg-surface-raised py-16 lg:pb-20 lg:pt-[91px] max-lg:p-0">
+    <div class="container-sizdah hidden lg:block">
       <SectionHeading
         data-reveal
         :eyebrow="props.section.eyebrow"
@@ -241,32 +242,16 @@ const nodes = computed(() => {
       Below `lg` the connectors have nowhere to point, so the diagram becomes
       a plain grid and the badge leads it.
     -->
-    <div class="container-sizdah mt-12 lg:hidden">
-      <div class="flex flex-col items-center gap-10">
-        <div class="relative w-[220px]">
-          <img :src="centerUrl" alt="" aria-hidden="true" width="304" height="261" class="w-full" />
-          <img
-            :src="wordmarkUrl"
-            alt="Lost Level"
-            width="100"
-            height="73"
-            class="absolute left-[32.57%] top-[39.46%] w-[32.89%]"
-          />
-        </div>
-
-        <ul class="grid w-full grid-cols-1 gap-10 sm:grid-cols-2" data-reveal-group>
-          <li v-for="node in nodes" :key="node.slot.icon" class="flex flex-col items-center gap-2">
-            <img
-              :src="node.slot.art"
-              alt=""
-              aria-hidden="true"
-              :width="node.slot.size[0]"
-              :height="node.slot.size[1]"
-              class="w-full max-w-[240px]"
-            />
-            <p class="text-center text-heading-sm text-ink-1000">{{ node.service!.title }}</p>
-          </li>
-        </ul>
+    <div class="relative h-[793px] overflow-hidden lg:hidden">
+      <img :src="mobileOrbitUrl" alt="" aria-hidden="true" width="402" height="793" class="absolute inset-y-0 start-[22.5%] block h-[793px] w-[55%] max-w-none" />
+      <div class="absolute inset-x-5 top-8">
+        <SectionHeading
+          :eyebrow="props.section.eyebrow"
+          :title="props.section.title"
+          :subtitle="props.section.subtitle || props.section.description"
+          tone="light"
+          layout="stacked"
+        />
       </div>
     </div>
   </section>
