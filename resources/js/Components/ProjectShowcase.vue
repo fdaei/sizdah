@@ -183,13 +183,13 @@ function finishSwipe(event: TouchEvent) {
             </Link>
           </div>
           <div class="flex flex-col items-end gap-2 text-right">
-            <div class="flex items-center gap-1">
+            <div class="flex w-full items-center justify-end gap-1">
               <p v-if="props.projects[active].industry" class="text-[12px] font-medium leading-[20px] text-brand">
                 {{ props.projects[active].industry }}
               </p>
               <img :src="projectCategoryUrl" alt="" aria-hidden="true" width="20" height="20" class="size-5" />
             </div>
-            <p v-if="props.projects[active].excerpt" class="text-[14px] leading-[20px] text-ink-200">
+            <p v-if="props.projects[active].excerpt" class="w-full text-[14px] leading-[20px] text-ink-200">
               {{ props.projects[active].excerpt }}
             </p>
           </div>

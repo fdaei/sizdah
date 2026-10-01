@@ -8,8 +8,6 @@ import SeoHead from '@/Components/SeoHead.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
 import { useTranslations } from '@/Composables/useTranslations'
 import type { FilterOption, PageSectionData, ProjectSummary, SectionMap, SeoMeta } from '@/types'
-import figmaWorkFirstUrl from '~img/sizdah/work/figma-1074-first.png'
-import figmaWorkSecondUrl from '~img/sizdah/work/figma-1074-second.png'
 
 /**
  * Work listing — Figma "projects" 222:1989 (1440x4656).
@@ -71,21 +69,20 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
     222:1989 puts the footer at 4154.24 and the cream CTA (577:9134) at 3464;
     the slack below the CTA is 177.24, not the shared `pb-24` (96).
   -->
-  <section class="section-first pb-[177.24px] max-md:pt-[132px]">
+  <section class="section-first pb-[177.24px]">
     <div class="container-sizdah relative isolate">
       <header
-        class="mx-auto flex max-w-full flex-col items-center gap-16 text-center max-md:gap-8"
+        class="mx-auto flex max-w-full flex-col items-center gap-16 text-center"
         data-reveal
       >
         <!-- 222:2461 — the eyebrow/title/description column is 612 wide inside the 670 track. -->
         <div class="flex w-full max-w-[612px] flex-col items-center gap-10">
-          <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" class="max-md:hidden" />
-          <div class="hidden items-center gap-1 text-[14px] text-brand max-md:flex">پروژه های ما <span class="size-2 rounded-full bg-brand" /></div>
+          <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
-          <div class="flex flex-col items-center gap-6 max-md:gap-6">
-            <h1 class="text-display-lg text-ink-50 max-md:text-[26px] max-md:leading-[36px]"><span class="max-md:hidden">{{ props.heading.title }}</span><span class="hidden max-md:block">هر برند<br />داستان خودش را دارد</span></h1>
-            <p v-if="props.heading.description" class="text-title-sm text-ink-200 max-md:text-[16px] max-md:leading-[22px]">
-              <span class="max-md:hidden">{{ props.heading.description }}</span><span class="hidden max-md:block">نمونه‌ای از برندهایی که در این مسیر همراهشان بوده‌ایم</span>
+          <div class="flex flex-col items-center gap-6">
+            <h1 class="text-display-lg text-ink-50">{{ props.heading.title }}</h1>
+            <p v-if="props.heading.description" class="text-title-sm text-ink-200">
+              {{ props.heading.description }}
             </p>
           </div>
         </div>
@@ -93,7 +90,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
         <!-- 222:2475 — the chip row stretches the full 670 track, not the 612 column. -->
         <div
           v-if="props.filters.length"
-          class="flex w-full justify-center max-md:justify-start max-md:overflow-x-auto max-md:pb-2"
+          class="flex w-full justify-center"
         >
           <FilterChips
             :options="filterOptions"
@@ -124,7 +121,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
       -->
       <div
         v-else
-        class="mt-16 grid gap-x-6 gap-y-16 max-md:hidden sm:grid-cols-2 md:mt-[110px] md:gap-y-24 lg:grid-cols-3"
+        class="mt-16 grid gap-x-6 gap-y-16 sm:grid-cols-2 md:mt-[110px] md:gap-y-24 lg:grid-cols-3"
         data-reveal-group
       >
         <ProjectPostCard
@@ -135,15 +132,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
         />
       </div>
 
-      <div class="mt-[77px] hidden flex-col gap-[86px] pb-[64px] max-md:flex">
-        <article class="h-[542px] rounded-2xl bg-ink-900 p-2" style="background-image: linear-gradient(90deg, rgb(0 0 0 / 20%), rgb(0 0 0 / 20%)), linear-gradient(-54deg, rgb(248 185 55 / 0%), rgb(248 185 55 / 10%)), linear-gradient(90deg, rgb(20 20 20 / 80%), rgb(20 20 20 / 80%));">
-          <img :src="figmaWorkFirstUrl" alt="" class="h-[248px] w-full rounded-2xl border border-warm-100 object-cover" />
-          <div class="mt-6 flex flex-col items-end gap-4 text-right"><div class="flex w-full flex-row-reverse items-center justify-between"><span class="text-[14px] text-brand">↙ مطالعه مقاله</span><span class="rounded-full bg-brand-100 px-2 py-1 text-[14px] text-ink-800">رشد</span></div><h3 class="text-[22px] leading-normal text-ink-50">چطور شبکه‌های اجتماعی را به یک مسیر رشد تبدیل کنیم؟</h3><p class="text-[16px] leading-normal text-ink-300">از انتشار پراکنده و پیام‌های ناهماهنگ تا ساخت یک سیستم منسجم؛ سیستمی که مخاطب درست را جذب می‌کند، به‌مرور اعتماد می‌سازد و توجه را به نتیجه واقعی برای کسب‌وکار تبدیل می‌کند.</p><p class="text-[14px] text-ink-200">۲۰ اردیبهشت ۱۴۰۳ · زمان مطالعه : ۵ دقیقه</p></div>
-        </article>
-        <article class="h-[488px] overflow-hidden rounded-2xl border border-warm-100 shadow-card"><img :src="figmaWorkSecondUrl" alt="" class="h-[362px] w-full object-cover" /><div class="flex flex-col items-end gap-4 p-4 text-right"><p class="text-[14px] text-ink-200">۲۰ اردیبهشت ۱۴۰۳ · زمان مطالعه : ۵ دقیقه</p><h3 class="text-[22px] leading-normal text-ink-50">وقتی بدون مسیر محتوا تولید می‌کنید، چه اتفاقی می‌افتد؟</h3></div></article>
-      </div>
-
-      <div v-if="finalCta" class="mt-24 max-md:hidden md:mt-[259px]">
+      <div v-if="finalCta" class="mt-24 md:mt-[259px]">
         <StartTogetherCard :section="finalCta" data-reveal />
       </div>
     </div>

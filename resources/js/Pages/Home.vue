@@ -14,7 +14,7 @@ import TestimonialCard from '@/Components/TestimonialCard.vue'
 import InsightsShowcase from '@/Components/InsightsShowcase.vue'
 import FaqAccordion from '@/Components/FaqAccordion.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
-import heroBgUrl from '~img/sizdah/home/hero-bg.jpg'
+import heroMobileBgUrl from '~img/sizdah/home/hero-bg-mobile.webp'
 import trustMarkUrl from '~img/sizdah/clients/trust-divider.svg'
 import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
 import heroNoteArrowUrl from '~img/sizdah/shared/hero-note-icon.svg'
@@ -81,7 +81,6 @@ const hero = computed(() => props.sections.hero)
  * rule that used to appear between the hero and the KPI row on narrow
  * viewports. Nothing in CSS drew it, so nothing in CSS could remove it.
  */
-const heroBackground = computed(() => hero.value?.image?.src ?? heroBgUrl)
 const kpi = computed(() => props.sections.kpi)
 const trustProof = computed(() => props.sections.trust_proof)
 const servicesCloud = computed(() => props.sections.services_cloud)
@@ -221,7 +220,7 @@ function endTestimonialSwipe(event: TouchEvent) {
   -->
   <section
     class="home-hero section-first relative overflow-hidden bg-cover bg-top bg-no-repeat pb-12 sm:pb-16 max-md:h-[619px] lg:min-h-[783px] lg:pb-24"
-    :style="{ backgroundImage: `url(${heroBackground})` }"
+    :style="{ backgroundImage: `url(${heroMobileBgUrl})` }"
   >
     <div class="container-sizdah relative">
       <div class="flex min-w-0 flex-col gap-5 sm:gap-6 lg:max-w-[566px] lg:gap-0 lg:pt-4" data-reveal-group>
@@ -493,3 +492,9 @@ function endTestimonialSwipe(event: TouchEvent) {
     </div>
   </section>
 </template>
+
+<style scoped>
+.home-hero {
+  background-size: 100% 100%;
+}
+</style>

@@ -79,7 +79,7 @@ function chipClass(value: string | null): (string | false)[] {
 <template>
   <nav
     :aria-label="props.label"
-    :class="props.singleLine && 'scrollbar-hidden max-w-full overflow-x-auto'"
+    :class="props.singleLine && 'scrollbar-hidden min-w-0 w-full max-w-full overflow-x-auto'"
   >
     <ul
       class="flex items-start gap-3"

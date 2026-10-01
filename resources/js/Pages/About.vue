@@ -508,7 +508,7 @@ onBeforeUnmount(() => {
   }
 
   .about-story > div {
-    gap: 24px;
+    gap: 32px;
   }
 
   .about-story .rich-prose {
@@ -541,7 +541,7 @@ onBeforeUnmount(() => {
     inset-inline: 0;
     width: 362px;
     height: 208px;
-    padding: 32px 16px;
+    padding: 32px;
     gap: 24px;
   }
 
@@ -614,13 +614,13 @@ onBeforeUnmount(() => {
   }
 
   .about-cta::after,
-  .about-cta > .grid-mesh {
-    display: none;
+  .about-cta :deep(.grid-mesh) {
+    display: none !important;
   }
 
   .about-cta > div.relative {
     align-items: center;
-    gap: 32px;
+    gap: 24px;
   }
 
   .about-cta > div.relative > div {
@@ -638,15 +638,21 @@ onBeforeUnmount(() => {
     text-align: center;
   }
 
-  .about-cta a {
-    align-self: flex-end;
+  .about-cta :deep(img[width='592']) {
+    width: 322px;
+    max-width: 322px;
+    transform: translateY(-13px);
+  }
+
+  .about-cta :deep(a) {
+    align-self: flex-start;
     width: 100px;
     padding: 12px 0;
     font-size: 16px;
     line-height: 22px;
   }
 
-  .about-cta a > img {
+  .about-cta :deep(a > img) {
     display: none;
   }
 }

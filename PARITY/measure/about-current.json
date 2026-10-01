@@ -176,7 +176,7 @@
         "textDecorationLine": "none",
         "color": "rgb(185, 185, 185)",
         "backgroundColor": "rgb(20, 20, 20)",
-        "backgroundImage": "url(\"http://localhost:8000/build/assets/site-background-BWHHdGLS.webp\")",
+        "backgroundImage": "url(\"http://127.0.0.1:5173/resources/images/sizdah/shared/site-background.webp\")",
         "borderTopWidth": "0px",
         "borderRightWidth": "0px",
         "borderBottomWidth": "0px",
@@ -1586,7 +1586,7 @@
         "x": 0,
         "y": 737,
         "w": 402,
-        "h": 450.69
+        "h": 458.69
       },
       "style": {
         "display": "flex",
@@ -1595,9 +1595,9 @@
         "alignItems": "center",
         "flexWrap": "nowrap",
         "gridTemplateColumns": "none",
-        "gap": "24px",
-        "rowGap": "24px",
-        "columnGap": "24px",
+        "gap": "32px",
+        "rowGap": "32px",
+        "columnGap": "32px",
         "paddingTop": "0px",
         "paddingRight": "0px",
         "paddingBottom": "0px",
@@ -1824,7 +1824,7 @@
       "text": "",
       "box": {
         "x": 0,
-        "y": 817,
+        "y": 825,
         "w": 402,
         "h": 370.69
       },
@@ -1884,7 +1884,7 @@
       "text": "سیزده از یک باور ساده شکل گرفت: خیلی از کسب‌وکارها واقعاً خوب‌اند، اما نمی‌دانند چطور درست دیده شوند. در شلوغی بازار، بر",
       "box": {
         "x": 0,
-        "y": 817,
+        "y": 825,
         "w": 402,
         "h": 139.69
       },
@@ -1944,7 +1944,7 @@
       "text": "",
       "box": {
         "x": 0,
-        "y": 980.69,
+        "y": 988.69,
         "w": 402,
         "h": 207
       },
@@ -2004,7 +2004,7 @@
       "text": "ما سیزده را ساختیم تا این پراکندگی را به یک مسیر روشن تبدیل کنیم؛ مسیری که از شناخت هویت هر برند شروع می‌شود و با استرات",
       "box": {
         "x": 0,
-        "y": 980.69,
+        "y": 988.69,
         "w": 402,
         "h": 100
       },
@@ -2064,7 +2064,7 @@
       "text": "برای ما مارکتینگ فقط تولید محتوا یا اجرای کمپین نیست. ما به برندها کمک می‌کنیم واضح‌تر حرف بزنند، اعتماد بسازند و هدفمند",
       "box": {
         "x": 0,
-        "y": 1112.69,
+        "y": 1120.69,
         "w": 402,
         "h": 75
       },
@@ -2439,9 +2439,9 @@
         "rowGap": "24px",
         "columnGap": "24px",
         "paddingTop": "32px",
-        "paddingRight": "16px",
+        "paddingRight": "32px",
         "paddingBottom": "32px",
-        "paddingLeft": "16px",
+        "paddingLeft": "32px",
         "marginTop": "0px",
         "marginRight": "0px",
         "marginBottom": "0px",
@@ -2483,7 +2483,7 @@
       "cls": "size-10 shrink-0",
       "text": "",
       "box": {
-        "x": 354,
+        "x": 338,
         "y": 1423,
         "w": 32,
         "h": 32
@@ -2543,9 +2543,9 @@
       "cls": "flex flex-col gap-6",
       "text": "",
       "box": {
-        "x": 56,
+        "x": 72,
         "y": 1479,
-        "w": 330,
+        "w": 298,
         "h": 102
       },
       "style": {
@@ -2603,9 +2603,9 @@
       "cls": "text-heading-sm text-brand-50",
       "text": "",
       "box": {
-        "x": 56,
+        "x": 72,
         "y": 1479,
-        "w": 330,
+        "w": 298,
         "h": 30
       },
       "style": {
@@ -2663,7 +2663,7 @@
       "cls": "hidden max-md:inline",
       "text": "شناخت، قبل از اجرا",
       "box": {
-        "x": 246,
+        "x": 230,
         "y": 1479,
         "w": 140,
         "h": 30
@@ -2723,9 +2723,9 @@
       "cls": "text-title-sm text-ink-300",
       "text": "",
       "box": {
-        "x": 56,
+        "x": 72,
         "y": 1533,
-        "w": 330,
+        "w": 298,
         "h": 48
       },
       "style": {
@@ -2783,7 +2783,7 @@
       "cls": "hidden max-md:inline",
       "text": "اول مسئله و مخاطب را می‌فهمیم، بعد وارد اجرا می‌شویم",
       "box": {
-        "x": 110,
+        "x": 94,
         "y": 1533,
         "w": 276,
         "h": 48
@@ -2859,9 +2859,9 @@
         "rowGap": "24px",
         "columnGap": "24px",
         "paddingTop": "32px",
-        "paddingRight": "16px",
+        "paddingRight": "32px",
         "paddingBottom": "32px",
-        "paddingLeft": "16px",
+        "paddingLeft": "32px",
         "marginTop": "0px",
         "marginRight": "0px",
         "marginBottom": "0px",
@@ -2903,7 +2903,7 @@
       "cls": "size-10 shrink-0",
       "text": "",
       "box": {
-        "x": 354,
+        "x": 338,
         "y": 1647,
         "w": 32,
         "h": 32
@@ -2963,9 +2963,9 @@
       "cls": "flex flex-col gap-6",
       "text": "",
       "box": {
-        "x": 56,
+        "x": 72,
         "y": 1703,
-        "w": 330,
+        "w": 298,
         "h": 102
       },
       "style": {
@@ -3023,9 +3023,9 @@
       "cls": "text-heading-sm text-brand-50",
       "text": "",
       "box": {
-        "x": 56,
+        "x": 72,
         "y": 1703,
-        "w": 330,
+        "w": 298,
         "h": 30
       },
       "style": {
@@ -3083,7 +3083,7 @@
       "cls": "hidden max-md:inline",
       "text": "شناخت، قبل از اجرا",
       "box": {
-        "x": 246,
+        "x": 230,
         "y": 1703,
         "w": 140,
         "h": 30
@@ -3143,9 +3143,9 @@
       "cls": "text-title-sm text-ink-300",
       "text": "",
       "box": {
-        "x": 56,
+        "x": 72,
         "y": 1757,
-        "w": 330,
+        "w": 298,
         "h": 48
       },
       "style": {
@@ -3203,7 +3203,7 @@
       "cls": "hidden max-md:inline",
       "text": "اول مسئله و مخاطب را می‌فهمیم، بعد وارد اجرا می‌شویم",
       "box": {
-        "x": 110,
+        "x": 94,
         "y": 1757,
         "w": 276,
         "h": 48
@@ -3279,9 +3279,9 @@
         "rowGap": "24px",
         "columnGap": "24px",
         "paddingTop": "32px",
-        "paddingRight": "16px",
+        "paddingRight": "32px",
         "paddingBottom": "32px",
-        "paddingLeft": "16px",
+        "paddingLeft": "32px",
         "marginTop": "0px",
         "marginRight": "0px",
         "marginBottom": "0px",
@@ -3323,7 +3323,7 @@
       "cls": "size-10 shrink-0",
       "text": "",
       "box": {
-        "x": 354,
+        "x": 338,
         "y": 1871,
         "w": 32,
         "h": 32
@@ -3383,9 +3383,9 @@
       "cls": "flex flex-col gap-6",
       "text": "",
       "box": {
-        "x": 56,
+        "x": 72,
         "y": 1927,
-        "w": 330,
+        "w": 298,
         "h": 102
       },
       "style": {
@@ -3443,9 +3443,9 @@
       "cls": "text-heading-sm text-brand-50",
       "text": "",
       "box": {
-        "x": 56,
+        "x": 72,
         "y": 1927,
-        "w": 330,
+        "w": 298,
         "h": 30
       },
       "style": {
@@ -3503,7 +3503,7 @@
       "cls": "hidden max-md:inline",
       "text": "شناخت، قبل از اجرا",
       "box": {
-        "x": 246,
+        "x": 230,
         "y": 1927,
         "w": 140,
         "h": 30
@@ -3563,9 +3563,9 @@
       "cls": "text-title-sm text-ink-300",
       "text": "",
       "box": {
-        "x": 56,
+        "x": 72,
         "y": 1981,
-        "w": 330,
+        "w": 298,
         "h": 48
       },
       "style": {
@@ -3623,7 +3623,7 @@
       "cls": "hidden max-md:inline",
       "text": "اول مسئله و مخاطب را می‌فهمیم، بعد وارد اجرا می‌شویم",
       "box": {
-        "x": 110,
+        "x": 94,
         "y": 1981,
         "w": 276,
         "h": 48
@@ -3699,9 +3699,9 @@
         "rowGap": "24px",
         "columnGap": "24px",
         "paddingTop": "32px",
-        "paddingRight": "16px",
+        "paddingRight": "32px",
         "paddingBottom": "32px",
-        "paddingLeft": "16px",
+        "paddingLeft": "32px",
         "marginTop": "0px",
         "marginRight": "0px",
         "marginBottom": "0px",
@@ -3743,7 +3743,7 @@
       "cls": "size-10 shrink-0",
       "text": "",
       "box": {
-        "x": 354,
+        "x": 338,
         "y": 2095,
         "w": 32,
         "h": 32
@@ -3803,9 +3803,9 @@
       "cls": "flex flex-col gap-6",
       "text": "",
       "box": {
-        "x": 56,
+        "x": 72,
         "y": 2151,
-        "w": 330,
+        "w": 298,
         "h": 102
       },
       "style": {
@@ -3863,9 +3863,9 @@
       "cls": "text-heading-sm text-brand-50",
       "text": "",
       "box": {
-        "x": 56,
+        "x": 72,
         "y": 2151,
-        "w": 330,
+        "w": 298,
         "h": 30
       },
       "style": {
@@ -3923,7 +3923,7 @@
       "cls": "hidden max-md:inline",
       "text": "شناخت، قبل از اجرا",
       "box": {
-        "x": 246,
+        "x": 230,
         "y": 2151,
         "w": 140,
         "h": 30
@@ -3983,9 +3983,9 @@
       "cls": "text-title-sm text-ink-300",
       "text": "",
       "box": {
-        "x": 56,
+        "x": 72,
         "y": 2205,
-        "w": 330,
+        "w": 298,
         "h": 48
       },
       "style": {
@@ -4043,7 +4043,7 @@
       "cls": "hidden max-md:inline",
       "text": "اول مسئله و مخاطب را می‌فهمیم، بعد وارد اجرا می‌شویم",
       "box": {
-        "x": 110,
+        "x": 94,
         "y": 2205,
         "w": 276,
         "h": 48
@@ -5006,7 +5006,7 @@
         "x": 20,
         "y": 2824,
         "w": 362,
-        "h": 723.39
+        "h": 706.77
       },
       "style": {
         "display": "block",
@@ -5059,66 +5059,6 @@
     {
       "order": 84,
       "tag": "div",
-      "path": "main#main>div>div>section:nth-of-type(5)>div:nth-of-type(1)",
-      "cls": "grid-mesh pointer-events-none absolute inset-y-0 inline-start-0 w-[57.47%]",
-      "text": "",
-      "box": {
-        "x": 173.97,
-        "y": 2824,
-        "w": 208.03,
-        "h": 723.39
-      },
-      "style": {
-        "display": "block",
-        "flexDirection": "row",
-        "justifyContent": "normal",
-        "alignItems": "normal",
-        "flexWrap": "nowrap",
-        "gridTemplateColumns": "none",
-        "gap": "normal",
-        "rowGap": "normal",
-        "columnGap": "normal",
-        "paddingTop": "0px",
-        "paddingRight": "0px",
-        "paddingBottom": "0px",
-        "paddingLeft": "0px",
-        "marginTop": "0px",
-        "marginRight": "0px",
-        "marginBottom": "0px",
-        "marginLeft": "0px",
-        "fontFamily": "Lahzeh, Peyda, Vazirmatn, Tahoma, sans-serif",
-        "fontSize": "16px",
-        "fontWeight": "400",
-        "lineHeight": "20px",
-        "letterSpacing": "normal",
-        "textAlign": "start",
-        "textTransform": "none",
-        "textDecorationLine": "none",
-        "color": "rgb(185, 185, 185)",
-        "backgroundColor": "rgba(0, 0, 0, 0)",
-        "backgroundImage": "linear-gradient(to right, rgba(20, 20, 20, 0.1) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(rgba(20, 20, 20, 0.1) 1px, rgba(0, 0, 0, 0) 1px)",
-        "borderTopWidth": "0px",
-        "borderRightWidth": "0px",
-        "borderBottomWidth": "0px",
-        "borderLeftWidth": "0px",
-        "borderTopColor": "rgb(229, 231, 235)",
-        "borderStyle": "solid",
-        "borderTopLeftRadius": "0px",
-        "borderTopRightRadius": "0px",
-        "borderBottomRightRadius": "0px",
-        "borderBottomLeftRadius": "0px",
-        "boxShadow": "none",
-        "opacity": "1",
-        "mixBlendMode": "normal",
-        "filter": "none",
-        "backdropFilter": "none",
-        "position": "absolute",
-        "direction": "rtl"
-      }
-    },
-    {
-      "order": 85,
-      "tag": "div",
       "path": "main#main>div>div>section:nth-of-type(5)>div:nth-of-type(2)",
       "cls": "relative z-10 flex flex-col items-center gap-10 lg:flex-row lg:justify-between lg:gap-6",
       "text": "",
@@ -5126,7 +5066,7 @@
         "x": 36,
         "y": 2856,
         "w": 330,
-        "h": 659.39
+        "h": 642.77
       },
       "style": {
         "display": "flex",
@@ -5177,7 +5117,7 @@
       }
     },
     {
-      "order": 86,
+      "order": 85,
       "tag": "div",
       "path": "main#main>div>div>section:nth-of-type(5)>div:nth-of-type(2)>div",
       "cls": "flex w-full flex-col items-start gap-12 text-start lg:max-w-[554px]",
@@ -5186,7 +5126,67 @@
         "x": 36,
         "y": 2856,
         "w": 330,
-        "h": 386.95
+        "h": 375.95
+      },
+      "style": {
+        "display": "flex",
+        "flexDirection": "column",
+        "justifyContent": "normal",
+        "alignItems": "flex-start",
+        "flexWrap": "nowrap",
+        "gridTemplateColumns": "none",
+        "gap": "48px",
+        "rowGap": "48px",
+        "columnGap": "48px",
+        "paddingTop": "0px",
+        "paddingRight": "0px",
+        "paddingBottom": "0px",
+        "paddingLeft": "0px",
+        "marginTop": "0px",
+        "marginRight": "0px",
+        "marginBottom": "0px",
+        "marginLeft": "0px",
+        "fontFamily": "Lahzeh, Peyda, Vazirmatn, Tahoma, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "20px",
+        "letterSpacing": "normal",
+        "textAlign": "start",
+        "textTransform": "none",
+        "textDecorationLine": "none",
+        "color": "rgb(185, 185, 185)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundImage": "none",
+        "borderTopWidth": "0px",
+        "borderRightWidth": "0px",
+        "borderBottomWidth": "0px",
+        "borderLeftWidth": "0px",
+        "borderTopColor": "rgb(229, 231, 235)",
+        "borderStyle": "solid",
+        "borderTopLeftRadius": "0px",
+        "borderTopRightRadius": "0px",
+        "borderBottomRightRadius": "0px",
+        "borderBottomLeftRadius": "0px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "mixBlendMode": "normal",
+        "filter": "none",
+        "backdropFilter": "none",
+        "position": "static",
+        "direction": "rtl"
+      }
+    },
+    {
+      "order": 86,
+      "tag": "div",
+      "path": "div>div>section:nth-of-type(5)>div:nth-of-type(2)>div>div",
+      "cls": "flex flex-col items-start gap-12",
+      "text": "",
+      "box": {
+        "x": 36,
+        "y": 2856,
+        "w": 330,
+        "h": 287.95
       },
       "style": {
         "display": "flex",
@@ -5238,66 +5238,6 @@
     },
     {
       "order": 87,
-      "tag": "div",
-      "path": "div>div>section:nth-of-type(5)>div:nth-of-type(2)>div>div",
-      "cls": "flex flex-col items-start gap-12",
-      "text": "",
-      "box": {
-        "x": 36,
-        "y": 2856,
-        "w": 330,
-        "h": 298.95
-      },
-      "style": {
-        "display": "flex",
-        "flexDirection": "column",
-        "justifyContent": "normal",
-        "alignItems": "flex-start",
-        "flexWrap": "nowrap",
-        "gridTemplateColumns": "none",
-        "gap": "48px",
-        "rowGap": "48px",
-        "columnGap": "48px",
-        "paddingTop": "0px",
-        "paddingRight": "0px",
-        "paddingBottom": "0px",
-        "paddingLeft": "0px",
-        "marginTop": "0px",
-        "marginRight": "0px",
-        "marginBottom": "0px",
-        "marginLeft": "0px",
-        "fontFamily": "Lahzeh, Peyda, Vazirmatn, Tahoma, sans-serif",
-        "fontSize": "16px",
-        "fontWeight": "400",
-        "lineHeight": "20px",
-        "letterSpacing": "normal",
-        "textAlign": "start",
-        "textTransform": "none",
-        "textDecorationLine": "none",
-        "color": "rgb(185, 185, 185)",
-        "backgroundColor": "rgba(0, 0, 0, 0)",
-        "backgroundImage": "none",
-        "borderTopWidth": "0px",
-        "borderRightWidth": "0px",
-        "borderBottomWidth": "0px",
-        "borderLeftWidth": "0px",
-        "borderTopColor": "rgb(229, 231, 235)",
-        "borderStyle": "solid",
-        "borderTopLeftRadius": "0px",
-        "borderTopRightRadius": "0px",
-        "borderBottomRightRadius": "0px",
-        "borderBottomLeftRadius": "0px",
-        "boxShadow": "none",
-        "opacity": "1",
-        "mixBlendMode": "normal",
-        "filter": "none",
-        "backdropFilter": "none",
-        "position": "static",
-        "direction": "rtl"
-      }
-    },
-    {
-      "order": 88,
       "tag": "div",
       "path": "div>section:nth-of-type(5)>div:nth-of-type(2)>div>div>div",
       "cls": "flex flex-col items-start gap-2",
@@ -5357,7 +5297,7 @@
       }
     },
     {
-      "order": 89,
+      "order": 88,
       "tag": "p",
       "path": "section:nth-of-type(5)>div:nth-of-type(2)>div>div>div>p",
       "cls": "font-display text-title-md text-brand",
@@ -5417,7 +5357,7 @@
       }
     },
     {
-      "order": 90,
+      "order": 89,
       "tag": "div",
       "path": "section:nth-of-type(5)>div:nth-of-type(2)>div>div>div>div",
       "cls": "flex flex-col gap-6",
@@ -5477,7 +5417,7 @@
       }
     },
     {
-      "order": 91,
+      "order": 90,
       "tag": "h2",
       "path": "div:nth-of-type(2)>div>div>div>div>h2",
       "cls": "text-section-line text-ink-1000",
@@ -5537,7 +5477,7 @@
       }
     },
     {
-      "order": 92,
+      "order": 91,
       "tag": "p",
       "path": "div:nth-of-type(2)>div>div>div>div>p",
       "cls": "text-title-sm text-ink-800",
@@ -5597,16 +5537,16 @@
       }
     },
     {
-      "order": 93,
+      "order": 92,
       "tag": "a",
       "path": "div>section:nth-of-type(5)>div:nth-of-type(2)>div>div>a",
       "cls": "inline-flex items-center justify-center gap-1 rounded-sm transition-colors duration-200 ease-brand gap-2 px-8 py-4 text-title-md bg-brand text-ink-1000 hover:bg-brand-900",
       "text": "",
       "box": {
-        "x": 180,
+        "x": 266,
         "y": 3097.95,
-        "w": 186,
-        "h": 57
+        "w": 100,
+        "h": 46
       },
       "style": {
         "display": "flex",
@@ -5618,18 +5558,18 @@
         "gap": "8px",
         "rowGap": "8px",
         "columnGap": "8px",
-        "paddingTop": "16px",
-        "paddingRight": "32px",
-        "paddingBottom": "16px",
-        "paddingLeft": "32px",
+        "paddingTop": "12px",
+        "paddingRight": "0px",
+        "paddingBottom": "12px",
+        "paddingLeft": "0px",
         "marginTop": "0px",
         "marginRight": "0px",
         "marginBottom": "0px",
         "marginLeft": "0px",
         "fontFamily": "Lahzeh, Peyda, Vazirmatn, Tahoma, sans-serif",
-        "fontSize": "20px",
+        "fontSize": "16px",
         "fontWeight": "500",
-        "lineHeight": "25px",
+        "lineHeight": "22px",
         "letterSpacing": "normal",
         "textAlign": "start",
         "textTransform": "none",
@@ -5657,16 +5597,16 @@
       }
     },
     {
-      "order": 94,
+      "order": 93,
       "tag": "span",
       "path": "section:nth-of-type(5)>div:nth-of-type(2)>div>div>a>span",
       "cls": "",
       "text": "شروع گفتگو",
       "box": {
-        "x": 244,
-        "y": 3113.95,
-        "w": 90,
-        "h": 25
+        "x": 279,
+        "y": 3109.95,
+        "w": 74,
+        "h": 22
       },
       "style": {
         "display": "block",
@@ -5687,9 +5627,9 @@
         "marginBottom": "0px",
         "marginLeft": "0px",
         "fontFamily": "Lahzeh, Peyda, Vazirmatn, Tahoma, sans-serif",
-        "fontSize": "20px",
+        "fontSize": "16px",
         "fontWeight": "500",
-        "lineHeight": "25px",
+        "lineHeight": "22px",
         "letterSpacing": "normal",
         "textAlign": "start",
         "textTransform": "none",
@@ -5717,74 +5657,14 @@
       }
     },
     {
-      "order": 95,
-      "tag": "img",
-      "path": "section:nth-of-type(5)>div:nth-of-type(2)>div>div>a>img",
-      "cls": "size-6 flip-rtl",
-      "text": "",
-      "box": {
-        "x": 212,
-        "y": 3114.45,
-        "w": 24,
-        "h": 24
-      },
-      "style": {
-        "display": "block",
-        "flexDirection": "row",
-        "justifyContent": "normal",
-        "alignItems": "normal",
-        "flexWrap": "nowrap",
-        "gridTemplateColumns": "none",
-        "gap": "normal",
-        "rowGap": "normal",
-        "columnGap": "normal",
-        "paddingTop": "0px",
-        "paddingRight": "0px",
-        "paddingBottom": "0px",
-        "paddingLeft": "0px",
-        "marginTop": "0px",
-        "marginRight": "0px",
-        "marginBottom": "0px",
-        "marginLeft": "0px",
-        "fontFamily": "Lahzeh, Peyda, Vazirmatn, Tahoma, sans-serif",
-        "fontSize": "20px",
-        "fontWeight": "500",
-        "lineHeight": "25px",
-        "letterSpacing": "normal",
-        "textAlign": "start",
-        "textTransform": "none",
-        "textDecorationLine": "none",
-        "color": "rgb(20, 20, 20)",
-        "backgroundColor": "rgba(0, 0, 0, 0)",
-        "backgroundImage": "none",
-        "borderTopWidth": "0px",
-        "borderRightWidth": "0px",
-        "borderBottomWidth": "0px",
-        "borderLeftWidth": "0px",
-        "borderTopColor": "rgb(229, 231, 235)",
-        "borderStyle": "solid",
-        "borderTopLeftRadius": "0px",
-        "borderTopRightRadius": "0px",
-        "borderBottomRightRadius": "0px",
-        "borderBottomLeftRadius": "0px",
-        "boxShadow": "none",
-        "opacity": "1",
-        "mixBlendMode": "normal",
-        "filter": "none",
-        "backdropFilter": "none",
-        "position": "static",
-        "direction": "rtl"
-      }
-    },
-    {
-      "order": 96,
+      "order": 94,
       "tag": "p",
       "path": "div>div>section:nth-of-type(5)>div:nth-of-type(2)>div>p",
       "cls": "text-body-lg text-ink-700",
       "text": "برندینگ · مارکتینگ دیزاین · تولید محتوا · پشتیبانی شبکه‌های اجتماعی",
       "box": {
         "x": 36,
-        "y": 3202.95,
+        "y": 3191.95,
         "w": 330,
         "h": 40
       },
@@ -5837,16 +5717,16 @@
       }
     },
     {
-      "order": 97,
+      "order": 95,
       "tag": "img",
       "path": "main#main>div>div>section:nth-of-type(5)>div:nth-of-type(2)>img",
       "cls": "w-full max-w-[592px]",
       "text": "",
       "box": {
-        "x": 36,
-        "y": 3282.95,
-        "w": 330,
-        "h": 232.44
+        "x": 40,
+        "y": 3258.95,
+        "w": 322,
+        "h": 226.81
       },
       "style": {
         "display": "block",
@@ -5897,7 +5777,7 @@
       }
     },
     {
-      "order": 98,
+      "order": 96,
       "tag": "footer",
       "path": "div#app>div>footer",
       "cls": "rounded-t-lg border-t border-warm-100 bg-ink-1000 shadow-footer max-md:h-[640px] max-md:overflow-hidden",
@@ -5957,7 +5837,7 @@
       }
     },
     {
-      "order": 99,
+      "order": 97,
       "tag": "div",
       "path": "div#app>div>footer>div",
       "cls": "container-sizdah relative pb-12 pt-12 max-md:pb-[30px] xl:pb-[128.76px]",
@@ -6017,7 +5897,7 @@
       }
     },
     {
-      "order": 100,
+      "order": 98,
       "tag": "div",
       "path": "div#app>div>footer>div>div",
       "cls": "relative flex flex-col gap-10",
@@ -6077,7 +5957,7 @@
       }
     },
     {
-      "order": 101,
+      "order": 99,
       "tag": "div",
       "path": "div#app>div>footer>div>div>div:nth-of-type(1)",
       "cls": "flex flex-col justify-between gap-10 md:flex-row md:items-start",
@@ -6137,7 +6017,7 @@
       }
     },
     {
-      "order": 102,
+      "order": 100,
       "tag": "div",
       "path": "div>footer>div>div>div:nth-of-type(1)>div:nth-of-type(1)",
       "cls": "flex w-full flex-col gap-8 md:w-[402px]",
@@ -6197,7 +6077,7 @@
       }
     },
     {
-      "order": 103,
+      "order": 101,
       "tag": "img",
       "path": "footer>div>div>div:nth-of-type(1)>div:nth-of-type(1)>img",
       "cls": "",
@@ -6257,7 +6137,7 @@
       }
     },
     {
-      "order": 104,
+      "order": 102,
       "tag": "p",
       "path": "footer>div>div>div:nth-of-type(1)>div:nth-of-type(1)>p",
       "cls": "text-body-lg text-ink-100",
@@ -6317,7 +6197,7 @@
       }
     },
     {
-      "order": 105,
+      "order": 103,
       "tag": "div",
       "path": "div>footer>div>div>div:nth-of-type(1)>div:nth-of-type(2)",
       "cls": "grid grid-cols-2 gap-10 md:flex md:gap-[88px]",
@@ -6377,7 +6257,7 @@
       }
     },
     {
-      "order": 106,
+      "order": 104,
       "tag": "nav",
       "path": "footer>div>div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)",
       "cls": "flex flex-col gap-4",
@@ -6437,7 +6317,7 @@
       }
     },
     {
-      "order": 107,
+      "order": 105,
       "tag": "h2",
       "path": "div>div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)>h2",
       "cls": "text-title-sm text-brand",
@@ -6497,7 +6377,7 @@
       }
     },
     {
-      "order": 108,
+      "order": 106,
       "tag": "ul",
       "path": "div>div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)>ul",
       "cls": "flex flex-col gap-3",
@@ -6557,7 +6437,7 @@
       }
     },
     {
-      "order": 109,
+      "order": 107,
       "tag": "li",
       "path": "div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)>ul>li:nth-of-type(1)",
       "cls": "",
@@ -6617,7 +6497,7 @@
       }
     },
     {
-      "order": 110,
+      "order": 108,
       "tag": "a",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)>ul>li:nth-of-type(1)>a",
       "cls": "text-body-lg text-ink-100 transition-colors duration-200 ease-brand hover:text-brand",
@@ -6677,7 +6557,7 @@
       }
     },
     {
-      "order": 111,
+      "order": 109,
       "tag": "li",
       "path": "div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)>ul>li:nth-of-type(2)",
       "cls": "",
@@ -6737,7 +6617,7 @@
       }
     },
     {
-      "order": 112,
+      "order": 110,
       "tag": "a",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)>ul>li:nth-of-type(2)>a",
       "cls": "text-body-lg text-ink-100 transition-colors duration-200 ease-brand hover:text-brand",
@@ -6797,7 +6677,7 @@
       }
     },
     {
-      "order": 113,
+      "order": 111,
       "tag": "li",
       "path": "div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)>ul>li:nth-of-type(3)",
       "cls": "",
@@ -6857,7 +6737,7 @@
       }
     },
     {
-      "order": 114,
+      "order": 112,
       "tag": "a",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)>ul>li:nth-of-type(3)>a",
       "cls": "text-body-lg text-ink-100 transition-colors duration-200 ease-brand hover:text-brand",
@@ -6917,7 +6797,7 @@
       }
     },
     {
-      "order": 115,
+      "order": 113,
       "tag": "li",
       "path": "div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)>ul>li:nth-of-type(4)",
       "cls": "",
@@ -6977,7 +6857,7 @@
       }
     },
     {
-      "order": 116,
+      "order": 114,
       "tag": "a",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)>ul>li:nth-of-type(4)>a",
       "cls": "text-body-lg text-ink-100 transition-colors duration-200 ease-brand hover:text-brand",
@@ -7037,7 +6917,7 @@
       }
     },
     {
-      "order": 117,
+      "order": 115,
       "tag": "li",
       "path": "div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)>ul>li:nth-of-type(5)",
       "cls": "",
@@ -7097,7 +6977,7 @@
       }
     },
     {
-      "order": 118,
+      "order": 116,
       "tag": "a",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)>ul>li:nth-of-type(5)>a",
       "cls": "text-body-lg text-ink-100 transition-colors duration-200 ease-brand hover:text-brand",
@@ -7157,7 +7037,7 @@
       }
     },
     {
-      "order": 119,
+      "order": 117,
       "tag": "li",
       "path": "div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)>ul>li:nth-of-type(6)",
       "cls": "",
@@ -7217,7 +7097,7 @@
       }
     },
     {
-      "order": 120,
+      "order": 118,
       "tag": "a",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(1)>ul>li:nth-of-type(6)>a",
       "cls": "text-body-lg text-ink-100 transition-colors duration-200 ease-brand hover:text-brand",
@@ -7277,7 +7157,7 @@
       }
     },
     {
-      "order": 121,
+      "order": 119,
       "tag": "nav",
       "path": "footer>div>div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(2)",
       "cls": "flex flex-col gap-4",
@@ -7337,7 +7217,7 @@
       }
     },
     {
-      "order": 122,
+      "order": 120,
       "tag": "h2",
       "path": "div>div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(2)>h2",
       "cls": "text-title-sm text-brand",
@@ -7397,7 +7277,7 @@
       }
     },
     {
-      "order": 123,
+      "order": 121,
       "tag": "ul",
       "path": "div>div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(2)>ul",
       "cls": "flex flex-col gap-3",
@@ -7457,7 +7337,7 @@
       }
     },
     {
-      "order": 124,
+      "order": 122,
       "tag": "li",
       "path": "div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(2)>ul>li:nth-of-type(1)",
       "cls": "",
@@ -7517,7 +7397,7 @@
       }
     },
     {
-      "order": 125,
+      "order": 123,
       "tag": "a",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(2)>ul>li:nth-of-type(1)>a",
       "cls": "text-body-lg text-ink-100 transition-colors duration-200 ease-brand hover:text-brand",
@@ -7577,7 +7457,7 @@
       }
     },
     {
-      "order": 126,
+      "order": 124,
       "tag": "li",
       "path": "div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(2)>ul>li:nth-of-type(2)",
       "cls": "",
@@ -7637,7 +7517,7 @@
       }
     },
     {
-      "order": 127,
+      "order": 125,
       "tag": "a",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(2)>ul>li:nth-of-type(2)>a",
       "cls": "text-body-lg text-ink-100 transition-colors duration-200 ease-brand hover:text-brand",
@@ -7697,7 +7577,7 @@
       }
     },
     {
-      "order": 128,
+      "order": 126,
       "tag": "li",
       "path": "div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(2)>ul>li:nth-of-type(3)",
       "cls": "",
@@ -7757,7 +7637,7 @@
       }
     },
     {
-      "order": 129,
+      "order": 127,
       "tag": "a",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(2)>ul>li:nth-of-type(3)>a",
       "cls": "text-body-lg text-ink-100 transition-colors duration-200 ease-brand hover:text-brand",
@@ -7817,7 +7697,7 @@
       }
     },
     {
-      "order": 130,
+      "order": 128,
       "tag": "li",
       "path": "div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(2)>ul>li:nth-of-type(4)",
       "cls": "",
@@ -7877,7 +7757,7 @@
       }
     },
     {
-      "order": 131,
+      "order": 129,
       "tag": "a",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(2)>ul>li:nth-of-type(4)>a",
       "cls": "text-body-lg text-ink-100 transition-colors duration-200 ease-brand hover:text-brand",
@@ -7937,7 +7817,7 @@
       }
     },
     {
-      "order": 132,
+      "order": 130,
       "tag": "li",
       "path": "div>div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(2)>ul>li:nth-of-type(5)",
       "cls": "",
@@ -7997,7 +7877,7 @@
       }
     },
     {
-      "order": 133,
+      "order": 131,
       "tag": "a",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>nav:nth-of-type(2)>ul>li:nth-of-type(5)>a",
       "cls": "text-body-lg text-ink-100 transition-colors duration-200 ease-brand hover:text-brand",
@@ -8057,7 +7937,7 @@
       }
     },
     {
-      "order": 134,
+      "order": 132,
       "tag": "div",
       "path": "footer>div>div>div:nth-of-type(1)>div:nth-of-type(2)>div",
       "cls": "flex flex-col gap-4",
@@ -8117,7 +7997,7 @@
       }
     },
     {
-      "order": 135,
+      "order": 133,
       "tag": "h2",
       "path": "div>div>div:nth-of-type(1)>div:nth-of-type(2)>div>h2",
       "cls": "text-title-sm text-brand",
@@ -8177,7 +8057,7 @@
       }
     },
     {
-      "order": 136,
+      "order": 134,
       "tag": "ul",
       "path": "div>div>div:nth-of-type(1)>div:nth-of-type(2)>div>ul",
       "cls": "flex flex-col gap-3 text-body-lg text-ink-100",
@@ -8237,7 +8117,7 @@
       }
     },
     {
-      "order": 137,
+      "order": 135,
       "tag": "li",
       "path": "div>div:nth-of-type(1)>div:nth-of-type(2)>div>ul>li:nth-of-type(1)",
       "cls": "flex items-center gap-2",
@@ -8297,7 +8177,7 @@
       }
     },
     {
-      "order": 138,
+      "order": 136,
       "tag": "img",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>div>ul>li:nth-of-type(1)>img",
       "cls": "h-4 w-auto shrink-0",
@@ -8357,7 +8237,7 @@
       }
     },
     {
-      "order": 139,
+      "order": 137,
       "tag": "span",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>div>ul>li:nth-of-type(1)>span",
       "cls": "",
@@ -8417,7 +8297,7 @@
       }
     },
     {
-      "order": 140,
+      "order": 138,
       "tag": "li",
       "path": "div>div:nth-of-type(1)>div:nth-of-type(2)>div>ul>li:nth-of-type(2)",
       "cls": "flex items-center gap-2",
@@ -8477,7 +8357,7 @@
       }
     },
     {
-      "order": 141,
+      "order": 139,
       "tag": "img",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>div>ul>li:nth-of-type(2)>img",
       "cls": "h-4 w-auto shrink-0",
@@ -8537,7 +8417,7 @@
       }
     },
     {
-      "order": 142,
+      "order": 140,
       "tag": "a",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>div>ul>li:nth-of-type(2)>a",
       "cls": "latin-nums transition-colors duration-200 ease-brand hover:text-brand",
@@ -8597,7 +8477,7 @@
       }
     },
     {
-      "order": 143,
+      "order": 141,
       "tag": "li",
       "path": "div>div:nth-of-type(1)>div:nth-of-type(2)>div>ul>li:nth-of-type(3)",
       "cls": "flex items-center gap-2",
@@ -8657,7 +8537,7 @@
       }
     },
     {
-      "order": 144,
+      "order": 142,
       "tag": "img",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>div>ul>li:nth-of-type(3)>img",
       "cls": "h-4 w-auto shrink-0",
@@ -8717,7 +8597,7 @@
       }
     },
     {
-      "order": 145,
+      "order": 143,
       "tag": "a",
       "path": "div:nth-of-type(1)>div:nth-of-type(2)>div>ul>li:nth-of-type(3)>a",
       "cls": "transition-colors duration-200 ease-brand hover:text-brand",
@@ -8777,7 +8657,7 @@
       }
     },
     {
-      "order": 146,
+      "order": 144,
       "tag": "div",
       "path": "div#app>div>footer>div>div>div:nth-of-type(2)",
       "cls": "flex flex-col items-start justify-between gap-4 border-t border-warm-300 py-6 sm:flex-row sm:items-center",
@@ -8837,7 +8717,7 @@
       }
     },
     {
-      "order": 147,
+      "order": 145,
       "tag": "p",
       "path": "div>footer>div>div>div:nth-of-type(2)>p",
       "cls": "text-label-lg text-ink-200",
@@ -8897,7 +8777,7 @@
       }
     },
     {
-      "order": 148,
+      "order": 146,
       "tag": "div",
       "path": "div>footer>div>div>div:nth-of-type(2)>div",
       "cls": "flex items-center gap-4",
@@ -8957,7 +8837,7 @@
       }
     },
     {
-      "order": 149,
+      "order": 147,
       "tag": "a",
       "path": "footer>div>div>div:nth-of-type(2)>div>a:nth-of-type(1)",
       "cls": "text-label-lg text-ink-100 underline transition-colors duration-200 ease-brand hover:text-brand",
@@ -9017,7 +8897,7 @@
       }
     },
     {
-      "order": 150,
+      "order": 148,
       "tag": "a",
       "path": "footer>div>div>div:nth-of-type(2)>div>a:nth-of-type(2)",
       "cls": "text-label-lg text-ink-100 underline transition-colors duration-200 ease-brand hover:text-brand",
