@@ -5,6 +5,7 @@ import FilterChips from '@/Components/FilterChips.vue'
 import SectionHeading from '@/Components/SectionHeading.vue'
 import SeoHead from '@/Components/SeoHead.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
+import { useDragScroll } from '@/Composables/useDragScroll'
 import { useTranslations } from '@/Composables/useTranslations'
 import type {
   CardItem,
@@ -87,6 +88,10 @@ const props = defineProps<{
 }>()
 
 const { t } = useTranslations()
+
+/* The meta row swipes sideways below `md`; this lets a mouse drag it too. */
+const { onPointerDown, onPointerMove, onPointerUp, onClickCapture, onDragStart } =
+  useDragScroll('metaRow')
 
 /*
  | 411:8568, read right-to-left: industry, year, instagram, services. The frame
@@ -287,7 +292,14 @@ const strategyLead = computed(() =>
         -->
         <dl
           v-if="meta.length"
-          class="scrollbar-hidden -mx-5 flex snap-x snap-mandatory scroll-px-5 flex-nowrap justify-start gap-4 self-stretch overflow-x-auto px-5 md:mx-0 md:snap-none md:justify-center md:self-center md:overflow-visible md:px-0"
+          ref="metaRow"
+          class="scrollbar-hidden select-none -mx-5 flex snap-x snap-mandatory scroll-px-5 flex-nowrap justify-start gap-4 self-stretch overflow-x-auto px-5 md:mx-0 md:snap-none md:justify-center md:self-center md:overflow-visible md:px-0"
+          @pointerdown="onPointerDown"
+          @pointermove="onPointerMove"
+          @pointerup="onPointerUp"
+          @pointercancel="onPointerUp"
+          @click.capture="onClickCapture"
+          @dragstart="onDragStart"
         >
           <div
             v-for="item in meta"
