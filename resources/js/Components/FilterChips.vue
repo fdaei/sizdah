@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3'
+import { ref } from 'vue'
 import type { FilterOption } from '@/types'
 
 /**
@@ -52,6 +53,55 @@ const props = withDefaults(
 
 const emit = defineEmits<{ select: [value: string | null] }>()
 
+/*
+ | Mouse drag-to-scroll for the single-line row. Touch and trackpads already
+ | scroll an `overflow-x-auto` box natively; a mouse cannot drag one, so a
+ | narrow desktop window would show a clipped row it cannot move. Only mouse
+ | pointers are handled, and only once the pointer has travelled 5px, so a
+ | plain click still selects a chip. A drag that did move swallows the click
+ | that follows it, so letting go over a chip does not also navigate.
+ */
+const scroller = ref<HTMLElement | null>(null)
+let drag: { x: number; left: number; moved: boolean } | null = null
+let swallowClick = false
+
+function onPointerDown(event: PointerEvent): void {
+  // A drag released off-target fires no click; never carry that over.
+  swallowClick = false
+  const el = scroller.value
+  if (!props.singleLine || !el || event.pointerType !== 'mouse' || event.button !== 0) return
+  if (el.scrollWidth <= el.clientWidth) return
+  drag = { x: event.clientX, left: el.scrollLeft, moved: false }
+}
+
+function onPointerMove(event: PointerEvent): void {
+  const el = scroller.value
+  if (!drag || !el) return
+  const dx = event.clientX - drag.x
+  if (!drag.moved) {
+    if (Math.abs(dx) < 5) return
+    drag.moved = true
+    el.setPointerCapture(event.pointerId)
+    // Mandatory snapping would fight every intermediate scrollLeft.
+    el.style.scrollSnapType = 'none'
+  }
+  el.scrollLeft = drag.left - dx
+}
+
+function onPointerUp(): void {
+  if (!drag) return
+  swallowClick = drag.moved
+  if (drag.moved && scroller.value) scroller.value.style.scrollSnapType = ''
+  drag = null
+}
+
+function onClickCapture(event: MouseEvent): void {
+  if (!swallowClick) return
+  swallowClick = false
+  event.preventDefault()
+  event.stopPropagation()
+}
+
 /** Tint of the sketch outline's three slices, mirroring the old border colours. */
 function frameClass(value: string | null): (string | false)[] {
   const active = value === props.active
@@ -85,11 +135,18 @@ function chipClass(value: string | null): (string | false)[] {
     than scrollable. Both single-line call sites sit directly in that container.
   -->
   <nav
+    ref="scroller"
     :aria-label="props.label"
     :class="
       props.singleLine &&
-        'scrollbar-hidden -mx-5 w-[calc(100%+2.5rem)] min-w-0 max-w-none snap-x snap-mandatory scroll-px-5 overflow-x-auto px-5 md:mx-0 md:w-full md:max-w-full md:snap-none md:px-0'
+        'scrollbar-hidden select-none -mx-5 w-[calc(100%+2.5rem)] min-w-0 max-w-none snap-x snap-mandatory scroll-px-5 overflow-x-auto px-5 md:mx-0 md:w-full md:max-w-full md:snap-none md:px-0'
     "
+    @pointerdown="onPointerDown"
+    @pointermove="onPointerMove"
+    @pointerup="onPointerUp"
+    @pointercancel="onPointerUp"
+    @click.capture="onClickCapture"
+    @dragstart="props.singleLine && $event.preventDefault()"
   >
     <ul
       class="mx-auto flex items-start gap-3"
