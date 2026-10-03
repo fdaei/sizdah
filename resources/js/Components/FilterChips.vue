@@ -77,9 +77,19 @@ function chipClass(value: string | null): (string | false)[] {
 </script>
 
 <template>
+  <!--
+    Single-line rows swipe sideways when they overflow. Below `md` the row
+    bleeds through the 20px `.container-sizdah` gutter (-mx-5 / px-5) so the
+    next chip peeks in at the screen edge; clipped at the gutter, a hidden
+    chip could sit wholly outside the box and the row read as cut off rather
+    than scrollable. Both single-line call sites sit directly in that container.
+  -->
   <nav
     :aria-label="props.label"
-    :class="props.singleLine && 'scrollbar-hidden min-w-0 w-full max-w-full overflow-x-auto'"
+    :class="
+      props.singleLine &&
+        'scrollbar-hidden -mx-5 w-[calc(100%+2.5rem)] min-w-0 max-w-none snap-x snap-mandatory scroll-px-5 overflow-x-auto px-5 md:mx-0 md:w-full md:max-w-full md:snap-none md:px-0'
+    "
   >
     <ul
       class="mx-auto flex items-start gap-3"
@@ -88,7 +98,7 @@ function chipClass(value: string | null): (string | false)[] {
       <li
         v-for="option in props.options"
         :key="option.value ?? 'all'"
-        :class="props.singleLine && 'shrink-0'"
+        :class="props.singleLine && 'shrink-0 snap-start'"
       >
         <Link
           v-if="option.href"

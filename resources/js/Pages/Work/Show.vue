@@ -278,15 +278,21 @@ const strategyLead = computed(() =>
           follows it, so in RTL the glyph sits at the inline START (visually
           right) and the text runs after it — user decision 2026-09-11, taken
           against the earlier reading of 411:8569 (see .figma-sync/GAPS.md).
+
+          Below `md` the four chips (~765px) cannot fit, so the row swipes
+          sideways. It bleeds through the container's 20px gutter (-mx-5 /
+          px-5) so the next chip peeks in at the screen edge — clipped at the
+          gutter, the hidden chip sat wholly outside the box and the row read
+          as cut off rather than scrollable.
         -->
         <dl
           v-if="meta.length"
-          class="scrollbar-hidden flex w-full flex-nowrap justify-start gap-4 overflow-x-auto md:w-auto md:justify-center md:overflow-visible"
+          class="scrollbar-hidden -mx-5 flex snap-x snap-mandatory scroll-px-5 flex-nowrap justify-start gap-4 self-stretch overflow-x-auto px-5 md:mx-0 md:snap-none md:justify-center md:self-center md:overflow-visible md:px-0"
         >
           <div
             v-for="item in meta"
             :key="item.key"
-            class="surface-meta-chip relative flex shrink-0 items-start gap-2 rounded-lg px-[26px] py-[14px]"
+            class="surface-meta-chip relative flex shrink-0 snap-start items-start gap-2 rounded-lg px-[26px] py-[14px]"
           >
             <!--
               The outline is the hand-drawn chip drawing (.sketch-frame-chip),
