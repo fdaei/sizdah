@@ -289,7 +289,7 @@ const fieldClass =
                         v-model="phoneNumber"
                         type="tel"
                         dir="ltr"
-                        class="w-full min-w-0 bg-transparent p-3 text-body-md text-ink-1000 placeholder:text-ink-600 focus:outline-none focus:ring-0 focus:ring-offset-0"
+                        class="w-full min-w-0 border-0 bg-transparent p-3 text-body-md text-ink-1000 placeholder:text-ink-600 focus:outline-none focus:ring-0 focus:ring-offset-0"
                         :placeholder="t('forms.contact.phone_placeholder')"
                         autocomplete="tel"
                       />

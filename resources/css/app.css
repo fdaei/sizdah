@@ -54,6 +54,25 @@
     @apply outline-none ring-2 ring-brand ring-offset-2 ring-offset-ink-1000;
   }
 
+  /*
+   | Browser autofill paints its own (blue/yellow) fill over the field, which
+   | reads as a box inside the designed frame — most visibly on the transparent
+   | inputs nested in a bordered wrapper (phone, lead-magnet modal). The fill
+   | can't be overridden directly in Chromium, so its transition is stretched
+   | until it never visibly lands; the text colour is pinned back to ink.
+   */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:focus {
+    -webkit-text-fill-color: theme('colors.ink.1000');
+    caret-color: theme('colors.ink.1000');
+    transition:
+      background-color 600000s 0s,
+      color 600000s 0s;
+  }
+
   img,
   video,
   svg {
