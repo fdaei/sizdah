@@ -32,4 +32,4 @@
         </div>
     </body>
 </html>
-<?php /**PATH /home/fdaei/project/my/sizdah/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/views/minimal.blade.php ENDPATH**/ ?>
+<?php /**PATH /home/fdaei/workspace/mine/phc-frontend/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/views/minimal.blade.php ENDPATH**/ ?>

@@ -450,90 +450,118 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 767px) {
+  /*
+   | Sections stack in normal flow on mobile. They used to be pinned at fixed
+   | `top` offsets inside a 3689px box, so any block whose copy ran longer than
+   | its reserved height (the story, at 360px wide) slid under the next one.
+   | The margins below keep the mobile frame's rhythm between blocks.
+   */
   .about-page {
-    min-height: 3689px;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding-top: 132px;
+    padding-bottom: 158px;
   }
 
   .about-page > .container-sizdah {
-    position: relative;
-    height: 3689px;
     gap: 0;
   }
 
-  .about-hero,
-  .about-story,
-  .about-think,
-  .about-team,
-  .about-cta {
-    position: absolute;
-    inset-inline: 20px;
-  }
-
+  /*
+   | Mobile type scale. The desktop sizes come straight off the 1440 frame, but
+   | carried down to a 390px phone they flattened the hierarchy (a 28px h1 over
+   | a 26px subline) and set running Persian copy at 20-22px on 1.25 leading.
+   | Below `md` the page follows Home's mobile tiers instead: 28px section
+   | heads, 16px body, 14px card copy, and 1.7-1.8 leading for Persian text.
+   */
   .about-hero {
-    top: 132px;
-    display: block;
-    height: 534px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
   }
 
   .about-hero > div:first-child {
-    position: absolute;
-    inset-inline: 0;
-    top: 15px;
-    gap: 33px;
+    gap: 16px;
+  }
+
+  .about-hero h1 {
+    font-size: 32px;
+    line-height: 1.4;
+  }
+
+  .about-hero > div:first-child > p:nth-of-type(1) {
+    font-size: 22px;
+    line-height: 1.6;
+  }
+
+  .about-hero > div:first-child > p:nth-of-type(2) {
+    font-size: 16px;
+    line-height: 1.8;
   }
 
   .about-hero > img {
-    position: absolute;
-    top: 264px;
-    inset-inline: 7px;
-    width: 348px;
-    height: 261px;
-    object-fit: cover;
+    width: 100%;
+    max-width: 348px;
+    height: auto;
   }
 
   .about-story {
-    top: 737px;
-    display: block;
-    height: 430px;
+    margin-top: 72px;
   }
 
   .about-story > div {
-    gap: 32px;
+    gap: 24px;
   }
 
-  .about-story .rich-prose {
+  .about-story .about-story-heading img {
+    width: 44px;
+    height: 44px;
+  }
+
+  .about-story > div > div:last-child {
+    gap: 16px;
+  }
+
+  .about-story > div > div:last-child > p {
     font-size: 18px;
-    line-height: normal;
+    line-height: 1.8;
   }
 
-  .about-think {
-    top: 1123px;
-    display: block;
-    height: 1110px;
+  .about-story .rich-prose :deep(p) {
+    font-size: 16px;
+    line-height: 1.8;
   }
 
-  .about-think > div:first-child {
-    position: absolute;
-    top: 132px;
-    inset-inline: 0;
+  .about-story .rich-prose :deep(p + p) {
+    margin-block-start: 16px;
+  }
+
+  .about-think,
+  .about-team {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-top: 72px;
+  }
+
+  .about-think > div:first-child,
+  .about-team > div:first-child {
+    gap: 12px;
+  }
+
+  .about-think > div:first-child > p,
+  .about-team > div:first-child > p {
+    font-size: 16px;
+    line-height: 1.8;
   }
 
   .about-think > ul {
-    position: absolute;
-    top: 268px;
-    inset-inline: 0;
-    display: block;
-    height: 896px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 
   .about-think > ul > li {
-    position: absolute;
-    inset-inline: 0;
-    height: 208px;
-    padding: 32px;
-    gap: 24px;
+    padding: 24px;
+    gap: 20px;
   }
 
   .about-think > ul > li > img {
@@ -541,37 +569,33 @@ onBeforeUnmount(() => {
     height: 32px;
   }
 
+  .about-think > ul > li > div {
+    gap: 8px;
+  }
+
   .about-think > ul > li h3 {
-    font-size: 20px;
-    line-height: normal;
+    font-size: 18px;
+    line-height: 1.5;
   }
 
   .about-think > ul > li p {
-    font-size: 16px;
-    line-height: normal;
+    font-size: 14px;
+    line-height: 1.7;
   }
 
-  .about-think > ul > li:nth-child(1) { top: 0; }
-  .about-think > ul > li:nth-child(2) { top: 224px; }
-  .about-think > ul > li:nth-child(3) { top: 448px; }
-  .about-think > ul > li:nth-child(4) { top: 672px; }
-
-  .about-team {
-    top: 2359px;
-    display: block;
-    height: 400px;
+  .about-team .team-carousel-list > li > div {
+    padding: 12px;
+    gap: 2px;
   }
 
-  .about-team > div:first-child {
-    position: absolute;
-    top: 0;
-    inset-inline: 0;
+  .about-team .team-carousel-list > li > div > p:first-child {
+    font-size: 18px;
+    line-height: 1.5;
   }
 
-  .about-team .team-carousel {
-    position: absolute;
-    top: 130px;
-    inset-inline: 0;
+  .about-team .team-carousel-list > li > div > p:last-child {
+    font-size: 14px;
+    line-height: 1.6;
   }
 
   .about-team .team-carousel-list {
@@ -591,8 +615,7 @@ onBeforeUnmount(() => {
   }
 
   .about-cta {
-    top: 2824px;
-    inset-inline: 20px;
+    margin-top: 71px;
     padding: 32px 16px;
   }
 
@@ -614,6 +637,21 @@ onBeforeUnmount(() => {
 
   .about-cta > div.relative > div > div > div {
     text-align: center;
+  }
+
+  .about-cta :deep(h2) {
+    font-size: 24px;
+    line-height: 1.5;
+  }
+
+  .about-cta :deep(h2 + p) {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  .about-cta :deep(p.text-body-lg) {
+    font-size: 14px;
+    line-height: 1.7;
   }
 
   .about-cta :deep(img[width='592']) {
