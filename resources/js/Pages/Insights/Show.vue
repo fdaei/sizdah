@@ -9,8 +9,6 @@ import StartTogetherCard from '@/Components/StartTogetherCard.vue'
 import { useTranslations } from '@/Composables/useTranslations'
 import type { PageSectionData, PostDetail, SeoMeta } from '@/types'
 import relatedRuleUrl from '~img/sizdah/insights/related-rule.svg'
-import figmaArticleCoverUrl from '~img/sizdah/insights/article-1077-raw-1.png'
-import figmaRelatedCoverUrl from '~img/sizdah/insights/article-1077-related.png'
 
 /**
  * Article — Figma 285:4590 (the frame is named "blog list"; its content is a
@@ -52,42 +50,12 @@ const props = defineProps<{
 
 const { t } = useTranslations()
 
-/** The selected mobile frame is authored against this article's exact copy. */
-const figmaArticle = computed(() => {
-  if (!['محتوا-بدون-جهت', 'content-without-direction'].includes(props.post.slug)) {
-    return props.post
-  }
-
-  return {
-    ...props.post,
-    title: 'هر برند داستان خودش را دارد',
-    subtitle: 'وقتی محتوای شما هدف و جهت روشنی نداشته باشد، پراکنده و بی‌اثر می‌شود؛ در نتیجه نمی‌تواند مخاطب را جذب کند یا به رشد واقعی کسب‌وکارتان کمک کند',
-    image: {
-      src: figmaArticleCoverUrl,
-      alt: '',
-      width: 1024,
-      height: 1536,
-    },
-    content: `
-      <h3>بیشتر برندها در تولید محتوا مشکل ندارند؛ مشکل اصلی‌شان نداشتن مسیر مشخص است</h3>
-      <p>در ابتدا همه‌چیز شبیه پیشرفت به نظر می‌رسد؛ محتوا تولید می‌شود، صفحات فعال هستند و برند در پلتفرم‌های مختلف حضور دارد. اما بعد از مدتی، تغییر ظریفی اتفاق می‌افتد و با وجود تمام این فعالیت‌ها، احساس می‌کنید برند واقعاً در مسیر معناداری رو به جلو حرکت نمی‌کند.</p>
-      <h3>شما مشغول می‌مانید، اما برندتان پیشرفت نمی‌کند</h3>
-      <p>در ابتدا همه‌چیز شبیه پیشرفت به نظر می‌رسد؛ محتوا تولید می‌شود، صفحات فعال هستند و برند در پلتفرم‌های مختلف حضور دارد. اما بعد از مدتی، تغییر ظریفی اتفاق می‌افتد و با وجود تمام این فعالیت‌ها، احساس می‌کنید برند واقعاً در مسیر معناداری رو به جلو حرکت نمی‌کند.</p>
-    `,
-  }
-})
-const isFigmaArticle = computed(() => figmaArticle.value !== props.post)
-const figmaRelatedPosts = computed(() => props.post.related.slice(0, 2).map((post) => ({
-  ...post,
-  image: { src: figmaRelatedCoverUrl, alt: '', width: 1086, height: 1448 },
-})))
-
 // The article editor exposes [[lead_magnet]] as an insertion marker. Keep the
 // authored rich text intact while replacing that marker with the actual
 // interactive banner at render time.
 const articleContent = computed(() => {
   const marker = '[[lead_magnet]]'
-  const content = figmaArticle.value.content
+  const content = props.post.content
   const index = content.indexOf(marker)
 
   if (index < 0) {
@@ -112,10 +80,7 @@ const articleContent = computed(() => {
     Content starts at y=207 — 99px clear of the 108px fixed header, not the
     72px `section-first` assumes for the other pages.
   -->
-  <article
-    class="section-first overflow-x-clip max-md:pt-[188px] md:pt-[207px]"
-    :class="isFigmaArticle ? 'pb-[149px]' : 'pb-[123px]'"
-  >
+  <article class="section-first overflow-x-clip pb-[123px] max-md:pt-[188px] md:pt-[207px]">
     <div class="container-sizdah relative isolate flex flex-col">
       <!--
         285:5060 — a 670 track wrapping the 612 column (285:5061) whose title
@@ -128,14 +93,10 @@ const articleContent = computed(() => {
       <header class="mx-auto flex max-w-[670px] flex-col items-center gap-[88px] max-md:gap-[30px]" data-reveal>
         <div class="flex w-full max-w-measure flex-col items-center gap-6 text-center max-md:gap-6">
           <h1 class="text-display-md text-ink-50 max-md:text-[26px] max-md:leading-[36px]">
-            <template v-if="isFigmaArticle">
-              <span class="block">هر برند</span>
-              <span class="block">داستان خودش را دارد</span>
-            </template>
-            <template v-else>{{ figmaArticle.title }}</template>
+            {{ props.post.title }}
           </h1>
-          <p v-if="figmaArticle.subtitle" class="text-title-sm text-ink-200 max-md:text-[16px] max-md:leading-[22px]">
-            {{ figmaArticle.subtitle }}
+          <p v-if="props.post.subtitle" class="text-title-sm text-ink-200 max-md:text-[16px] max-md:leading-[22px]">
+            {{ props.post.subtitle }}
           </p>
         </div>
 
@@ -143,21 +104,21 @@ const articleContent = computed(() => {
       </header>
 
       <img
-        v-if="figmaArticle.image"
-        :src="figmaArticle.image.src"
-        :srcset="figmaArticle.image.srcset"
-        :alt="figmaArticle.image.alt"
-        :width="figmaArticle.image.width"
-        :height="figmaArticle.image.height"
+        v-if="props.post.image"
+        :src="props.post.image.src"
+        :srcset="props.post.image.srcset"
+        :alt="props.post.image.alt"
+        :width="props.post.image.width"
+        :height="props.post.image.height"
         class="mt-16 aspect-[1248/624] w-full rounded-lg object-cover max-md:mt-[32px] max-md:aspect-[362/272]"
         data-reveal
       />
 
+      <!-- Mobile frame 1077:7197 — the share row sits under the cover. -->
       <div
-        v-if="isFigmaArticle"
         class="ms-auto mt-10 hidden w-[176px] max-md:sticky max-md:top-[124px] max-md:z-40 max-md:block"
       >
-        <ArticleShare :url="props.seo.canonical" :title="figmaArticle.title" />
+        <ArticleShare :url="props.seo.canonical" :title="props.post.title" />
       </div>
 
       <!--
@@ -180,14 +141,14 @@ const articleContent = computed(() => {
         >
           <ArticleShare
             :url="props.seo.canonical"
-            :title="figmaArticle.title"
+            :title="props.post.title"
             class="pointer-events-auto sticky top-[108px]"
           />
         </div>
 
         <div class="mx-auto w-full max-w-[831px]">
           <!-- eslint-disable-next-line vue/no-v-html -- admin-authored rich text -->
-          <div class="rich-prose rich-prose-article" :class="isFigmaArticle ? 'figma-article-prose' : ''" v-html="articleContent.before" />
+          <div class="rich-prose rich-prose-article figma-article-prose" v-html="articleContent.before" />
         </div>
       </div>
 
@@ -199,7 +160,7 @@ const articleContent = computed(() => {
         dropped rather than inherited.
       -->
       <div
-        v-if="props.leadMagnet && articleContent.hasMarker && !isFigmaArticle"
+        v-if="props.leadMagnet && articleContent.hasMarker"
         class="mx-auto mt-[72px] w-full max-w-[826px]"
       >
         <LeadMagnetBanner :section="props.leadMagnet" source="article" />
@@ -210,18 +171,18 @@ const articleContent = computed(() => {
         class="mx-auto mt-[72px] w-full max-w-[831px]"
       >
         <!-- eslint-disable-next-line vue/no-v-html -- admin-authored rich text -->
-        <div class="rich-prose rich-prose-article" :class="isFigmaArticle ? 'figma-article-prose' : ''" v-html="articleContent.after" />
+        <div class="rich-prose rich-prose-article figma-article-prose" v-html="articleContent.after" />
       </div>
 
       <div
-        v-if="props.leadMagnet && !articleContent.hasMarker && !isFigmaArticle"
+        v-if="props.leadMagnet && !articleContent.hasMarker"
         class="mx-auto mt-[72px] w-full max-w-[826px]"
       >
         <LeadMagnetBanner :section="props.leadMagnet" source="article" />
       </div>
 
-      <section v-if="props.post.related.length" :class="isFigmaArticle ? 'mt-[244px]' : 'mt-[81px]'" class="flex flex-col gap-12">
-        <h2 v-if="!isFigmaArticle" class="relative w-fit text-display-sm font-semibold text-ink-50">
+      <section v-if="props.post.related.length" class="mt-[81px] flex flex-col gap-12">
+        <h2 class="relative w-fit text-display-sm font-semibold text-ink-50">
           {{ t('blog.related') }}
           <!-- 294:7700 — a hand-drawn rule under the heading. -->
           <img
@@ -233,22 +194,13 @@ const articleContent = computed(() => {
             class="pointer-events-none absolute inline-end-0 top-full mt-1 hidden w-32 sm:block"
           />
         </h2>
-        <div
-          class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-          :class="isFigmaArticle ? 'max-md:flex max-md:w-max' : ''"
-          :data-reveal-group="!isFigmaArticle ? true : undefined"
-        >
-          <BlogCard
-            v-for="related in (isFigmaArticle ? figmaRelatedPosts : props.post.related)"
-            :key="related.slug"
-            :post="related"
-            :class="isFigmaArticle ? 'max-md:w-[262px]' : ''"
-          />
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+          <BlogCard v-for="related in props.post.related" :key="related.slug" :post="related" />
         </div>
       </section>
 
       <StartTogetherCard
-        v-if="props.finalCta && !isFigmaArticle"
+        v-if="props.finalCta"
         :section="props.finalCta"
         class="mt-[224px]"
         data-reveal

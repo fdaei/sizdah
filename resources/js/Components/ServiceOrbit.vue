@@ -17,6 +17,7 @@ import gridDoodleUrl from '~img/sizdah/home/orbit-grid.svg'
 import scribbleUrl from '~img/sizdah/home/orbit-scribble.svg'
 import crossUrl from '~img/sizdah/home/orbit-cross.svg'
 import dotsUrl from '~img/sizdah/home/orbit-dots.svg'
+import { headingColors } from '@/lib/sectionColors'
 
 /**
  * Services band — Figma 268:3032, the one cream (#FDFCFA) section on Home.
@@ -123,6 +124,7 @@ const nodes = computed(() => {
         :eyebrow="props.section.eyebrow"
         :title="props.section.title"
         :subtitle="props.section.subtitle || props.section.description"
+        :colors="headingColors(props.section)"
         tone="light"
         subtitle-width="md:max-w-[505px]"
       />
@@ -137,6 +139,7 @@ const nodes = computed(() => {
         :eyebrow="props.section.eyebrow"
         :title="props.section.title"
         :subtitle="props.section.subtitle || props.section.description"
+        :colors="headingColors(props.section)"
         tone="light"
         class="gap-6 [&>div]:gap-5 [&>div>h2]:text-[26px] [&>div>h2]:leading-[34px] [&>div>p]:text-[16px] [&>div>p]:leading-[24px]"
       />

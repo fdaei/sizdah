@@ -3261,7 +3261,7 @@
       "tag": "span",
       "path": "div:nth-of-type(2)>nav>ul>li:nth-of-type(5)>a>span:nth-of-type(4)",
       "cls": "relative",
-      "text": "پشتیبانی شبکه های اجتماعی",
+      "text": "پشتیبانی سوشال مدیا",
       "box": {
         "x": -282,
         "y": 398,
@@ -5481,7 +5481,7 @@
       "tag": "span",
       "path": "article:nth-of-type(2)>a>div:nth-of-type(2)>ul>li:nth-of-type(2)>span:nth-of-type(2)",
       "cls": "whitespace-nowrap text-body-md text-ink-100 max-md:text-[12px] max-md:leading-[17px]",
-      "text": "پشتیبانی شبکه های اجتماعی",
+      "text": "پشتیبانی سوشال مدیا",
       "box": {
         "x": 176,
         "y": 1563.75,
@@ -7641,7 +7641,7 @@
       "tag": "span",
       "path": "article:nth-of-type(4)>a>div:nth-of-type(2)>ul>li:nth-of-type(2)>span:nth-of-type(2)",
       "cls": "whitespace-nowrap text-body-md text-ink-100 max-md:text-[12px] max-md:leading-[17px]",
-      "text": "پشتیبانی شبکه های اجتماعی",
+      "text": "پشتیبانی سوشال مدیا",
       "box": {
         "x": 166,
         "y": 2736.75,

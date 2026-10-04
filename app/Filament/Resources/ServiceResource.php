@@ -12,6 +12,7 @@ use App\Models\Service;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -104,10 +105,13 @@ final class ServiceResource extends Resource
                                     ->default(0)
                                     ->helperText('Lower numbers appear first.'),
 
-                                TextInput::make('icon')
-                                    ->label('Icon name')
-                                    ->maxLength(50)
-                                    ->helperText('Technical icon identifier. Leave the current value unchanged if unsure.'),
+                                // The artwork keys ServiceOrbit.vue places on the home services band.
+                                Select::make('icon')
+                                    ->label('Home illustration')
+                                    ->native(false)
+                                    ->options(fn (): array => collect(['video', 'palette', 'share-2', 'megaphone'])
+                                        ->mapWithKeys(fn (string $key): array => [$key => __("admin.section_icons.{$key}")])
+                                        ->all()),
                             ]),
                     ]),
 

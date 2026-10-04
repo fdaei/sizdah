@@ -7,6 +7,8 @@ import arrowUrl from '~img/sizdah/shared/cta-arrow.svg'
 import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
 import sidewalkProjectUrl from '~img/sizdah/home/sidewalk-project.jpeg'
 import projectCategoryUrl from '~img/sizdah/home/project-category.svg'
+import { headingColors } from '@/lib/sectionColors'
+import { useTranslations } from '@/Composables/useTranslations'
 
 /**
  * Projects showcase — Figma 268:3461 (heading), 268:3539 (530x663 image) and
@@ -35,6 +37,8 @@ const props = defineProps<{
   section: PageSectionData
   projects: ProjectSummary[]
 }>()
+
+const { t } = useTranslations()
 
 const active = ref(0)
 const touchStartX = ref<number | null>(null)
@@ -87,6 +91,7 @@ onBeforeUnmount(() => {
         :eyebrow="props.section.eyebrow"
         :title="props.section.title"
         :subtitle="props.section.subtitle || props.section.description"
+        :colors="headingColors(props.section)"
         split-class="lg:grid-cols-[minmax(0,615px)_minmax(0,530px)] lg:justify-between lg:gap-x-16"
       />
 
@@ -142,7 +147,7 @@ onBeforeUnmount(() => {
                     height="24"
                     class="size-6 flip-rtl"
                   />
-                  <span>{{ props.section.content || 'جزییات پروژه' }}</span>
+                  <span>{{ props.section.content || t('work.project_details') }}</span>
                 </Link>
               </div>
 
@@ -195,7 +200,7 @@ onBeforeUnmount(() => {
               class="flex items-center gap-1 text-[14px] font-medium leading-[20px] text-paper"
             >
               <img :src="arrowUrl" alt="" aria-hidden="true" width="24" height="24" class="size-6 flip-rtl" />
-              <span>{{ props.section.content || 'جزییات پروژه' }}</span>
+              <span>{{ props.section.content || t('work.project_details') }}</span>
             </Link>
             <Link :href="props.projects[active].url" class="text-[24px] font-semibold leading-[30px] text-paper">
               {{ props.projects[active].title }}
@@ -223,8 +228,8 @@ onBeforeUnmount(() => {
             <img
               v-for="(project, index) in props.projects"
               :key="project.slug"
-              :src="index === 0 ? sidewalkProjectUrl : project.image?.src"
-              :srcset="index === 0 ? undefined : project.image?.srcset"
+              :src="project.image?.src ?? sidewalkProjectUrl"
+              :srcset="project.image?.srcset"
               :alt="project.image?.alt ?? project.title"
               width="530"
               height="663"

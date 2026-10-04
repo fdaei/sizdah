@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
 import SeoHead from '@/Components/SeoHead.vue'
+import { sectionColor } from '@/lib/sectionColors'
 import type {
   PageSectionData,
   SectionItem,
@@ -235,7 +236,7 @@ onBeforeUnmount(() => {
       >
         <div class="flex flex-col items-start gap-6 text-start" data-reveal>
           <h1 class="flex flex-wrap items-center gap-x-2 text-hero-line font-bold text-ink-50">
-            <span>{{ hero.title }}</span>
+            <span :style="sectionColor(hero, 'title')">{{ hero.title }}</span>
             <img
               v-if="showHeroScript"
               :src="heroScriptUrl"
@@ -245,14 +246,18 @@ onBeforeUnmount(() => {
               height="46"
               class="inline-block h-[0.96em] w-auto"
             />
-            <span v-if="hero.subtitle">{{ hero.subtitle }}</span>
+            <span v-if="hero.subtitle" :style="sectionColor(hero, 'subtitle')">{{ hero.subtitle }}</span>
           </h1>
 
-          <p v-if="hero.content" class="text-heading-md text-brand-200 max-md:text-[26px] max-md:leading-[36px]">
+          <p
+            v-if="hero.content"
+            class="text-heading-md text-brand-200 max-md:text-[26px] max-md:leading-[36px]"
+            :style="sectionColor(hero, 'content')"
+          >
             {{ hero.content }}
           </p>
 
-          <p v-if="hero.description" class="text-title-sm text-ink-200">
+          <p v-if="hero.description" class="text-title-sm text-ink-200" :style="sectionColor(hero, 'description')">
             {{ hero.description }}
           </p>
         </div>
@@ -294,16 +299,21 @@ onBeforeUnmount(() => {
         <div class="mx-auto flex max-w-[824px] flex-col items-center gap-10 text-center lg:gap-20">
           <div class="about-story-heading flex flex-row-reverse items-center gap-2">
             <img :src="figmaStoryIconUrl" alt="" aria-hidden="true" class="size-14" />
-            <h2 class="text-section-line text-brand-50">{{ story.title }}</h2>
+            <h2 class="text-section-line text-brand-50" :style="sectionColor(story, 'title')">{{ story.title }}</h2>
           </div>
 
           <div class="flex flex-col gap-6">
-            <p v-if="story.description" class="text-title-lg text-ink-200">
+            <p v-if="story.description" class="text-title-lg text-ink-200" :style="sectionColor(story, 'description')">
               {{ story.description }}
             </p>
 
             <!-- eslint-disable-next-line vue/no-v-html -- admin-authored rich text -->
-            <div v-if="story.content" class="rich-prose" v-html="story.content" />
+            <div
+              v-if="story.content"
+              class="rich-prose"
+              :style="story.colors.content ? { '--prose-color': story.colors.content } : undefined"
+              v-html="story.content"
+            />
           </div>
         </div>
       </section>
@@ -313,9 +323,13 @@ onBeforeUnmount(() => {
         <div
           class="flex flex-col items-start gap-4 text-start md:flex-row md:items-center md:justify-between md:gap-16"
         >
-          <h2 class="text-section-line text-brand-50">{{ think.title }}</h2>
+          <h2 class="text-section-line text-brand-50" :style="sectionColor(think, 'title')">{{ think.title }}</h2>
 
-          <p v-if="think.description" class="max-w-[506px] text-title-md text-ink-200">
+          <p
+            v-if="think.description"
+            class="max-w-[506px] text-title-md text-ink-200"
+            :style="sectionColor(think, 'description')"
+          >
             {{ think.description }}
           </p>
         </div>
@@ -352,12 +366,10 @@ onBeforeUnmount(() => {
 
             <div class="flex flex-col gap-6">
               <h3 class="text-heading-sm text-brand-50">
-                <span class="max-md:hidden">{{ item.title }}</span>
-                <span class="hidden max-md:inline">شناخت، قبل از اجرا</span>
+                {{ item.title }}
               </h3>
               <p v-if="item.description" class="text-title-sm text-ink-300">
-                <span class="max-md:hidden">{{ item.description }}</span>
-                <span class="hidden max-md:inline">اول مسئله و مخاطب را می‌فهمیم، بعد وارد اجرا می‌شویم</span>
+                {{ item.description }}
               </p>
             </div>
           </li>
@@ -369,11 +381,19 @@ onBeforeUnmount(() => {
         <div
           class="flex flex-col items-start gap-4 text-start md:flex-row md:items-center md:justify-between md:gap-16"
         >
-          <h2 v-if="teamSection?.title" class="text-section-line text-brand-50">
+          <h2
+            v-if="teamSection?.title"
+            class="text-section-line text-brand-50"
+            :style="sectionColor(teamSection, 'title')"
+          >
             {{ teamSection.title }}
           </h2>
 
-          <p v-if="teamSection?.description" class="max-w-[506px] text-title-md text-ink-200">
+          <p
+            v-if="teamSection?.description"
+            class="max-w-[506px] text-title-md text-ink-200"
+            :style="sectionColor(teamSection, 'description')"
+          >
             {{ teamSection.description }}
           </p>
         </div>

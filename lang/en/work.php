@@ -25,5 +25,6 @@ return [
     'after'           => 'After',
     'results'         => 'Results',
     'next_case_study' => 'Next project',
+    'project_details' => 'Project details',
 
 ];

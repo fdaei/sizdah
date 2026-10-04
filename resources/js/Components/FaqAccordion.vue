@@ -4,6 +4,7 @@ import type { FaqItem, PageSectionData } from '@/types'
 import illustrationUrl from '~img/sizdah/home/faq-illustration.svg'
 import plusUrl from '~img/sizdah/home/faq-plus.svg'
 import minusUrl from '~img/sizdah/home/faq-minus.svg'
+import { headingColors } from '@/lib/sectionColors'
 
 /**
  * FAQ — Figma "FAQ section" 434:5512, with the heading at 434:5470, the
@@ -35,6 +36,7 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
             :eyebrow="props.section.eyebrow"
             :title="props.section.title"
             :subtitle="props.section.subtitle || props.section.description"
+            :colors="headingColors(props.section)"
             layout="stacked"
           />
 
@@ -58,7 +60,10 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
               <summary
                 class="flex cursor-pointer list-none items-center justify-between gap-6 [&::-webkit-details-marker]:hidden"
               >
-                <span class="text-title-md text-ink-1000 max-md:text-[14px] max-md:leading-[20px]">{{ faq.question }}</span>
+                <span
+                  class="text-title-md text-ink-1000 max-md:text-[14px] max-md:leading-[20px]"
+                  >{{ faq.question }}</span
+                >
 
                 <img
                   :src="plusUrl"
@@ -78,7 +83,11 @@ const props = defineProps<{ section: PageSectionData; faqs: FaqItem[] }>()
                 />
               </summary>
 
-              <p class="mt-4 text-body-lg text-warm-700 max-md:mt-2 max-md:text-[12px] max-md:leading-[17px]">{{ faq.answer }}</p>
+              <p
+                class="mt-4 text-body-lg text-warm-700 max-md:mt-2 max-md:text-[12px] max-md:leading-[17px]"
+              >
+                {{ faq.answer }}
+              </p>
             </details>
           </li>
         </ul>

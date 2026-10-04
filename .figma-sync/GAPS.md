@@ -2711,7 +2711,7 @@ and is now resolved separately — see G-chip below.
 ## G-chip — the filter chips get their own sketch outline (2026-09-11)
 
 The user supplied a chip-sized hand-drawn frame (105 x 46) for the filter row —
-`همه / برندینگ / تولید محتوا / مارکتینگ / پشتیبانی شبکه های اجتماعی` on
+`همه / برندینگ / تولید محتوا / مارکتینگ / پشتیبانی سوشال مدیا` on
 `Work/Index.vue`, the insights listing and the case-study showcase — so the
 deferral above is lifted. It is a *second* drawing, not the card frame scaled:
 the card frame's nine-slice needs 32px corners a 44px chip cannot give.
@@ -2902,3 +2902,13 @@ Replaced with the standard overlay: `relative` box + a masked
 `.sketch-frame-chip bg-brand-300` span at `inset-0`, padding moved to
 `px-[26px] py-[14px]` so the box measures the same as 24px + a 2px border did.
 The `.surface-meta-chip` gradient ground is unchanged.
+
+## G73 — Article share rail: 12px padding, 48px circles  (2026-10-04)  (severity: low)
+
+**Node.** `690:7022` ("Frame 95907").
+
+The frame draws the share circles at 68px around a 24px glyph. Per the
+user's request (2026-10-04), the buttons in `ArticleShare.vue` now use a flat
+12px padding (`p-3`) around the 24px glyph, i.e. 48px circles at every
+breakpoint. Mobile was already 48px (`max-md:size-12`), so only desktop
+changes. This is a deliberate departure from the frame, not a misread.

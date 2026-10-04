@@ -242,6 +242,9 @@ final class PageSeeder extends Seeder
                 'description' => 'سیستم محتوای برند خود را بررسی کنید و ببینید چقدر با اهداف شما هماهنگ است.',
                 'primary_cta_label' => 'دریافت چک‌لیست',
                 'primary_cta_url' => '/contact',
+                // Home's large strip (391:4795) labels the button with this
+                // one; the article strip keeps the primary label above.
+                'secondary_cta_label' => 'شروع گفتگو',
             ],
             'ar' => [
                 'title' => 'هل لمحتواك مسار واضح أم أنه يستمر فحسب؟',

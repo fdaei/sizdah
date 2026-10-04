@@ -3139,7 +3139,7 @@
       "tag": "a",
       "path": "header>div:nth-of-type(2)>nav>ul>li:nth-of-type(5)>a",
       "cls": "inline-flex items-center justify-center rounded-lg px-6 py-3 text-body-lg transition-colors duration-200 ease-brand border-2 border-ink-300 text-paper hover:border-paper",
-      "text": "پشتیبانی شبکه های اجتماعی",
+      "text": "پشتیبانی سوشال مدیا",
       "box": {
         "x": 363,
         "y": 457.86,
@@ -9319,7 +9319,7 @@
       "tag": "span",
       "path": "article:nth-of-type(2)>a>div:nth-of-type(2)>ul>li:nth-of-type(2)>span:nth-of-type(2)",
       "cls": "text-body-md text-ink-100",
-      "text": "پشتیبانی شبکه های اجتماعی",
+      "text": "پشتیبانی سوشال مدیا",
       "box": {
         "x": 482,
         "y": 2098.52,

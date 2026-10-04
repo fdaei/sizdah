@@ -10,7 +10,7 @@ import ProjectShowcase from '@/Components/ProjectShowcase.vue'
 import SectionHeading from '@/Components/SectionHeading.vue'
 import ProcessStepCard from '@/Components/ProcessStepCard.vue'
 import WhyUsGrid from '@/Components/WhyUsGrid.vue'
-import TestimonialCard from '@/Components/TestimonialCard.vue'
+import TestimonialCarousel from '@/Components/TestimonialCarousel.vue'
 import InsightsShowcase from '@/Components/InsightsShowcase.vue'
 import FaqAccordion from '@/Components/FaqAccordion.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
@@ -19,6 +19,7 @@ import heroMobileBgUrl from '~img/sizdah/home/hero-bg-mobile.webp'
 import trustMarkUrl from '~img/sizdah/clients/trust-divider.svg'
 import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
 import heroNoteArrowUrl from '~img/sizdah/shared/hero-note-icon.svg'
+import { headingColors, sectionColor } from '@/lib/sectionColors'
 import type {
   ClientItem,
   PostSummary,
@@ -64,6 +65,15 @@ const props = defineProps<{
 }>()
 
 const hero = computed(() => props.sections.hero)
+
+/*
+ | An image uploaded on the hero section in Filament replaces the bundled art
+ | at every width; without one, the desktop/mobile Figma exports are used.
+ */
+const heroBackground = computed(() => ({
+  desktop: hero.value?.image?.src ?? heroDesktopBgUrl,
+  mobile: hero.value?.image?.src ?? heroMobileBgUrl,
+}))
 
 /**
  * The hero's ground. The shipped art already has the hairline mesh, the warm
@@ -171,32 +181,6 @@ onBeforeUnmount(() => {
   cancelAnimationFrame(clientFrame)
   clientResize?.disconnect()
 })
-
-const activeTestimonial = ref(0)
-const testimonialTouchStart = ref<number | null>(null)
-
-function showTestimonial(index: number) {
-  activeTestimonial.value = (index + props.testimonials.length) % props.testimonials.length
-}
-
-function nextTestimonial() {
-  showTestimonial(activeTestimonial.value + 1)
-}
-
-function previousTestimonial() {
-  showTestimonial(activeTestimonial.value - 1)
-}
-
-function startTestimonialSwipe(event: TouchEvent) {
-  testimonialTouchStart.value = event.changedTouches[0]?.clientX ?? null
-}
-
-function endTestimonialSwipe(event: TouchEvent) {
-  if (testimonialTouchStart.value === null) return
-  const distance = event.changedTouches[0].clientX - testimonialTouchStart.value
-  if (Math.abs(distance) > 40) distance > 0 ? previousTestimonial() : nextTestimonial()
-  testimonialTouchStart.value = null
-}
 </script>
 
 <template>
@@ -216,12 +200,15 @@ function endTestimonialSwipe(event: TouchEvent) {
   <section
     class="home-hero relative overflow-hidden bg-top bg-no-repeat pt-[132px] pb-12 sm:pb-16 md:pt-[180px] max-md:h-[619px] lg:min-h-[783px] lg:pb-24"
     :style="{
-      '--hero-bg-desktop': `url(${heroDesktopBgUrl})`,
-      '--hero-bg-mobile': `url(${heroMobileBgUrl})`,
+      '--hero-bg-desktop': `url(${heroBackground.desktop})`,
+      '--hero-bg-mobile': `url(${heroBackground.mobile})`,
     }"
   >
     <div class="container-sizdah relative">
-      <div class="flex min-w-0 flex-col gap-5 sm:gap-6 lg:max-w-[566px] lg:gap-0 lg:pt-4" data-reveal-group>
+      <div
+        class="flex min-w-0 flex-col gap-5 sm:gap-6 lg:max-w-[566px] lg:gap-0 lg:pt-4"
+        data-reveal-group
+      >
         <!--
           394:4964 — a 221px label over a 2px brand rule. Not the dotted
           `.eyebrow` used by the section headers further down the page; this
@@ -231,7 +218,7 @@ function endTestimonialSwipe(event: TouchEvent) {
           v-if="hero?.eyebrow"
           class="flex w-fit max-w-full flex-col gap-px text-label-lg text-ink-100 lg:max-w-[221px] lg:whitespace-nowrap max-md:hidden"
         >
-          <span>{{ hero.eyebrow }}</span>
+          <span :style="sectionColor(hero, 'eyebrow')">{{ hero.eyebrow }}</span>
           <img
             :src="underlineUrl"
             alt=""
@@ -240,17 +227,40 @@ function endTestimonialSwipe(event: TouchEvent) {
           />
         </p>
 
-        <h1 v-if="hero" class="me-4 flex w-auto flex-col gap-4 text-start max-md:mt-[32px] sm:gap-3 lg:me-0 lg:mt-[47.5px] lg:gap-4">
-          <span class="text-hero-line text-paper max-md:text-[32px] max-md:leading-[40px]">{{ hero.title }}</span>
-          <span class="text-hero-accent text-brand max-md:text-[40px] max-md:leading-[51px]">{{ hero.subtitle }}</span>
-          <span class="text-hero-line text-paper max-md:text-[32px] max-md:leading-[40px]">{{ hero.description }}</span>
+        <h1
+          v-if="hero"
+          class="me-4 flex w-auto flex-col gap-4 text-start max-md:mt-[32px] sm:gap-3 lg:me-0 lg:mt-[47.5px] lg:gap-4"
+        >
+          <span
+            class="text-hero-line text-paper max-md:text-[32px] max-md:leading-[40px]"
+            :style="sectionColor(hero, 'title')"
+            >{{ hero.title }}</span
+          >
+          <span
+            class="text-hero-accent text-brand max-md:text-[40px] max-md:leading-[51px]"
+            :style="sectionColor(hero, 'subtitle')"
+            >{{ hero.subtitle }}</span
+          >
+          <span
+            class="text-hero-line text-paper max-md:text-[32px] max-md:leading-[40px]"
+            :style="sectionColor(hero, 'description')"
+            >{{ hero.description }}</span
+          >
         </h1>
 
-        <p v-if="hero?.content" class="max-w-[506px] text-title-sm text-ink-200 max-md:mt-[42px] max-md:text-[14px] max-md:leading-[20px] sm:leading-relaxed lg:mt-[59px]">
+        <p
+          v-if="hero?.content"
+          class="max-w-[506px] text-title-sm text-ink-200 max-md:mt-[42px] max-md:text-[14px] max-md:leading-[20px] sm:leading-relaxed lg:mt-[59px]"
+          :style="sectionColor(hero, 'content')"
+        >
           {{ hero.content }}
         </p>
 
-        <div v-if="hero" dir="ltr" class="flex flex-nowrap items-center justify-end gap-2 max-md:mt-[52px] sm:gap-4 lg:mt-[109px]">
+        <div
+          v-if="hero"
+          dir="ltr"
+          class="flex flex-nowrap items-center justify-end gap-2 max-md:mt-[52px] sm:gap-4 lg:mt-[109px]"
+        >
           <CtaButton
             v-if="hero.primaryCta"
             :label="hero.primaryCta.label"
@@ -308,15 +318,12 @@ function endTestimonialSwipe(event: TouchEvent) {
   <section v-if="kpi?.items.length" class="pb-16 max-md:pb-[80px] md:pb-24">
     <div class="container-sizdah">
       <h2 v-if="kpi.title" class="sr-only">{{ kpi.title }}</h2>
-      <ul
-        class="mx-auto grid w-full max-w-[1036px] grid-cols-3 gap-2 sm:gap-4"
-        data-reveal-group
-      >
+      <ul class="mx-auto grid w-full max-w-[1036px] grid-cols-3 gap-2 sm:gap-4" data-reveal-group>
         <!-- The gold line is the item's `title`; each card is a direct grid item. -->
         <StatCard
-          v-for="(item, index) in kpi.items"
+          v-for="item in kpi.items"
           :key="item.id"
-          :value="['+40%', '+70K', '+90%'][index] ?? item.value"
+          :value="item.value"
           :label="item.title"
           :caption="item.description"
           :icon="item.icon"
@@ -332,8 +339,13 @@ function endTestimonialSwipe(event: TouchEvent) {
   -->
   <section v-if="trustProof" class="pb-16 max-md:pb-[76px] md:pb-24 lg:pb-[117px]">
     <div class="container-sizdah flex flex-col items-center gap-6 lg:gap-0">
-      <p class="flex flex-wrap items-center justify-center gap-1 text-center max-md:h-[54px] max-md:w-[258px] max-md:flex-nowrap max-md:whitespace-nowrap max-md:text-[16px]" data-reveal>
-        <span class="text-title-lg text-brand-50">{{ trustProof.title }}</span>
+      <p
+        class="flex flex-wrap items-center justify-center gap-1 text-center max-md:h-[54px] max-md:w-[258px] max-md:flex-nowrap max-md:whitespace-nowrap max-md:text-[16px]"
+        data-reveal
+      >
+        <span class="text-title-lg text-brand-50" :style="sectionColor(trustProof, 'title')">{{
+          trustProof.title
+        }}</span>
         <img
           :src="trustMarkUrl"
           alt=""
@@ -342,7 +354,11 @@ function endTestimonialSwipe(event: TouchEvent) {
           height="34"
           class="h-auto w-[72px] max-md:size-[54px]"
         />
-        <span v-if="trustProof.subtitle" class="text-title-md text-brand-50">
+        <span
+          v-if="trustProof.subtitle"
+          class="text-title-md text-brand-50"
+          :style="sectionColor(trustProof, 'subtitle')"
+        >
           {{ trustProof.subtitle }}
         </span>
       </p>
@@ -407,6 +423,7 @@ function endTestimonialSwipe(event: TouchEvent) {
         :eyebrow="process.eyebrow"
         :title="process.title"
         :subtitle="process.subtitle || process.description"
+        :colors="headingColors(process)"
       />
 
       <ul
@@ -433,38 +450,13 @@ function endTestimonialSwipe(event: TouchEvent) {
         :eyebrow="reviews.eyebrow"
         :title="reviews.title"
         :subtitle="reviews.subtitle || reviews.description"
+        :colors="headingColors(reviews)"
         gap="lg"
         class="max-md:gap-6 max-md:[&>div>h2]:whitespace-nowrap max-md:[&>div>h2]:text-[26px] max-md:[&>div>h2]:leading-[36px] max-md:[&>div>p]:text-[16px] max-md:[&>div>p]:leading-[22px]"
       />
 
-      <!-- Mobile becomes a swipeable carousel; desktop keeps the editorial grid. -->
-      <ul
-        class="testimonial-carousel mt-2 flex h-auto touch-pan-y gap-[26px] overflow-hidden max-md:mt-10 lg:mt-2 lg:grid lg:h-[297px] lg:overflow-visible"
-        :style="{ '--testimonial-index': activeTestimonial }"
-        @touchstart="startTestimonialSwipe"
-        @touchend="endTestimonialSwipe"
-        :class="[
-          props.testimonials.length > 1 && 'sm:grid-cols-2',
-          props.testimonials.length > 2 && 'lg:grid-cols-3',
-          props.testimonials.length > 3 && 'lg:grid-cols-4',
-          props.testimonials.length === 1 && 'max-w-[300px] max-md:max-w-none max-md:w-full',
-        ]"
-        data-reveal-group
-      >
-        <TestimonialCard
-          v-for="testimonial in props.testimonials"
-          :key="testimonial.name"
-          :testimonial="testimonial"
-        />
-      </ul>
-
-      <div v-if="props.testimonials.length > 1" class="testimonial-controls mt-6 flex items-center justify-center gap-4 max-md:mt-0 lg:hidden">
-        <button type="button" class="testimonial-arrow" aria-label="نظر قبلی" @click="previousTestimonial">←</button>
-        <div class="flex items-center gap-2" role="tablist" aria-label="انتخاب نظر مشتری">
-          <button v-for="(_, index) in props.testimonials" :key="`testimonial-dot-${index}`" type="button" role="tab" :aria-selected="activeTestimonial === index" :aria-label="`نمایش نظر ${index + 1}`" class="testimonial-dot" :class="activeTestimonial === index && 'is-active'" @click="showTestimonial(index)" />
-        </div>
-        <button type="button" class="testimonial-arrow" aria-label="نظر بعدی" @click="nextTestimonial">→</button>
-      </div>
+      <!-- An endless loop: drifting on desktop, autoplaying slides with dots below lg. -->
+      <TestimonialCarousel :testimonials="props.testimonials" class="mt-2 max-md:mt-10" />
     </div>
   </section>
 

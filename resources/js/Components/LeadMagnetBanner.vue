@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import CtaButton from '@/Components/CtaButton.vue'
 import LeadMagnetModal from '@/Components/LeadMagnetModal.vue'
 import type { PageSectionData } from '@/types'
+import { sectionColor } from '@/lib/sectionColors'
 import doodleUrl from '~img/sizdah/shared/checklist-doodle.svg'
 import articleAccentUrl from '~img/sizdah/blog/lead-magnet-accent.svg'
 import leadMagnetDotsUrl from '~img/sizdah/home/lead-magnet-dots.svg'
@@ -42,6 +43,11 @@ import leadMagnetScribbleUrl from '~img/sizdah/home/lead-magnet-scribble.svg'
  * frame rather than filed as its own component. The modal has its own fixed
  * title/description (see its docblock) — this banner's own copy is not
  * passed through to it.
+ *
+ * Both strips render the same `lead_magnet` section of the home page, but the
+ * frames label the button differently: the article strip uses the primary
+ * button label ("دریافت چک‌لیست"), and Home's large strip uses the secondary
+ * one ("شروع گفتگو"), falling back to the primary label when it is empty.
  */
 const props = withDefaults(
   defineProps<{
@@ -140,6 +146,7 @@ const modalOpen = ref(false)
             ? 'text-heading-sm text-ink-1000 max-md:text-[18px] max-md:leading-[22px]'
             : 'text-title-md text-ink-900'
         "
+        :style="sectionColor(props.section, 'title')"
       >
         {{ props.section.title }}
       </p>
@@ -150,6 +157,7 @@ const modalOpen = ref(false)
             ? 'text-body-lg text-ink-600 max-md:text-[12px] max-md:leading-[17px] lg:text-start'
             : 'text-body-md text-ink-600 md:text-start'
         "
+        :style="sectionColor(props.section, 'description')"
       >
         {{ props.section.description }}
       </p>
@@ -157,7 +165,11 @@ const modalOpen = ref(false)
 
     <div v-if="props.section.primaryCta" class="relative z-10 shrink-0">
       <CtaButton
-        :label="props.size === 'lg' ? 'شروع گفتگو' : props.section.primaryCta.label"
+        :label="
+          props.size === 'lg'
+            ? (props.section.secondaryCta?.label ?? props.section.primaryCta.label)
+            : props.section.primaryCta.label
+        "
         :variant="props.size === 'lg' ? 'brand-outline' : 'solid'"
         @click="modalOpen = true"
         class="max-md:px-3 max-md:py-3 max-md:text-[14px]"

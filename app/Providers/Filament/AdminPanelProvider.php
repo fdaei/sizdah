@@ -44,7 +44,7 @@ final class AdminPanelProvider extends PanelProvider
             ->passwordReset()
             ->profile(isSimple: false)
             ->brandName('Sizdah')
-            ->favicon(asset('favicon.ico'))
+            ->favicon(asset('favicon.svg').'?v=3')
             ->colors([
                 // Figma "primary gold" #BD933B
                 'primary' => Color::hex('#BD933B'),

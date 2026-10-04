@@ -9,6 +9,7 @@ use App\Filament\Support\TranslatableForm;
 use App\Models\PageSection;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
@@ -43,6 +44,16 @@ final class SectionsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'type';
 
+    /**
+     * Types whose `content` is HTML rendered with v-html. Every other type that
+     * uses `content` prints it as plain text (the home hero paragraph, the
+     * about-hero gold line, the projects-showcase link label).
+     */
+    private const RICH_CONTENT_TYPES = [
+        SectionType::RichText,
+        SectionType::Story,
+    ];
+
     public function form(Form $form): Form
     {
         return $form->schema([
@@ -67,6 +78,12 @@ final class SectionsRelationManager extends RelationManager
                         ->default(true)
                         ->columnSpan(1)
                         ->helperText('Hide without deleting the content.'),
+
+                    Placeholder::make('field_guide')
+                        ->label(fn (): string => __('admin.section_guide.heading'))
+                        ->content(fn (Get $get): string => __('admin.section_guide.'.self::sectionType($get('type'))?->value))
+                        ->visible(fn (Get $get): bool => self::sectionType($get('type')) !== null)
+                        ->columnSpanFull(),
                 ]),
 
             TranslatableForm::tabs(fn (string $locale): array => [
@@ -93,7 +110,13 @@ final class SectionsRelationManager extends RelationManager
                         'bold', 'italic', 'link', 'bulletList', 'orderedList',
                         'h2', 'h3', 'blockquote', 'undo', 'redo',
                     ])
-                    ->visible(fn (Get $get): bool => $get('type') === SectionType::RichText->value),
+                    ->visible(fn (Get $get): bool => self::hasRichContent($get('type'))),
+
+                Textarea::make("translations.{$locale}.content")
+                    ->label('Content')
+                    ->rows(3)
+                    ->visible(fn (Get $get): bool => self::sectionType($get('type')) !== null
+                        && ! self::hasRichContent($get('type'))),
 
                 TextInput::make("translations.{$locale}.primary_cta_label")
                     ->label('Primary button label')
@@ -155,8 +178,7 @@ final class SectionsRelationManager extends RelationManager
              */
             Repeater::make('items')
                 ->label('Cards')
-                ->visible(fn (Get $get): bool => $get('type') !== null
-                    && SectionType::from($get('type'))->hasItems())
+                ->visible(fn (Get $get): bool => self::sectionType($get('type'))?->hasItems() ?? false)
                 ->orderColumn('sort_order')
                 ->reorderableWithButtons()
                 ->collapsible()
@@ -213,10 +235,12 @@ final class SectionsRelationManager extends RelationManager
                             ->helperText('Packages: e.g. "Best for growing brands".'),
                     ]),
 
-                    TextInput::make('icon')
-                        ->label('Icon name')
-                        ->maxLength(50)
-                        ->helperText('A lucide-vue-next icon, e.g. "check-circle".'),
+                    // `../../type` climbs from the repeater item to the section.
+                    Select::make('icon')
+                        ->label('Icon')
+                        ->native(false)
+                        ->options(fn (Get $get): array => self::sectionType($get('../../type'))?->iconOptions() ?? [])
+                        ->visible(fn (Get $get): bool => (self::sectionType($get('../../type'))?->iconOptions() ?? []) !== []),
                 ]),
         ]);
     }
@@ -260,6 +284,20 @@ final class SectionsRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    private static function sectionType(mixed $value): ?SectionType
+    {
+        if ($value instanceof SectionType) {
+            return $value;
+        }
+
+        return is_string($value) ? SectionType::tryFrom($value) : null;
+    }
+
+    private static function hasRichContent(mixed $value): bool
+    {
+        return in_array(self::sectionType($value), self::RICH_CONTENT_TYPES, true);
     }
 
     /**

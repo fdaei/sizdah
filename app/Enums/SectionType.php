@@ -51,7 +51,37 @@ enum SectionType: string implements HasLabel
 
     public function getLabel(): string
     {
-        return str(ucwords(str_replace('_', ' ', $this->value)))->toString();
+        $key = "admin.section_types.{$this->value}";
+        $label = __($key);
+
+        return $label !== $key
+            ? $label
+            : str(ucwords(str_replace('_', ' ', $this->value)))->toString();
+    }
+
+    /**
+     * Artwork keys the frontend can draw on this section's cards, mapped to
+     * the label shown in the admin. Empty when the cards carry no icon.
+     *
+     * Each list mirrors the component that renders it: StatCard (kpi),
+     * ProcessStepCard (process), About.vue (how_we_think) and Work/Show.vue
+     * (results). A key missing from the component renders without a glyph.
+     *
+     * @return array<string, string>
+     */
+    public function iconOptions(): array
+    {
+        $keys = match ($this) {
+            self::Kpi => ['engagement', 'audience', 'retention'],
+            self::Process => ['discovery', 'strategy', 'production', 'approval', 'publishing', 'campaign', 'optimization'],
+            self::HowWeThink => ['discovery', 'identity', 'impact', 'path'],
+            self::Results => ['roi', 'reach', 'interaction', 'follower', 'view'],
+            default => [],
+        };
+
+        return collect($keys)
+            ->mapWithKeys(fn (string $key): array => [$key => __("admin.section_icons.{$key}")])
+            ->all();
     }
 
     /**

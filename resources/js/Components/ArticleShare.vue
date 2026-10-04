@@ -7,7 +7,9 @@ import linkedinUrl from '~img/sizdah/social/linkedin.svg'
 
 /**
  * Article share rail — Figma "Frame 95907" (690:7022), floating beside the
- * body copy column. 68px Yellow/100 (#fff8eb) circles on a 16px track.
+ * body copy column. Yellow/100 (#fff8eb) circles on a 16px track — 12px
+ * padding around the 24px glyph (48px circle) at every breakpoint, per the
+ * 2026-10-04 request; the frame drew them at 68px on desktop.
  * Re-read 2026-09-09: these carried Yellow/50 (#fefbf5), which is the
  * lead-magnet card's fill, not the warmer one the frame paints here.
  *
@@ -42,7 +44,7 @@ const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${
       <li class="relative">
         <button
           type="button"
-          class="group flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-colors duration-200 ease-brand hover:bg-brand max-md:size-12"
+          class="group flex size-12 items-center justify-center rounded-full bg-brand-100 p-3 transition-colors duration-200 ease-brand hover:bg-brand"
           @click="copyLink"
         >
           <span class="sr-only">{{ t('blog.copy_link') }}</span>
@@ -77,7 +79,7 @@ const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${
           :href="xShareUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="group flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-colors duration-200 ease-brand hover:bg-brand max-md:size-12"
+          class="group flex size-12 items-center justify-center rounded-full bg-brand-100 p-3 transition-colors duration-200 ease-brand hover:bg-brand"
         >
           <span class="sr-only">X</span>
           <img
@@ -96,7 +98,7 @@ const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${
           :href="linkedinShareUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="group flex size-[68px] items-center justify-center rounded-full bg-brand-100 transition-colors duration-200 ease-brand hover:bg-brand max-md:size-12"
+          class="group flex size-12 items-center justify-center rounded-full bg-brand-100 p-3 transition-colors duration-200 ease-brand hover:bg-brand"
         >
           <span class="sr-only">LinkedIn</span>
           <img

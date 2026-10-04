@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import CtaButton from '@/Components/CtaButton.vue'
 import type { PageSectionData } from '@/types'
+import { sectionColor } from '@/lib/sectionColors'
 import journeyUrl from '~img/sizdah/about/cta-journey.svg'
 
 /**
@@ -67,13 +68,23 @@ const props = defineProps<{ section: PageSectionData }>()
           <div class="flex flex-col items-start gap-2">
             <!-- 577:11228 is set in Maneli, which is unlicensed here; it takes
                  the display stack at the same size. -->
-            <p v-if="props.section.eyebrow" class="font-display text-title-md text-brand">
+            <p
+              v-if="props.section.eyebrow"
+              class="font-display text-title-md text-brand"
+              :style="sectionColor(props.section, 'eyebrow')"
+            >
               {{ props.section.eyebrow }}
             </p>
 
             <div class="flex flex-col gap-6">
-              <h2 class="text-section-line text-ink-1000">{{ props.section.title }}</h2>
-              <p v-if="props.section.description" class="text-title-sm text-ink-800">
+              <h2 class="text-section-line text-ink-1000" :style="sectionColor(props.section, 'title')">
+                {{ props.section.title }}
+              </h2>
+              <p
+                v-if="props.section.description"
+                class="text-title-sm text-ink-800"
+                :style="sectionColor(props.section, 'description')"
+              >
                 {{ props.section.description }}
               </p>
             </div>
@@ -89,7 +100,11 @@ const props = defineProps<{ section: PageSectionData }>()
         </div>
 
         <!-- 577:11233 — the services line, same column the shared card uses. -->
-        <p v-if="props.section.subtitle" class="text-body-lg text-ink-700">
+        <p
+          v-if="props.section.subtitle"
+          class="text-body-lg text-ink-700"
+          :style="sectionColor(props.section, 'subtitle')"
+        >
           {{ props.section.subtitle }}
         </p>
       </div>

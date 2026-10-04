@@ -20,5 +20,6 @@ return [
     'after'           => 'بعد',
     'results'         => 'النتائج',
     'next_case_study' => 'المشروع التالي',
+    'project_details' => 'تفاصيل المشروع',
 
 ];

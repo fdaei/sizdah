@@ -9,6 +9,7 @@ import qualityUrl from '~img/sizdah/home/why-quality.svg'
 import ruleVerticalUrl from '~img/sizdah/home/why-rule-vertical.svg'
 import ruleTopUrl from '~img/sizdah/home/why-rule-a.svg'
 import ruleBottomUrl from '~img/sizdah/home/why-rule-b.svg'
+import { headingColors } from '@/lib/sectionColors'
 
 /**
  * Why us — Figma 268:3475 (heading) with the four claims at 268:3708, 268:3711,
@@ -59,12 +60,15 @@ const claims = computed(() =>
 <template>
   <section class="section max-md:-mt-[47px]">
     <div class="container-sizdah">
-      <div class="grid gap-12 max-md:gap-[58px] xl:grid-cols-[401px_680px] xl:justify-between xl:gap-0">
+      <div
+        class="grid gap-12 max-md:gap-[58px] xl:grid-cols-[401px_680px] xl:justify-between xl:gap-0"
+      >
         <SectionHeading
           data-reveal
           :eyebrow="props.section.eyebrow"
           :title="props.section.title"
           :subtitle="props.section.subtitle || props.section.description"
+          :colors="headingColors(props.section)"
           layout="stacked"
         />
 
@@ -104,12 +108,9 @@ const claims = computed(() =>
           <template v-for="({ item, glyph }, index) in claims" :key="item.id">
             <div
               class="relative flex items-start gap-4 max-md:min-h-[64px] xl:absolute xl:gap-0"
-              :class="[
-                index % 2 === 0 ? 'sm:pe-10 xl:pe-0' : 'sm:ps-0',
-                DESKTOP_POSITIONS[index],
-              ]"
+              :class="[index % 2 === 0 ? 'sm:pe-10 xl:pe-0' : 'sm:ps-0', DESKTOP_POSITIONS[index]]"
             >
-                <img
+              <img
                 :src="glyph"
                 alt=""
                 aria-hidden="true"
@@ -118,9 +119,16 @@ const claims = computed(() =>
                 class="size-10 shrink-0 max-md:size-8"
               />
 
-              <div class="flex w-[212px] flex-col gap-2 text-right max-md:flex-1 max-md:gap-1 max-md:w-auto">
-                <h3 class="text-heading-sm text-ink-50 max-md:text-[18px] max-md:leading-[25px]">{{ item.title }}</h3>
-                <p v-if="item.description" class="text-title-sm text-ink-300 max-md:text-[12px] max-md:leading-[17px]">
+              <div
+                class="flex w-[212px] flex-col gap-2 text-right max-md:flex-1 max-md:gap-1 max-md:w-auto"
+              >
+                <h3 class="text-heading-sm text-ink-50 max-md:text-[18px] max-md:leading-[25px]">
+                  {{ item.title }}
+                </h3>
+                <p
+                  v-if="item.description"
+                  class="text-title-sm text-ink-300 max-md:text-[12px] max-md:leading-[17px]"
+                >
                   {{ item.description }}
                 </p>
               </div>

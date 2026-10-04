@@ -559,6 +559,8 @@
   .rich-prose p,
   .rich-prose li {
     @apply text-title-md text-ink-200;
+    /* `--prose-color` is an editor-set section colour (Filament "Text colours"). */
+    color: var(--prose-color, theme('colors.ink.200'));
   }
 
   .rich-prose p + p {
@@ -619,8 +621,8 @@
   }
 
   @media (max-width: 767px) {
-  /* Mobile article frame 1077:7197 — the authored copy uses a tighter
-     rhythm than the general article template. */
+  /* Mobile article frame 1077:7197 — a tighter rhythm than the desktop
+     article template, applied to every article body below `md`. */
   .figma-article-prose > h3 {
     margin-block: 0 30px;
     font-size: 22px;
@@ -729,25 +731,7 @@
 }
 
 
-@media (max-width: 1023px) {
-  .testimonial-carousel {
-    --testimonial-index: 0;
-    transform: translateX(calc(var(--testimonial-index) * (100% + 26px)));
-    transition: transform 560ms cubic-bezier(.22, .8, .25, 1);
-    will-change: transform;
-  }
-
-  [dir='rtl'] .testimonial-carousel {
-    transform: translateX(calc(var(--testimonial-index) * (100% + 26px)));
-  }
-
-  .testimonial-carousel > li,
-  .testimonial-carousel > * {
-    flex: 0 0 100%;
-    min-width: 100%;
-    animation: testimonial-settle 560ms cubic-bezier(.22, .8, .25, 1);
-  }
-
+@layer components {
   .testimonial-arrow {
     @apply flex size-9 items-center justify-center rounded-full border border-ink-700 text-lg text-brand transition-colors;
   }
@@ -757,18 +741,14 @@
     @apply border-brand bg-brand text-ink-1000;
   }
 
+  /* The active dot widens and fills with brand over the dwell time (TestimonialCarousel.vue). */
   .testimonial-dot {
-    @apply size-2 rounded-full bg-ink-700 transition-all duration-300;
+    @apply relative size-2 overflow-hidden rounded-full bg-ink-700 transition-all duration-300;
   }
 
   .testimonial-dot.is-active {
-    @apply w-6 bg-brand;
+    @apply w-6;
   }
-}
-
-@keyframes testimonial-settle {
-  0% { opacity: .55; transform: rotate(1.2deg) scale(.985); }
-  100% { opacity: 1; transform: rotate(0) scale(1); }
 }
 
 @layer utilities {

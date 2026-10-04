@@ -5,6 +5,7 @@ import SectionHeading from '@/Components/SectionHeading.vue'
 import type { PageSectionData, PostSummary } from '@/types'
 import calendarUrl from '~img/sizdah/shared/calendar.svg'
 import dividerUrl from '~img/sizdah/home/insight-divider.svg'
+import { headingColors } from '@/lib/sectionColors'
 
 /**
  * Insights row — Figma "insight cards" 430:5247, under the heading at 268:3797.
@@ -34,6 +35,7 @@ const rest = computed(() => props.posts.slice(1, 3))
         :eyebrow="props.section.eyebrow"
         :title="props.section.title"
         :subtitle="props.section.subtitle || props.section.description"
+        :colors="headingColors(props.section)"
         gap="lg"
         class="max-md:gap-6 max-md:[&>div>p]:text-[16px] max-md:[&>div>p]:leading-[22px]"
       />

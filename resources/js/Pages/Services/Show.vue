@@ -1,8 +1,13 @@
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3'
+import { route } from 'ziggy-js'
 import SeoHead from '@/Components/SeoHead.vue'
+import { useTranslations } from '@/Composables/useTranslations'
 import type { SeoMeta } from '@/types'
 
 defineProps<{ service: { title: string; description: string; features: string[] }; seo: SeoMeta }>()
+
+const { t } = useTranslations()
 </script>
 
 <template>
@@ -14,9 +19,9 @@ defineProps<{ service: { title: string; description: string; features: string[] 
       <ul v-if="service.features.length" class="mt-10 list-disc space-y-4 ps-6 text-body-lg text-ink-200">
         <li v-for="feature in service.features" :key="feature">{{ feature }}</li>
       </ul>
-      <nav class="mt-12 flex gap-6" aria-label="Related pages">
-        <a href="/en/services" class="underline">All services</a>
-        <a href="/en/contact" class="underline">Contact us</a>
+      <nav class="mt-12 flex gap-6">
+        <Link :href="route('services')" class="underline">{{ t('work.services') }}</Link>
+        <Link :href="route('contact')" class="underline">{{ t('common.start_conversation') }}</Link>
       </nav>
     </article>
   </main>

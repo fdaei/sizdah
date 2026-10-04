@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Eyebrow from '@/Components/Eyebrow.vue'
+import type { HeadingColors } from '@/lib/sectionColors'
 
 /**
  * The repeated Home section header — Figma 268:3461 (projects), 268:3468
@@ -48,6 +49,8 @@ withDefaults(
      * subtitle aligns with content further down the section.
      */
     splitClass?: string
+    /** Editor-set text colours from the section ("Text colours" in Filament). */
+    colors?: HeadingColors
   }>(),
   {
     eyebrow: '',
@@ -57,13 +60,19 @@ withDefaults(
     gap: 'sm',
     subtitleWidth: '',
     splitClass: '',
+    colors: () => ({}),
   },
 )
 </script>
 
 <template>
   <div class="flex flex-col items-start" :class="gap === 'lg' ? 'gap-12' : 'gap-6'">
-    <Eyebrow v-if="eyebrow" :text="eyebrow" :marker-ring="tone === 'dark' ? 'paper' : 'ink'" />
+    <Eyebrow
+      v-if="eyebrow"
+      :text="eyebrow"
+      :marker-ring="tone === 'dark' ? 'paper' : 'ink'"
+      :style="colors.eyebrow ? { color: colors.eyebrow } : undefined"
+    />
 
     <div
       class="flex w-full flex-col gap-6"
@@ -77,6 +86,7 @@ withDefaults(
       <h2
         class="whitespace-pre-line text-section-line font-bold"
         :class="tone === 'light' ? 'text-ink-1000' : 'text-ink-50'"
+        :style="colors.title ? { color: colors.title } : undefined"
       >
         {{ title }}
       </h2>
@@ -88,6 +98,7 @@ withDefaults(
           tone === 'light' ? 'text-ink-700' : 'text-ink-200',
           subtitleWidth || (layout === 'split' ? 'md:max-w-[612px]' : 'max-w-[400px]'),
         ]"
+        :style="colors.subtitle ? { color: colors.subtitle } : undefined"
       >
         {{ subtitle }}
       </p>
