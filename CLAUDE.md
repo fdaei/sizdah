@@ -49,6 +49,22 @@ npm run test:e2e                          # Playwright; requires the app
 Pest tests run against an in-memory SQLite DB (`phpunit.xml`), so they need
 no local database — but they do need the `pdo_sqlite` PHP extension.
 
+Production build + SSR (required for SEO — technical SEO audit 2026-10-04):
+
+```bash
+npm run build && npm run build:ssr       # client bundle + bootstrap/ssr/ssr.js
+php artisan inertia:start-ssr            # Node renderer on :13714 — run it
+                                         # under a supervisor (systemd /
+                                         # supervisord) so it restarts
+```
+
+Without the SSR process, pages still ship full `<head>` SEO tags (rendered
+by `resources/views/partials/seo.blade.php`), but the `<body>` is an empty
+app shell until JS runs. `APP_URL` must be the canonical origin
+(`https://`, no `www`): `RedirectToCanonicalHost` 301s every other
+host/scheme/trailing-slash variant to it in production. Regression tests:
+`php artisan test --filter=TechnicalSeo`.
+
 Asset verification (checks the 44-item manifest in `docs/ASSET-MANIFEST.md`
 is actually present on disk):
 

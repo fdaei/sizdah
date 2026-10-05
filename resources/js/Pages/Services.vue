@@ -82,13 +82,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
 <template>
   <SeoHead :seo="props.seo" />
 
-  <!--
-    The frame puts the eyebrow's top edge at y=188, where `.section-first`
-    clears the 108px header by 72 and lands at 180. The 8px is overridden here
-    rather than in the shared utility because only this frame has been measured
-    at this tier — see .figma-sync/GAPS.md G44.
-  -->
-  <div class="section-first pb-24 md:pt-[188px] lg:pb-[224px]">
+  <div class="section-first pb-24 lg:pb-[224px]">
     <div class="container-sizdah relative isolate">
       <!--
         309:4754 — a 638-wide centred stack, gap 40 to the title block

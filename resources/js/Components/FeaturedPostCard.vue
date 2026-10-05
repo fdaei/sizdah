@@ -64,7 +64,7 @@ const { t } = useTranslations()
 
       <div class="flex flex-col gap-8 lg:gap-24">
         <div class="flex flex-col gap-6">
-          <h2 class="text-heading-xl text-ink-50 max-md:text-[24px] max-md:leading-[30px]">
+          <h2 class="text-heading-xl text-ink-50 max-md:text-[22px] max-md:leading-[28px]">
             <Link
               :href="props.post.url"
               class="transition-colors duration-200 ease-brand hover:text-brand"

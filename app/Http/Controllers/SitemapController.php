@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Project;
+use App\Models\Service;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -18,6 +19,27 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final class SitemapController extends Controller
 {
+    /**
+     * robots.txt (SEO-CHK-04). Served by the app rather than public/ so the
+     * Sitemap line is an absolute URL on the canonical origin — the protocol
+     * does not accept a relative one.
+     */
+    public function robots(): Response
+    {
+        $body = implode("\n", [
+            'User-agent: *',
+            'Allow: /',
+            '',
+            'Disallow: /admin',
+            'Disallow: /admin/*',
+            '',
+            'Sitemap: '.route('sitemap'),
+            '',
+        ]);
+
+        return response($body, 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
+    }
+
     public function index(): Response
     {
         $locales = array_keys(config('locales.supported'));
@@ -58,7 +80,9 @@ final class SitemapController extends Controller
         ] as $name => $priority) {
             $urls[] = [
                 'loc' => route($name, ['locale' => $locale]),
-                'lastmod' => now()->toAtomString(),
+                // No lastmod: a fake "now" on every fetch teaches crawlers to
+                // ignore the field for the URLs where it is real.
+                'lastmod' => null,
                 'priority' => $priority,
                 'changefreq' => 'weekly',
                 'alternates' => $this->alternatesForRoute($name),
@@ -80,6 +104,27 @@ final class SitemapController extends Controller
                 ];
             });
 
+        // Service detail pages — live, indexable routes that nothing links
+        // to yet, so the sitemap is their only discovery path.
+        Service::query()
+            ->forDisplay()
+            ->get()
+            ->each(function (Service $service) use (&$urls, $locale): void {
+                $slug = (string) $service->getTranslation('slug', $locale);
+
+                if ($slug === '') {
+                    return;
+                }
+
+                $urls[] = [
+                    'loc' => route('services.show', ['locale' => $locale, 'service' => $slug]),
+                    'lastmod' => $service->updated_at?->toAtomString(),
+                    'priority' => 0.6,
+                    'changefreq' => 'monthly',
+                    'alternates' => [],
+                ];
+            });
+
         // Posts
         Post::query()
             ->published()
@@ -94,6 +139,22 @@ final class SitemapController extends Controller
                     'alternates' => $this->alternatesForModel($post, 'insights.show', 'post'),
                 ];
             });
+
+        // x-default alongside the per-language alternates (SEO-CHK-02).
+        foreach ($urls as &$url) {
+            if ($url['alternates'] === []) {
+                continue;
+            }
+
+            $default = config("locales.supported.".config('locales.default').'.html_lang');
+            $match = collect($url['alternates'])->firstWhere('hreflang', $default);
+
+            $url['alternates'][] = [
+                'hreflang' => 'x-default',
+                'href' => $match['href'] ?? $url['alternates'][0]['href'],
+            ];
+        }
+        unset($url);
 
         $xml = view('sitemap.locale', ['urls' => $urls])->render();
 

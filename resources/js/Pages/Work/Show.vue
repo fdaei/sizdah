@@ -238,7 +238,7 @@ const strategyLead = computed(() =>
 <template>
   <SeoHead :seo="props.seo" />
 
-  <article class="section-first pb-[442.38px] md:pt-[188px]">
+  <article class="section-first pb-[442.38px]">
     <!--
       Vertical rhythm. 336:5374 is free-positioned, so the step between blocks
       is NOT uniform — it is measured per boundary off the frame and carried on

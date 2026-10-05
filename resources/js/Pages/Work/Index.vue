@@ -80,8 +80,8 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
           <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
           <div class="flex flex-col items-center gap-6">
-            <h1 class="text-display-lg text-ink-50">{{ props.heading.title }}</h1>
-            <p v-if="props.heading.description" class="text-title-sm text-ink-200">
+            <h1 class="text-display-lg text-ink-50 max-md:text-[26px] max-md:leading-[36px]">{{ props.heading.title }}</h1>
+            <p v-if="props.heading.description" class="text-title-sm text-ink-200 max-md:text-[16px] max-md:leading-[22px]">
               {{ props.heading.description }}
             </p>
           </div>

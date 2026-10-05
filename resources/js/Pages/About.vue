@@ -215,16 +215,10 @@ onBeforeUnmount(() => {
   <SeoHead :seo="props.seo" />
 
   <!--
-    336:5623 puts the first content (the 696x522 portrait, 343:9292) at y=250,
-    not the 180 that `section-first` gives every other page. The frame is
-    absolutely positioned, so this is the frame's own offset rather than a
-    shared rhythm.
-  -->
-  <!--
     336:5623 puts the footer at 3519.24 and the cream CTA (577:10889) at 2859;
     the slack below the CTA is 147.24.
   -->
-  <div class="about-page section-first md:pt-[250px] pb-[147.24px]">
+  <div class="about-page section-first pb-[147.24px]">
     <div class="container-sizdah flex flex-col gap-24 lg:gap-48">
       <!--
         Hero — 336:5703 / 343:9292. Copy column (466) at the inline start with
@@ -477,7 +471,6 @@ onBeforeUnmount(() => {
    | The margins below keep the mobile frame's rhythm between blocks.
    */
   .about-page {
-    padding-top: 132px;
     padding-bottom: 158px;
   }
 

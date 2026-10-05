@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\RedirectToCanonicalHost;
 use App\Http\Middleware\RedirectToLocalisedRoute;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Facades\App as AppFacade;
 use Illuminate\Support\Facades\URL;
+use Inertia\Inertia;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -22,6 +24,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Global and first: www/http/trailing-slash -> canonical origin, 301.
+        $middleware->prepend(RedirectToCanonicalHost::class);
+
         $middleware->web(append: [
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
@@ -88,6 +93,19 @@ return Application::configure(basePath: dirname(__DIR__))
             $locale = (new SetLocale())->resolve($request);
             AppFacade::setLocale($locale);
             URL::defaults(['locale' => $locale]);
+
+            /*
+             | Share the full prop set (locale, flash, navigation, ziggy, …)
+             | here too. A missing /fa/work/{slug} 404s inside
+             | SubstituteBindings, which runs before HandleInertiaRequests, so
+             | those props were never shared — and the SSR render of the Error
+             | page then threw on `locale.current` / `flash.success`, killing
+             | the Node SSR process. Every later request was served as an
+             | empty app shell until it was restarted (SEO audit SEO-DEV-02).
+             */
+            if ($request->hasSession()) {
+                Inertia::share(app(HandleInertiaRequests::class)->share($request));
+            }
 
             return inertia('Error', ['status' => $status])
                 ->toResponse($request)

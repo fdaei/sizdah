@@ -12,6 +12,7 @@ export interface LocaleOption {
   name: string
   native: string
   direction: Direction
+  htmlLang: string
 }
 
 export interface LocaleProp {
@@ -19,6 +20,8 @@ export interface LocaleProp {
   direction: Direction
   font: 'sans' | 'arabic'
   htmlLang: string
+  /** config('locales.default') — the hreflang x-default target. */
+  default: LocaleCode
   supported: LocaleOption[]
 }
 

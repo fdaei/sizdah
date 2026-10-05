@@ -147,9 +147,14 @@
     @apply py-16 md:py-24;
   }
 
-  /* First section clears the fixed header (108px in the file). */
+  /*
+   | First section clears the fixed header plus a uniform 64px gap on every
+   | page. The header is 108px from lg up (py-24 around the 60px logo) and
+   | 124px below lg (pt-40 / pb-24), hence 172 / 188. Pages must not override
+   | the top padding — change it here so the gap stays the same site-wide.
+   */
   .section-first {
-    @apply pt-[132px] md:pt-[180px];
+    @apply pt-[188px] lg:pt-[172px];
   }
 
   /*

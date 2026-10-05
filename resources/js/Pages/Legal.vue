@@ -32,15 +32,7 @@ const props = defineProps<{
 <template>
   <SeoHead :seo="props.seo" />
 
-  <!--
-    Both Legal frames (279:5924 privacy, 281:6773 terms) put the title block's
-    top edge at y=188, same 8px-over-`.section-first` gap as Services (G44).
-    Overridden locally rather than in the shared utility, same reasoning as
-    Services: with Legal now also measured at 188, the site is a 3-3 split
-    against Contact/Work index/Insights index at 180 — not a clear "one
-    outlier", so the safer move is another local override. See GAPS G49.
-  -->
-  <article class="section-first pb-24 md:pt-[188px]">
+  <article class="section-first pb-24">
     <!--
       Decorative seal (279:5927 / 281:6776, "image 127 [Vectorized]"), identical
       on both frames: a hand-drawn badge in near-background ink (#202024/#222326

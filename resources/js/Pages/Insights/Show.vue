@@ -77,10 +77,8 @@ const articleContent = computed(() => {
     Vertical rhythm, all measured off the frame (285:4590) rather than the
     even gap-12 this used to run on: the blocks are 88 / 64 / 113 / 72 / 81 /
     224 / 123 apart, so each one carries its own margin instead.
-    Content starts at y=207 — 99px clear of the 108px fixed header, not the
-    72px `section-first` assumes for the other pages.
   -->
-  <article class="section-first overflow-x-clip pb-[123px] max-md:pt-[188px] md:pt-[207px]">
+  <article class="section-first overflow-x-clip pb-[123px]">
     <div class="container-sizdah relative isolate flex flex-col">
       <!--
         285:5060 — a 670 track wrapping the 612 column (285:5061) whose title
@@ -114,9 +112,13 @@ const articleContent = computed(() => {
         data-reveal
       />
 
-      <!-- Mobile frame 1077:7197 — the share row sits under the cover. -->
+      <!--
+        Mobile frame 1077:7197 — the share row sits under the cover. Sticky
+        12px below the 124px mobile header (user request 2026-10-05), not
+        flush against it.
+      -->
       <div
-        class="ms-auto mt-10 hidden w-[176px] max-md:sticky max-md:top-[124px] max-md:z-40 max-md:block"
+        class="ms-auto mt-10 hidden w-[176px] max-md:sticky max-md:top-[136px] max-md:z-40 max-md:block"
       >
         <ArticleShare :url="props.seo.canonical" :title="props.post.title" />
       </div>

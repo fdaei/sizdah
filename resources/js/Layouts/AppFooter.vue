@@ -94,7 +94,11 @@ const contact = computed(() => settings.value.contact)
 <template>
   <footer
     class="rounded-t-lg border-t border-warm-100 bg-ink-1000 shadow-footer"
-    :class="['Work/Index', 'About'].includes(page.component) ? 'max-md:h-[640px] max-md:overflow-hidden' : ''"
+    :class="
+      ['Work/Index', 'About'].includes(page.component)
+        ? 'max-md:h-[640px] max-md:overflow-hidden'
+        : ''
+    "
   >
     <div class="container-sizdah relative pb-12 pt-12 max-md:pb-[30px] xl:pb-[128.76px]">
       <img
@@ -109,7 +113,7 @@ const contact = computed(() => settings.value.contact)
           <!-- Brand + positioning line -->
           <div class="flex w-full flex-col gap-8 md:w-[402px]">
             <BrandLogo :width="87" :title="settings.siteName" />
-            <p class="text-body-lg text-ink-100">{{ settings.tagline }}</p>
+            <p class="text-body-lg text-ink-100 max-md:text-[12px]">{{ settings.tagline }}</p>
           </div>
 
           <!-- Link columns -->
@@ -120,7 +124,7 @@ const contact = computed(() => settings.value.contact)
               :aria-label="column.label"
               class="flex flex-col gap-4"
             >
-              <h2 class="text-title-sm text-brand">
+              <h2 class="text-title-sm text-brand max-md:text-label-lg">
                 {{ column.label }}
               </h2>
 
@@ -129,7 +133,7 @@ const contact = computed(() => settings.value.contact)
                   <Link
                     :href="child.url"
                     :target="child.target"
-                    class="text-body-lg text-ink-100 transition-colors duration-200 ease-brand hover:text-brand"
+                    class="text-body-lg text-ink-100 transition-colors max-md:text-body-md duration-200 ease-brand hover:text-brand"
                   >
                     {{ child.label }}
                   </Link>
@@ -139,11 +143,11 @@ const contact = computed(() => settings.value.contact)
 
             <!-- Contact column — from settings, not the menu tree -->
             <div class="flex flex-col gap-4">
-              <h2 class="text-title-sm text-brand">
+              <h2 class="text-title-sm text-brand max-md:text-label-lg">
                 {{ $t('footer.info') }}
               </h2>
 
-              <ul class="flex flex-col gap-3 text-body-lg text-ink-100">
+              <ul class="flex flex-col gap-3 text-body-lg text-ink-100 max-md:text-body-md">
                 <li v-if="contact.location" class="flex items-center gap-2">
                   <img
                     :src="locationIconUrl"
@@ -197,20 +201,20 @@ const contact = computed(() => settings.value.contact)
         <div
           class="flex flex-col items-start justify-between gap-4 border-t border-warm-300 py-6 sm:flex-row sm:items-center"
         >
-          <p class="text-label-lg text-ink-200">
+          <p class="text-label-lg text-ink-200 max-md:text-[12px]">
             {{ $t('footer.copyright', { year, name: settings.siteName }) }}
           </p>
 
           <div class="flex items-center gap-4">
             <Link
               :href="route('legal.terms')"
-              class="text-label-lg text-ink-100 underline transition-colors duration-200 ease-brand hover:text-brand"
+              class="text-label-lg text-ink-100 underline max-md:text-[12px] transition-colors duration-200 ease-brand hover:text-brand"
             >
               {{ $t('footer.terms') }}
             </Link>
             <Link
               :href="route('legal.privacy')"
-              class="text-label-lg text-ink-100 underline transition-colors duration-200 ease-brand hover:text-brand"
+              class="text-label-lg text-ink-100 underline max-md:text-[12px] transition-colors duration-200 ease-brand hover:text-brand"
             >
               {{ $t('footer.privacy_policy') }}
             </Link>

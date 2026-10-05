@@ -46,14 +46,7 @@ const rest = computed(() => props.posts.slice(1, 3))
       >
         <!-- 430:5311 — the lead post, cream on the dark ground. -->
         <article
-          class="sketch-frame flex flex-col gap-4 bg-brand-50 p-4 shadow-card sm:flex-row sm:justify-between"
-          style="
-            background-image: linear-gradient(
-              -32.7deg,
-              rgb(248 185 55 / 0) 2.3248%,
-              rgb(248 185 55 / 10%) 100%
-            );
-          "
+          class="insight-lead sketch-frame flex flex-col gap-4 bg-brand-50 p-4 shadow-card sm:flex-row sm:justify-between"
         >
           <img
             v-if="lead.image"
@@ -82,13 +75,13 @@ const rest = computed(() => props.posts.slice(1, 3))
               </p>
 
               <div class="flex flex-col gap-[32px] max-md:gap-3">
-                <h3 class="text-title-md text-gold">
+                <h3 class="text-title-md text-brand max-md:text-[22px] max-md:leading-[28px]">
                   <Link :href="lead.url" class="transition-opacity hover:opacity-80">
                     {{ lead.title }}
                   </Link>
                 </h3>
 
-                <p v-if="lead.excerpt" class="text-body-md text-warm-700">{{ lead.excerpt }}</p>
+                <p v-if="lead.excerpt" class="text-body-md text-warm-700 max-md:text-[16px] max-md:leading-[20px]">{{ lead.excerpt }}</p>
               </div>
             </div>
 
@@ -150,7 +143,7 @@ const rest = computed(() => props.posts.slice(1, 3))
                   <time :datetime="post.publishedAtIso">{{ post.publishedAt }}</time>
                 </p>
 
-                <h3 class="text-title-md text-brand-50">
+                <h3 class="text-title-md text-brand-50 max-md:text-[22px] max-md:leading-[28px]">
                   <Link :href="post.url" class="transition-colors hover:text-brand">
                     {{ post.title }}
                   </Link>
@@ -173,3 +166,13 @@ const rest = computed(() => props.posts.slice(1, 3))
     </div>
   </section>
 </template>
+
+<style scoped>
+.insight-lead {
+  background-image: linear-gradient(
+    -32.7deg,
+    rgb(248 185 55 / 0) 2.3248%,
+    rgb(248 185 55 / 10%) 100%
+  );
+}
+</style>

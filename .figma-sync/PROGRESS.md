@@ -157,3 +157,26 @@ shorter than two 32px corner slices.
   child order the node metadata reports. See G72.
   Follow-up the same day: the chip outline now uses the shared hand-drawn
   `filter-chip-frame.svg` mask instead of a CSS border, matching `ArticleMeta`.
+
+- 2026-10-05 — `StartTogetherCard` mobile (below md) now follows the file's
+  phone frame `1072:5146`: p-24, radius 16, 32px gap above a 320-wide
+  copy of `cta-journey.svg` (verified the same drawing, scaled 320/592), type
+  Maneli 16 / Peyda Bold 26 / Medium 16 / Medium 12, and the compact CTA
+  (space12, 14px Medium label, arrow hidden). md and up unchanged.
+  Follow-up: full-card mesh below md from a user-supplied export (G74).
+
+- 2026-10-05 — Header-to-content gap is now a uniform 64px on every page (user
+  decision, overrides the per-frame offsets of G44/G49). `.section-first` is
+  the single source: header height + 64 = 172 from lg up (108 header), 188
+  below lg (124 header). Per-page top overrides removed from Services, Legal,
+  About (incl. its mobile scoped `padding-top`), Insights/Show, Work/Show,
+  Error and Services/Show; Home's hero padding matches the same values and its
+  mobile `h-[619px]` became `min-h` so the extra 56px cannot clip the copy.
+
+- 2026-10-05 — Mobile card type scale unified (user review, below md only):
+  card title 22 (leading 28), description 16, category / tags / meta 14.
+  Applied to `ProjectPostCard` (Work), `ProjectShowcase` mobile block and
+  `InsightsShowcase` (Home), `BlogCard` and `FeaturedPostCard` (Insights).
+  `ProjectShowcase`'s mobile excerpt is now `line-clamp-2` so the 16px copy
+  cannot overflow its fixed 112px block. Detail-page headings (Work/Show etc.)
+  are page typography, not cards, and were left alone. md and up unchanged.

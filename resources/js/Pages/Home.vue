@@ -198,7 +198,7 @@ onBeforeUnmount(() => {
     ratio while the copy sits on top.
   -->
   <section
-    class="home-hero relative overflow-hidden bg-top bg-no-repeat pt-[132px] pb-12 sm:pb-16 md:pt-[180px] max-md:h-[619px] lg:min-h-[783px] lg:pb-24"
+    class="home-hero relative overflow-hidden bg-top bg-no-repeat pt-[188px] pb-12 sm:pb-16 lg:pt-[172px] max-md:min-h-[619px] lg:min-h-[783px] lg:pb-24"
     :style="{
       '--hero-bg-desktop': `url(${heroBackground.desktop})`,
       '--hero-bg-mobile': `url(${heroBackground.mobile})`,
@@ -206,7 +206,7 @@ onBeforeUnmount(() => {
   >
     <div class="container-sizdah relative">
       <div
-        class="flex min-w-0 flex-col gap-5 sm:gap-6 lg:max-w-[566px] lg:gap-0 lg:pt-4"
+        class="flex min-w-0 flex-col gap-5 sm:gap-6 lg:max-w-[566px] lg:gap-0"
         data-reveal-group
       >
         <!--

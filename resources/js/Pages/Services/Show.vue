@@ -12,7 +12,7 @@ const { t } = useTranslations()
 
 <template>
   <SeoHead :seo="seo" />
-  <main id="main" class="section-first container-sizdah py-32">
+  <main id="main" class="section-first container-sizdah pb-32">
     <article class="mx-auto max-w-3xl">
       <h1 class="text-display-lg text-ink-50">{{ service.title }}</h1>
       <p class="mt-8 text-title-lg text-ink-200">{{ service.description }}</p>

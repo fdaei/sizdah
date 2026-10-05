@@ -75,7 +75,7 @@ function chipClass(value: string | null): (string | false)[] {
   const active = value === props.active
 
   return [
-    'group relative inline-flex items-center justify-center whitespace-nowrap rounded-lg px-[26px] py-[14px] text-body-lg transition-colors duration-200 ease-brand',
+    'group relative inline-flex items-center justify-center whitespace-nowrap rounded-lg px-[26px] py-[14px] text-body-lg transition-colors max-md:text-[14px] max-md:leading-[20px] duration-200 ease-brand',
     !active && 'text-paper',
     active && props.variant === 'solid' && 'bg-brand text-ink-1000',
     active && props.variant === 'outline' && 'bg-ink-900 text-brand',

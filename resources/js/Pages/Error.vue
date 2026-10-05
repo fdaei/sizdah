@@ -31,7 +31,7 @@ const message = computed(() => t(`errors.${key.value}.message`))
 <template>
   <Head :title="title" />
 
-  <section class="section-first flex min-h-[874px] flex-col items-center pb-0 text-center max-md:pt-[239px]">
+  <section class="section-first flex min-h-[874px] flex-col items-center pb-0 text-center">
     <div class="container-sizdah flex flex-col items-center">
       <!--
         725x544 in the frame, exported at 2x. The negative block-end margin is

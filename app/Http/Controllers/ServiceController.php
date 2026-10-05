@@ -21,7 +21,12 @@ use Inertia\Response;
  */
 final class ServiceController extends Controller
 {
-    public function show(Request $request, string $service): Response
+    /**
+     * `$locale` must be declared: scalar route parameters are passed
+     * positionally, so without it `$service` received the {locale} segment
+     * ("fa") and every service detail URL 404'd.
+     */
+    public function show(Request $request, string $locale, string $service): Response
     {
         $record = Service::query()->forDisplay()->whereHas('translations', fn ($query) =>
             $query->where('locale', app()->getLocale())->where('slug', $service)
@@ -31,10 +36,7 @@ final class ServiceController extends Controller
 
         return Inertia::render('Services/Show', [
             'service' => ['title' => $title, 'description' => $description, 'features' => $record->getTranslation('features') ?? []],
-            'seo' => array_merge(SeoBuilder::forPage(null, $request->url()), [
-                'title' => $title, 'description' => $description,
-                'schema' => ['@context' => 'https://schema.org', '@type' => 'Service', 'name' => $title, 'description' => $description, 'url' => $request->url()],
-            ]),
+            'seo' => SeoBuilder::forService($record, $request->url()),
         ]);
     }
 

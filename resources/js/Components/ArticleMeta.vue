@@ -35,6 +35,14 @@ import calendarUrl from '~img/sizdah/shared/calendar.svg'
  * appear on Home (268:2962), and a `get_variable_defs` read scoped to Home
  * therefore reports it as absent. It is now `brand-300`.
  *
+ * 2026-10-05: the mobile row (1077:7197) was a fixed 362px with 172/182px
+ * chips, which only fits a viewport of 402px+ inside the container's 20px
+ * gutters. On a 360-393px phone it overflowed, widened the centred header
+ * with it, and — RTL — spilled off the left edge, dragging the subtitle off
+ * centre too. It is now a 172fr/182fr grid capped at 362px: identical at
+ * 402px+, proportionally narrower below. The third chip still auto-places
+ * under the first, as the frame draws it.
+ *
  * The date glyph in the frame is a ten-fragment variant of the same calendar
  * drawn on the blog cards; the card export is reused for it.
  */
@@ -68,11 +76,13 @@ const chips = computed(() =>
 </script>
 
 <template>
-  <ul class="flex flex-wrap items-center gap-4 max-md:w-[362px] max-md:gap-2">
+  <ul
+    class="flex flex-wrap items-center gap-4 max-md:grid max-md:w-full max-md:max-w-[362px] max-md:grid-cols-[172fr_182fr] max-md:gap-2"
+  >
     <li
       v-for="chip in chips"
       :key="chip.key"
-      class="relative flex items-start gap-2 rounded-lg px-[26px] py-[14px] max-md:h-[57px] max-md:gap-1 max-md:px-3 max-md:py-2"
+      class="relative flex min-w-0 items-start gap-2 rounded-lg px-[26px] py-[14px] max-md:h-[57px] max-md:gap-1 max-md:px-3 max-md:py-2"
       style="
         background-image: linear-gradient(
           -15deg,
@@ -101,7 +111,9 @@ const chips = computed(() =>
         height="24"
         class="size-6 shrink-0"
       />
-      <span class="flex flex-col justify-center gap-2 whitespace-nowrap max-md:gap-0.5">
+      <span
+        class="flex min-w-0 flex-col justify-center gap-2 whitespace-nowrap max-md:gap-0.5 max-md:[&>span]:truncate"
+      >
         <span class="text-label-lg text-ink-50 max-md:text-[12px] max-md:leading-[15px]">{{
           chip.label
         }}</span>
@@ -112,18 +124,3 @@ const chips = computed(() =>
     </li>
   </ul>
 </template>
-
-<style scoped>
-@media (max-width: 767px) {
-  li:nth-child(1) {
-    width: 172px;
-  }
-  li:nth-child(2) {
-    width: 182px;
-  }
-  li:nth-child(3) {
-    width: 172px;
-    margin-inline-end: 190px;
-  }
-}
-</style>

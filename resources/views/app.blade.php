@@ -36,18 +36,14 @@
         <link rel="preload" href="/fonts/poppins/Poppins-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
     @endif
 
-    {{-- hreflang: every page in every language + x-default --}}
-    @isset($page['props']['alternates'])
-        @foreach ($page['props']['alternates'] as $code => $url)
-            <link rel="alternate" hreflang="{{ config("locales.supported.{$code}.html_lang") }}" href="{{ $url }}">
-        @endforeach
-        <link rel="alternate" hreflang="x-default"
-              href="{{ $page['props']['alternates'][config('locales.default')] ?? url('/') }}">
-    @endisset
-
     @routes
     @vite(['resources/js/app.ts'])
     @inertiaHead
+
+    {{-- Title, description, canonical, robots, hreflang, OG, JSON-LD — in the
+         initial HTML whether or not SSR / JavaScript runs. Must stay after
+         @inertiaHead, which it inspects for an SSR-rendered title. --}}
+    @include('partials.seo')
 </head>
 <body class="bg-ink-1000 text-ink-300">
     {{-- Skip link — first focusable element, revealed on focus --}}

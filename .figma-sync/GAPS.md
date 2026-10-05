@@ -2912,3 +2912,20 @@ user's request (2026-10-04), the buttons in `ArticleShare.vue` now use a flat
 12px padding (`p-3`) around the 24px glyph, i.e. 48px circles at every
 breakpoint. Mobile was already 48px (`max-md:size-12`), so only desktop
 changes. This is a deliberate departure from the frame, not a misread.
+
+## G74 — Start-together card: mobile mesh from a user-supplied export  (2026-10-05)  (severity: low)
+
+**Node.** `1072:5146` ("Frame 96495", phone frame) — draws **no** mesh.
+
+The user supplied a 640x564 transparent PNG of the mesh this card should carry
+below md (2026-10-05). Measured off its alpha channel: 11 x 11 cells
+(58.2 x 51.3 at that size, ratio 0.881), interior lines only — nothing on
+the outer edges. Verticals peak at ~12% black at mid-height and fade linearly
+to 0 at top and bottom; horizontals are a flat ~2.5% with no fade.
+
+Built in CSS like every other mesh (not the bitmap), spanning the whole card:
+verticals at k/11 of the card width (k = 1..10), cell height = width/11 x
+0.881 via a size container (`cqw`), so the cell proportions hold at any
+phone width. Ink is `#141414` rather than the PNG's pure black, matching the
+desktop mesh. md and up unchanged; the desktop copy-side mesh (G57)
+is still hidden below md.

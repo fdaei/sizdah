@@ -59,7 +59,7 @@ const props = withDefaults(
         <component
           :is="props.headingLevel"
           class="text-ink-50 transition-colors duration-200 ease-brand group-hover:text-brand"
-          :class="props.variant === 'wide' ? 'text-heading-md max-md:text-[24px] max-md:leading-[30px]' : 'text-heading-sm max-md:text-[20px] max-md:leading-[25px]'"
+          :class="props.variant === 'wide' ? 'text-heading-md max-md:text-[22px] max-md:leading-[28px]' : 'text-heading-sm max-md:text-[22px] max-md:leading-[28px]'"
         >
           {{ props.post.title }}
         </component>

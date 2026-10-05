@@ -48,6 +48,9 @@ final class AppServiceProvider extends ServiceProvider
 
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
+            // Canonical, hreflang, sitemap and OG URLs always use APP_URL's
+            // host, never whichever host (e.g. www.) the request came in on.
+            URL::forceRootUrl(config('app.url'));
         }
 
         $this->shareTranslations();

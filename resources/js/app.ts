@@ -1,6 +1,6 @@
 import '../css/app.css'
 
-import { createApp, h, type DefineComponent } from 'vue'
+import { createSSRApp, h, type DefineComponent } from 'vue'
 import { createInertiaApp, router } from '@inertiajs/vue3'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { ZiggyVue } from 'ziggy-js'
@@ -29,7 +29,10 @@ createInertiaApp({
   },
 
   setup({ el, App, props, plugin }) {
-    const app = createApp({ render: () => h(App, props) })
+    // createSSRApp hydrates the server-rendered markup instead of discarding
+    // and re-mounting it (no re-render flash / layout shift). When the SSR
+    // server is down the container is empty and Vue falls back to a full mount.
+    const app = createSSRApp({ render: () => h(App, props) })
       .use(plugin)
       .use(ZiggyVue)
 

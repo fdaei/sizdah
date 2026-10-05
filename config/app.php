@@ -15,6 +15,14 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    /*
+     | 301 every request whose scheme/host differs from APP_URL (www, http)
+     | or that carries a trailing slash, in one hop — see
+     | App\Http\Middleware\RedirectToCanonicalHost. On by default in
+     | production only, so local `php artisan serve` keeps working.
+     */
+    'canonical_redirect' => (bool) env('APP_CANONICAL_REDIRECT', env('APP_ENV', 'production') === 'production'),
+
     'timezone' => 'UTC',
 
     /*

@@ -38,6 +38,9 @@ import titleUnderlineUrl from '~img/sizdah/work/project-title-underline.svg'
  *
  * When every title fits one line and every excerpt runs two — the frame's own
  * case — this collapses back to exactly the 40/16/24 rhythm above.
+ *
+ * Mobile (below md, per review 2026-10-05): title 22px; excerpt stays 16px
+ * (`body-lg`), industry label and service tags stay 14px.
  */
 const props = defineProps<{ project: ProjectSummary }>()
 </script>
@@ -66,7 +69,7 @@ const props = defineProps<{ project: ProjectSummary }>()
           <div class="flex items-start justify-between gap-4">
             <h3 class="flex min-w-0 flex-col items-start">
               <span
-                class="text-display-sm font-semibold text-paper transition-colors duration-200 ease-brand group-hover:text-brand"
+                class="text-display-sm font-semibold text-paper transition-colors max-md:text-[22px] duration-200 ease-brand group-hover:text-brand"
               >
                 {{ props.project.title }}
               </span>
@@ -77,7 +80,10 @@ const props = defineProps<{ project: ProjectSummary }>()
               <img :src="titleUnderlineUrl" alt="" aria-hidden="true" class="mt-1 h-[5px] w-full" />
             </h3>
 
-            <p v-if="props.project.industry" class="shrink-0 pt-3 text-label-lg text-brand">
+            <p
+              v-if="props.project.industry"
+              class="shrink-0 pt-3 text-label-lg text-brand max-md:pt-1.5"
+            >
               {{ props.project.industry }}
             </p>
           </div>

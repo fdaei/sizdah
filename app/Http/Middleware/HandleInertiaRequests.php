@@ -42,12 +42,14 @@ final class HandleInertiaRequests extends Middleware
                 'direction' => $config['direction'],
                 'font'      => $config['font'],
                 'htmlLang'  => $config['html_lang'],
+                'default'   => config('locales.default'),
                 'supported' => collect(config('locales.supported'))
                     ->map(fn (array $c, string $code): array => [
                         'code'      => $code,
                         'name'      => $c['name'],
                         'native'    => $c['native'],
                         'direction' => $c['direction'],
+                        'htmlLang'  => $c['html_lang'],
                     ])
                     ->values()
                     ->all(),
