@@ -25,6 +25,7 @@ const props = defineProps<{ url: string; title: string }>()
 const { t } = useTranslations()
 
 const copied = ref(false)
+
 let resetTimer: ReturnType<typeof setTimeout> | undefined
 
 async function copyLink() {
