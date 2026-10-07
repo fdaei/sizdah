@@ -28,6 +28,7 @@ return [
             'post_tag' => 'برچسب مقاله‌ها',
             'contact_submission' => 'پیام‌های تماس',
             'newsletter_subscription' => 'اعضای خبرنامه',
+            'lead_magnet_request' => 'درخواست‌های فایل (لید مگنت)',
             'menu' => 'منوهای سایت',
             'social_link' => 'لینک شبکه‌های اجتماعی',
             'redirect' => 'انتقال آدرس‌های قدیمی',
@@ -48,6 +49,7 @@ return [
         'post_tag' => 'برچسب مقاله',
         'contact_submission' => 'پیام تماس',
         'newsletter_subscription' => 'عضو خبرنامه',
+        'lead_magnet_request' => 'درخواست فایل',
         'menu' => 'منوی سایت',
         'social_link' => 'لینک شبکه اجتماعی',
         'redirect' => 'انتقال آدرس',
@@ -67,6 +69,7 @@ return [
         'post_tag' => 'برچسب‌های مقاله',
         'contact_submission' => 'پیام‌های تماس',
         'newsletter_subscription' => 'اعضای خبرنامه',
+        'lead_magnet_request' => 'درخواست‌های فایل',
         'menu' => 'منوهای سایت',
         'social_link' => 'لینک‌های شبکه اجتماعی',
         'redirect' => 'انتقال آدرس‌ها',
@@ -154,5 +157,28 @@ return [
         'palette' => 'برندینگ',
         'share-2' => 'شبکه‌های اجتماعی',
         'megaphone' => 'طراحی مارکتینگ',
+    ],
+    /*
+     | Lead magnet — the per-article file (PostResource) and the log of who
+     | asked for it and whether the email went out (LeadMagnetRequestResource).
+     */
+    'lead_magnet' => [
+        'section_description' => 'فایلی که خواننده بعد از پر کردن فرم چک‌لیست داخل همین مقاله دریافت می‌کند.',
+        'file_help' => 'PDF، ZIP، Word، Excel، PowerPoint یا تصویر — حداکثر ۱۰ مگابایت. فایل خصوصی ذخیره می‌شود و فقط به‌صورت پیوست ایمیل ارسال می‌شود.',
+        'send_email_help' => 'اگر روشن باشد، بعد از ثبت فرم، فایل به ایمیل خواننده ارسال می‌شود. اگر خاموش باشد فقط اطلاعات فرم ثبت می‌شود.',
+        'requests_title' => 'درخواست‌های فایل',
+        'status' => [
+            'skipped' => 'ارسال نشد (غیرفعال)',
+            'pending' => 'در صف ارسال',
+            'sent' => 'ارسال شد',
+            'failed' => 'خطا در ارسال',
+        ],
+        'resend' => 'ارسال دوباره ایمیل',
+        'resend_confirm' => 'فایل فعلی این مقاله دوباره به این ایمیل ارسال می‌شود.',
+        'resend_queued' => 'ایمیل در صف ارسال قرار گرفت.',
+        'resend_no_file' => 'این مقاله فایلی ندارد؛ ابتدا در فرم مقاله فایل را بارگذاری کنید.',
+        'resend_bulk_queued' => ':count ایمیل در صف ارسال قرار گرفت.',
+        'export' => 'خروجی CSV',
+        'home_page' => 'صفحه اصلی',
     ],
 ];

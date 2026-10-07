@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\LeadMagnetEmailStatus;
 use App\Enums\SubmissionStatus;
 use App\Http\Requests\ContactSubmissionRequest;
 use App\Http\Requests\NewsletterSubscriptionRequest;
+use App\Jobs\SendLeadMagnetEmail;
 use App\Models\ContactSubmission;
+use App\Models\LeadMagnetRequest;
 use App\Models\NewsletterSubscription;
+use App\Models\Post;
 use App\Notifications\ContactSubmissionReceived;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
@@ -56,11 +60,27 @@ final class SubmissionHandler
     }
 
     /**
-     * Subscribe an address.
+     * Subscribe an address and log the lead-magnet request it came with.
+     *
+     * Every submission gets its own LeadMagnetRequest row (even from an
+     * address already on the list), and — when the article it came from has
+     * a file and email delivery enabled in the admin — a queued email.
      *
      * @return bool  true when newly subscribed, false when already on the list
      */
     public function handleNewsletter(NewsletterSubscriptionRequest $request): bool
+    {
+        [$subscription, $wasNew] = $this->subscribe($request);
+
+        $this->recordLeadMagnetRequest($request, $subscription);
+
+        return $wasNew;
+    }
+
+    /**
+     * @return array{0: NewsletterSubscription, 1: bool}
+     */
+    private function subscribe(NewsletterSubscriptionRequest $request): array
     {
         $email = strtolower((string) $request->validated('email'));
 
@@ -77,13 +97,13 @@ final class SubmissionHandler
 
                 $existing->resubscribe();
 
-                return true;
+                return [$existing, true];
             }
 
-            return false;
+            return [$existing, false];
         }
 
-        NewsletterSubscription::create([
+        $subscription = NewsletterSubscription::create([
             'email' => $email,
             'name' => $request->validated('name'),
             'locale' => app()->getLocale(),
@@ -91,6 +111,41 @@ final class SubmissionHandler
             'ip_address' => $request->ip(),
         ]);
 
-        return true;
+        return [$subscription, true];
+    }
+
+    private function recordLeadMagnetRequest(
+        NewsletterSubscriptionRequest $request,
+        NewsletterSubscription $subscription,
+    ): LeadMagnetRequest {
+        $postId = $request->validated('post_id');
+
+        $post = $postId === null
+            ? null
+            : Post::query()->published()->find((int) $postId);
+
+        $sendsEmail = $post?->emailsLeadMagnet() ?? false;
+
+        $leadRequest = LeadMagnetRequest::create([
+            'post_id' => $post?->getKey(),
+            'newsletter_subscription_id' => $subscription->getKey(),
+            'name' => $request->validated('name'),
+            'email' => $subscription->email,
+            'locale' => app()->getLocale(),
+            'source' => $request->validated('source') ?? 'home',
+            'file_path' => $post?->lead_magnet_path,
+            'file_name' => $post?->lead_magnet_name,
+            'email_status' => $sendsEmail
+                ? LeadMagnetEmailStatus::Pending
+                : LeadMagnetEmailStatus::Skipped,
+            'ip_address' => $request->ip(),
+        ]);
+
+        if ($sendsEmail) {
+            // Queued — the visitor gets their success state immediately.
+            SendLeadMagnetEmail::dispatch($leadRequest);
+        }
+
+        return $leadRequest;
     }
 }

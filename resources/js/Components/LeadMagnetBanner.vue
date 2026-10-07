@@ -55,8 +55,10 @@ const props = withDefaults(
     size?: 'sm' | 'lg'
     /** Matches `NewsletterSubscriptionRequest`'s `source` enum. */
     source: 'home' | 'article'
+    /** The article this banner sits in; its admin-chosen file is emailed. */
+    postId?: number | null
   }>(),
-  { size: 'sm' },
+  { size: 'sm', postId: null },
 )
 
 const modalOpen = ref(false)
@@ -196,5 +198,10 @@ const modalOpen = ref(false)
     </div>
   </aside>
 
-  <LeadMagnetModal :open="modalOpen" :source="props.source" @close="modalOpen = false" />
+  <LeadMagnetModal
+    :open="modalOpen"
+    :source="props.source"
+    :post-id="props.postId"
+    @close="modalOpen = false"
+  />
 </template>

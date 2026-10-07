@@ -46,4 +46,17 @@ return [
         'dialog_label'      => 'Get the free checklist',
     ],
 
+    // Lead-magnet file email — the file is chosen per article in the admin panel.
+    'lead_magnet_mail' => [
+        'subject'            => 'Your requested file',
+        'subject_with_title' => 'Your requested file — :title',
+        'greeting'           => 'Hi,',
+        'greeting_named'     => 'Hi :name,',
+        'body'               => 'Thanks for your request. The file you asked for is ready.',
+        'body_with_title'    => 'Thanks for your request on “:title”. The file you asked for is ready.',
+        'attached'           => 'You will find it attached to this email.',
+        'read_article'       => 'Read the article',
+        'signoff'            => 'Best regards, the :app team',
+    ],
+
 ];

@@ -28,6 +28,8 @@ final class NewsletterSubscriptionRequest extends FormRequest
             'name' => ['nullable', 'string', 'max:200'],
             'email' => ['required', 'email:rfc,dns', 'max:200'],
             'source' => ['nullable', 'string', 'in:home,article,contact'],
+            // The article whose banner opened the form; picks the file to email.
+            'post_id' => ['nullable', 'integer', 'min:1'],
             'website' => ['nullable', 'prohibited'], // honeypot
         ];
     }
