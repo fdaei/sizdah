@@ -28,6 +28,7 @@ return [
             'post_tag' => 'Article tags',
             'contact_submission' => 'Contact messages',
             'newsletter_subscription' => 'Newsletter subscribers',
+            'lead_magnet_request' => 'Lead magnet requests',
             'menu' => 'Website menus',
             'social_link' => 'Social media links',
             'redirect' => 'Old URL redirects',
@@ -48,6 +49,7 @@ return [
         'post_tag' => 'article tag',
         'contact_submission' => 'contact message',
         'newsletter_subscription' => 'newsletter subscriber',
+        'lead_magnet_request' => 'Lead magnet request',
         'menu' => 'website menu',
         'social_link' => 'social media link',
         'redirect' => 'URL redirect',
@@ -67,6 +69,7 @@ return [
         'post_tag' => 'article tags',
         'contact_submission' => 'contact messages',
         'newsletter_subscription' => 'newsletter subscribers',
+        'lead_magnet_request' => 'Lead magnet requests',
         'menu' => 'website menus',
         'social_link' => 'social media links',
         'redirect' => 'URL redirects',
@@ -154,5 +157,28 @@ return [
         'palette' => 'Branding',
         'share-2' => 'Social media',
         'megaphone' => 'Marketing design',
+    ],
+    /*
+     | Lead magnet — the per-article file (PostResource) and the log of who
+     | asked for it and whether the email went out (LeadMagnetRequestResource).
+     */
+    'lead_magnet' => [
+        'section_description' => 'The file a reader receives after filling the checklist form inside this article.',
+        'file_help' => 'PDF, ZIP, Word, Excel, PowerPoint or image — up to 10 MB. Stored privately and only ever sent as an email attachment.',
+        'send_email_help' => 'When on, the file is emailed to the reader after they submit the form. When off, the submission is only recorded.',
+        'requests_title' => 'Lead magnet requests',
+        'status' => [
+            'skipped' => 'Not sent (disabled)',
+            'pending' => 'Queued',
+            'sent' => 'Sent',
+            'failed' => 'Failed',
+        ],
+        'resend' => 'Resend email',
+        'resend_confirm' => "The article's current file will be emailed to this address again.",
+        'resend_queued' => 'Email queued for sending.',
+        'resend_no_file' => 'This article has no file — upload one in the article form first.',
+        'resend_bulk_queued' => ':count email(s) queued for sending.',
+        'export' => 'Export CSV',
+        'home_page' => 'Home page',
     ],
 ];

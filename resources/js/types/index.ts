@@ -242,6 +242,8 @@ export interface PostSummary {
 }
 
 export interface PostDetail extends PostSummary {
+  /** Sent back by the lead-magnet form so the article's own file is emailed. */
+  id: number
   subtitle: string
   content: string
   author: { name: string; email: string | null } | null

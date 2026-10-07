@@ -6,6 +6,7 @@ namespace App\Filament\Resources;
 
 use App\Enums\PublicationStatus;
 use App\Filament\Resources\PostResource\Pages;
+use App\Filament\Resources\PostResource\RelationManagers;
 use App\Filament\Support\PublicationFields;
 use App\Filament\Support\TranslatableForm;
 use App\Models\Post;
@@ -20,6 +21,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Pages\PageRegistration;
 use App\Filament\Resource;
@@ -151,6 +153,45 @@ final class PostResource extends Resource
                             ->directory('posts')
                             ->disk('public'),
                     ]),
+
+                    // What the in-article checklist form (LeadMagnetModal)
+                    // hands out. Who asked and whether their email went out
+                    // is listed under the form (LeadMagnetRequestsRelationManager).
+                    Section::make('Lead magnet')
+                        ->description(fn (): string => __('admin.lead_magnet.section_description'))
+                        ->schema([
+                            FileUpload::make('lead_magnet_path')
+                                ->label('Lead magnet file')
+                                // Private disk: never publicly linkable, only
+                                // ever leaves the server as a mail attachment.
+                                ->disk('local')
+                                ->directory('lead-magnets')
+                                ->visibility('private')
+                                ->storeFileNamesIn('lead_magnet_name')
+                                ->acceptedFileTypes([
+                                    'application/pdf',
+                                    'application/zip',
+                                    'application/x-zip-compressed',
+                                    'application/msword',
+                                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                    'application/vnd.ms-excel',
+                                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                    'application/vnd.ms-powerpoint',
+                                    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                                    'image/png',
+                                    'image/jpeg',
+                                ])
+                                // Mail servers commonly reject attachments past ~10–25 MB.
+                                ->maxSize(10 * 1024)
+                                ->downloadable()
+                                ->required(fn (Get $get): bool => (bool) $get('lead_magnet_send_email'))
+                                ->helperText(fn (): string => __('admin.lead_magnet.file_help')),
+
+                            Toggle::make('lead_magnet_send_email')
+                                ->label('Email the file to readers')
+                                ->live()
+                                ->helperText(fn (): string => __('admin.lead_magnet.send_email_help')),
+                        ]),
                 ]),
             ]),
         ]);
@@ -193,6 +234,14 @@ final class PostResource extends Resource
                     ->label('Main article')
                     ->boolean(),
 
+                Tables\Columns\TextColumn::make('lead_magnet_requests_count')
+                    ->label('Lead requests')
+                    ->counts('leadMagnetRequests')
+                    ->badge()
+                    ->color('gray')
+                    ->sortable()
+                    ->toggleable(),
+
                 Tables\Columns\TextColumn::make('published_at')
                     ->dateTime('M j, Y')
                     ->sortable(),
@@ -234,6 +283,13 @@ final class PostResource extends Resource
                     Tables\Actions\ForceDeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\LeadMagnetRequestsRelationManager::class,
+        ];
     }
 
     /**

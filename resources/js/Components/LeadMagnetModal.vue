@@ -64,6 +64,8 @@ const props = defineProps<{
   open: boolean
   /** Matches `NewsletterSubscriptionRequest`'s `source` enum. */
   source: 'home' | 'article' | 'contact'
+  /** Article the form was opened from — picks which lead-magnet file is emailed. */
+  postId?: number | null
 }>()
 
 const emit = defineEmits<{ close: [] }>()
@@ -74,10 +76,17 @@ const panel = ref<HTMLElement | null>(null)
 const nameInput = ref<HTMLInputElement | null>(null)
 const succeeded = ref(false)
 
-const form = useForm<{ name: string; email: string; source: string; website: string }>({
+const form = useForm<{
+  name: string
+  email: string
+  source: string
+  post_id: number | null
+  website: string
+}>({
   name: '',
   email: '',
   source: props.source,
+  post_id: props.postId ?? null,
   website: '',
 })
 

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 
@@ -38,6 +39,9 @@ final class Post extends Model implements HasLocalisedSlugs
         'is_featured',
         'cover_path',
         'reading_minutes',
+        'lead_magnet_path',
+        'lead_magnet_name',
+        'lead_magnet_send_email',
     ];
 
     /** @var array<int, string> */
@@ -59,6 +63,7 @@ final class Post extends Model implements HasLocalisedSlugs
             'published_at' => 'datetime',
             'is_featured' => 'boolean',
             'reading_minutes' => 'integer',
+            'lead_magnet_send_email' => 'boolean',
         ];
     }
 
@@ -82,6 +87,24 @@ final class Post extends Model implements HasLocalisedSlugs
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(PostTag::class, 'post_post_tag');
+    }
+
+    public function leadMagnetRequests(): HasMany
+    {
+        return $this->hasMany(LeadMagnetRequest::class);
+    }
+
+    /* ---------------------------------------------------------- lead magnet */
+
+    /**
+     * Whether a reader who fills this article's checklist form is emailed
+     * the file: the admin toggle is on AND a file is actually attached.
+     */
+    public function emailsLeadMagnet(): bool
+    {
+        return $this->lead_magnet_send_email
+            && $this->lead_magnet_path !== null
+            && $this->lead_magnet_path !== '';
     }
 
     /* -------------------------------------------------------------- routing */

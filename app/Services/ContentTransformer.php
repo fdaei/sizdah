@@ -215,6 +215,8 @@ final class ContentTransformer
     public static function postDetail(Post $post): array
     {
         return array_merge(self::postSummary($post), [
+            // Sent back by the lead-magnet form so the right file is emailed.
+            'id' => $post->getKey(),
             'subtitle' => (string) $post->getTranslation('subtitle'),
             'content' => (string) $post->getTranslation('content'),
             'image' => MediaTransformer::make(

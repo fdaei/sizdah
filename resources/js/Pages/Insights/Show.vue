@@ -165,7 +165,7 @@ const articleContent = computed(() => {
         v-if="props.leadMagnet && articleContent.hasMarker"
         class="mx-auto mt-[72px] w-full max-w-[826px]"
       >
-        <LeadMagnetBanner :section="props.leadMagnet" source="article" />
+        <LeadMagnetBanner :section="props.leadMagnet" source="article" :post-id="props.post.id" />
       </div>
 
       <div
@@ -180,7 +180,7 @@ const articleContent = computed(() => {
         v-if="props.leadMagnet && !articleContent.hasMarker"
         class="mx-auto mt-[72px] w-full max-w-[826px]"
       >
-        <LeadMagnetBanner :section="props.leadMagnet" source="article" />
+        <LeadMagnetBanner :section="props.leadMagnet" source="article" :post-id="props.post.id" />
       </div>
 
       <section v-if="props.post.related.length" class="mt-[81px] flex flex-col gap-12">
