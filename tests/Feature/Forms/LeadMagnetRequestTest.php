@@ -110,8 +110,11 @@ it('marks the request sent once the mail goes out, with the file attached', func
     (new SendLeadMagnetEmail($request))->handle();
 
     Mail::assertSent(LeadMagnetMail::class, function (LeadMagnetMail $mail): bool {
+        $attachments = $mail->attachments();
+
         return $mail->hasTo('reader@example.com')
-            && $mail->hasAttachmentFromStorageDisk('local', 'lead-magnets/checklist.pdf', 'content-checklist.pdf');
+            && count($attachments) === 1
+            && $attachments[0]->as === 'content-checklist.pdf';
     });
 
     $request->refresh();
