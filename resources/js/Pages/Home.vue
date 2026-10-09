@@ -495,6 +495,12 @@ onBeforeUnmount(() => {
 @media (max-width: 1023px) {
   .home-hero {
     background-image: var(--hero-bg-mobile) !important;
+    /*
+     * AppHeader is fixed on mobile (32px top padding + the 60px logo +
+     * 24px bottom padding). Keep the hero artwork below that chrome instead
+     * of letting it show through the translucent navigation bar.
+     */
+    background-position: center 116px;
     background-size: 100% auto;
   }
 }

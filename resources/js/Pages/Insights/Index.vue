@@ -94,18 +94,18 @@ const rest = computed(() => props.posts.data.slice(2))
   -->
   <section class="section-first overflow-x-hidden pb-[199.24px] max-md:pb-12">
     <!-- Header sits 96 above the content block; 270:5252 then runs on 144. -->
-    <div class="container-sizdah relative isolate flex flex-col gap-16 max-md:gap-8 lg:gap-24">
+    <div class="container-sizdah relative isolate flex flex-col gap-16 max-md:gap-12 lg:gap-24">
       <!-- 268:5233 — 670 track, 64 to the chip row; 268:5234 is the 612 column. -->
       <header
-        class="relative mx-auto flex w-full max-w-[1000px] flex-col items-center gap-16 text-center max-md:gap-8"
+        class="relative mx-auto flex w-full max-w-[1000px] flex-col items-center gap-16 text-center max-md:gap-12"
         data-reveal
       >
         <div class="flex w-full max-w-measure flex-col items-center gap-10 max-md:gap-6 max-md:!max-w-full">
           <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
           <div class="flex flex-col items-center gap-6 max-md:gap-5">
-            <h1 class="text-display-lg text-ink-50 max-md:w-full max-md:text-[40px] max-md:leading-[51px]">{{ props.heading.title }}</h1>
-            <p v-if="props.heading.description" class="text-title-sm text-ink-200 max-md:text-[16px] max-md:leading-[22px]">
+            <h1 class="text-display-lg text-ink-50 max-md:w-full max-md:text-[16px] max-md:leading-[20px]">{{ props.heading.title }}</h1>
+            <p v-if="props.heading.description" class="text-title-sm text-ink-200 max-md:text-[14px] max-md:leading-[18px]">
               {{ props.heading.description }}
             </p>
           </div>
@@ -170,7 +170,7 @@ const rest = computed(() => props.posts.data.slice(2))
           }}
         </p>
 
-        <div v-if="wide.length" class="grid gap-6 md:grid-cols-2" data-reveal-group>
+        <div v-if="wide.length" class="grid gap-x-6 gap-y-16 md:grid-cols-2 md:gap-y-6" data-reveal-group>
           <BlogCard
             v-for="post in wide"
             :key="post.slug"

@@ -15,6 +15,11 @@ import type { PostSummary } from '@/types'
  * 612 card (275:5577) against 24px on the 400 card (276:5746). Both are Peyda
  * Medium in Black/50. The image hairline is black/100 #E9E9E9 — the warm ramp,
  * not the cool ink-100 #E8E8E8 it was set to.
+ *
+ * Mobile (below md): both variants collapse to one column, so the width split
+ * no longer exists — every card takes the 362x248 image and 16px radius that
+ * the Work listing's ProjectPostCard uses, so the stack reads as one set of
+ * identical cards (GAPS G75).
  */
 const props = withDefaults(
   defineProps<{
@@ -32,7 +37,7 @@ const props = withDefaults(
   <article class="flex flex-col gap-4">
     <Link :href="props.post.url" class="group flex flex-col gap-4">
       <div
-        class="overflow-hidden rounded-lg border border-warm-100 shadow-card"
+        class="overflow-hidden rounded-lg border border-warm-100 shadow-card max-md:aspect-[362/248] max-md:rounded-[16px]"
         :class="props.variant === 'wide' ? 'aspect-[612/400]' : 'aspect-square'"
       >
         <picture v-if="props.post.image">

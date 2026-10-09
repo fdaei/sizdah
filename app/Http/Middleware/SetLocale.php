@@ -65,12 +65,20 @@ final class SetLocale
         $fromRoute = $request->route('locale');
 
         if (is_string($fromRoute) && in_array($fromRoute, $supported, true)) {
-            $request->session()->put('locale', $fromRoute);
+            // Route middleware normally runs after StartSession, but this
+            // method is also called from the exception renderer for requests
+            // that matched no route at all. In that path there is no session
+            // store attached to the request.
+            if ($request->hasSession()) {
+                $request->session()->put('locale', $fromRoute);
+            }
 
             return $fromRoute;
         }
 
-        $fromSession = $request->session()->get('locale');
+        $fromSession = $request->hasSession()
+            ? $request->session()->get('locale')
+            : null;
 
         if (is_string($fromSession) && in_array($fromSession, $supported, true)) {
             return $fromSession;

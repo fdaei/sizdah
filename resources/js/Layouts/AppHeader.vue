@@ -10,15 +10,16 @@ import doodleUrl from '~img/sizdah/shared/header-doodle.svg'
 import type { NavItem, SharedProps } from '@/types'
 
 /**
- * Site header. Figma 268:3031 (instanced on every frame, 1440 x 108).
+ * Site header. Figma 268:3031 (instanced on every frame).
  *
  * Layout in the file is RTL: wordmark at the inline start, the menu centred,
  * and the gold CTA at the inline end. Built with logical properties so the
  * same markup flips for the LTR locale.
  *
- * Measured off the frame (1440 x 107.568): px space96 / py space24, the logo
- * 104 x 59.568 at y=24 (it is what sets the header height), the menu on gap 24,
- * and the ink doodle `Layer_1` (I268:3031;56:2399) at x=98.148 / y=12.948 —
+ * Header spacing uses 96px inline padding, 32px above, and 24px below. The logo
+ * is 104 x 59.568 at y=32 (it is what sets the header height), and the menu has
+ * a gap of 24px. The ink doodle `Layer_1` (I268:3031;56:2399) sits at
+ * x=98.148 / y=12.948 —
  * i.e. over the CTA's top corner, NOT beside the wordmark, where it used to sit.
  *
  * The frame paints no bottom border; the 15% white fill plus the 15px backdrop

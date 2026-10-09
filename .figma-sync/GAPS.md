@@ -2929,3 +2929,30 @@ verticals at k/11 of the card width (k = 1..10), cell height = width/11 x
 phone width. Ink is `#141414` rather than the PNG's pure black, matching the
 desktop mesh. md and up unchanged; the desktop copy-side mesh (G57)
 is still hidden below md.
+
+## G75 — Insights cards: one image shape on mobile, matching Work  (2026-10-09)  (severity: low)
+
+**Nodes.** `276:5724` (blog card, 400 square / 612x400 variants), `270:5253`
+(featured row, 612x459).
+
+Below md every Insights card stacks in a single column, but each one kept its
+desktop image aspect: square for the 3-up cards, 612:400 for the 2-up pair, and
+612:459 for the featured card. Down one column that read as three different
+card shapes. Per the user's request (2026-10-09), below md all of them
+(`BlogCard` in both variants and `FeaturedPostCard`) now use the 362x248 image
+and 16px radius that `ProjectPostCard` uses on the Work listing. The 2-up row
+also takes the same 64px vertical gap as the rest of the stack (it was 24).
+md and up are unchanged.
+
+Follow-up (2026-10-09, user request): below md the featured card also drops its
+surface. The sketched outline (`.sketch-frame::after`) and the mobile
+background art (`insights/mobile-background.jpg`, a grid with doodle icons) are
+both gone, and so is the 16px inset, so the image sits flush like the BlogCards
+under it. That JPG is no longer referenced anywhere.
+
+Follow-up 2 (2026-10-09, user-supplied CSS): below md the featured card gets its
+ground back. It is the `.surface-glow` stack (20% black wash, brand glow
+0 -> 10% from 2.32%, 80% #141414) with the glow raked at 317deg instead of
+-20.03deg, a 16px radius and the 16px inset. The sketched outline and the
+background art stay off. `--glow-angle` moved from an inline style into the
+component's scoped CSS so the mobile rule can override it.

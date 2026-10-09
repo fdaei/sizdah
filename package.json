@@ -10,7 +10,8 @@
         "lint": "eslint resources/js",
         "format": "prettier --write resources/js",
         "test:e2e": "playwright test",
-        "test:e2e:ui": "playwright test --ui"
+        "test:e2e:ui": "playwright test --ui",
+        "test:e2e:parspack": "HEADED=1 playwright test --config=playwright.parspack.config.ts"
     },
     "devDependencies": {
         "@inertiajs/vue3": "^2.3.28",

@@ -423,6 +423,27 @@
   }
 
   /*
+   | 2026-10-09: the Work/Show meta cards (57px on the phone, ~70px desktop)
+   | are taller than the 46px chip drawing, so even the 3-slice above scales
+   | its caps with the height and the cards read as pills/ellipses. The user
+   | wants a rectangle with a small rounded corner, so this is a full 9-slice
+   | of the same drawing as eight mask layers: the four 24x20 corners at native
+   | size (fixed radius at any card size) and each edge stretched only along
+   | its own length. Still a mask, so the call site tints it via
+   | background-color like the other chip rules.
+   */
+  .sketch-frame-chip-box {
+    -webkit-mask-image: url('../images/sizdah/shared/filter-chip-frame.svg#chip-tl'), url('../images/sizdah/shared/filter-chip-frame.svg#chip-tr'), url('../images/sizdah/shared/filter-chip-frame.svg#chip-bl'), url('../images/sizdah/shared/filter-chip-frame.svg#chip-br'), url('../images/sizdah/shared/filter-chip-frame.svg#chip-top'), url('../images/sizdah/shared/filter-chip-frame.svg#chip-bottom'), url('../images/sizdah/shared/filter-chip-frame.svg#chip-left'), url('../images/sizdah/shared/filter-chip-frame.svg#chip-right');
+    mask-image: url('../images/sizdah/shared/filter-chip-frame.svg#chip-tl'), url('../images/sizdah/shared/filter-chip-frame.svg#chip-tr'), url('../images/sizdah/shared/filter-chip-frame.svg#chip-bl'), url('../images/sizdah/shared/filter-chip-frame.svg#chip-br'), url('../images/sizdah/shared/filter-chip-frame.svg#chip-top'), url('../images/sizdah/shared/filter-chip-frame.svg#chip-bottom'), url('../images/sizdah/shared/filter-chip-frame.svg#chip-left'), url('../images/sizdah/shared/filter-chip-frame.svg#chip-right');
+    -webkit-mask-size: 24px 20px, 24px 20px, 24px 20px, 24px 20px, calc(100% - 48px) 20px, calc(100% - 48px) 20px, 24px calc(100% - 40px), 24px calc(100% - 40px);
+    mask-size: 24px 20px, 24px 20px, 24px 20px, 24px 20px, calc(100% - 48px) 20px, calc(100% - 48px) 20px, 24px calc(100% - 40px), 24px calc(100% - 40px);
+    -webkit-mask-position: left top, right top, left bottom, right bottom, center top, center bottom, left center, right center;
+    mask-position: left top, right top, left bottom, right bottom, center top, center bottom, left center, right center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  /*
    | The social chip outline (SocialIcon.vue). This is its OWN 57 x 57 drawing,
    | traced off 279:6487, not the filter chip's — the frame draws these chips
    | with a hand-drawn rule too, but squarer and at radius 16. Stretching the

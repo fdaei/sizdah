@@ -202,18 +202,18 @@ onBeforeUnmount(() => {
               <img :src="arrowUrl" alt="" aria-hidden="true" width="24" height="24" class="size-6 flip-rtl" />
               <span>{{ props.section.content || t('work.project_details') }}</span>
             </Link>
-            <Link :href="props.projects[active].url" class="text-[22px] font-semibold leading-[28px] text-paper">
+            <Link :href="props.projects[active].url" class="text-[16px] font-semibold leading-[20px] text-paper">
               {{ props.projects[active].title }}
             </Link>
           </div>
           <div class="flex flex-col items-start gap-2 text-right">
             <div class="flex w-full items-center justify-start gap-1">
               <img :src="projectCategoryUrl" alt="" aria-hidden="true" width="20" height="20" class="size-5" />
-              <p v-if="props.projects[active].industry" class="text-[14px] font-medium leading-[20px] text-brand">
+              <p v-if="props.projects[active].industry" class="text-[12px] font-medium leading-[15px] text-brand">
                 {{ props.projects[active].industry }}
               </p>
             </div>
-            <p v-if="props.projects[active].excerpt" class="line-clamp-2 w-full text-[16px] leading-[20px] text-ink-200">
+            <p v-if="props.projects[active].excerpt" class="line-clamp-2 w-full text-[14px] leading-[18px] text-ink-200">
               {{ props.projects[active].excerpt }}
             </p>
           </div>

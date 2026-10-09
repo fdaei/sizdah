@@ -95,12 +95,15 @@ const contact = computed(() => settings.value.contact)
   <footer
     class="rounded-t-lg border-t border-warm-100 bg-ink-1000 shadow-footer"
     :class="
-      ['Work/Index', 'About'].includes(page.component)
+      ['Work/Index', 'Work/Show', 'About'].includes(page.component)
         ? 'max-md:h-[640px] max-md:overflow-hidden'
         : ''
     "
   >
-    <div class="container-sizdah relative pb-12 pt-12 max-md:pb-[30px] xl:pb-[128.76px]">
+    <div
+      class="container-sizdah relative pb-12 pt-12 max-md:pb-[30px] xl:pb-[128.76px]"
+      :class="page.component === 'Work/Show' ? 'max-md:pt-8' : ''"
+    >
       <img
         :src="footerBloomUrl"
         alt=""
@@ -109,7 +112,10 @@ const contact = computed(() => settings.value.contact)
       />
 
       <div class="relative flex flex-col gap-10">
-        <div class="flex flex-col justify-between gap-10 md:flex-row md:items-start">
+        <div
+          class="flex flex-col justify-between gap-10 md:flex-row md:items-start"
+          :class="page.component === 'Work/Show' ? 'max-md:ms-auto max-md:w-[297px]' : ''"
+        >
           <!-- Brand + positioning line -->
           <div class="flex w-full flex-col gap-8 md:w-[402px]">
             <BrandLogo :width="87" :title="settings.siteName" />

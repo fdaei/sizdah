@@ -233,12 +233,192 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
 const strategyLead = computed(() =>
   props.project.deliverables.length > 0 ? 'mt-20 md:mt-[121px]' : 'mt-20 md:mt-[233px]',
 )
+
+/*
+ * The selected Figma frame is the 402px phone composition (1118:4879).  Its
+ * copy is authored as a fixed case-study presentation and its cards are
+ * intentionally repeated; keep this small model local to the phone layout so
+ * the data-driven desktop case study remains reusable for other projects.
+ */
+const mobileCard = {
+  title: 'هویت آرام و حرفه‌ای',
+  description: 'ساخت تصویری ساده‌تر، دلنشین‌تر و حرفه‌ای‌تر از برند',
+}
+const mobileGoals = Array.from({ length: 4 }, () => mobileCard)
+const mobileStrategy = Array.from({ length: 3 }, () => mobileCard)
+const mobileDeliverables = Array.from({ length: 6 }, () => mobileCard)
+const mobileResults = [
+  { label: 'Interaction', value: '+72%', icon: 'interaction' },
+  { label: 'View', value: '+72%', icon: 'view' },
+  { label: 'Interaction', value: '+72%', icon: 'interaction' },
+  { label: 'View', value: '+72%', icon: 'view' },
+  { label: 'View', value: '+72%', icon: 'view' },
+] as ResultStat[]
+const mobileMeta = [
+  { label: 'موضوع', value: 'پشتیبانی از شبکه های اجتماعی', icon: servicesIconUrl, class: 'px-[10px]' },
+  { label: 'تاریخ', value: '۲۰ اردیبهشت ۱۴۰۳', icon: yearIconUrl, class: 'px-[14px]' },
+  { label: 'نویسنده', value: 'SaraAmiri@gmail.com', icon: industryIconUrl, class: 'col-start-2 px-[14px]' },
+]
 </script>
 
 <template>
   <SeoHead :seo="props.seo" />
 
-  <article class="section-first pb-[442.38px]">
+  <article class="section-first overflow-x-clip pb-[442.38px] max-md:pb-[161px]">
+    <!-- The Figma reference supplied for this route is the phone frame. -->
+    <div class="md:hidden" dir="rtl">
+      <div class="mx-auto w-full max-w-[402px] px-5">
+        <header class="flex flex-col items-end gap-[30px]" data-reveal>
+          <div class="flex w-full flex-col items-end gap-6 text-right">
+            <h1 class="w-full text-[26px] font-bold leading-[36px] text-ink-50">
+              هر برند<br />داستان خودش را دارد
+            </h1>
+            <p class="w-full text-[16px] font-medium leading-[22px] text-ink-200">
+              وقتی محتوای شما هدف و جهت روشنی نداشته باشد، پراکنده و بی‌اثر می‌شود؛ در نتیجه نمی‌تواند مخاطب را جذب کند یا به رشد واقعی کسب‌وکارتان کمک کند
+            </p>
+          </div>
+
+          <!--
+            Hand-drawn outline (.sketch-frame-chip, the same drawing the desktop
+            meta row wears), not a CSS border. Padding absorbs the old 2px
+            border so each card keeps its box size.
+          -->
+          <div class="grid w-full grid-cols-[1fr_0.95fr] gap-2" aria-label="اطلاعات پروژه">
+            <div
+              v-for="item in mobileMeta"
+              :key="item.label"
+              class="surface-meta-chip relative flex h-[57px] items-start justify-end gap-2 rounded-lg py-[10px] text-right"
+              :class="item.class"
+            >
+              <!-- Fixed-radius 9-slice (.sketch-frame-chip-box): a rectangle with small
+                   rounded corners at any card size, not a stretched pill. -->
+              <span
+                aria-hidden="true"
+                class="sketch-frame-chip-box pointer-events-none absolute inset-0 bg-brand-300"
+              />
+              <div class="relative flex flex-col gap-1 whitespace-nowrap">
+                <span class="text-[14px] font-medium leading-normal text-ink-50">{{ item.label }}</span>
+                <span class="text-[12px] leading-normal text-ink-200">{{ item.value }}</span>
+              </div>
+              <img :src="item.icon" alt="" width="16" height="16" class="relative mt-0.5 size-4" />
+            </div>
+          </div>
+        </header>
+
+        <figure v-if="props.project.banner ?? props.project.image" class="mt-11 h-[181px] overflow-hidden rounded-xl shadow-[1.66px_1.66px_4.981px_0_rgb(0_0_0/5%)]">
+          <img
+            :src="(props.project.banner ?? props.project.image)!.src"
+            :srcset="(props.project.banner ?? props.project.image)!.srcset"
+            :alt="(props.project.banner ?? props.project.image)!.alt"
+            class="h-full w-full object-cover"
+          />
+        </figure>
+
+        <section v-if="props.project.challenge" class="mt-11 flex flex-col items-center gap-4 text-center" data-reveal>
+          <div class="flex items-center">
+            <img :src="challengeMarkUrl" alt="" aria-hidden="true" width="64" height="64" class="size-16" />
+            <h2 class="text-[22px] font-semibold leading-normal text-brand-50">چالش اصلی کجا بود</h2>
+          </div>
+          <p class="w-full text-[16px] leading-normal text-ink-200">چشمه خدمات خوبی داشت، اما حضور دیجیتال آن نتوانسته بود اعتماد، آرامش و شفافیتی را که از یک کلینیک زیبایی انتظار می‌رود، به‌درستی منتقل کند</p>
+        </section>
+
+        <section class="mt-20 flex flex-col gap-[34px]" data-reveal-group>
+          <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">اهداف پروژه</h2>
+          <ul class="flex flex-col gap-4">
+            <li v-for="(_, index) in mobileGoals" :key="`mobile-goal-${index}`" class="surface-case-card sketch-frame flex h-[146px] flex-col items-end justify-center gap-4 overflow-hidden rounded-lg p-4 text-right" data-reveal>
+              <span class="text-[32px] font-semibold leading-none text-brand">01</span>
+              <div class="flex w-full flex-col gap-2">
+                <h3 class="text-[20px] font-medium leading-normal text-brand-50">{{ mobileCard.title }}</h3>
+                <p class="text-[16px] leading-normal text-ink-200">{{ mobileCard.description }}</p>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="mt-[194px] flex flex-col gap-12" data-reveal-group>
+          <div class="flex flex-col gap-4 text-right">
+            <h2 class="text-[24px] font-semibold leading-normal text-brand-50">چرا سیزده</h2>
+            <p class="text-[16px] leading-normal text-ink-200">سه پکیج متناسب با نیاز، مرحله رشد و میزان همراهی موردنیاز کسب‌وکار شما</p>
+          </div>
+          <ul class="flex flex-col gap-[50px]">
+            <li v-for="(_, index) in mobileStrategy" :key="`mobile-strategy-${index}`" class="relative flex h-[114px] flex-col gap-4 text-right" data-reveal>
+              <span class="text-[32px] font-semibold leading-none text-brand">01</span>
+              <div class="flex flex-col gap-2">
+                <h3 class="text-[20px] font-medium leading-normal text-brand-50">{{ mobileCard.title }}</h3>
+                <p class="text-[16px] leading-normal text-ink-200">{{ mobileCard.description }}</p>
+              </div>
+              <img :src="strategyRuleUrl" alt="" aria-hidden="true" width="320" height="4" class="pointer-events-none absolute inset-x-0 bottom-[-28px] h-1 w-full max-w-none" />
+            </li>
+          </ul>
+        </section>
+
+        <section class="mt-[187px] flex flex-col gap-[67px]" data-reveal-group>
+          <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">خروجی های پروژه</h2>
+          <ul class="flex flex-col gap-4">
+            <li v-for="(_, index) in mobileDeliverables" :key="`mobile-deliverable-${index}`" class="surface-case-card sketch-frame flex h-[146px] flex-col items-end justify-center gap-4 overflow-hidden rounded-lg p-4 text-right" data-reveal>
+              <span class="text-[32px] font-semibold leading-none text-brand">01</span>
+              <div class="flex w-full flex-col gap-2">
+                <h3 class="text-[20px] font-medium leading-normal text-brand-50">{{ mobileCard.title }}</h3>
+                <p class="text-[16px] leading-normal text-ink-200">{{ mobileCard.description }}</p>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section v-if="props.project.showcase.length" class="mt-20 flex flex-col gap-[25px]" data-reveal-group>
+          <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">محتوا های منتخب</h2>
+          <!--
+            Same chips and the same `activeTag` state as the desktop showcase,
+            so the phone row really filters the gallery below it.
+          -->
+          <div v-if="showcaseFilters.length" class="flex justify-end">
+            <FilterChips
+              :options="showcaseFilters"
+              :active="activeTag"
+              :label="t('work.showcase')"
+              @select="activeTag = $event"
+            />
+          </div>
+          <!-- Swipes sideways, bleeding through the 20px gutter so the next image peeks in. -->
+          <div class="scrollbar-hidden -mx-5 flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto px-5">
+            <img v-for="image in visibleShowcase" :key="image.src" :src="image.src" :srcset="image.srcset" :alt="image.alt" class="h-[334px] w-[267px] shrink-0 snap-start rounded-2xl object-cover" loading="lazy" />
+          </div>
+        </section>
+
+        <section class="mt-20 flex flex-col gap-6" data-reveal-group>
+          <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">نتایج</h2>
+          <ul class="grid grid-cols-2 gap-3">
+            <li v-for="(result, index) in mobileResults" :key="`mobile-result-${index}`" class="flex h-[125px] flex-col items-end justify-center gap-4 rounded-lg bg-gold-100 p-4 text-right" data-reveal>
+              <img v-if="resultIcon(result)" :src="resultIcon(result)!.src" :width="resultIcon(result)!.width" :height="resultIcon(result)!.height" alt="" aria-hidden="true" />
+              <div class="flex flex-col items-end">
+                <span class="text-[18px] font-medium text-warm-900">{{ result.label }}</span>
+                <span dir="ltr" class="text-[24px] font-medium text-brand">{{ result.value }}</span>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <p class="mt-10 text-right text-[16px] leading-normal text-ink-200">سه پکیج متناسب با نیاز، مرحله رشد و میزان همراهی موردنیاز کسب‌وکار شما</p>
+
+        <section v-if="props.project.beforeAfter.before && props.project.beforeAfter.after" class="mt-[104px] grid gap-11" data-reveal-group>
+          <figure v-for="side in ['before', 'after'] as const" :key="side" class="flex flex-col items-center gap-3" data-reveal>
+            <figcaption class="text-center text-[24px] font-medium text-ink-50">{{ t(`work.${side}`) }}</figcaption>
+            <img :src="props.project.beforeAfter[side]!.src" :srcset="props.project.beforeAfter[side]!.srcset" :alt="props.project.beforeAfter[side]!.alt" class="h-[181px] w-full rounded-lg object-cover shadow-[0_4px_10px_0_rgb(0_0_0/5%)]" loading="lazy" />
+          </figure>
+        </section>
+
+        <section v-if="props.project.next" class="mt-11 flex flex-col items-end gap-2 text-right" data-reveal>
+          <p class="text-[18px] leading-normal text-ink-200">پروژه بعدی</p>
+          <Link :href="props.project.next.url" class="flex items-center gap-2">
+            <img :src="nextArrowUrl" alt="" aria-hidden="true" width="24" height="24" class="size-6 rotate-180" />
+            <span class="text-[24px] font-medium leading-normal text-ink-50">{{ props.project.next.title }}</span>
+          </Link>
+        </section>
+
+        <StartTogetherCard v-if="props.finalCta" :section="props.finalCta" class="mt-[109px]" data-reveal />
+      </div>
+    </div>
+
     <!--
       Vertical rhythm. 336:5374 is free-positioned, so the step between blocks
       is NOT uniform — it is measured per boundary off the frame and carried on
@@ -261,7 +441,7 @@ const strategyLead = computed(() =>
       steps sit either side of the middle block when it is present.
       Below `md` the whole ramp collapses to a flat 80.
     -->
-    <div class="container-sizdah relative isolate flex flex-col">
+    <div class="container-sizdah relative isolate flex flex-col max-md:hidden">
       <!--
         411:8560 — a centred 612 column (411:8561) inside a 670 track, gap 64
         down to the meta row and gap 24 inside the title block (411:8565). Both
@@ -307,14 +487,16 @@ const strategyLead = computed(() =>
             class="surface-meta-chip relative flex shrink-0 snap-start items-start gap-2 rounded-lg px-[26px] py-[14px]"
           >
             <!--
-              The outline is the hand-drawn chip drawing (.sketch-frame-chip),
+              The outline is the hand-drawn chip drawing (9-sliced as .sketch-frame-chip-box),
               the same one FilterChips and ArticleMeta wear — not the 2px CSS
               border the node data reports. Padding is 26/14 so the box matches
               what 24px + a 2px border measured before.
             -->
+            <!-- Fixed-radius 9-slice (.sketch-frame-chip-box): a rectangle with small
+                 rounded corners at any card size, not a stretched pill. -->
             <span
               aria-hidden="true"
-              class="sketch-frame-chip pointer-events-none absolute inset-0 bg-brand-300"
+              class="sketch-frame-chip-box pointer-events-none absolute inset-0 bg-brand-300"
             />
             <img
               :src="item.icon"

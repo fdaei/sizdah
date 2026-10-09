@@ -39,8 +39,8 @@ import titleUnderlineUrl from '~img/sizdah/work/project-title-underline.svg'
  * When every title fits one line and every excerpt runs two — the frame's own
  * case — this collapses back to exactly the 40/16/24 rhythm above.
  *
- * Mobile (below md, per review 2026-10-05): title 22px; excerpt stays 16px
- * (`body-lg`), industry label and service tags stay 14px.
+ * Mobile (below md): title 16px, excerpt 14px, and industry/service labels
+ * 12px, matching the compact listing hierarchy used by the filters.
  */
 const props = defineProps<{ project: ProjectSummary }>()
 </script>
@@ -49,7 +49,7 @@ const props = defineProps<{ project: ProjectSummary }>()
   <article class="group h-full">
     <Link :href="props.project.url" class="flex h-full flex-col gap-10">
       <div
-        class="aspect-square shrink-0 overflow-hidden rounded-[24px] border-2 border-ink-400 shadow-card"
+        class="aspect-square shrink-0 overflow-hidden rounded-[24px] border-2 border-ink-400 shadow-card max-md:aspect-[362/248] max-md:rounded-[16px]"
       >
         <img
           v-if="props.project.image"
@@ -69,7 +69,7 @@ const props = defineProps<{ project: ProjectSummary }>()
           <div class="flex items-start justify-between gap-4">
             <h3 class="flex min-w-0 flex-col items-start">
               <span
-                class="text-display-sm font-semibold text-paper transition-colors max-md:text-[22px] duration-200 ease-brand group-hover:text-brand"
+                class="text-display-sm font-semibold text-paper transition-colors max-md:text-[16px] max-md:leading-[20px] duration-200 ease-brand group-hover:text-brand"
               >
                 {{ props.project.title }}
               </span>
@@ -82,7 +82,7 @@ const props = defineProps<{ project: ProjectSummary }>()
 
             <p
               v-if="props.project.industry"
-              class="shrink-0 pt-3 text-label-lg text-brand max-md:pt-1.5"
+              class="shrink-0 pt-3 text-label-lg text-brand max-md:pt-1.5 max-md:text-[12px] max-md:leading-[15px]"
             >
               {{ props.project.industry }}
             </p>
@@ -93,7 +93,7 @@ const props = defineProps<{ project: ProjectSummary }>()
             length. Kept unconditional so a project without one still reserves
             the band and its neighbours stay aligned.
           -->
-          <p class="mt-auto line-clamp-2 min-h-10 text-body-lg text-ink-100">
+          <p class="mt-auto line-clamp-2 min-h-10 text-body-lg text-ink-100 max-md:text-[14px] max-md:leading-[18px]">
             {{ props.project.excerpt }}
           </p>
         </div>
@@ -118,7 +118,7 @@ const props = defineProps<{ project: ProjectSummary }>()
               class="size-1 shrink-0 rounded-round bg-brand"
               aria-hidden="true"
             />
-            <span class="whitespace-nowrap text-body-md text-ink-100">{{ service }}</span>
+            <span class="whitespace-nowrap text-body-md text-ink-100 max-md:text-[12px] max-md:leading-[15px]">{{ service }}</span>
           </li>
         </ul>
       </div>

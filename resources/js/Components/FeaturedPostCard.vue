@@ -3,7 +3,6 @@ import { Link } from '@inertiajs/vue3'
 import PostMeta from '@/Components/PostMeta.vue'
 import { useTranslations } from '@/Composables/useTranslations'
 import type { PostSummary } from '@/types'
-import mobileBackgroundUrl from '~img/sizdah/insights/mobile-background.jpg'
 
 /**
  * Featured post row — Figma 270:5253 (1248x491).
@@ -20,6 +19,10 @@ import mobileBackgroundUrl from '~img/sizdah/insights/mobile-background.jpg'
  * row (270:5263): the frame puts "مطالعه مقاله" at that row's inline-start
  * and the date/reading-time strip at its inline-end, so `PostMeta` is first
  * in the template and the CTA link second.
+ *
+ * Mobile (below md, user spec 2026-10-09): no sketched outline and no
+ * background art, but the same .surface-glow ground with the glow raked at
+ * 317deg and a 16px radius (GAPS G75).
  */
 const props = defineProps<{ post: PostSummary }>()
 
@@ -29,11 +32,10 @@ const { t } = useTranslations()
 <template>
   <article
     class="featured-post-card surface-glow sketch-frame flex flex-col gap-8 p-4 lg:flex-row lg:items-center"
-    :style="{ '--glow-angle': '-20.03deg', '--mobile-background': `url(${mobileBackgroundUrl})` }"
   >
     <Link
       :href="props.post.url"
-      class="group block shrink-0 overflow-hidden rounded-lg border border-ink-100 shadow-card max-md:w-full lg:w-[612px]"
+      class="group block shrink-0 overflow-hidden rounded-lg max-md:rounded-[16px] border border-ink-100 shadow-card max-md:w-full lg:w-[612px]"
     >
       <picture v-if="props.post.image">
         <source v-if="props.post.image.avif" :srcset="props.post.image.avif" type="image/avif" />
@@ -48,10 +50,10 @@ const { t } = useTranslations()
           loading="eager"
           fetchpriority="high"
           decoding="async"
-          class="aspect-[612/459] w-full object-cover transition-transform duration-500 ease-brand group-hover:scale-105"
+          class="aspect-[612/459] w-full object-cover max-md:aspect-[362/248] transition-transform duration-500 ease-brand group-hover:scale-105"
         />
       </picture>
-      <div v-else class="aspect-[612/459] w-full bg-ink-900" aria-hidden="true" />
+      <div v-else class="aspect-[612/459] w-full bg-ink-900 max-md:aspect-[362/248]" aria-hidden="true" />
     </Link>
 
     <div class="flex flex-1 flex-col gap-8 lg:gap-24">
@@ -106,13 +108,19 @@ const { t } = useTranslations()
 </template>
 
 <style scoped>
+/* Set here rather than inline so the mobile rule below can override it. */
+.featured-post-card {
+  --glow-angle: -20.03deg;
+}
+
 @media (max-width: 767px) {
   .featured-post-card {
-    background-color: #141414;
-    background-image: var(--mobile-background);
-    background-position: top center;
-    background-repeat: no-repeat;
-    background-size: 100% auto;
+    --glow-angle: 317deg;
+    border-radius: 16px;
+  }
+
+  .featured-post-card::after {
+    content: none;
   }
 }
 </style>

@@ -72,7 +72,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
   <section class="section-first pb-[177.24px]">
     <div class="container-sizdah relative isolate">
       <header
-        class="mx-auto flex max-w-full flex-col items-center gap-16 text-center"
+        class="mx-auto flex max-w-full flex-col items-center gap-16 text-center max-md:gap-12"
         data-reveal
       >
         <!-- 222:2461 — the eyebrow/title/description column is 612 wide inside the 670 track. -->
@@ -80,8 +80,8 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
           <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
           <div class="flex flex-col items-center gap-6">
-            <h1 class="text-display-lg text-ink-50 max-md:text-[26px] max-md:leading-[36px]">{{ props.heading.title }}</h1>
-            <p v-if="props.heading.description" class="text-title-sm text-ink-200 max-md:text-[16px] max-md:leading-[22px]">
+            <h1 class="text-display-lg text-ink-50 max-md:text-[16px] max-md:leading-[20px]">{{ props.heading.title }}</h1>
+            <p v-if="props.heading.description" class="text-title-sm text-ink-200 max-md:text-[14px] max-md:leading-[18px]">
               {{ props.heading.description }}
             </p>
           </div>
@@ -121,7 +121,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
       -->
       <div
         v-else
-        class="mt-16 grid gap-x-6 gap-y-16 sm:grid-cols-2 md:mt-[110px] md:gap-y-24 lg:grid-cols-3"
+        class="mt-12 grid gap-x-6 gap-y-16 sm:grid-cols-2 md:mt-[110px] md:gap-y-24 lg:grid-cols-3"
         data-reveal-group
       >
         <ProjectPostCard

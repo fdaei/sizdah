@@ -10,13 +10,12 @@ import { headingColors } from '@/lib/sectionColors'
 /**
  * Insights row — Figma "insight cards" 430:5247, under the heading at 268:3797.
  *
- * A 1248x424 pair: the lead post as a cream "Big insight" card (430:5311) at
+ * A 1248x424 pair: the lead post as a white "Big insight" card (430:5311) at
  * the inline start, and the next two as compact rows beside it, split by the
  * hand-drawn rule at 430:5251.
  *
- * The cream card is the only light surface on this half of the page — gold/100
- * under a raking brand wash on a gold/200 hairline — so its copy inverts to ink
- * while the two compact rows stay on the dark page ground.
+ * The white card is the only light surface on this half of the page, so its
+ * copy inverts to ink while the two compact rows stay on the dark page ground.
  *
  * Only the first three posts are drawn; the frame has no room for more and the
  * full list lives on the insights index.
@@ -44,9 +43,9 @@ const rest = computed(() => props.posts.slice(1, 3))
         class="mt-12 grid items-stretch gap-6 lg:mt-16 lg:grid-cols-2 [&>*]:min-w-0"
         data-reveal-group
       >
-        <!-- 430:5311 — the lead post, cream on the dark ground. -->
+        <!-- 430:5311 — the lead post, white on the dark ground. -->
         <article
-          class="insight-lead sketch-frame flex flex-col gap-4 bg-brand-50 p-4 shadow-card sm:flex-row sm:justify-between"
+          class="insight-lead sketch-frame flex flex-col gap-4 bg-white p-4 shadow-card sm:flex-row sm:justify-between"
         >
           <img
             v-if="lead.image"
@@ -166,13 +165,3 @@ const rest = computed(() => props.posts.slice(1, 3))
     </div>
   </section>
 </template>
-
-<style scoped>
-.insight-lead {
-  background-image: linear-gradient(
-    -32.7deg,
-    rgb(248 185 55 / 0) 2.3248%,
-    rgb(248 185 55 / 10%) 100%
-  );
-}
-</style>
