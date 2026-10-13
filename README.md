@@ -12,9 +12,9 @@ resource mapping.
 
 ## 1. Requirements
 
-- PHP 8.3+
+- PHP 8.4.1+ for the current locked dependencies
 - Composer 2
-- Node 20+
+- Node 20+ on the development/build machine only (not required on the PHP host)
 - MySQL 8 or PostgreSQL 14+
 - A queue-capable cache (database driver works fine for development)
 
@@ -95,19 +95,26 @@ npm run test:e2e               # Playwright — requires the app running;
 
 ## 5. Production build & deployment
 
+For cPanel hosting without Node.js, SSH, or a terminal, follow
+[the PHP-only deployment guide](docs/CPANEL-DEPLOYMENT.md). Page content and
+SEO tags are rendered by PHP on the initial request; Vue adds the interactive
+interface in the browser. `INERTIA_SSR_ENABLED=false` is the default.
+
 ```bash
-composer install --no-dev --optimize-autoloader
-npm run build
-
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-php artisan event:cache
-
-php artisan migrate --force
+composer install
+npm ci
+php vendor/bin/pest
+npm run build:cpanel
 ```
 
-Queue worker (contact-form email notifications run through the queue):
+Run these on your local build machine. The upload archive is
+`dist/cpanel/sizdah-cpanel.zip`; it includes production PHP dependencies, built
+browser assets, admin assets and public media. Configure the host's `.env` and
+import the database separately as described in the guide. Do not generate config,
+route or view caches locally for upload.
+
+On cPanel without a worker, use `QUEUE_CONNECTION=sync`. If your host supports a
+persistent queue worker, configure a queue backend and run this on the host:
 
 ```bash
 php artisan queue:work --tries=3

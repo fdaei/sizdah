@@ -53,6 +53,19 @@
         {{ __('common.skip_to_content') }}
     </a>
 
-    @inertia
+    @if ($__inertiaSsrResponse ?? false)
+        @inertia
+    @else
+        {{-- Visible to every visitor, including crawlers and browsers without
+             JavaScript. Vue replaces this content when it mounts. --}}
+        @if (config('inertia.use_script_element_for_initial_page'))
+            <script data-page="app" type="application/json">{!! json_encode($page, JSON_HEX_TAG) !!}</script>
+            <div id="app" data-php-content>
+        @else
+            <div id="app" data-page="{{ json_encode($page) }}" data-php-content>
+        @endif
+            @include('partials.content', ['props' => $page['props']])
+        </div>
+    @endif
 </body>
 </html>

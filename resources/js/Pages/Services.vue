@@ -103,7 +103,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
             hugs the lede (`w-fit`) instead of pinning a width that would wrap
             it. See the DEVIATIONS note above.
           -->
-          <h1 class="max-w-[638px] text-display-lg text-ink-50 max-md:text-[40px] max-md:leading-[51px]">{{ props.heading.title }}</h1>
+          <h1 class="max-w-[638px] text-display-lg text-ink-50 max-md:text-[26px] max-md:leading-[36px]">{{ props.heading.title }}</h1>
           <p v-if="props.heading.description" class="text-title-lg text-ink-200 max-md:text-[16px] max-md:leading-[22px]">
             {{ props.heading.description }}
           </p>
@@ -244,6 +244,7 @@ const finalCta = computed<PageSectionData | undefined>(() => props.sections.fina
                   as="li"
                   size="lg"
                   :text="feature"
+                  class="max-md:text-[18px] max-md:leading-[25px]"
                 />
               </ul>
             </div>

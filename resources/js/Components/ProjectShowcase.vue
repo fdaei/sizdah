@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import SectionHeading from '@/Components/SectionHeading.vue'
 import type { PageSectionData, ProjectSummary } from '@/types'
@@ -38,7 +38,21 @@ const props = defineProps<{
   projects: ProjectSummary[]
 }>()
 
-const { t } = useTranslations()
+const { t, locale } = useTranslations()
+
+const projectDetailsFallbacks: Record<string, string> = {
+  fa: 'جزییات پروژه',
+  en: 'Project details',
+  ar: 'تفاصيل المشروع',
+}
+
+const projectDetailsLabel = computed(() => {
+  if (props.section.content) return props.section.content
+
+  const label = t('work.project_details')
+
+  return label === 'work.project_details' ? projectDetailsFallbacks[locale.value] ?? label : label
+})
 
 const active = ref(0)
 const touchStartX = ref<number | null>(null)
@@ -147,7 +161,7 @@ onBeforeUnmount(() => {
                     height="24"
                     class="size-6 flip-rtl"
                   />
-                  <span>{{ props.section.content || t('work.project_details') }}</span>
+                  <span>{{ projectDetailsLabel }}</span>
                 </Link>
               </div>
 
@@ -193,16 +207,16 @@ onBeforeUnmount(() => {
           </li>
         </ul>
 
-        <div v-if="props.projects[active]" class="hidden h-[112px] flex-col gap-3 max-md:flex max-md:order-none">
+        <div v-if="props.projects[active]" class="hidden min-h-[112px] flex-col gap-3 max-md:flex max-md:order-none">
           <div class="flex flex-row-reverse items-center justify-between text-right">
             <Link
               :href="props.projects[active].url"
               class="flex items-center gap-1 text-[14px] font-medium leading-[20px] text-paper"
             >
               <img :src="arrowUrl" alt="" aria-hidden="true" width="24" height="24" class="size-6 flip-rtl" />
-              <span>{{ props.section.content || t('work.project_details') }}</span>
+              <span>{{ projectDetailsLabel }}</span>
             </Link>
-            <Link :href="props.projects[active].url" class="text-[16px] font-semibold leading-[20px] text-paper">
+            <Link :href="props.projects[active].url" class="text-[24px] font-semibold leading-[30px] text-paper">
               {{ props.projects[active].title }}
             </Link>
           </div>

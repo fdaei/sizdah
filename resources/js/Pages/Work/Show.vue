@@ -142,7 +142,7 @@ const cardBlocks: {
     items: props.project.deliverables,
     // 429:5092 -> 429:5117 is 40 between the rows against 16 between columns.
     columns: 'gap-x-4 gap-y-10 sm:grid-cols-2 lg:grid-cols-3',
-    lead: 'mt-20 md:mt-[233px]',
+    lead: 'mt-[104px] md:mt-[233px]',
   },
 ].filter((block) => block.items.length > 0)
 
@@ -231,7 +231,9 @@ const strategyColumns = computed<{ item: CardItem; index: number }[][]>(() => {
 // When a project has no deliverables block, strategy takes its place in the
 // section sequence and therefore uses the frame's goals-to-next-block rhythm.
 const strategyLead = computed(() =>
-  props.project.deliverables.length > 0 ? 'mt-20 md:mt-[121px]' : 'mt-20 md:mt-[233px]',
+  props.project.deliverables.length > 0
+    ? 'mt-[104px] md:mt-[121px]'
+    : 'mt-[104px] md:mt-[233px]',
 )
 
 /*
@@ -439,7 +441,7 @@ const mobileMeta = [
       blocks when content exists (the Cheshmeh case study replaces
       deliverables with its «چرا سیزده» strategy quadrant), so the 233 and 121
       steps sit either side of the middle block when it is present.
-      Below `md` the whole ramp collapses to a flat 80.
+      Below `md` the ramp is 80, with 104 around the deliverables block.
     -->
     <div class="container-sizdah relative isolate flex flex-col max-md:hidden">
       <!--
@@ -576,7 +578,7 @@ const mobileMeta = [
       <section
         v-for="block in cardBlocks"
         :key="block.key"
-        class="flex flex-col gap-10"
+        class="flex flex-col gap-10 max-md:gap-8"
         :class="block.lead"
       >
         <h2 class="text-section-line text-brand-50">{{ t(`work.${block.key}`) }}</h2>
@@ -588,7 +590,7 @@ const mobileMeta = [
             class="surface-case-card sketch-frame flex h-full flex-col items-start justify-center gap-10 px-6 py-14"
             data-reveal
           >
-            <span class="latin-nums text-display-sm font-semibold text-brand" aria-hidden="true">
+            <span class="latin-nums w-full text-right text-display-sm font-semibold text-brand" aria-hidden="true">
               {{ ordinal(index) }}
             </span>
             <div class="flex w-full flex-col gap-6">

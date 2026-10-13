@@ -8,10 +8,13 @@ declare(strict_types=1);
 return [
 
     'breadcrumbs' => [
-        'home'           => 'الرئيسية',
-        'work.index'     => 'أعمالنا',
-        'insights.index' => 'المقالات',
-        'services'       => 'الخدمات',
+        'home' => 'الرئيسية',
+        'work' => ['index' => 'أعمالنا'],
+        'insights' => ['index' => 'المقالات'],
+        'services' => 'الخدمات',
+        'about' => 'من نحن',
+        'contact' => 'اتصل بنا',
+        'legal' => ['privacy' => 'سياسة الخصوصية', 'terms' => 'شروط الاستخدام'],
     ],
 
 ];

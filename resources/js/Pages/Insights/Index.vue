@@ -104,7 +104,7 @@ const rest = computed(() => props.posts.data.slice(2))
           <Eyebrow v-if="props.heading.eyebrow" :text="props.heading.eyebrow" />
 
           <div class="flex flex-col items-center gap-6 max-md:gap-5">
-            <h1 class="text-display-lg text-ink-50 max-md:w-full max-md:text-[16px] max-md:leading-[20px]">{{ props.heading.title }}</h1>
+            <h1 class="text-display-lg text-ink-50 max-md:w-full max-md:text-[26px] max-md:leading-[36px]">{{ props.heading.title }}</h1>
             <p v-if="props.heading.description" class="text-title-sm text-ink-200 max-md:text-[14px] max-md:leading-[18px]">
               {{ props.heading.description }}
             </p>
@@ -139,10 +139,12 @@ const rest = computed(() => props.posts.data.slice(2))
                the percentage so it holds as the column narrows) and 7.5px ABOVE
                the card's top edge (y=603), overlapping ~21px into the card.
                Offsets are physical on purpose: the Figma frame is already the
-               RTL layout, so its coordinates map straight across. -->
+               RTL layout, so its coordinates map straight across. On mobile,
+               align to the image's 16px top inset so the smaller clip still
+               overlaps the image instead of floating above it. -->
           <div
             aria-hidden="true"
-            class="pointer-events-none absolute left-[45.75%] top-0 z-10 block -translate-x-1/2 translate-y-[calc(-50%-8px)]"
+            class="pointer-events-none absolute left-[45.75%] top-0 z-10 block -translate-x-1/2 translate-y-[calc(-50%-8px)] max-md:top-4"
           >
             <!-- The export is already rotated (78x78 desktop box, scaled down
                  on mobile), so never add a CSS rotation here - a second

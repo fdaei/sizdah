@@ -40,8 +40,8 @@ import calendarUrl from '~img/sizdah/shared/calendar.svg'
  * gutters. On a 360-393px phone it overflowed, widened the centred header
  * with it, and — RTL — spilled off the left edge, dragging the subtitle off
  * centre too. It is now a 172fr/182fr grid capped at 362px: identical at
- * 402px+, proportionally narrower below. The third chip still auto-places
- * under the first, as the frame draws it.
+ * 402px+, proportionally narrower below. On mobile, subject leads the date
+ * so the author auto-places beneath it on the right in RTL.
  *
  * The date glyph in the frame is a ten-fragment variant of the same calendar
  * drawn on the blog cards; the card export is reused for it.
@@ -83,6 +83,7 @@ const chips = computed(() =>
       v-for="chip in chips"
       :key="chip.key"
       class="relative flex min-w-0 items-start gap-2 rounded-lg px-[26px] py-[14px] max-md:h-[57px] max-md:gap-1 max-md:px-3 max-md:py-2"
+      :class="{ 'max-md:-order-1': chip.key === 'subject' }"
       style="
         background-image: linear-gradient(
           -15deg,

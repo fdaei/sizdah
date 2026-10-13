@@ -5,6 +5,7 @@
     "scripts": {
         "dev": "vite",
         "build": "vue-tsc --noEmit && vite build",
+        "build:cpanel": "bash scripts/package-cpanel.sh",
         "build:ssr": "vite build --ssr resources/js/ssr.ts --outDir bootstrap/ssr",
         "typecheck": "vue-tsc --noEmit",
         "lint": "eslint resources/js",

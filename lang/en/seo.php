@@ -8,10 +8,13 @@ declare(strict_types=1);
 return [
 
     'breadcrumbs' => [
-        'home'           => 'Home',
-        'work.index'     => 'Work',
-        'insights.index' => 'Insights',
-        'services'       => 'Services',
+        'home' => 'Home',
+        'work' => ['index' => 'Work'],
+        'insights' => ['index' => 'Insights'],
+        'services' => 'Services',
+        'about' => 'About us',
+        'contact' => 'Contact us',
+        'legal' => ['privacy' => 'Privacy policy', 'terms' => 'Terms of use'],
     ],
 
 ];
