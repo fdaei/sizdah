@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Models\ContactSubmission;
 
 it('stores a valid contact submission', function (): void {
-    $response = $this->from('/en/contact')->post('/en/contact', [
+    $response = $this->from('/fa/contact')->post('/fa/contact', [
         'name' => 'Jane Doe',
         'brand_name' => 'Doe Studio',
         'phone' => '+968 7781 1213',
@@ -13,14 +13,14 @@ it('stores a valid contact submission', function (): void {
         'form_started_at' => (now()->subSeconds(10)->timestamp) * 1000,
     ]);
 
-    $response->assertRedirect('/en/contact');
+    $response->assertRedirect('/fa/contact');
     $response->assertSessionHas('success');
 
     expect(ContactSubmission::query()->where('name', 'Jane Doe')->exists())->toBeTrue();
 });
 
 it('rejects a submission with neither phone nor email', function (): void {
-    $response = $this->from('/en/contact')->post('/en/contact', [
+    $response = $this->from('/fa/contact')->post('/fa/contact', [
         'name' => 'Jane Doe',
         'message' => 'Hello',
         'form_started_at' => (now()->subSeconds(10)->timestamp) * 1000,
@@ -30,7 +30,7 @@ it('rejects a submission with neither phone nor email', function (): void {
 });
 
 it('silently rejects a honeypot-filled submission', function (): void {
-    $response = $this->from('/en/contact')->post('/en/contact', [
+    $response = $this->from('/fa/contact')->post('/fa/contact', [
         'name' => 'Bot',
         'phone' => '+968 1234 5678',
         'website' => 'http://spam.example',
@@ -41,7 +41,7 @@ it('silently rejects a honeypot-filled submission', function (): void {
 });
 
 it('rejects a submission filled faster than a human plausibly could', function (): void {
-    $response = $this->from('/en/contact')->post('/en/contact', [
+    $response = $this->from('/fa/contact')->post('/fa/contact', [
         'name' => 'Speedy',
         'phone' => '+968 1234 5678',
         'form_started_at' => now()->timestamp * 1000, // 0 seconds elapsed

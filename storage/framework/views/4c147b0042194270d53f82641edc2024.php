@@ -17,6 +17,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    
+    <?php echo $__env->make('partials.analytics-head', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
     
@@ -44,6 +48,8 @@
     <?php echo $__env->make('partials.seo', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </head>
 <body class="bg-ink-1000 text-ink-300">
+    <?php echo $__env->make('partials.analytics-body', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
     
     <a href="#main"
        class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-menu

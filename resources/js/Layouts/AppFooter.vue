@@ -118,7 +118,7 @@ const contact = computed(() => settings.value.contact)
         >
           <!-- Brand + positioning line -->
           <div class="flex w-full flex-col gap-8 md:w-[402px]">
-            <BrandLogo :width="87" :title="settings.siteName" />
+            <BrandLogo :width="87" :title="settings.siteName" variant="footer" />
             <p class="text-body-lg text-ink-100 max-md:text-[12px]">{{ settings.tagline }}</p>
           </div>
 

@@ -17,6 +17,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    {{-- GTM wants to be as high in <head> as possible --}}
+    @include('partials.analytics-head')
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Sizdah brand mark (the previous icon.svg belonged to the Sahra brand). --}}
@@ -46,6 +50,8 @@
     @include('partials.seo')
 </head>
 <body class="bg-ink-1000 text-ink-300">
+    @include('partials.analytics-body')
+
     {{-- Skip link — first focusable element, revealed on focus --}}
     <a href="#main"
        class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-menu

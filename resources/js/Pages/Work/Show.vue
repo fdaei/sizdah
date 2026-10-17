@@ -259,7 +259,7 @@ const mobileResults = [
 const mobileMeta = [
   { label: 'موضوع', value: 'پشتیبانی از شبکه های اجتماعی', icon: servicesIconUrl, class: 'px-[10px]' },
   { label: 'تاریخ', value: '۲۰ اردیبهشت ۱۴۰۳', icon: yearIconUrl, class: 'px-[14px]' },
-  { label: 'نویسنده', value: 'SaraAmiri@gmail.com', icon: industryIconUrl, class: 'col-start-2 px-[14px]' },
+  { label: 'نویسنده', value: 'SaraAmiri@gmail.com', icon: industryIconUrl, class: 'col-start-1 px-[14px]' },
 ]
 </script>
 
@@ -289,7 +289,7 @@ const mobileMeta = [
             <div
               v-for="item in mobileMeta"
               :key="item.label"
-              class="surface-meta-chip relative flex h-[57px] items-start justify-end gap-2 rounded-lg py-[10px] text-right"
+              class="surface-meta-chip relative flex h-[57px] items-start justify-start gap-2 rounded-lg py-[10px] text-right"
               :class="item.class"
             >
               <!-- Fixed-radius 9-slice (.sketch-frame-chip-box): a rectangle with small
@@ -298,11 +298,11 @@ const mobileMeta = [
                 aria-hidden="true"
                 class="sketch-frame-chip-box pointer-events-none absolute inset-0 bg-brand-300"
               />
+              <img :src="item.icon" alt="" width="16" height="16" class="relative mt-0.5 size-4" />
               <div class="relative flex flex-col gap-1 whitespace-nowrap">
                 <span class="text-[14px] font-medium leading-normal text-ink-50">{{ item.label }}</span>
                 <span class="text-[12px] leading-normal text-ink-200">{{ item.value }}</span>
               </div>
-              <img :src="item.icon" alt="" width="16" height="16" class="relative mt-0.5 size-4" />
             </div>
           </div>
         </header>
@@ -327,7 +327,7 @@ const mobileMeta = [
         <section class="mt-20 flex flex-col gap-[34px]" data-reveal-group>
           <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">اهداف پروژه</h2>
           <ul class="flex flex-col gap-4">
-            <li v-for="(_, index) in mobileGoals" :key="`mobile-goal-${index}`" class="surface-case-card sketch-frame flex h-[146px] flex-col items-end justify-center gap-4 overflow-hidden rounded-lg p-4 text-right" data-reveal>
+            <li v-for="(_, index) in mobileGoals" :key="`mobile-goal-${index}`" class="surface-case-card sketch-frame flex h-[146px] flex-col items-start justify-center gap-4 overflow-hidden rounded-lg p-4 text-right" data-reveal>
               <span class="text-[32px] font-semibold leading-none text-brand">01</span>
               <div class="flex w-full flex-col gap-2">
                 <h3 class="text-[20px] font-medium leading-normal text-brand-50">{{ mobileCard.title }}</h3>
@@ -357,7 +357,7 @@ const mobileMeta = [
         <section class="mt-[187px] flex flex-col gap-[67px]" data-reveal-group>
           <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">خروجی های پروژه</h2>
           <ul class="flex flex-col gap-4">
-            <li v-for="(_, index) in mobileDeliverables" :key="`mobile-deliverable-${index}`" class="surface-case-card sketch-frame flex h-[146px] flex-col items-end justify-center gap-4 overflow-hidden rounded-lg p-4 text-right" data-reveal>
+            <li v-for="(_, index) in mobileDeliverables" :key="`mobile-deliverable-${index}`" class="surface-case-card sketch-frame flex h-[146px] flex-col items-start justify-center gap-4 overflow-hidden rounded-lg p-4 text-right" data-reveal>
               <span class="text-[32px] font-semibold leading-none text-brand">01</span>
               <div class="flex w-full flex-col gap-2">
                 <h3 class="text-[20px] font-medium leading-normal text-brand-50">{{ mobileCard.title }}</h3>
@@ -373,7 +373,7 @@ const mobileMeta = [
             Same chips and the same `activeTag` state as the desktop showcase,
             so the phone row really filters the gallery below it.
           -->
-          <div v-if="showcaseFilters.length" class="flex justify-end">
+          <div v-if="showcaseFilters.length" class="flex justify-start">
             <FilterChips
               :options="showcaseFilters"
               :active="activeTag"
@@ -390,9 +390,9 @@ const mobileMeta = [
         <section class="mt-20 flex flex-col gap-6" data-reveal-group>
           <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">نتایج</h2>
           <ul class="grid grid-cols-2 gap-3">
-            <li v-for="(result, index) in mobileResults" :key="`mobile-result-${index}`" class="flex h-[125px] flex-col items-end justify-center gap-4 rounded-lg bg-gold-100 p-4 text-right" data-reveal>
+            <li v-for="(result, index) in mobileResults" :key="`mobile-result-${index}`" class="flex h-[125px] flex-col items-start justify-center gap-4 rounded-lg bg-gold-100 p-4 text-right" data-reveal>
               <img v-if="resultIcon(result)" :src="resultIcon(result)!.src" :width="resultIcon(result)!.width" :height="resultIcon(result)!.height" alt="" aria-hidden="true" />
-              <div class="flex flex-col items-end">
+              <div class="flex flex-col items-start">
                 <span class="text-[18px] font-medium text-warm-900">{{ result.label }}</span>
                 <span dir="ltr" class="text-[24px] font-medium text-brand">{{ result.value }}</span>
               </div>
@@ -448,9 +448,9 @@ const mobileMeta = [
         411:8560 — a centred 612 column (411:8561) inside a 670 track, gap 64
         down to the meta row and gap 24 inside the title block (411:8565). Both
         text runs are CENTER in the frame, and it carries no eyebrow, so this
-        header is centred and the kicker is not drawn. Only the copy is capped
-        at 612: the meta row is its own 740-wide frame in the file and would
-        wrap early if it inherited the track.
+        title block is centred and the kicker is not drawn. Only the copy is
+        capped at 612: the meta row has its own width and aligns to the track's
+        inline start (right in Persian).
       -->
       <header class="flex flex-col items-center gap-16" data-reveal>
         <div class="flex w-full max-w-measure flex-col items-center gap-6 text-center">
@@ -475,7 +475,7 @@ const mobileMeta = [
         <dl
           v-if="meta.length"
           ref="metaRow"
-          class="scrollbar-hidden select-none -mx-5 flex snap-x snap-mandatory scroll-px-5 flex-nowrap justify-start gap-4 self-stretch overflow-x-auto px-5 md:mx-0 md:snap-none md:justify-center md:self-center md:overflow-visible md:px-0"
+          class="scrollbar-hidden select-none -mx-5 flex snap-x snap-mandatory scroll-px-5 flex-nowrap justify-start gap-4 self-stretch overflow-x-auto px-5 md:mx-0 md:snap-none md:self-start md:overflow-visible md:px-0"
           @pointerdown="onPointerDown"
           @pointermove="onPointerMove"
           @pointerup="onPointerUp"
@@ -768,7 +768,7 @@ const mobileMeta = [
                 aria-hidden="true"
                 class="block h-auto"
               />
-              <div class="flex flex-col gap-2">
+              <div class="flex flex-col items-start gap-2">
                 <span class="text-title-lg text-warm-900">{{ result.label }}</span>
                 <!-- dir=ltr keeps a leading "+" leading; bidi would flip it to the end. -->
                 <span dir="ltr" class="latin-nums block text-heading-lg text-brand">
