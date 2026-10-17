@@ -259,7 +259,7 @@ const mobileResults = [
 const mobileMeta = [
   { label: 'موضوع', value: 'پشتیبانی از شبکه های اجتماعی', icon: servicesIconUrl, class: 'px-[10px]' },
   { label: 'تاریخ', value: '۲۰ اردیبهشت ۱۴۰۳', icon: yearIconUrl, class: 'px-[14px]' },
-  { label: 'نویسنده', value: 'SaraAmiri@gmail.com', icon: industryIconUrl, class: 'col-start-1 px-[14px]' },
+  { label: 'نویسنده', value: 'SaraAmiri@gmail.com', icon: industryIconUrl, class: 'col-start-1 px-[14px] max-[380px]:col-span-2' },
 ]
 </script>
 
@@ -285,11 +285,11 @@ const mobileMeta = [
             meta row wears), not a CSS border. Padding absorbs the old 2px
             border so each card keeps its box size.
           -->
-          <div class="grid w-full grid-cols-[1fr_0.95fr] gap-2" aria-label="اطلاعات پروژه">
+          <div class="grid w-full grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] gap-2" aria-label="اطلاعات پروژه">
             <div
               v-for="item in mobileMeta"
               :key="item.label"
-              class="surface-meta-chip relative flex h-[57px] items-start justify-start gap-2 rounded-lg py-[10px] text-right"
+              class="surface-meta-chip relative flex min-h-[57px] min-w-0 items-start justify-start gap-2 rounded-lg py-[10px] text-right"
               :class="item.class"
             >
               <!-- Fixed-radius 9-slice (.sketch-frame-chip-box): a rectangle with small
@@ -298,10 +298,12 @@ const mobileMeta = [
                 aria-hidden="true"
                 class="sketch-frame-chip-box pointer-events-none absolute inset-0 bg-brand-300"
               />
-              <img :src="item.icon" alt="" width="16" height="16" class="relative mt-0.5 size-4" />
-              <div class="relative flex flex-col gap-1 whitespace-nowrap">
+              <img :src="item.icon" alt="" width="16" height="16" class="relative mt-0.5 size-4 shrink-0" />
+              <!-- min-w-0 + wrapping: long values (the topic, the email) wrap inside
+                   the chip on narrow phones instead of spilling past its frame. -->
+              <div class="relative flex min-w-0 flex-col gap-1">
                 <span class="text-[14px] font-medium leading-normal text-ink-50">{{ item.label }}</span>
-                <span class="text-[12px] leading-normal text-ink-200">{{ item.value }}</span>
+                <span class="text-[12px] leading-normal text-ink-200 [overflow-wrap:anywhere]">{{ item.value }}</span>
               </div>
             </div>
           </div>
