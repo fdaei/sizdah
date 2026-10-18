@@ -477,7 +477,7 @@ const mobileMeta = [
         <dl
           v-if="meta.length"
           ref="metaRow"
-          class="scrollbar-hidden select-none -mx-5 flex snap-x snap-mandatory scroll-px-5 flex-nowrap justify-start gap-4 self-stretch overflow-x-auto px-5 md:mx-0 md:snap-none md:self-start md:overflow-visible md:px-0"
+          class="scrollbar-hidden select-none -mx-5 flex snap-x snap-mandatory scroll-px-5 flex-nowrap justify-start gap-4 self-stretch overflow-x-auto px-5 md:mx-0 md:snap-none md:self-center md:overflow-visible md:px-0"
           @pointerdown="onPointerDown"
           @pointermove="onPointerMove"
           @pointerup="onPointerUp"
