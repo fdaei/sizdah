@@ -758,15 +758,6 @@
 
 
 @layer components {
-  .testimonial-arrow {
-    @apply flex size-9 items-center justify-center rounded-full border border-ink-700 text-lg text-brand transition-colors;
-  }
-
-  .testimonial-arrow:active,
-  .testimonial-arrow:hover {
-    @apply border-brand bg-brand text-ink-1000;
-  }
-
   /* The active dot widens and fills with brand over the dwell time (TestimonialCarousel.vue). */
   .testimonial-dot {
     @apply relative size-2 overflow-hidden rounded-full bg-ink-700 transition-all duration-300;

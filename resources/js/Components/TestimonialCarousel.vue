@@ -11,7 +11,8 @@ import type { TestimonialItem } from '@/types'
  *   lg+      four across (the 268:3729 track); the row drifts continuously,
  *            pauses while the mouse rests on it, and can be dragged either way
  *   < lg     two (sm) or one card per view; autoplay steps one card at a time,
- *            swipe/drag steps manually, and the dots underneath track the
+ *            swipe/drag steps manually (no arrow buttons — no other carousel
+ *            on the site has them), and the dots underneath track the
  *            active card with a fill that runs for the dwell time
  *
  * The list is rendered twice so the loop never shows an empty edge; the
@@ -99,10 +100,6 @@ function goTo(index: number): void {
 
 function next(): void {
   goTo(active.value + 1)
-}
-
-function previous(): void {
-  goTo(active.value - 1)
 }
 
 function syncPaused(): void {
@@ -244,27 +241,26 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <div v-if="loops && !continuous" class="mt-6 flex items-center justify-center gap-4">
-      <button type="button" class="testimonial-arrow" aria-label="نظر قبلی" @click="previous">
-        →
+    <div
+      v-if="loops && !continuous"
+      class="mt-6 flex items-center justify-center gap-2"
+      role="tablist"
+      aria-label="انتخاب نظر مشتری"
+    >
+      <button
+        v-for="(_, index) in props.testimonials"
+        :key="`testimonial-dot-${index}`"
+        type="button"
+        role="tab"
+        :aria-selected="active === index"
+        :aria-label="`نمایش نظر ${index + 1}`"
+        class="testimonial-dot"
+        :class="{ 'is-active': active === index, 'is-paused': paused }"
+        @click="goTo(index)"
+      >
+        <!-- Keyed on the index so the fill restarts with every new slide. -->
+        <span v-if="active === index" :key="`fill-${active}`" class="testimonial-dot-fill" />
       </button>
-      <div class="flex items-center gap-2" role="tablist" aria-label="انتخاب نظر مشتری">
-        <button
-          v-for="(_, index) in props.testimonials"
-          :key="`testimonial-dot-${index}`"
-          type="button"
-          role="tab"
-          :aria-selected="active === index"
-          :aria-label="`نمایش نظر ${index + 1}`"
-          class="testimonial-dot"
-          :class="{ 'is-active': active === index, 'is-paused': paused }"
-          @click="goTo(index)"
-        >
-          <!-- Keyed on the index so the fill restarts with every new slide. -->
-          <span v-if="active === index" :key="`fill-${active}`" class="testimonial-dot-fill" />
-        </button>
-      </div>
-      <button type="button" class="testimonial-arrow" aria-label="نظر بعدی" @click="next">←</button>
     </div>
   </div>
 </template>
