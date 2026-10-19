@@ -7,6 +7,8 @@ use App\Jobs\SendLeadMagnetEmail;
 use App\Mail\LeadMagnetMail;
 use App\Models\LeadMagnetRequest;
 use App\Models\Post;
+use App\Models\Setting;
+use App\Support\HomeLeadMagnet;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
@@ -168,5 +170,87 @@ it('resends with the article current file', function (): void {
     expect($request->file_path)->toBe('lead-magnets/v2.pdf')
         ->and($request->email_status)->toBe(LeadMagnetEmailStatus::Pending)
         ->and($request->email_error)->toBeNull();
+    Queue::assertPushed(SendLeadMagnetEmail::class);
+});
+
+function homeLeadMagnet(bool $sendEmail = true, ?string $path = 'lead-magnets/checklist.pdf'): void
+{
+    foreach ([
+        HomeLeadMagnet::PATH_KEY => $path,
+        HomeLeadMagnet::NAME_KEY => $path === null ? null : 'home-checklist.pdf',
+        HomeLeadMagnet::SEND_EMAIL_KEY => $sendEmail,
+    ] as $key => $value) {
+        Setting::updateOrCreate(['key' => $key], ['group' => 'lead_magnet', 'value' => ['value' => $value]]);
+    }
+}
+
+it('queues the home file email for a home banner submission', function (): void {
+    Queue::fake();
+    homeLeadMagnet();
+
+    $this->from('/fa')->post('/fa/newsletter', [
+        'email' => 'visitor@example.com',
+        'source' => 'home',
+    ])->assertRedirect('/fa');
+
+    $request = LeadMagnetRequest::query()->sole();
+
+    expect($request->post_id)->toBeNull()
+        ->and($request->file_path)->toBe('lead-magnets/checklist.pdf')
+        ->and($request->file_name)->toBe('home-checklist.pdf')
+        ->and($request->email_status)->toBe(LeadMagnetEmailStatus::Pending);
+
+    Queue::assertPushed(SendLeadMagnetEmail::class);
+});
+
+it('records but does not email a home submission when home email is off', function (): void {
+    Queue::fake();
+    homeLeadMagnet(sendEmail: false);
+
+    $this->from('/fa')->post('/fa/newsletter', ['email' => 'visitor@example.com', 'source' => 'home']);
+
+    expect(LeadMagnetRequest::query()->sole()->email_status)->toBe(LeadMagnetEmailStatus::Skipped);
+    Queue::assertNothingPushed();
+});
+
+it('does not email a home submission when no home file is set', function (): void {
+    Queue::fake();
+    homeLeadMagnet(path: null);
+
+    $this->from('/fa')->post('/fa/newsletter', ['email' => 'visitor@example.com', 'source' => 'home']);
+
+    expect(LeadMagnetRequest::query()->sole()->email_status)->toBe(LeadMagnetEmailStatus::Skipped);
+    Queue::assertNothingPushed();
+});
+
+it('does not use the home file for an article submission', function (): void {
+    Queue::fake();
+    homeLeadMagnet();
+    $post = leadMagnetPost(['lead_magnet_path' => null, 'lead_magnet_send_email' => false]);
+
+    $this->from('/fa')->post('/fa/newsletter', [
+        'email' => 'reader@example.com',
+        'source' => 'article',
+        'post_id' => $post->id,
+    ]);
+
+    expect(LeadMagnetRequest::query()->sole()->email_status)->toBe(LeadMagnetEmailStatus::Skipped);
+    Queue::assertNothingPushed();
+});
+
+it('resends a home request with the current home file', function (): void {
+    Queue::fake();
+    Storage::disk('local')->put('lead-magnets/home-v2.pdf', '%PDF-1.4 v2');
+    homeLeadMagnet(path: 'lead-magnets/home-v2.pdf');
+
+    $request = LeadMagnetRequest::factory()->create([
+        'post_id' => null,
+        'source' => 'home',
+        'file_path' => null,
+        'email_status' => LeadMagnetEmailStatus::Skipped,
+    ]);
+
+    expect($request->resend())->toBeTrue()
+        ->and($request->refresh()->file_path)->toBe('lead-magnets/home-v2.pdf');
     Queue::assertPushed(SendLeadMagnetEmail::class);
 });

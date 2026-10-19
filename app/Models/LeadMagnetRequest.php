@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\LeadMagnetEmailStatus;
 use App\Jobs\SendLeadMagnetEmail;
+use App\Support\HomeLeadMagnet;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -59,7 +60,8 @@ final class LeadMagnetRequest extends Model
     }
 
     /**
-     * Queue the email again (admin "Resend"). Uses the article's CURRENT file
+     * Queue the email again (admin "Resend"). Uses the article's (or, for a
+     * home banner request, the home page's) CURRENT file
      * when it has one, so a corrected upload reaches readers who got the old
      * one or none.
      *
@@ -72,6 +74,9 @@ final class LeadMagnetRequest extends Model
         if ($post !== null && filled($post->lead_magnet_path)) {
             $this->file_path = $post->lead_magnet_path;
             $this->file_name = $post->lead_magnet_name;
+        } elseif ($this->post_id === null && $this->source === 'home' && HomeLeadMagnet::path() !== null) {
+            $this->file_path = HomeLeadMagnet::path();
+            $this->file_name = HomeLeadMagnet::name();
         }
 
         if (! $this->hasFile()) {

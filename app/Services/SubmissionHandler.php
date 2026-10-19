@@ -14,6 +14,7 @@ use App\Models\LeadMagnetRequest;
 use App\Models\NewsletterSubscription;
 use App\Models\Post;
 use App\Notifications\ContactSubmissionReceived;
+use App\Support\HomeLeadMagnet;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
@@ -64,7 +65,8 @@ final class SubmissionHandler
      *
      * Every submission gets its own LeadMagnetRequest row (even from an
      * address already on the list), and — when the article it came from has
-     * a file and email delivery enabled in the admin — a queued email.
+     * a file and email delivery enabled in the admin — a queued email. Home
+     * banner submissions use the home file (Support\HomeLeadMagnet).
      *
      * @return bool  true when newly subscribed, false when already on the list
      */
@@ -124,7 +126,21 @@ final class SubmissionHandler
             ? null
             : Post::query()->published()->find((int) $postId);
 
-        $sendsEmail = $post?->emailsLeadMagnet() ?? false;
+        $source = $request->validated('source') ?? 'home';
+
+        // The home banner has no article — its file comes from the
+        // "Home lead magnet" admin page instead.
+        $usesHomeFile = $post === null && $source === 'home';
+
+        if ($usesHomeFile) {
+            $sendsEmail = HomeLeadMagnet::emails();
+            $filePath = HomeLeadMagnet::path();
+            $fileName = HomeLeadMagnet::name();
+        } else {
+            $sendsEmail = $post?->emailsLeadMagnet() ?? false;
+            $filePath = $post?->lead_magnet_path;
+            $fileName = $post?->lead_magnet_name;
+        }
 
         $leadRequest = LeadMagnetRequest::create([
             'post_id' => $post?->getKey(),
@@ -132,9 +148,9 @@ final class SubmissionHandler
             'name' => $request->validated('name'),
             'email' => $subscription->email,
             'locale' => app()->getLocale(),
-            'source' => $request->validated('source') ?? 'home',
-            'file_path' => $post?->lead_magnet_path,
-            'file_name' => $post?->lead_magnet_name,
+            'source' => $source,
+            'file_path' => $filePath,
+            'file_name' => $fileName,
             'email_status' => $sendsEmail
                 ? LeadMagnetEmailStatus::Pending
                 : LeadMagnetEmailStatus::Skipped,
