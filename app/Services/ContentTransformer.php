@@ -324,11 +324,16 @@ final class ContentTransformer
             'primaryCta' => self::cta(
                 $section->getTranslation('primary_cta_label'),
                 $section->getTranslation('primary_cta_url'),
+                $section->primary_cta_variant,
+                $section->primary_cta_icon,
             ),
             'secondaryCta' => self::cta(
                 $section->getTranslation('secondary_cta_label'),
                 $section->getTranslation('secondary_cta_url'),
+                $section->secondary_cta_variant,
+                $section->secondary_cta_icon,
             ),
+            'note' => (string) $section->getTranslation('note'),
             'image' => MediaTransformer::make(
                 $section->image_path,
                 $section->getTranslation('image_alt'),
@@ -436,13 +441,22 @@ final class ContentTransformer
     /**
      * @return array{label: string, url: string}|null
      */
-    private static function cta(?string $label, ?string $url): ?array
+    /**
+     * `variant` and `icon` stay null unless an editor overrode them, so the
+     * Vue component falls back to the design default for that button slot.
+     */
+    private static function cta(?string $label, ?string $url, ?string $variant = null, ?string $icon = null): ?array
     {
         if ($label === null || $label === '') {
             return null;
         }
 
-        return ['label' => $label, 'url' => $url ?? '#'];
+        return [
+            'label' => $label,
+            'url' => $url ?? '#',
+            'variant' => $variant,
+            'icon' => $icon,
+        ];
     }
 
     private static function imageContextFor(SectionType $type): string

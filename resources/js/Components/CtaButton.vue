@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import arrowUrl from '~img/sizdah/shared/cta-arrow.svg'
+import type { CtaVariant, SharedProps } from '@/types'
 
 /**
  * The file's "CTA" component (21:2146).
@@ -30,7 +31,7 @@ const props = withDefaults(
      * (391:4796): no fill, a 1px brand rule and a brand label. `outline` cannot
      * stand in — its ink rule and paper label are meant for the dark ground.
      */
-    variant?: 'solid' | 'outline' | 'light' | 'brand-outline'
+    variant?: CtaVariant
     /**
      * `md` is the hero/inline size (space24 / space12, 18px label). `lg` is the
      * standalone size the 404 and final-CTA frames use (space32 / space16,
@@ -55,6 +56,13 @@ const props = withDefaults(
 
 defineEmits<{ click: [event: MouseEvent] }>()
 
+/*
+ | Pinned to the page direction so the arrow always trails the label, even when
+ | a parent sets `dir="ltr"` just to fix the order of a button row (the home
+ | hero does). Without it the arrow landed on the wrong side of the text.
+ */
+const page = usePage<SharedProps>()
+
 const classes = computed(() => [
   'inline-flex items-center justify-center gap-1 rounded-sm',
   'transition-colors duration-200 ease-brand',
@@ -65,6 +73,7 @@ const classes = computed(() => [
 <template>
   <component
     :is="href ? (external ? 'a' : Link) : 'button'"
+    :dir="page.props.locale.direction"
     :href="href"
     :type="href ? undefined : type"
     :disabled="href ? undefined : disabled"

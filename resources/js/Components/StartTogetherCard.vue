@@ -2,6 +2,7 @@
 import CtaButton from '@/Components/CtaButton.vue'
 import type { PageSectionData } from '@/types'
 import { sectionColor } from '@/lib/sectionColors'
+import { ctaArrow, ctaVariant } from '@/lib/sectionCta'
 import journeyUrl from '~img/sizdah/about/cta-journey.svg'
 
 /**
@@ -134,8 +135,9 @@ const props = defineProps<{ section: PageSectionData }>()
             v-if="props.section.primaryCta"
             :label="props.section.primaryCta.label"
             :href="props.section.primaryCta.url"
+            :variant="ctaVariant(props.section.primaryCta, 'solid')"
             size="lg"
-            with-arrow
+            :with-arrow="ctaArrow(props.section.primaryCta, true)"
             class="max-md:gap-1 max-md:p-3 max-md:text-label-lg max-md:[&>img]:hidden"
           />
         </div>

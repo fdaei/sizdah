@@ -68,15 +68,16 @@ final class SubmissionHandler
      * a file and email delivery enabled in the admin — a queued email. Home
      * banner submissions use the home file (Support\HomeLeadMagnet).
      *
-     * @return bool  true when newly subscribed, false when already on the list
+     * @return array{0: bool, 1: LeadMagnetRequest}  [true when newly subscribed /
+     *         false when already on the list, the logged request]
      */
-    public function handleNewsletter(NewsletterSubscriptionRequest $request): bool
+    public function handleNewsletter(NewsletterSubscriptionRequest $request): array
     {
         [$subscription, $wasNew] = $this->subscribe($request);
 
-        $this->recordLeadMagnetRequest($request, $subscription);
+        $leadRequest = $this->recordLeadMagnetRequest($request, $subscription);
 
-        return $wasNew;
+        return [$wasNew, $leadRequest];
     }
 
     /**

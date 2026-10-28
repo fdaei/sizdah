@@ -109,7 +109,7 @@ return [
     ],
     'section_guide' => [
         'heading' => 'How this section is used',
-        'hero' => 'Title = first headline line · Subtitle = second line (gold) · Description = third line · Content = paragraph under the headline · Primary/secondary button = the two hero buttons · Image = replaces the background art.',
+        'hero' => 'Title = first headline line · Subtitle = second line (gold) · Description = third line · Content = paragraph under the headline · Primary/secondary button = the two hero buttons (style and arrow under "Buttons") · Note = handwritten line under the buttons · Image = replaces the background art.',
         'kpi' => 'Each card: Value = big number · Title = gold label · Description = grey caption · Icon = glyph beside the number.',
         'trust_proof' => 'Title = text before the "سیزده" mark · Subtitle = text after it. Logos come from Client logos.',
         'services_cloud' => 'Eyebrow, title and subtitle of the heading. The four services come from Services (those shown on home).',

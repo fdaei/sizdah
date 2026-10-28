@@ -96,6 +96,8 @@ export interface SharedProps {
   flash: {
     success: string | null
     error: string | null
+    /** Signed lead-magnet file URL, flashed after a newsletter signup that has a file. */
+    download: string | null
   }
   auth: {
     user: { id: number; name: string; email: string } | null
@@ -111,7 +113,14 @@ export interface SharedProps {
 export interface SectionCta {
   label: string
   url: string
+  /** Editor override from Filament; null keeps the slot's design default. */
+  variant: CtaVariant | null
+  /** `arrow` / `none` from Filament; null keeps the slot's design default. */
+  icon: CtaIcon | null
 }
+
+export type CtaVariant = 'solid' | 'outline' | 'light' | 'brand-outline'
+export type CtaIcon = 'arrow' | 'none'
 
 /**
  * Mirrors `ContentTransformer::sectionItem()`. One row of a section's repeater:
@@ -152,6 +161,8 @@ export interface PageSectionData {
   }
   primaryCta: SectionCta | null
   secondaryCta: SectionCta | null
+  /** Short aside under the buttons — only the home hero uses it. */
+  note: string
   image: MediaImage | null
   items: SectionItem[]
 }

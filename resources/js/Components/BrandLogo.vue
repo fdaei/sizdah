@@ -11,8 +11,10 @@ import footerLogoUrl from '~img/sizdah/shared/logo-footer.svg'
  *
  * `variant="footer"` swaps in `logo-footer.svg`: the horizontal
  * "SIZDAH / MARKETING AGENCY" lockup, 80 x 28 (designer request 2026-10-28,
- * replaces the earlier recoloured bulb mark). Yellow wordmark, white tagline —
- * it only works on the dark footer ground.
+ * replaces the earlier recoloured bulb mark). All-white — the wordmark was
+ * yellow until 2026-10-28; Figma's footer logo (`688:5803`) draws "SIZDAH"
+ * in white and keeps yellow for the bulb only. It only works on the dark
+ * footer ground.
  */
 const props = withDefaults(
   defineProps<{

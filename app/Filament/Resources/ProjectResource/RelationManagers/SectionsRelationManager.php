@@ -54,6 +54,19 @@ final class SectionsRelationManager extends RelationManager
         SectionType::Story,
     ];
 
+    /** Mirrors CtaButton's `variant` prop (resources/js/Components/CtaButton.vue). */
+    private const CTA_VARIANTS = [
+        'solid' => 'Yellow (filled)',
+        'light' => 'White (filled)',
+        'brand-outline' => 'Yellow outline',
+        'outline' => 'Grey outline (dark backgrounds)',
+    ];
+
+    private const CTA_ICONS = [
+        'arrow' => 'Show arrow',
+        'none' => 'No arrow',
+    ];
+
     public function form(Form $form): Form
     {
         return $form->schema([
@@ -134,6 +147,12 @@ final class SectionsRelationManager extends RelationManager
                     ->label('Secondary button URL')
                     ->maxLength(500),
 
+                TextInput::make("translations.{$locale}.note")
+                    ->label('Note under the buttons')
+                    ->maxLength(300)
+                    ->helperText('The handwritten line beside the doodle arrow. Leave empty to hide both.')
+                    ->visible(fn (Get $get): bool => self::sectionType($get('type')) === SectionType::Hero),
+
                 TextInput::make("translations.{$locale}.image_alt")
                     ->label('Image alt text')
                     ->maxLength(300),
@@ -158,6 +177,33 @@ final class SectionsRelationManager extends RelationManager
                         ->label('Description'),
                     ColorPicker::make('content_color')
                         ->label('Content'),
+                ]),
+
+            Section::make('Buttons')
+                ->description('Optional. "Design default" keeps the look the website uses for that button.')
+                ->columns(2)
+                ->collapsed()
+                ->schema([
+                    Select::make('primary_cta_variant')
+                        ->label('Primary button style')
+                        ->options(self::CTA_VARIANTS)
+                        ->placeholder('Design default')
+                        ->native(false),
+                    Select::make('primary_cta_icon')
+                        ->label('Primary button arrow')
+                        ->options(self::CTA_ICONS)
+                        ->placeholder('Design default')
+                        ->native(false),
+                    Select::make('secondary_cta_variant')
+                        ->label('Secondary button style')
+                        ->options(self::CTA_VARIANTS)
+                        ->placeholder('Design default')
+                        ->native(false),
+                    Select::make('secondary_cta_icon')
+                        ->label('Secondary button arrow')
+                        ->options(self::CTA_ICONS)
+                        ->placeholder('Design default')
+                        ->native(false),
                 ]),
 
             FileUpload::make('image_path')

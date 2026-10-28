@@ -237,30 +237,10 @@ const strategyLead = computed(() =>
 )
 
 /*
- * The selected Figma frame is the 402px phone composition (1118:4879).  Its
- * copy is authored as a fixed case-study presentation and its cards are
- * intentionally repeated; keep this small model local to the phone layout so
- * the data-driven desktop case study remains reusable for other projects.
+ * The phone layout follows the 402px Figma composition (1118:4879) but reads
+ * the same project data as the desktop track. The frame's copy was a fixed
+ * Cheshmeh sample; hardcoding it made admin edits invisible on phones.
  */
-const mobileCard = {
-  title: 'هویت آرام و حرفه‌ای',
-  description: 'ساخت تصویری ساده‌تر، دلنشین‌تر و حرفه‌ای‌تر از برند',
-}
-const mobileGoals = Array.from({ length: 4 }, () => mobileCard)
-const mobileStrategy = Array.from({ length: 3 }, () => mobileCard)
-const mobileDeliverables = Array.from({ length: 6 }, () => mobileCard)
-const mobileResults = [
-  { label: 'Interaction', value: '+72%', icon: 'interaction' },
-  { label: 'View', value: '+72%', icon: 'view' },
-  { label: 'Interaction', value: '+72%', icon: 'interaction' },
-  { label: 'View', value: '+72%', icon: 'view' },
-  { label: 'View', value: '+72%', icon: 'view' },
-] as ResultStat[]
-const mobileMeta = [
-  { label: 'موضوع', value: 'پشتیبانی از شبکه های اجتماعی', icon: servicesIconUrl, class: 'px-[10px]' },
-  { label: 'تاریخ', value: '۲۰ اردیبهشت ۱۴۰۳', icon: yearIconUrl, class: 'px-[14px]' },
-  { label: 'نویسنده', value: 'SaraAmiri@gmail.com', icon: industryIconUrl, class: 'col-start-1 px-[14px] max-[380px]:col-span-2' },
-]
 </script>
 
 <template>
@@ -273,10 +253,10 @@ const mobileMeta = [
         <header class="flex flex-col items-end gap-[30px]" data-reveal>
           <div class="flex w-full flex-col items-end gap-6 text-right">
             <h1 class="w-full text-[26px] font-bold leading-[36px] text-ink-50">
-              هر برند<br />داستان خودش را دارد
+              {{ props.project.title }}
             </h1>
-            <p class="w-full text-[16px] font-medium leading-[22px] text-ink-200">
-              وقتی محتوای شما هدف و جهت روشنی نداشته باشد، پراکنده و بی‌اثر می‌شود؛ در نتیجه نمی‌تواند مخاطب را جذب کند یا به رشد واقعی کسب‌وکارتان کمک کند
+            <p v-if="props.project.excerpt" class="w-full text-[16px] font-medium leading-[22px] text-ink-200">
+              {{ props.project.excerpt }}
             </p>
           </div>
 
@@ -285,12 +265,11 @@ const mobileMeta = [
             meta row wears), not a CSS border. Padding absorbs the old 2px
             border so each card keeps its box size.
           -->
-          <div class="grid w-full grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] gap-2" aria-label="اطلاعات پروژه">
+          <div v-if="meta.length" class="grid w-full grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] gap-2" :aria-label="t('work.project_details')">
             <div
-              v-for="item in mobileMeta"
-              :key="item.label"
-              class="surface-meta-chip relative flex min-h-[57px] min-w-0 items-start justify-start gap-2 rounded-lg py-[10px] text-right"
-              :class="item.class"
+              v-for="item in meta"
+              :key="item.key"
+              class="surface-meta-chip relative flex min-h-[57px] min-w-0 items-start justify-start gap-2 rounded-lg px-[14px] py-[10px] text-right"
             >
               <!-- Fixed-radius 9-slice (.sketch-frame-chip-box): a rectangle with small
                    rounded corners at any card size, not a stretched pill. -->
@@ -302,8 +281,8 @@ const mobileMeta = [
               <!-- min-w-0 + wrapping: long values (the topic, the email) wrap inside
                    the chip on narrow phones instead of spilling past its frame. -->
               <div class="relative flex min-w-0 flex-col gap-1">
-                <span class="text-[14px] font-medium leading-normal text-ink-50">{{ item.label }}</span>
-                <span class="text-[12px] leading-normal text-ink-200 [overflow-wrap:anywhere]">{{ item.value }}</span>
+                <span class="text-[14px] font-medium leading-normal text-ink-50">{{ t(`work.${item.key}`) }}</span>
+                <span class="text-[12px] leading-normal text-ink-200 [overflow-wrap:anywhere]" :class="item.underline && 'underline'">{{ item.value }}</span>
               </div>
             </div>
           </div>
@@ -321,49 +300,55 @@ const mobileMeta = [
         <section v-if="props.project.challenge" class="mt-11 flex flex-col items-center gap-4 text-center" data-reveal>
           <div class="flex items-center">
             <img :src="challengeMarkUrl" alt="" aria-hidden="true" width="64" height="64" class="size-16" />
-            <h2 class="text-[22px] font-semibold leading-normal text-brand-50">چالش اصلی کجا بود</h2>
+            <h2 class="text-[22px] font-semibold leading-normal text-brand-50">{{ t('work.challenge') }}</h2>
           </div>
-          <p class="w-full text-[16px] leading-normal text-ink-200">چشمه خدمات خوبی داشت، اما حضور دیجیتال آن نتوانسته بود اعتماد، آرامش و شفافیتی را که از یک کلینیک زیبایی انتظار می‌رود، به‌درستی منتقل کند</p>
+          <p class="w-full text-[16px] leading-normal text-ink-200">{{ props.project.challenge }}</p>
+          <ul v-if="props.project.challengePoints.length" class="flex w-full flex-col gap-3 text-right">
+            <li v-for="point in props.project.challengePoints" :key="point" class="flex items-start gap-3 text-[16px] leading-normal text-ink-200">
+              <span class="mt-2 size-2 shrink-0 rounded-round bg-brand" aria-hidden="true" />
+              <span>{{ point }}</span>
+            </li>
+          </ul>
         </section>
 
-        <section class="mt-20 flex flex-col gap-[34px]" data-reveal-group>
-          <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">اهداف پروژه</h2>
+        <section v-if="props.project.goals.length" class="mt-20 flex flex-col gap-[34px]" data-reveal-group>
+          <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">{{ t('work.goals') }}</h2>
           <ul class="flex flex-col gap-4">
-            <li v-for="(_, index) in mobileGoals" :key="`mobile-goal-${index}`" class="surface-case-card sketch-frame flex h-[146px] flex-col items-start justify-center gap-4 overflow-hidden rounded-lg p-4 text-right" data-reveal>
-              <span class="text-[32px] font-semibold leading-none text-brand">01</span>
+            <li v-for="(item, index) in props.project.goals" :key="`mobile-goal-${index}`" class="surface-case-card sketch-frame flex min-h-[146px] flex-col items-start justify-center gap-4 overflow-hidden rounded-lg p-4 text-right" data-reveal>
+              <span class="latin-nums text-[32px] font-semibold leading-none text-brand" aria-hidden="true">{{ ordinal(index) }}</span>
               <div class="flex w-full flex-col gap-2">
-                <h3 class="text-[20px] font-medium leading-normal text-brand-50">{{ mobileCard.title }}</h3>
-                <p class="text-[16px] leading-normal text-ink-200">{{ mobileCard.description }}</p>
+                <h3 class="text-[20px] font-medium leading-normal text-brand-50">{{ item.title }}</h3>
+                <p class="text-[16px] leading-normal text-ink-200">{{ item.description }}</p>
               </div>
             </li>
           </ul>
         </section>
 
-        <section class="mt-[194px] flex flex-col gap-12" data-reveal-group>
+        <section v-if="props.project.strategy.length" class="mt-[194px] flex flex-col gap-12" data-reveal-group>
           <div class="flex flex-col gap-4 text-right">
-            <h2 class="text-[24px] font-semibold leading-normal text-brand-50">چرا سیزده</h2>
-            <p class="text-[16px] leading-normal text-ink-200">سه پکیج متناسب با نیاز، مرحله رشد و میزان همراهی موردنیاز کسب‌وکار شما</p>
+            <h2 class="text-[24px] font-semibold leading-normal text-brand-50">{{ t('work.strategy_eyebrow') }}</h2>
+            <p class="text-[16px] leading-normal text-ink-200">{{ t('work.strategy_subtitle') }}</p>
           </div>
           <ul class="flex flex-col gap-[50px]">
-            <li v-for="(_, index) in mobileStrategy" :key="`mobile-strategy-${index}`" class="relative flex h-[114px] flex-col gap-4 text-right" data-reveal>
-              <span class="text-[32px] font-semibold leading-none text-brand">01</span>
+            <li v-for="(item, index) in props.project.strategy" :key="`mobile-strategy-${index}`" class="relative flex min-h-[114px] flex-col gap-4 text-right" data-reveal>
+              <span class="latin-nums text-[32px] font-semibold leading-none text-brand" aria-hidden="true">{{ ordinal(index) }}</span>
               <div class="flex flex-col gap-2">
-                <h3 class="text-[20px] font-medium leading-normal text-brand-50">{{ mobileCard.title }}</h3>
-                <p class="text-[16px] leading-normal text-ink-200">{{ mobileCard.description }}</p>
+                <h3 class="text-[20px] font-medium leading-normal text-brand-50">{{ item.title }}</h3>
+                <p class="text-[16px] leading-normal text-ink-200">{{ item.description }}</p>
               </div>
               <img :src="strategyRuleUrl" alt="" aria-hidden="true" width="320" height="4" class="pointer-events-none absolute inset-x-0 bottom-[-28px] h-1 w-full max-w-none" />
             </li>
           </ul>
         </section>
 
-        <section class="mt-[187px] flex flex-col gap-[67px]" data-reveal-group>
+        <section v-if="props.project.deliverables.length" class="mt-[187px] flex flex-col gap-[67px]" data-reveal-group>
           <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">خروجی های پروژه</h2>
           <ul class="flex flex-col gap-4">
-            <li v-for="(_, index) in mobileDeliverables" :key="`mobile-deliverable-${index}`" class="surface-case-card sketch-frame flex h-[146px] flex-col items-start justify-center gap-4 overflow-hidden rounded-lg p-4 text-right" data-reveal>
-              <span class="text-[32px] font-semibold leading-none text-brand">01</span>
+            <li v-for="(item, index) in props.project.deliverables" :key="`mobile-deliverable-${index}`" class="surface-case-card sketch-frame flex min-h-[146px] flex-col items-start justify-center gap-4 overflow-hidden rounded-lg p-4 text-right" data-reveal>
+              <span class="latin-nums text-[32px] font-semibold leading-none text-brand" aria-hidden="true">{{ ordinal(index) }}</span>
               <div class="flex w-full flex-col gap-2">
-                <h3 class="text-[20px] font-medium leading-normal text-brand-50">{{ mobileCard.title }}</h3>
-                <p class="text-[16px] leading-normal text-ink-200">{{ mobileCard.description }}</p>
+                <h3 class="text-[20px] font-medium leading-normal text-brand-50">{{ item.title }}</h3>
+                <p class="text-[16px] leading-normal text-ink-200">{{ item.description }}</p>
               </div>
             </li>
           </ul>
@@ -389,10 +374,10 @@ const mobileMeta = [
           </div>
         </section>
 
-        <section class="mt-20 flex flex-col gap-6" data-reveal-group>
-          <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">نتایج</h2>
+        <section v-if="props.project.results.length" class="mt-20 flex flex-col gap-6" data-reveal-group>
+          <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">{{ t('work.results') }}</h2>
           <ul class="grid grid-cols-2 gap-3">
-            <li v-for="(result, index) in mobileResults" :key="`mobile-result-${index}`" class="flex h-[125px] flex-col items-start justify-center gap-4 rounded-lg bg-gold-100 p-4 text-right" data-reveal>
+            <li v-for="(result, index) in props.project.results" :key="`mobile-result-${index}`" class="flex h-[125px] flex-col items-start justify-center gap-4 rounded-lg bg-gold-100 p-4 text-right" data-reveal>
               <img v-if="resultIcon(result)" :src="resultIcon(result)!.src" :width="resultIcon(result)!.width" :height="resultIcon(result)!.height" alt="" aria-hidden="true" />
               <div class="flex flex-col items-start">
                 <span class="text-[18px] font-medium text-warm-900">{{ result.label }}</span>
@@ -402,7 +387,7 @@ const mobileMeta = [
           </ul>
         </section>
 
-        <p class="mt-10 text-right text-[16px] leading-normal text-ink-200">سه پکیج متناسب با نیاز، مرحله رشد و میزان همراهی موردنیاز کسب‌وکار شما</p>
+        <p v-if="props.project.resultsSummary" class="mt-10 whitespace-pre-line text-right text-[16px] leading-normal text-ink-200">{{ props.project.resultsSummary }}</p>
 
         <section v-if="props.project.beforeAfter.before && props.project.beforeAfter.after" class="mt-[104px] grid gap-11" data-reveal-group>
           <figure v-for="side in ['before', 'after'] as const" :key="side" class="flex flex-col items-center gap-3" data-reveal>
@@ -412,7 +397,7 @@ const mobileMeta = [
         </section>
 
         <section v-if="props.project.next" class="mt-11 flex flex-col items-end gap-2 text-right" data-reveal>
-          <p class="text-[18px] leading-normal text-ink-200">پروژه بعدی</p>
+          <p class="text-[18px] leading-normal text-ink-200">{{ t('work.next_case_study') }}</p>
           <Link :href="props.project.next.url" class="flex items-center gap-2">
             <img :src="nextArrowUrl" alt="" aria-hidden="true" width="24" height="24" class="size-6 rotate-180" />
             <span class="text-[24px] font-medium leading-normal text-ink-50">{{ props.project.next.title }}</span>

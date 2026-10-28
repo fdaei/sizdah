@@ -254,3 +254,52 @@ it('resends a home request with the current home file', function (): void {
         ->and($request->refresh()->file_path)->toBe('lead-magnets/home-v2.pdf');
     Queue::assertPushed(SendLeadMagnetEmail::class);
 });
+
+it('flashes a signed download url that serves the article file', function (): void {
+    Queue::fake();
+    $post = leadMagnetPost();
+
+    $this->from('/fa')->post('/fa/newsletter', [
+        'email' => 'reader@example.com',
+        'source' => 'article',
+        'post_id' => $post->id,
+    ])->assertSessionHas('download');
+
+    $response = $this->get(session('download'));
+
+    $response->assertOk()->assertDownload('content-checklist.pdf');
+    Queue::assertPushed(SendLeadMagnetEmail::class);
+});
+
+it('still offers the download when the article has email turned off', function (): void {
+    Queue::fake();
+    $post = leadMagnetPost(['lead_magnet_send_email' => false]);
+
+    $this->from('/fa')->post('/fa/newsletter', [
+        'email' => 'reader@example.com',
+        'source' => 'article',
+        'post_id' => $post->id,
+    ])->assertSessionHas('download');
+
+    Queue::assertNothingPushed();
+});
+
+it('flashes no download url when the article has no file', function (): void {
+    Queue::fake();
+    $post = leadMagnetPost(['lead_magnet_path' => null]);
+
+    $this->from('/fa')->post('/fa/newsletter', [
+        'email' => 'reader@example.com',
+        'source' => 'article',
+        'post_id' => $post->id,
+    ])->assertSessionMissing('download');
+});
+
+it('refuses the download without a valid signature', function (): void {
+    $request = LeadMagnetRequest::factory()->create([
+        'file_path' => 'lead-magnets/checklist.pdf',
+        'file_name' => 'content-checklist.pdf',
+    ]);
+
+    $this->get("/fa/lead-magnet/{$request->id}/download")->assertForbidden();
+});

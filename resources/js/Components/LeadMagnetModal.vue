@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from 'vue'
-import { useForm } from '@inertiajs/vue3'
+import { useForm, usePage } from '@inertiajs/vue3'
+import type { SharedProps } from '@/types'
 import IconClose from '@/Components/Icons/IconClose.vue'
 import { route } from 'ziggy-js'
 import CtaButton from '@/Components/CtaButton.vue'
@@ -75,6 +76,9 @@ const { t } = useTranslations()
 const panel = ref<HTMLElement | null>(null)
 const nameInput = ref<HTMLInputElement | null>(null)
 const succeeded = ref(false)
+const page = usePage<SharedProps>()
+/** Signed file URL from the last successful submit — kept for the fallback link. */
+const downloadUrl = ref<string | null>(null)
 
 const form = useForm<{
   name: string
@@ -96,6 +100,12 @@ function submit(): void {
     onSuccess: async () => {
       succeeded.value = true
       form.reset()
+      // The file downloads right away (Content-Disposition: attachment, so
+      // the page stays put); the email, when enabled, goes out separately.
+      downloadUrl.value = page.props.flash.download ?? null
+      if (downloadUrl.value) {
+        window.location.assign(downloadUrl.value)
+      }
       // The submit button this click focused is removed by the v-else swap
       // to the success view, which drops focus to <body> — and once focus
       // leaves the panel, Escape no longer bubbles through its handler.
@@ -118,6 +128,7 @@ watch(
 
     if (open) {
       succeeded.value = false
+      downloadUrl.value = null
       form.clearErrors()
       await nextTick()
       if (nameInput.value) {
@@ -293,6 +304,13 @@ watch(
             <p class="whitespace-pre-line text-heading-sm text-ink-50">
               {{ t('forms.newsletter.success') }}
             </p>
+            <a
+              v-if="downloadUrl"
+              :href="downloadUrl"
+              class="text-label-md text-ink-300 underline underline-offset-4 transition-colors duration-200 ease-brand hover:text-brand"
+            >
+              {{ t('forms.newsletter.download_fallback') }}
+            </a>
             <CtaButton
               :label="t('common.start_conversation')"
               :href="route('contact')"

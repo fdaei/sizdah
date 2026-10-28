@@ -4,6 +4,7 @@ import CtaButton from '@/Components/CtaButton.vue'
 import LeadMagnetModal from '@/Components/LeadMagnetModal.vue'
 import type { PageSectionData } from '@/types'
 import { sectionColor } from '@/lib/sectionColors'
+import { ctaArrow, ctaVariant } from '@/lib/sectionCta'
 import doodleUrl from '~img/sizdah/shared/checklist-doodle.svg'
 import articleAccentUrl from '~img/sizdah/blog/lead-magnet-accent.svg'
 import leadMagnetDotsUrl from '~img/sizdah/home/lead-magnet-dots.svg'
@@ -48,6 +49,7 @@ import leadMagnetScribbleUrl from '~img/sizdah/home/lead-magnet-scribble.svg'
  * frames label the button differently: the article strip uses the primary
  * button label ("دریافت چک‌لیست"), and Home's large strip uses the secondary
  * one ("شروع گفتگو"), falling back to the primary label when it is empty.
+ * The Filament style/arrow overrides follow the same slot as the label.
  */
 const props = withDefaults(
   defineProps<{
@@ -172,7 +174,17 @@ const modalOpen = ref(false)
             ? (props.section.secondaryCta?.label ?? props.section.primaryCta.label)
             : props.section.primaryCta.label
         "
-        :variant="props.size === 'lg' ? 'brand-outline' : 'solid'"
+        :variant="
+          props.size === 'lg'
+            ? ctaVariant(props.section.secondaryCta, 'brand-outline')
+            : ctaVariant(props.section.primaryCta, 'solid')
+        "
+        :with-arrow="
+          ctaArrow(
+            props.size === 'lg' ? props.section.secondaryCta : props.section.primaryCta,
+            false,
+          )
+        "
         @click="modalOpen = true"
         class="max-md:px-3 max-md:py-3 max-md:text-[14px]"
       />

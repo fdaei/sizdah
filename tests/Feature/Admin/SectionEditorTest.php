@@ -63,6 +63,38 @@ it('delivers hero copy and text colours saved in the admin to the home page', fu
             ->where('sections.hero.colors.title', '#ff0000'));
 });
 
+it('delivers hero button style, arrow and note saved in the admin to the home page', function (): void {
+    $this->get('/fa')
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->where('sections.hero.primaryCta.variant', null)
+            ->where('sections.hero.primaryCta.icon', null)
+            ->where('sections.hero.note', 'بیایید درباره مسیر برندتان با هم صحبت کنیم'));
+
+    Livewire::test(SectionsRelationManager::class, [
+        'ownerRecord' => $this->home,
+        'pageClass' => EditPage::class,
+    ])
+        ->mountTableAction(EditAction::class, homeSection($this->home, SectionType::Hero))
+        ->assertFormFieldIsVisible('translations.fa.note', 'mountedTableActionForm')
+        ->setTableActionData([
+            'translations' => ['fa' => ['note' => 'یادداشت تازه']],
+            'primary_cta_variant' => 'solid',
+            'primary_cta_icon' => 'none',
+            'secondary_cta_icon' => 'arrow',
+        ])
+        ->callMountedTableAction()
+        ->assertHasNoTableActionErrors();
+
+    $this->get('/fa')
+        ->assertOk()
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->where('sections.hero.primaryCta.variant', 'solid')
+            ->where('sections.hero.primaryCta.icon', 'none')
+            ->where('sections.hero.secondaryCta.variant', null)
+            ->where('sections.hero.secondaryCta.icon', 'arrow')
+            ->where('sections.hero.note', 'یادداشت تازه'));
+});
+
 it('offers only the artwork keys the frontend can draw for card icons', function (): void {
     expect(array_keys(SectionType::Kpi->iconOptions()))->toBe(['engagement', 'audience', 'retention'])
         ->and(SectionType::WhyUs->iconOptions())->toBe([]);

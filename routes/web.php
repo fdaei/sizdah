@@ -6,6 +6,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AdminLocaleController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LeadMagnetDownloadController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PostController;
@@ -85,6 +86,12 @@ Route::prefix('{locale}')
         Route::post('newsletter', NewsletterController::class)
             ->middleware('throttle:6,1')
             ->name('newsletter.store');
+
+        // The file itself, downloaded right after the form above succeeds.
+        // Only reachable through the signed URL NewsletterController flashes.
+        Route::get('lead-magnet/{leadMagnetRequest}/download', LeadMagnetDownloadController::class)
+            ->middleware('signed')
+            ->name('lead-magnet.download');
 
         // 9/10 — Legal                   Figma 279:5924, 281:6773
         Route::get('privacy-policy', [LegalController::class, 'privacy'])->name('legal.privacy');

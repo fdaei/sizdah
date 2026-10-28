@@ -43,6 +43,7 @@ return [
         'disclaimer'        => 'No spam — just practical notes on brand and content.',
         'success'           => "You're subscribed. Check your inbox for the checklist.",
         'already'           => "You're already on the list.",
+        'download_fallback' => "Download didn't start? Click here",
         'dialog_label'      => 'Get the free checklist',
     ],
 

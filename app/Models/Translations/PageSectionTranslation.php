@@ -23,6 +23,7 @@ final class PageSectionTranslation extends Model
         'primary_cta_url',
         'secondary_cta_label',
         'secondary_cta_url',
+        'note',
         'image_alt',
     ];
 

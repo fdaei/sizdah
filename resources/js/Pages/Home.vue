@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import SeoHead from '@/Components/SeoHead.vue'
 import CtaButton from '@/Components/CtaButton.vue'
+import { ctaArrow, ctaVariant } from '@/lib/sectionCta'
 import StatCard from '@/Components/StatCard.vue'
 import ClientLogo from '@/Components/ClientLogo.vue'
 import ServiceOrbit from '@/Components/ServiceOrbit.vue'
@@ -261,15 +262,6 @@ onBeforeUnmount(() => {
           dir="ltr"
           class="flex flex-nowrap items-center justify-end gap-2 max-md:mt-[52px] sm:gap-4 lg:mt-[109px]"
         >
-          <CtaButton
-            v-if="hero.primaryCta"
-            :label="hero.primaryCta.label"
-            :href="hero.primaryCta.url"
-            variant="light"
-            size="lg"
-            with-arrow
-            class="ring-1 ring-brand max-md:w-[134px] max-md:px-0 max-md:py-3 max-md:text-title-sm max-md:[&>img]:hidden"
-          />
           <!--
             268:2989 is a white fill with a 1px brand rule and an ink label —
             not the dark outline the other pages use, so it takes `light`
@@ -277,23 +269,43 @@ onBeforeUnmount(() => {
             measure 57px (268:2990, 268:2989 are both lg-BW/lg-WB instances,
             32/16 padding + 20px Medium) — `size` was missing, so this was
             silently rendering at the smaller default (24/12, 18px).
+
+            Style and arrow are the frame's defaults; an editor can override
+            either per button in Filament, and the brand rule follows `light`.
           -->
+          <CtaButton
+            v-if="hero.primaryCta"
+            :label="hero.primaryCta.label"
+            :href="hero.primaryCta.url"
+            :variant="ctaVariant(hero.primaryCta, 'light')"
+            size="lg"
+            :with-arrow="ctaArrow(hero.primaryCta, true)"
+            :class="[
+              'max-md:w-[134px] max-md:px-0 max-md:py-3 max-md:text-title-sm max-md:[&>img]:hidden',
+              ctaVariant(hero.primaryCta, 'light') === 'light' && 'ring-1 ring-brand',
+            ]"
+          />
           <CtaButton
             v-if="hero.secondaryCta"
             :label="hero.secondaryCta.label"
             :href="hero.secondaryCta.url"
+            :variant="ctaVariant(hero.secondaryCta, 'solid')"
             size="lg"
-            class="max-md:w-[137px] max-md:px-0 max-md:py-3 max-md:text-title-sm"
+            :with-arrow="ctaArrow(hero.secondaryCta, false)"
+            :class="[
+              'max-md:w-[137px] max-md:px-0 max-md:py-3 max-md:text-title-sm max-md:[&>img]:hidden',
+              ctaVariant(hero.secondaryCta, 'solid') === 'light' && 'ring-1 ring-brand',
+            ]"
           />
         </div>
 
         <!--
           268:2997 — the handwritten aside under the buttons, with the
-          up-right doodle (268:3024) beside it. Fixed chrome rather than
-          authored copy, so it comes from lang/{locale}/home.php.
+          up-right doodle (268:3024) beside it. Edited as the hero section's
+          "Note" field in Filament; clearing it hides the aside and doodle.
         -->
         <p
-          v-if="hero"
+          v-if="hero?.note"
           class="flex items-start gap-2 text-body-lg text-ink-300 max-md:hidden lg:ms-[65px] lg:mt-[49px] lg:gap-[13px]"
         >
           <img
@@ -304,7 +316,7 @@ onBeforeUnmount(() => {
             height="56"
             class="size-10 shrink-0 lg:-mt-[35px] lg:size-14"
           />
-          <span class="max-w-[173px]">{{ $t('home.hero.note') }}</span>
+          <span class="max-w-[173px]">{{ hero.note }}</span>
         </p>
       </div>
     </div>

@@ -37,6 +37,10 @@ final class PageSection extends Model
         'subtitle_color',
         'description_color',
         'content_color',
+        'primary_cta_variant',
+        'primary_cta_icon',
+        'secondary_cta_variant',
+        'secondary_cta_icon',
     ];
 
     /** @var array<int, string> */
@@ -50,6 +54,7 @@ final class PageSection extends Model
         'primary_cta_url',
         'secondary_cta_label',
         'secondary_cta_url',
+        'note',
         'image_alt',
     ];
 

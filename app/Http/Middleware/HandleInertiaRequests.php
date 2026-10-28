@@ -69,6 +69,8 @@ final class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error'   => fn () => $request->session()->get('error'),
+                // Signed lead-magnet file URL, set by NewsletterController.
+                'download' => fn () => $request->session()->get('download'),
             ],
 
             'auth' => [
