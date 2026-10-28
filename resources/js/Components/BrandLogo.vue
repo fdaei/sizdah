@@ -9,13 +9,14 @@ import footerLogoUrl from '~img/sizdah/shared/logo-footer.svg'
  * The intrinsic ratio is preserved by setting both dimensions from one scale
  * factor, so the mark never causes layout shift while the SVG loads.
  *
- * `variant="footer"` swaps in `logo-footer.svg`: identical geometry, but the
- * white letterforms are #1B1B1B (designer request 2026-10-17). The yellow
- * bulb stays brand yellow.
+ * `variant="footer"` swaps in `logo-footer.svg`: the horizontal
+ * "SIZDAH / MARKETING AGENCY" lockup, 80 x 28 (designer request 2026-10-28,
+ * replaces the earlier recoloured bulb mark). Yellow wordmark, white tagline —
+ * it only works on the dark footer ground.
  */
 const props = withDefaults(
   defineProps<{
-    /** Rendered width in px. Height follows the 104:59.568 aspect. */
+    /** Rendered width in px. Height follows the variant's own aspect. */
     width?: number
     title: string
     variant?: 'default' | 'footer'
@@ -25,7 +26,9 @@ const props = withDefaults(
 
 const src = computed(() => (props.variant === 'footer' ? footerLogoUrl : logoUrl))
 
-const ASPECT = 59.568 / 104
+const height = computed(() =>
+  Math.round(props.width * (props.variant === 'footer' ? 28 / 80 : 59.568 / 104)),
+)
 </script>
 
 <template>
@@ -33,8 +36,8 @@ const ASPECT = 59.568 / 104
     :src="src"
     :alt="title"
     :width="width"
-    :height="Math.round(width * ASPECT)"
-    :style="{ width: `${width}px`, height: `${Math.round(width * ASPECT)}px` }"
+    :height="height"
+    :style="{ width: `${width}px`, height: `${height}px` }"
     decoding="async"
   />
 </template>

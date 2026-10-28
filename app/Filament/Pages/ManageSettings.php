@@ -118,27 +118,28 @@ final class ManageSettings extends Page implements HasForms
                         $this->translatableTextarea('footer_description', 'Footer description'),
                     ]),
 
-                Section::make('Contact details')
-                    ->description('Rendered in the footer and on the contact page.')
+                Section::make($this->label('اطلاعات تماس', 'Contact details'))
+                    ->description($this->label('در فوتر و کارت «اطلاعات تماس» صفحه تماس با ما نمایش داده می‌شود.', 'Rendered in the footer and on the contact page.'))
                     ->columns(2)
                     ->schema([
                         TextInput::make('contact_whatsapp')
-                            ->label('WhatsApp number')
+                            ->label($this->label('شماره واتس‌اپ', 'WhatsApp number'))
                             ->maxLength(50),
 
                         TextInput::make('contact_phone')
-                            ->label('Phone number')
+                            ->label($this->label('شماره تماس', 'Phone number'))
+                            ->helperText($this->label('مثلاً +98 913 616 2313', 'e.g. +98 913 616 2313'))
                             ->maxLength(50),
 
                         TextInput::make('contact_email')
-                            ->label('Email')
+                            ->label($this->label('ایمیل', 'Email'))
                             ->email()
                             ->maxLength(200),
 
-                        $this->translatableInput('contact_location', 'Location')
+                        $this->translatableInput('contact_location', $this->label('آدرس', 'Address'))
                             ->columnSpanFull(),
 
-                        $this->translatableInput('contact_working_with', 'Working with')
+                        $this->translatableInput('contact_working_with', $this->label('همکاری با', 'Working with'))
                             ->columnSpanFull(),
                     ]),
 
@@ -198,6 +199,11 @@ final class ManageSettings extends Page implements HasForms
                 ->label('Save changes')
                 ->submit('save'),
         ];
+    }
+
+    private function label(string $fa, string $en): string
+    {
+        return app()->getLocale() === 'fa' ? $fa : $en;
     }
 
     private function translatableInput(string $key, string $label): Tabs

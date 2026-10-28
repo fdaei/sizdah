@@ -292,7 +292,7 @@ onBeforeUnmount(() => {
 
         <div class="mx-auto flex max-w-[824px] flex-col items-center gap-10 text-center lg:gap-20">
           <div class="about-story-heading flex flex-row-reverse items-center gap-2">
-            <img :src="figmaStoryIconUrl" alt="" aria-hidden="true" class="size-14" />
+            <img :src="figmaStoryIconUrl" alt="" aria-hidden="true" class="size-14 lg:hidden" />
             <h2 class="text-section-line text-brand-50" :style="sectionColor(story, 'title')">{{ story.title }}</h2>
           </div>
 

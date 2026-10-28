@@ -25,8 +25,8 @@ return [
     // Contact details panel — Figma 466:1216.
     'details' => [
         'title'        => 'Contact Details',
-        'whatsapp'     => 'WhatsApp',
-        'location'     => 'Location',
+        'phone'        => 'Phone',
+        'location'     => 'Address',
         'email'        => 'Email',
         'working_with' => 'Working With',
         'follow'       => 'را برای ایده‌های خلاقانه و نگاه‌های تازه به برند در شبکه‌های اجتماعی دنبال کنید:',

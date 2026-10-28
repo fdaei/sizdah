@@ -48,7 +48,7 @@ const contact = computed(() => page.props.settings.contact)
 const socialLinks = computed(() => page.props.settings.socialLinks)
 
 const details = computed(() => [
-  { key: 'whatsapp', icon: phoneIconUrl, value: contact.value.whatsapp },
+  { key: 'phone', icon: phoneIconUrl, value: contact.value.phone },
   { key: 'location', icon: locationIconUrl, value: contact.value.location },
   { key: 'email', icon: emailIconUrl, value: contact.value.email },
   { key: 'working_with', icon: workingWithIconUrl, value: contact.value.workingWith },
@@ -441,7 +441,15 @@ const fieldClass =
                     <span class="text-label-lg text-brand-50">
                       {{ t(`forms.details.${detail.key}`) }}
                     </span>
-                    <span class="text-body-md text-ink-200 latin-nums">{{ detail.value }}</span>
+                    <!-- <bdi dir="ltr"> keeps "+98 913 …" in order inside the RTL card while still aligning to the start edge. -->
+                    <span class="text-body-md text-ink-200">
+                      <bdi
+                        v-if="detail.key === 'phone' || detail.key === 'email'"
+                        dir="ltr"
+                        class="latin-nums"
+                      >{{ detail.value }}</bdi>
+                      <template v-else>{{ detail.value }}</template>
+                    </span>
                   </span>
                 </div>
                 <img

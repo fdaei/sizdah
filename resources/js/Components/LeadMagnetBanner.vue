@@ -121,7 +121,7 @@ const modalOpen = ref(false)
       class="relative z-10 flex flex-col gap-2"
       :class="
         props.size === 'lg'
-          ? 'max-w-[580px] text-center gap-4 max-md:min-w-0 max-md:max-w-none max-md:flex-1 max-md:text-right lg:w-[580px]'
+          ? 'max-w-[580px] text-center gap-4 max-md:min-w-0 max-md:max-w-none max-md:flex-1 max-md:text-right lg:w-[580px] lg:text-start'
           : 'w-full max-w-[458px] text-start md:w-[458px]'
       "
     >
@@ -156,7 +156,7 @@ const modalOpen = ref(false)
         v-if="props.section.description"
         :class="
           props.size === 'lg'
-            ? 'text-body-lg text-ink-600 max-md:text-[12px] max-md:leading-[17px] lg:text-start'
+            ? 'text-body-lg text-ink-600 max-md:text-[12px] max-md:leading-[17px]'
             : 'text-body-md text-ink-600 md:text-start'
         "
         :style="sectionColor(props.section, 'description')"
