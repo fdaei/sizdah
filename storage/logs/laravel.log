@@ -23701,3 +23701,53 @@
 #68 /home/fdaei/Downloads/phc-backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('...')
 #69 {main}
 "} 
+[2026-11-02 08:43:08] local.ERROR: Command "test" is not defined.
+
+Did you mean one of these?
+    make:test
+    schedule:test {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"test\" is not defined.
+
+Did you mean one of these?
+    make:test
+    schedule:test at /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Application.php:759)
+[stacktrace]
+#0 /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Application.php(298): Symfony\\Component\\Console\\Application->find()
+#1 /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Application.php(195): Symfony\\Component\\Console\\Application->doRun()
+#2 /home/fdaei/Downloads/phc-backend/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony\\Component\\Console\\Application->run()
+#3 /home/fdaei/Downloads/phc-backend/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#4 /home/fdaei/Downloads/phc-backend/artisan(14): Illuminate\\Foundation\\Application->handleCommand()
+#5 {main}
+"} 
+[2026-11-02 08:43:51] local.ERROR: The "--filter" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--filter\" option does not exist. at /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Input/ArgvInput.php:226)
+[stacktrace]
+#0 /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Input/ArgvInput.php(153): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption()
+#1 /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Input/ArgvInput.php(88): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption()
+#2 /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Input/ArgvInput.php(77): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken()
+#3 /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Input/Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Command/Command.php(295): Symfony\\Component\\Console\\Input\\Input->bind()
+#5 /home/fdaei/Downloads/phc-backend/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#6 /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Application.php(1117): Illuminate\\Console\\Command->run()
+#7 /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Application.php(356): Symfony\\Component\\Console\\Application->doRunCommand()
+#8 /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Application.php(195): Symfony\\Component\\Console\\Application->doRun()
+#9 /home/fdaei/Downloads/phc-backend/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony\\Component\\Console\\Application->run()
+#10 /home/fdaei/Downloads/phc-backend/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#11 /home/fdaei/Downloads/phc-backend/artisan(14): Illuminate\\Foundation\\Application->handleCommand()
+#12 {main}
+"} 
+[2026-11-02 08:43:56] local.ERROR: Command "test" is not defined.
+
+Did you mean one of these?
+    make:test
+    schedule:test {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"test\" is not defined.
+
+Did you mean one of these?
+    make:test
+    schedule:test at /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Application.php:759)
+[stacktrace]
+#0 /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Application.php(298): Symfony\\Component\\Console\\Application->find()
+#1 /home/fdaei/Downloads/phc-backend/vendor/symfony/console/Application.php(195): Symfony\\Component\\Console\\Application->doRun()
+#2 /home/fdaei/Downloads/phc-backend/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony\\Component\\Console\\Application->run()
+#3 /home/fdaei/Downloads/phc-backend/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#4 /home/fdaei/Downloads/phc-backend/artisan(14): Illuminate\\Foundation\\Application->handleCommand()
+#5 {main}
+"} 

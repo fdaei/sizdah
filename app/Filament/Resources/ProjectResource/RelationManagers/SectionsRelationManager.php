@@ -234,7 +234,12 @@ final class SectionsRelationManager extends RelationManager
                 ]),
 
             FileUpload::make('image_path')
-                ->label('Section image')
+                ->label(fn (Get $get): string => self::sectionType($get('type')) === SectionType::FinalCta
+                    ? 'CTA illustration'
+                    : 'Section image')
+                ->helperText(fn (Get $get): ?string => self::sectionType($get('type')) === SectionType::FinalCta
+                    ? 'Optional. Replaces the default illustration on this page only.'
+                    : null)
                 ->image()
                 ->imageEditor()
                 ->directory('sections')

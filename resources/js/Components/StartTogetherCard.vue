@@ -153,12 +153,20 @@ const props = defineProps<{ section: PageSectionData }>()
         </p>
       </div>
 
+      <!--
+        The stock journey illustration is the design default. An editor can
+        replace it from the Final CTA section in the admin; retaining the
+        fallback means existing pages keep their illustration until they opt
+        in to a replacement.
+      -->
       <img
-        :src="journeyUrl"
-        alt=""
-        aria-hidden="true"
-        width="592"
-        height="417"
+        :src="props.section.image?.src ?? journeyUrl"
+        :srcset="props.section.image?.srcset"
+        :sizes="props.section.image?.sizes"
+        :alt="props.section.image?.alt ?? ''"
+        :aria-hidden="props.section.image ? undefined : true"
+        :width="props.section.image?.width ?? 592"
+        :height="props.section.image?.height ?? 417"
         class="w-full max-w-[592px] max-md:max-w-[320px]"
       />
     </div>
