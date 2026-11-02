@@ -7,7 +7,11 @@
      */
     $gtmId = config('services.google.tag_manager_id');
     $gaId  = config('services.google.analytics_id');
+    $searchConsoleVerification = config('services.google.search_console_verification');
 ?>
+<?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($searchConsoleVerification): ?>
+    <meta name="google-site-verification" content="<?php echo e($searchConsoleVerification); ?>">
+<?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(config('services.google.analytics_enabled')): ?>
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($gtmId): ?>
         <!-- Google Tag Manager -->

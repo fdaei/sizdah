@@ -34,6 +34,9 @@ return [
         'analytics_enabled' => (bool) env('GOOGLE_ANALYTICS_ENABLED', env('APP_ENV', 'production') === 'production'),
         'tag_manager_id' => env('GOOGLE_TAG_MANAGER_ID', 'GTM-TPQ229H9'),
         'analytics_id' => env('GOOGLE_ANALYTICS_ID', 'G-2P5DDJGQH3'),
+        // The value only (not the full <meta> element) supplied by Search
+        // Console's HTML-tag ownership-verification method.
+        'search_console_verification' => env('GOOGLE_SEARCH_CONSOLE_VERIFICATION'),
     ],
 
 ];

@@ -7,7 +7,11 @@
      */
     $gtmId = config('services.google.tag_manager_id');
     $gaId  = config('services.google.analytics_id');
+    $searchConsoleVerification = config('services.google.search_console_verification');
 @endphp
+@if ($searchConsoleVerification)
+    <meta name="google-site-verification" content="{{ $searchConsoleVerification }}">
+@endif
 @if (config('services.google.analytics_enabled'))
     @if ($gtmId)
         <!-- Google Tag Manager -->

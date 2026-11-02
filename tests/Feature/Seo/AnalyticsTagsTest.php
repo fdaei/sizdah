@@ -46,3 +46,10 @@ it('drops the gtag snippet when the GA4 id is empty', function (): void {
         ->toContain('gtm.js')
         ->not->toContain('gtag/js');
 });
+
+it('renders the Google Search Console ownership token when configured', function (): void {
+    config(['services.google.search_console_verification' => 'search-console-token']);
+
+    expect($this->get('/fa')->assertOk()->getContent())
+        ->toContain('<meta name="google-site-verification" content="search-console-token">');
+});
