@@ -31,25 +31,27 @@ final class SiteSettings
     public static function forFrontend(string $locale): array
     {
         return [
-            'siteName'    => self::get('site_name', $locale, 'Sizdah'),
-            'tagline'     => self::get('tagline', $locale, ''),
+            'siteName' => self::get('site_name', $locale, 'Sizdah'),
+            'tagline' => self::get('tagline', $locale, ''),
             'description' => self::get('footer_description', $locale, ''),
 
             'contact' => [
-                'whatsapp'    => self::get('contact_whatsapp', $locale, ''),
-                'phone'       => self::get('contact_phone', $locale, ''),
-                'email'       => self::get('contact_email', $locale, ''),
-                'location'    => self::get('contact_location', $locale, ''),
+                'whatsapp' => self::get('contact_whatsapp', $locale, ''),
+                'phone' => self::get('contact_phone', $locale, ''),
+                'email' => self::get('contact_email', $locale, ''),
+                'location' => self::get('contact_location', $locale, ''),
                 'workingWith' => self::get('contact_working_with', $locale, ''),
             ],
+
+            'contactDetails' => self::contactDetails($locale),
 
             'socialLinks' => self::socialLinks(),
 
             'seo' => [
-                'defaultTitle'       => self::get('seo_default_title', $locale, 'Sizdah'),
+                'defaultTitle' => self::get('seo_default_title', $locale, 'Sizdah'),
                 'defaultDescription' => self::get('seo_default_description', $locale, ''),
-                'defaultImage'       => self::mediaUrl(self::get('seo_default_image', $locale, null)),
-                'organizationName'   => self::get('seo_organization_name', $locale, 'Sizdah'),
+                'defaultImage' => self::mediaUrl(self::get('seo_default_image', $locale, null)),
+                'organizationName' => self::get('seo_organization_name', $locale, 'Sizdah'),
             ],
         ];
     }
@@ -114,12 +116,58 @@ final class SiteSettings
                 ->get()
                 ->map(fn (SocialLink $l): array => [
                     'platform' => $l->platform,
-                    'label'    => $l->label,
-                    'url'      => $l->url,
-                    'icon'     => $l->icon,
+                    'label' => $l->label,
+                    'url' => $l->url,
+                    'icon' => $l->icon,
                 ])
                 ->all(),
         );
+    }
+
+    /**
+     * Contact-card items are one ordered setting whose individual label/value
+     * fields are translated. Keeping them together makes their order editable
+     * in one Filament repeater without coupling the card to a fixed set of
+     * fields or social platforms.
+     *
+     * @return array<int, array{type: string, icon: string, label: string, value: string, url: string|null}>
+     */
+    public static function contactDetails(string $locale): array
+    {
+        $stored = self::all()['contact_details'] ?? null;
+        $items = is_array($stored) && array_key_exists('value', $stored)
+            ? $stored['value']
+            : [];
+
+        if (! is_array($items)) {
+            return [];
+        }
+
+        $fallback = config('locales.fallback');
+
+        return collect($items)
+            ->filter(fn (mixed $item): bool => is_array($item))
+            ->map(function (array $item) use ($locale, $fallback): ?array {
+                $label = self::localisedContactField($item['label'] ?? [], $locale, $fallback);
+                $value = self::localisedContactField($item['value'] ?? [], $locale, $fallback);
+
+                if ($label === '' || $value === '') {
+                    return null;
+                }
+
+                $type = (string) ($item['type'] ?? 'custom');
+
+                return [
+                    'type' => $type,
+                    'icon' => (string) ($item['icon'] ?? 'link'),
+                    'label' => $label,
+                    'value' => $value,
+                    'url' => self::contactDetailUrl($type, $value, $item['url'] ?? null),
+                ];
+            })
+            ->filter()
+            ->values()
+            ->all();
     }
 
     public static function flush(): void
@@ -136,5 +184,28 @@ final class SiteSettings
 
         // og:image must be absolute; url() resolves against the current request host.
         return url(Storage::disk('public')->url($path));
+    }
+
+    private static function localisedContactField(mixed $field, string $locale, string $fallback): string
+    {
+        if (! is_array($field)) {
+            return '';
+        }
+
+        return (string) ($field[$locale] ?? $field[$fallback] ?? '');
+    }
+
+    private static function contactDetailUrl(string $type, string $value, mixed $url): ?string
+    {
+        if (is_string($url) && $url !== '') {
+            return $url;
+        }
+
+        return match ($type) {
+            'phone' => 'tel:'.preg_replace('/\\s+/', '', $value),
+            'email' => 'mailto:'.$value,
+            'whatsapp' => ($number = preg_replace('/\\D+/', '', $value)) !== '' ? 'https://wa.me/'.$number : null,
+            default => null,
+        };
     }
 }

@@ -138,6 +138,7 @@ const props = defineProps<{ section: PageSectionData }>()
             :variant="ctaVariant(props.section.primaryCta, 'solid')"
             size="lg"
             :with-arrow="ctaArrow(props.section.primaryCta, true)"
+            :icon-position="props.section.primaryCta.iconPosition ?? 'after'"
             class="max-md:gap-1 max-md:p-3 max-md:text-label-lg max-md:[&>img]:hidden"
           />
         </div>

@@ -280,8 +280,10 @@ onBeforeUnmount(() => {
             :variant="ctaVariant(hero.primaryCta, 'light')"
             size="lg"
             :with-arrow="ctaArrow(hero.primaryCta, true)"
+            :icon-position="hero.primaryCta.iconPosition ?? 'after'"
             :class="[
               'max-md:w-[134px] max-md:px-0 max-md:py-3 max-md:text-title-sm max-md:[&>img]:hidden',
+              hero.ctaOrder === 'secondary-first' && 'order-2',
               ctaVariant(hero.primaryCta, 'light') === 'light' && 'ring-1 ring-brand',
             ]"
           />
@@ -292,8 +294,10 @@ onBeforeUnmount(() => {
             :variant="ctaVariant(hero.secondaryCta, 'solid')"
             size="lg"
             :with-arrow="ctaArrow(hero.secondaryCta, false)"
+            :icon-position="hero.secondaryCta.iconPosition ?? 'after'"
             :class="[
               'max-md:w-[137px] max-md:px-0 max-md:py-3 max-md:text-title-sm max-md:[&>img]:hidden',
+              hero.ctaOrder === 'secondary-first' && 'order-1',
               ctaVariant(hero.secondaryCta, 'solid') === 'light' && 'ring-1 ring-brand',
             ]"
           />

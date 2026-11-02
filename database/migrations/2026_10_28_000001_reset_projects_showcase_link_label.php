@@ -8,9 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * The Home projects_showcase section's `content` overrides the open row's link
- * label. Installations that stored the old "مشاهده مطالعه موردی" copy there
- * would never show "جزییات پروژه", so clear it and let `work.project_details`
- * drive the label again.
+ * label. Replace the legacy "مشاهده مطالعه موردی" copy with the approved
+ * "جزییات پروژه" label.
  */
 return new class extends Migration
 {
@@ -36,7 +35,7 @@ return new class extends Migration
             ->where('page_section_id', $sectionId)
             ->where('content', 'like', '%مطالعه موردی%')
             ->update([
-                'content' => null,
+                'content' => 'جزییات پروژه',
                 'updated_at' => now(),
             ]);
     }

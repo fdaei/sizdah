@@ -8,11 +8,15 @@ import SocialIcon from '@/Components/SocialIcon.vue'
 import CountrySelect from '@/Components/CountrySelect.vue'
 import { useTranslations } from '@/Composables/useTranslations'
 import { defaultCountry, type Country } from '@/lib/countries'
-import type { SeoMeta, SharedProps } from '@/types'
+import type { ContactDetail, SeoMeta, SharedProps } from '@/types'
 import phoneIconUrl from '~img/sizdah/contact/contact-phone.svg'
 import locationIconUrl from '~img/sizdah/contact/contact-location.svg'
 import emailIconUrl from '~img/sizdah/contact/contact-email.svg'
 import workingWithIconUrl from '~img/sizdah/home/kpi-retention.svg'
+import instagramIconUrl from '~img/sizdah/social/instagram.svg'
+import linkedinIconUrl from '~img/sizdah/social/linkedin.svg'
+import telegramIconUrl from '~img/sizdah/social/telegram.svg'
+import whatsappIconUrl from '~img/sizdah/social/whatsapp.svg'
 import detailRuleUrl from '~img/sizdah/insights/related-rule.svg'
 import pushpinUrl from '~img/sizdah/contact/pushpin.svg'
 import brandFieldUrl from '~img/sizdah/contact/field-brand.svg'
@@ -44,15 +48,29 @@ const props = defineProps<{
 const { t } = useTranslations()
 const page = usePage<SharedProps>()
 
-const contact = computed(() => page.props.settings.contact)
 const socialLinks = computed(() => page.props.settings.socialLinks)
 
-const details = computed(() => [
-  { key: 'phone', icon: phoneIconUrl, value: contact.value.phone },
-  { key: 'location', icon: locationIconUrl, value: contact.value.location },
-  { key: 'email', icon: emailIconUrl, value: contact.value.email },
-  { key: 'working_with', icon: workingWithIconUrl, value: contact.value.workingWith },
-])
+const detailIcons: Record<string, string> = {
+  phone: phoneIconUrl,
+  whatsapp: whatsappIconUrl,
+  email: emailIconUrl,
+  location: locationIconUrl,
+  collaboration: workingWithIconUrl,
+  instagram: instagramIconUrl,
+  telegram: telegramIconUrl,
+  linkedin: linkedinIconUrl,
+  link: workingWithIconUrl,
+}
+
+const details = computed<ContactDetail[]>(() => page.props.settings.contactDetails)
+
+function detailIcon(detail: ContactDetail): string {
+  return detailIcons[detail.icon] ?? detailIcons.link
+}
+
+function usesLatinDirection(detail: ContactDetail): boolean {
+  return ['phone', 'whatsapp', 'email'].includes(detail.type)
+}
 
 /*
  | `website` is the honeypot and `form_started_at` the timestamp trap — both are
@@ -427,10 +445,16 @@ const fieldClass =
             <h2 class="text-title-lg text-brand-50">{{ t('forms.details.title') }}</h2>
 
             <ul class="flex flex-col gap-6">
-              <li v-for="(detail, index) in details" :key="detail.key" class="flex flex-col gap-6">
-                <div class="flex items-center gap-4">
+              <li v-for="(detail, index) in details" :key="`${detail.type}-${index}`" class="flex flex-col gap-6">
+                <component
+                  :is="detail.url ? 'a' : 'div'"
+                  :href="detail.url ?? undefined"
+                  :target="detail.url?.startsWith('http') ? '_blank' : undefined"
+                  :rel="detail.url?.startsWith('http') ? 'noopener noreferrer' : undefined"
+                  class="flex items-center gap-4"
+                >
                   <img
-                    :src="detail.icon"
+                    :src="detailIcon(detail)"
                     alt=""
                     aria-hidden="true"
                     width="24"
@@ -439,19 +463,19 @@ const fieldClass =
                   />
                   <span class="flex flex-col gap-1">
                     <span class="text-label-lg text-brand-50">
-                      {{ t(`forms.details.${detail.key}`) }}
+                      {{ detail.label }}
                     </span>
                     <!-- <bdi dir="ltr"> keeps "+98 913 …" in order inside the RTL card while still aligning to the start edge. -->
                     <span class="text-body-md text-ink-200">
                       <bdi
-                        v-if="detail.key === 'phone' || detail.key === 'email'"
+                        v-if="usesLatinDirection(detail)"
                         dir="ltr"
                         class="latin-nums"
                       >{{ detail.value }}</bdi>
                       <template v-else>{{ detail.value }}</template>
                     </span>
                   </span>
-                </div>
+                </component>
                 <img
                   v-if="index < details.length - 1"
                   :src="detailRuleUrl"

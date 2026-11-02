@@ -80,6 +80,16 @@ final class SiteSettingsSeeder extends Seeder
                     'ar' => 'علامات في إيران وخارجها',
                 ],
             ],
+            'contact_details' => [
+                'translatable' => false,
+                'value' => [
+                    ['type' => 'whatsapp', 'icon' => 'whatsapp', 'label' => ['en' => 'WhatsApp', 'fa' => 'واتساپ', 'ar' => 'واتساب'], 'value' => ['en' => '+96 7781 1213', 'fa' => '+96 7781 1213', 'ar' => '+96 7781 1213'], 'url' => null],
+                    ['type' => 'phone', 'icon' => 'phone', 'label' => ['en' => 'Phone', 'fa' => 'تلفن', 'ar' => 'الهاتف'], 'value' => ['en' => '+96 7781 1213', 'fa' => '+96 7781 1213', 'ar' => '+96 7781 1213'], 'url' => null],
+                    ['type' => 'location', 'icon' => 'location', 'label' => ['en' => 'Location', 'fa' => 'موقعیت', 'ar' => 'الموقع'], 'value' => ['en' => 'Kerman, Iran', 'fa' => 'کرمان، ایران', 'ar' => 'كرمان، إيران'], 'url' => null],
+                    ['type' => 'email', 'icon' => 'email', 'label' => ['en' => 'Email', 'fa' => 'ایمیل', 'ar' => 'البريد الإلكتروني'], 'value' => ['en' => 'Sizdahmarketing@gmail.com', 'fa' => 'Sizdahmarketing@gmail.com', 'ar' => 'Sizdahmarketing@gmail.com'], 'url' => null],
+                    ['type' => 'collaboration', 'icon' => 'collaboration', 'label' => ['en' => 'Work with us', 'fa' => 'همکاری با', 'ar' => 'العمل معنا'], 'value' => ['en' => 'Brands in Iran and Beyond', 'fa' => 'برندهایی در ایران و فراتر', 'ar' => 'علامات في إيران وخارجها'], 'url' => null],
+                ],
+            ],
             'seo_default_title' => [
                 'translatable' => true,
                 'value' => [

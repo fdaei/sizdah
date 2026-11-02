@@ -39,8 +39,11 @@ final class PageSection extends Model
         'content_color',
         'primary_cta_variant',
         'primary_cta_icon',
+        'primary_cta_icon_position',
         'secondary_cta_variant',
         'secondary_cta_icon',
+        'secondary_cta_icon_position',
+        'cta_order',
     ];
 
     /** @var array<int, string> */

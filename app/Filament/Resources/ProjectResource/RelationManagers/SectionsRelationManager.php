@@ -67,6 +67,16 @@ final class SectionsRelationManager extends RelationManager
         'none' => 'No arrow',
     ];
 
+    private const CTA_ICON_POSITIONS = [
+        'before' => 'Before the text',
+        'after' => 'After the text',
+    ];
+
+    private const CTA_ORDERS = [
+        'primary-first' => 'First button, then second button',
+        'secondary-first' => 'Second button, then first button',
+    ];
+
     public function form(Form $form): Form
     {
         return $form->schema([
@@ -180,7 +190,7 @@ final class SectionsRelationManager extends RelationManager
                 ]),
 
             Section::make('Buttons')
-                ->description('Optional. "Design default" keeps the look the website uses for that button.')
+                ->description('Set each button’s text and link in the language tabs above. Here you can choose its appearance, icon placement, and the order of a two-button hero.')
                 ->columns(2)
                 ->collapsed()
                 ->schema([
@@ -194,6 +204,11 @@ final class SectionsRelationManager extends RelationManager
                         ->options(self::CTA_ICONS)
                         ->placeholder('Design default')
                         ->native(false),
+                    Select::make('primary_cta_icon_position')
+                        ->label('Primary arrow position')
+                        ->options(self::CTA_ICON_POSITIONS)
+                        ->placeholder('After the text (design default)')
+                        ->native(false),
                     Select::make('secondary_cta_variant')
                         ->label('Secondary button style')
                         ->options(self::CTA_VARIANTS)
@@ -204,6 +219,18 @@ final class SectionsRelationManager extends RelationManager
                         ->options(self::CTA_ICONS)
                         ->placeholder('Design default')
                         ->native(false),
+                    Select::make('secondary_cta_icon_position')
+                        ->label('Secondary arrow position')
+                        ->options(self::CTA_ICON_POSITIONS)
+                        ->placeholder('After the text (design default)')
+                        ->native(false),
+                    Select::make('cta_order')
+                        ->label('Two-button display order')
+                        ->options(self::CTA_ORDERS)
+                        ->placeholder('First button, then second button (design default)')
+                        ->visible(fn (Get $get): bool => self::sectionType($get('type')) === SectionType::Hero)
+                        ->native(false)
+                        ->columnSpanFull(),
                 ]),
 
             FileUpload::make('image_path')

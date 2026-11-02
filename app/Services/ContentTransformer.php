@@ -326,13 +326,16 @@ final class ContentTransformer
                 $section->getTranslation('primary_cta_url'),
                 $section->primary_cta_variant,
                 $section->primary_cta_icon,
+                $section->primary_cta_icon_position,
             ),
             'secondaryCta' => self::cta(
                 $section->getTranslation('secondary_cta_label'),
                 $section->getTranslation('secondary_cta_url'),
                 $section->secondary_cta_variant,
                 $section->secondary_cta_icon,
+                $section->secondary_cta_icon_position,
             ),
+            'ctaOrder' => $section->cta_order,
             'note' => (string) $section->getTranslation('note'),
             'image' => MediaTransformer::make(
                 $section->image_path,
@@ -445,8 +448,13 @@ final class ContentTransformer
      * `variant` and `icon` stay null unless an editor overrode them, so the
      * Vue component falls back to the design default for that button slot.
      */
-    private static function cta(?string $label, ?string $url, ?string $variant = null, ?string $icon = null): ?array
-    {
+    private static function cta(
+        ?string $label,
+        ?string $url,
+        ?string $variant = null,
+        ?string $icon = null,
+        ?string $iconPosition = null,
+    ): ?array {
         if ($label === null || $label === '') {
             return null;
         }
@@ -456,6 +464,7 @@ final class ContentTransformer
             'url' => $url ?? '#',
             'variant' => $variant,
             'icon' => $icon,
+            'iconPosition' => $iconPosition,
         ];
     }
 

@@ -8,7 +8,9 @@ use App\Models\Setting;
 use App\Support\SiteSettings;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -59,6 +61,7 @@ final class ManageSettings extends Page implements HasForms
         'contact_email' => false,
         'contact_location' => true,
         'contact_working_with' => true,
+        'contact_details' => false,
         'seo_default_title' => true,
         'seo_default_description' => true,
         'seo_default_image' => false,
@@ -119,7 +122,7 @@ final class ManageSettings extends Page implements HasForms
                     ]),
 
                 Section::make($this->label('اطلاعات تماس', 'Contact details'))
-                    ->description($this->label('در فوتر و کارت «اطلاعات تماس» صفحه تماس با ما نمایش داده می‌شود.', 'Rendered in the footer and on the contact page.'))
+                    ->description($this->label('موارد کارت تماس را اضافه، حذف و با کشیدن جابه‌جا کنید. برای اینستاگرام یا شبکه‌های دیگر، نوع و آدرس لینک را انتخاب کنید.', 'Add, remove, and drag to reorder the contact-card items. Choose a type and link for Instagram or other networks.'))
                     ->columns(2)
                     ->schema([
                         TextInput::make('contact_whatsapp')
@@ -140,6 +143,79 @@ final class ManageSettings extends Page implements HasForms
                             ->columnSpanFull(),
 
                         $this->translatableInput('contact_working_with', $this->label('همکاری با', 'Working with'))
+                            ->columnSpanFull(),
+
+                        Repeater::make('contact_details')
+                            ->label($this->label('موارد کارت اطلاعات تماس', 'Contact card items'))
+                            ->helperText($this->label('ترتیب نمایش دقیقاً مطابق ترتیب این فهرست است.', 'The display order follows this list exactly.'))
+                            ->addActionLabel($this->label('افزودن مورد', 'Add item'))
+                            ->reorderableWithButtons()
+                            ->collapsible()
+                            ->itemLabel(fn (array $state): ?string => $state['label'][app()->getLocale()]
+                                ?? $state['label'][config('locales.fallback')]
+                                ?? null)
+                            ->schema([
+                                Select::make('type')
+                                    ->label($this->label('نوع', 'Type'))
+                                    ->options([
+                                        'phone' => $this->label('تلفن', 'Phone'),
+                                        'whatsapp' => 'WhatsApp',
+                                        'email' => $this->label('ایمیل', 'Email'),
+                                        'location' => $this->label('موقعیت', 'Location'),
+                                        'collaboration' => $this->label('همکاری', 'Collaboration'),
+                                        'instagram' => 'Instagram',
+                                        'telegram' => 'Telegram',
+                                        'linkedin' => 'LinkedIn',
+                                        'custom' => $this->label('سفارشی', 'Custom'),
+                                    ])
+                                    ->required()
+                                    ->default('custom')
+                                    ->live(),
+
+                                Select::make('icon')
+                                    ->label($this->label('آیکن', 'Icon'))
+                                    ->options([
+                                        'phone' => $this->label('تلفن', 'Phone'),
+                                        'whatsapp' => 'WhatsApp',
+                                        'email' => $this->label('ایمیل', 'Email'),
+                                        'location' => $this->label('موقعیت', 'Location'),
+                                        'collaboration' => $this->label('همکاری', 'Collaboration'),
+                                        'instagram' => 'Instagram',
+                                        'telegram' => 'Telegram',
+                                        'linkedin' => 'LinkedIn',
+                                        'link' => $this->label('لینک', 'Link'),
+                                    ])
+                                    ->required()
+                                    ->default('link'),
+
+                                TextInput::make('url')
+                                    ->label($this->label('لینک (اختیاری)', 'Link (optional)'))
+                                    ->helperText($this->label('برای تلفن، ایمیل و واتس‌اپ خودکار ساخته می‌شود؛ برای شبکه‌های اجتماعی آدرس کامل را وارد کنید.', 'Generated automatically for phone, email, and WhatsApp. Enter the full URL for social profiles.'))
+                                    ->url()
+                                    ->maxLength(500)
+                                    ->columnSpanFull(),
+
+                                Tabs::make('translations')
+                                    ->columnSpanFull()
+                                    ->tabs(
+                                        collect(config('locales.supported'))
+                                            ->map(fn (array $config, string $locale): Tabs\Tab => Tabs\Tab::make($config['native'])
+                                                ->schema([
+                                                    TextInput::make("label.{$locale}")
+                                                        ->label($this->label('عنوان', 'Label'))
+                                                        ->required($locale === config('locales.fallback'))
+                                                        ->maxLength(100)
+                                                        ->extraAttributes(['dir' => $config['direction'], 'lang' => $config['html_lang']]),
+                                                    TextInput::make("value.{$locale}")
+                                                        ->label($this->label('مقدار', 'Value'))
+                                                        ->required($locale === config('locales.fallback'))
+                                                        ->maxLength(300)
+                                                        ->extraAttributes(['dir' => $config['direction'], 'lang' => $config['html_lang']]),
+                                                ]))
+                                            ->values()
+                                            ->all(),
+                                    ),
+                            ])
                             ->columnSpanFull(),
                     ]),
 

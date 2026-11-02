@@ -63,11 +63,13 @@ it('delivers hero copy and text colours saved in the admin to the home page', fu
             ->where('sections.hero.colors.title', '#ff0000'));
 });
 
-it('delivers hero button style, arrow and note saved in the admin to the home page', function (): void {
+it('delivers hero button presentation, icon placement, order and note saved in the admin to the home page', function (): void {
     $this->get('/fa')
         ->assertInertia(fn (AssertableInertia $page) => $page
             ->where('sections.hero.primaryCta.variant', null)
             ->where('sections.hero.primaryCta.icon', null)
+            ->where('sections.hero.primaryCta.iconPosition', null)
+            ->where('sections.hero.ctaOrder', null)
             ->where('sections.hero.note', 'بیایید درباره مسیر برندتان با هم صحبت کنیم'));
 
     Livewire::test(SectionsRelationManager::class, [
@@ -80,7 +82,10 @@ it('delivers hero button style, arrow and note saved in the admin to the home pa
             'translations' => ['fa' => ['note' => 'یادداشت تازه']],
             'primary_cta_variant' => 'solid',
             'primary_cta_icon' => 'none',
+            'primary_cta_icon_position' => 'before',
             'secondary_cta_icon' => 'arrow',
+            'secondary_cta_icon_position' => 'after',
+            'cta_order' => 'secondary-first',
         ])
         ->callMountedTableAction()
         ->assertHasNoTableActionErrors();
@@ -90,8 +95,11 @@ it('delivers hero button style, arrow and note saved in the admin to the home pa
         ->assertInertia(fn (AssertableInertia $page) => $page
             ->where('sections.hero.primaryCta.variant', 'solid')
             ->where('sections.hero.primaryCta.icon', 'none')
+            ->where('sections.hero.primaryCta.iconPosition', 'before')
             ->where('sections.hero.secondaryCta.variant', null)
             ->where('sections.hero.secondaryCta.icon', 'arrow')
+            ->where('sections.hero.secondaryCta.iconPosition', 'after')
+            ->where('sections.hero.ctaOrder', 'secondary-first')
             ->where('sections.hero.note', 'یادداشت تازه'));
 });
 

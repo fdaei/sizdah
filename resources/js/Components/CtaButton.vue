@@ -39,6 +39,8 @@ const props = withDefaults(
      */
     size?: 'md' | 'lg'
     withArrow?: boolean
+    /** Controls the arrow position when it is visible. */
+    iconPosition?: 'before' | 'after'
     type?: 'button' | 'submit'
     disabled?: boolean
     external?: boolean
@@ -48,6 +50,7 @@ const props = withDefaults(
     variant: 'solid',
     size: 'md',
     withArrow: false,
+    iconPosition: 'after',
     type: 'button',
     disabled: false,
     external: false,
@@ -91,6 +94,15 @@ const classes = computed(() => [
     ]"
     @click="$emit('click', $event)"
   >
+    <img
+      v-if="withArrow && iconPosition === 'before'"
+      :src="arrowUrl"
+      alt=""
+      aria-hidden="true"
+      width="24"
+      height="24"
+      class="size-6 flip-rtl"
+    />
     <span>{{ props.label }}</span>
     <!--
       The arrow follows the label and points along the reading direction, so
@@ -98,7 +110,7 @@ const classes = computed(() => [
       per locale.
     -->
     <img
-      v-if="withArrow"
+      v-if="withArrow && iconPosition === 'after'"
       :src="arrowUrl"
       alt=""
       aria-hidden="true"

@@ -185,6 +185,7 @@ const modalOpen = ref(false)
             false,
           )
         "
+        :icon-position="(props.size === 'lg' ? props.section.secondaryCta : props.section.primaryCta)?.iconPosition ?? 'after'"
         @click="modalOpen = true"
         class="max-md:px-3 max-md:py-3 max-md:text-[14px]"
       />

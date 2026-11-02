@@ -52,6 +52,7 @@ export interface SiteSettings {
     location: string
     workingWith: string
   }
+  contactDetails: ContactDetail[]
   socialLinks: SocialLink[]
   seo: {
     defaultTitle: string
@@ -59,6 +60,14 @@ export interface SiteSettings {
     defaultImage: string | null
     organizationName: string
   }
+}
+
+export interface ContactDetail {
+  type: string
+  icon: string
+  label: string
+  value: string
+  url: string | null
 }
 
 export interface SeoMeta {
@@ -117,10 +126,14 @@ export interface SectionCta {
   variant: CtaVariant | null
   /** `arrow` / `none` from Filament; null keeps the slot's design default. */
   icon: CtaIcon | null
+  /** Arrow placement from Filament; null keeps it after the text. */
+  iconPosition: CtaIconPosition | null
 }
 
 export type CtaVariant = 'solid' | 'outline' | 'light' | 'brand-outline'
 export type CtaIcon = 'arrow' | 'none'
+export type CtaIconPosition = 'before' | 'after'
+export type CtaOrder = 'primary-first' | 'secondary-first'
 
 /**
  * Mirrors `ContentTransformer::sectionItem()`. One row of a section's repeater:
@@ -161,6 +174,8 @@ export interface PageSectionData {
   }
   primaryCta: SectionCta | null
   secondaryCta: SectionCta | null
+  /** Relevant to two-button hero sections. */
+  ctaOrder: CtaOrder | null
   /** Short aside under the buttons — only the home hero uses it. */
   note: string
   image: MediaImage | null
