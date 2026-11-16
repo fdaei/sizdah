@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\NotFoundLog;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
@@ -16,3 +17,6 @@ Artisan::command('inspire', function (): void {
 */
 Schedule::command('sizdah:publish-scheduled')->everyFiveMinutes();
 Schedule::command('sitemap:generate')->dailyAt('03:00');
+
+// 404 monitor: drop rows with no hit in 90 days (App\Models\NotFoundLog::prunable).
+Schedule::command('model:prune', ['--model' => [NotFoundLog::class]])->daily();

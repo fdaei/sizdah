@@ -31,7 +31,7 @@ return [
             'lead_magnet_request' => 'Lead magnet requests',
             'menu' => 'Website menus',
             'social_link' => 'Social media links',
-            'redirect' => 'Old URL redirects',
+            'redirect' => 'ریدایرکت‌ها (Redirections)',
             'user' => 'Admin users',
         ],
     ],
@@ -52,7 +52,7 @@ return [
         'lead_magnet_request' => 'Lead magnet request',
         'menu' => 'website menu',
         'social_link' => 'social media link',
-        'redirect' => 'URL redirect',
+        'redirect' => 'ریدایرکت (Redirection)',
         'user' => 'admin user',
     ],
     'models_plural' => [
@@ -72,7 +72,7 @@ return [
         'lead_magnet_request' => 'Lead magnet requests',
         'menu' => 'website menus',
         'social_link' => 'social media links',
-        'redirect' => 'URL redirects',
+        'redirect' => 'ریدایرکت‌ها (Redirections)',
         'user' => 'admin users',
     ],
     /*

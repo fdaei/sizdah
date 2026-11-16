@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Translations;
 
+use App\Services\Redirects\SlugRedirector;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,6 +12,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 final class ProjectTranslation extends Model
 {
+    protected static function booted(): void
+    {
+        // Auto 301 from the old URL when a published item's slug changes.
+        self::updating(fn (self $t) => SlugRedirector::handle($t));
+    }
+
     protected $fillable = [
         'locale',
         'title',

@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Http\Middleware\ApplyRedirects;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\RedirectToCanonicalHost;
 use App\Http\Middleware\RedirectToLocalisedRoute;
 use App\Http\Middleware\SetLocale;
+use App\Models\NotFoundLog;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -26,6 +28,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Global and first: www/http/trailing-slash -> canonical origin, 301.
         $middleware->prepend(RedirectToCanonicalHost::class);
+        // Then admin-managed redirects (SEO "Redirections"), still before routing.
+        $middleware->append(ApplyRedirects::class);
 
         $middleware->web(append: [
             HandleInertiaRequests::class,
@@ -74,6 +78,15 @@ return Application::configure(basePath: dirname(__DIR__))
 
             if (! in_array($status, [403, 404, 419, 429, 500, 503], true)) {
                 return $response;
+            }
+
+            // 404 monitor (SEO): never let logging break the error page.
+            if ($status === 404 && $request->isMethod('GET')) {
+                try {
+                    NotFoundLog::record($request);
+                } catch (Throwable) {
+                    // ignore
+                }
             }
 
             if ($status === 419) {

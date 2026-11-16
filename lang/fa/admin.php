@@ -31,7 +31,7 @@ return [
             'lead_magnet_request' => 'درخواست‌های فایل (لید مگنت)',
             'menu' => 'منوهای سایت',
             'social_link' => 'لینک شبکه‌های اجتماعی',
-            'redirect' => 'انتقال آدرس‌های قدیمی',
+            'redirect' => 'ریدایرکت‌ها (Redirections)',
             'user' => 'کاربران پنل',
         ],
     ],
@@ -52,7 +52,7 @@ return [
         'lead_magnet_request' => 'درخواست فایل',
         'menu' => 'منوی سایت',
         'social_link' => 'لینک شبکه اجتماعی',
-        'redirect' => 'انتقال آدرس',
+        'redirect' => 'ریدایرکت (Redirection)',
         'user' => 'کاربر پنل',
     ],
     'models_plural' => [
@@ -72,7 +72,7 @@ return [
         'lead_magnet_request' => 'درخواست‌های فایل',
         'menu' => 'منوهای سایت',
         'social_link' => 'لینک‌های شبکه اجتماعی',
-        'redirect' => 'انتقال آدرس‌ها',
+        'redirect' => 'ریدایرکت‌ها (Redirections)',
         'user' => 'کاربران پنل',
     ],
     /*
