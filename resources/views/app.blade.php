@@ -48,6 +48,7 @@
          initial HTML whether or not SSR / JavaScript runs. Must stay after
          @inertiaHead, which it inspects for an SSR-rendered title. --}}
     @include('partials.seo')
+    @include('partials.seo-site')
 </head>
 <body class="bg-ink-1000 text-ink-300">
     @include('partials.analytics-body')
@@ -73,5 +74,7 @@
             @include('partials.content', ['props' => $page['props']])
         </div>
     @endif
+    {{-- Admin-only custom footer code (SEO settings). --}}
+    {!! \App\Support\SiteSettings::get('seo_body_code') ?: '' !!}
 </body>
 </html>

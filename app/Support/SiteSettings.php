@@ -75,6 +75,12 @@ final class SiteSettings
         // envelope before treating an array as a locale map.
         if (is_array($value) && array_key_exists('value', $value)) {
             $value = $value['value'];
+
+            // An unwrapped value is non-translatable by definition: return
+            // lists (e.g. opening hours) as-is, never as a locale map.
+            if (is_array($value)) {
+                return $value === [] ? $default : $value;
+            }
         }
 
         // Translatable settings are stored as {"en": "...", "fa": "..."}.

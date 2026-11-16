@@ -7,7 +7,6 @@ namespace App\Filament\Pages;
 use App\Models\Setting;
 use App\Support\SiteSettings;
 use Filament\Actions\Action;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -20,6 +19,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 
 /**
  * Site-wide settings: brand details, contact info and SEO defaults.
@@ -62,10 +62,6 @@ final class ManageSettings extends Page implements HasForms
         'contact_location' => true,
         'contact_working_with' => true,
         'contact_details' => false,
-        'seo_default_title' => true,
-        'seo_default_description' => true,
-        'seo_default_image' => false,
-        'seo_organization_name' => true,
     ];
 
     public static function canAccess(): bool
@@ -219,20 +215,8 @@ final class ManageSettings extends Page implements HasForms
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('SEO defaults')
-                    ->description('Used when a page has no specific SEO values.')
-                    ->schema([
-                        $this->translatableInput('seo_default_title', 'Default title'),
-                        $this->translatableTextarea('seo_default_description', 'Default description'),
-                        $this->translatableInput('seo_organization_name', 'Organisation name'),
-
-                        FileUpload::make('seo_default_image')
-                            ->label('Default share image')
-                            ->image()
-                            ->directory('seo')
-                            ->disk('public')
-                            ->helperText('Shown when a page has no image. 1200×630 recommended.'),
-                    ]),
+                Section::make('SEO')
+                    ->description(new HtmlString('عنوان، توضیحات و تصویر پیش‌فرض، نمودار دانش و سایر تنظیمات سئو به «<a href="'.e(ManageSeoSettings::getUrl()).'" style="text-decoration:underline">تنظیمات سئو (SEO settings)</a>» منتقل شده‌اند.')),
             ]);
     }
 

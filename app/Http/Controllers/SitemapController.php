@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Project;
 use App\Models\Service;
+use App\Support\SiteSettings;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -26,16 +27,14 @@ final class SitemapController extends Controller
      */
     public function robots(): Response
     {
-        $body = implode("\n", [
-            'User-agent: *',
-            'Allow: /',
-            '',
-            'Disallow: /admin',
-            'Disallow: /admin/*',
-            '',
-            'Sitemap: '.route('sitemap'),
-            '',
-        ]);
+        // Editable in "SEO settings"; any Sitemap: lines are dropped and the
+        // absolute sitemap URL is always appended (SEO checklist item 7).
+        $custom = trim((string) SiteSettings::get('seo_robots_txt', null, ''));
+        $rules = $custom !== ''
+            ? preg_replace('/^\s*sitemap\s*:.*$\R?/im', '', str_replace("\r\n", "\n", $custom))
+            : implode("\n", ['User-agent: *', 'Allow: /', '', 'Disallow: /admin', 'Disallow: /admin/*']);
+
+        $body = rtrim((string) $rules)."\n\nSitemap: ".route('sitemap')."\n";
 
         return response($body, 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
     }

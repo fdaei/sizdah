@@ -170,7 +170,16 @@ final class SeoBuilder
             $canonical .= '?page='.$pageNumber;
         }
 
-        if ($request->filled('q')) {
+        if ($request->filled('q') && (bool) SiteSettings::get('seo_noindex_search', null, true)) {
+            $noindex = true;
+        }
+
+        if ($pageNumber > 1 && (bool) SiteSettings::get('seo_noindex_paginated', null, false)) {
+            $noindex = true;
+        }
+
+        // Whole-site "Discourage search engines" (settings) — forced on staging.
+        if (self::siteNoindex()) {
             $noindex = true;
         }
 
@@ -220,7 +229,7 @@ final class SeoBuilder
                 'tags' => $tags,
             ],
             'twitter' => [
-                'card' => $meta?->twitter_card ?: ($ogImage ? 'summary_large_image' : 'summary'),
+                'card' => $meta?->twitter_card ?: ($ogImage ? (SiteSettings::get('seo_default_twitter_card', null, 'summary_large_image') ?: 'summary_large_image') : 'summary'),
                 'title' => $meta?->twitter_title ?: $meta?->og_title ?: $documentTitle,
                 'description' => $meta?->twitter_description ?: $meta?->og_description ?: $description,
                 'image' => self::media($meta?->twitter_image) ?? $ogImage,
@@ -258,16 +267,7 @@ final class SeoBuilder
         $organizationId = "{$root}/#organization";
         $websiteId = "{$root}/#website";
 
-        $organization = array_filter([
-            '@type' => 'Organization',
-            '@id' => $organizationId,
-            'name' => $settings['seo']['organizationName'],
-            'url' => $home,
-            'logo' => "{$root}/icon-512.png",
-            'email' => $settings['contact']['email'] ?: null,
-            'telephone' => $settings['contact']['phone'] ?: null,
-            'sameAs' => array_values(array_filter(array_column($settings['socialLinks'], 'url'))) ?: null,
-        ]);
+        $organization = self::organization($settings, $root, $home, $organizationId, $locale);
 
         $website = [
             '@type' => 'WebSite',
@@ -333,11 +333,11 @@ final class SeoBuilder
     {
         $name = Route::currentRouteName();
 
-        if ($name === null || $name === 'home') {
+        if ($name === null || $name === 'home' || ! (bool) SiteSettings::get('seo_breadcrumbs_enabled', null, true)) {
             return null;
         }
 
-        $items = [[__('seo.breadcrumbs.home'), route('home')]];
+        $items = [[SiteSettings::get('seo_breadcrumb_home') ?: __('seo.breadcrumbs.home'), route('home')]];
 
         if (isset(self::PARENT_ROUTES[$name])) {
             $parent = self::PARENT_ROUTES[$name];
@@ -442,5 +442,86 @@ final class SeoBuilder
         }
 
         return str_starts_with($path, 'http') ? $path : Storage::disk('public')->url($path);
+    }
+
+    public static function siteNoindex(): bool
+    {
+        return app()->environment('staging') || (bool) SiteSettings::get('seo_noindex_site', null, false);
+    }
+
+    /**
+     * Knowledge Graph node (SEO settings): Organization or Person, optionally
+     * also a LocalBusiness subtype with address / geo / hours. Keeps the
+     * stable `#organization` @id so every other node can reference it.
+     *
+     * @param  array<string, mixed>  $settings
+     * @return array<string, mixed>
+     */
+    private static function organization(array $settings, string $root, string $home, string $id, string $locale): array
+    {
+        $get = fn (string $key) => SiteSettings::get($key, $locale);
+        $sameAs = array_values(array_filter(array_column($settings['socialLinks'], 'url'))) ?: null;
+
+        if ($get('seo_kg_type') === 'Person') {
+            return array_filter([
+                '@type' => 'Person',
+                '@id' => $id,
+                'name' => $settings['seo']['organizationName'],
+                'alternateName' => $get('seo_kg_alternate_name') ?: null,
+                'url' => $home,
+                'sameAs' => $sameAs,
+            ]);
+        }
+
+        $business = $get('seo_kg_business_type') ?: null;
+        $phone = $get('seo_kg_phone') ?: ($settings['contact']['phone'] ?: null);
+        $email = $get('seo_kg_email') ?: ($settings['contact']['email'] ?: null);
+        $logo = self::media($get('seo_kg_logo')) ?? "{$root}/icon-512.png";
+
+        $node = [
+            '@type' => $business ? ['Organization', $business] : 'Organization',
+            '@id' => $id,
+            'name' => $settings['seo']['organizationName'],
+            'alternateName' => $get('seo_kg_alternate_name') ?: null,
+            'url' => $home,
+            'logo' => ['@type' => 'ImageObject', '@id' => "{$root}/#logo", 'url' => $logo, 'contentUrl' => $logo],
+            'image' => ['@id' => "{$root}/#logo"],
+            'email' => $email,
+            'telephone' => $phone,
+            'sameAs' => $sameAs,
+        ];
+
+        if ($business) {
+            $address = array_filter([
+                '@type' => 'PostalAddress',
+                'streetAddress' => $get('seo_kg_street') ?: null,
+                'addressLocality' => $get('seo_kg_locality') ?: null,
+                'addressRegion' => $get('seo_kg_region') ?: null,
+                'postalCode' => $get('seo_kg_postal_code') ?: null,
+                'addressCountry' => $get('seo_kg_country') ?: null,
+            ]);
+            $lat = $get('seo_kg_lat');
+            $lng = $get('seo_kg_lng');
+
+            $node += array_filter([
+                'address' => count($address) > 1 ? $address : null,
+                'geo' => is_numeric($lat) && is_numeric($lng)
+                    ? ['@type' => 'GeoCoordinates', 'latitude' => (float) $lat, 'longitude' => (float) $lng]
+                    : null,
+                'priceRange' => $get('seo_kg_price_range') ?: null,
+                'areaServed' => $get('seo_kg_area_served') ?: null,
+                'openingHoursSpecification' => array_values(array_map(
+                    fn (array $h): array => [
+                        '@type' => 'OpeningHoursSpecification',
+                        'dayOfWeek' => array_values((array) ($h['days'] ?? [])),
+                        'opens' => substr((string) ($h['opens'] ?? ''), 0, 5),
+                        'closes' => substr((string) ($h['closes'] ?? ''), 0, 5),
+                    ],
+                    array_filter((array) $get('seo_kg_hours'), fn ($h): bool => is_array($h) && ! empty($h['days'])),
+                )) ?: null,
+            ]);
+        }
+
+        return array_filter($node, fn ($v): bool => $v !== null && $v !== '');
     }
 }
