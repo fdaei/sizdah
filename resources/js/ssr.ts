@@ -10,7 +10,6 @@ import { ZiggyVue, type Config } from 'ziggy-js'
 import AppLayout from './Layouts/AppLayout.vue'
 import { installTranslations } from './Composables/useTranslations'
 
-const appName = import.meta.env.VITE_APP_NAME ?? 'Sizdah'
 
 /*
  | One page's render error must not take the renderer down: Node exits on an
