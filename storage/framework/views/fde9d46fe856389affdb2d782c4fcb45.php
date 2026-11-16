@@ -46,6 +46,7 @@
 
     
     <?php echo $__env->make('partials.seo', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php echo $__env->make('partials.seo-site', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </head>
 <body class="bg-ink-1000 text-ink-300">
     <?php echo $__env->make('partials.analytics-body', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
@@ -71,6 +72,9 @@
             <?php echo $__env->make('partials.content', ['props' => $page['props']], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
         </div>
     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+    
+    <?php echo \App\Support\SiteSettings::get('seo_body_code') ?: ''; ?>
+
 </body>
 </html>
 <?php /**PATH /home/fdaei/Downloads/sizdah/resources/views/app.blade.php ENDPATH**/ ?>
