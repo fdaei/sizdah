@@ -36,8 +36,9 @@ it('lists published posts with alternates, x-default and absolute images', funct
 
     $xml = $this->get('/sitemap-posts-1.xml')->assertOk()->getContent();
 
-    expect($xml)->toContain('/fa/insights/منتشر')
-        ->not->toContain('پیش-نویس')
+    // Sitemap URLs are percent-encoded, as the protocol requires.
+    expect($xml)->toContain('/fa/insights/'.rawurlencode('منتشر'))
+        ->not->toContain(rawurlencode('پیش-نویس'))
         ->toContain('hreflang="fa-IR"')
         ->toContain('hreflang="x-default"')
         ->toContain('<image:loc>'.url('/storage/posts/c.webp').'</image:loc>')
@@ -53,7 +54,7 @@ it('leaves out noindex, excluded and canonicalised items, and honours priority o
 
     $xml = $this->get('/sitemap-posts-1.xml')->getContent();
 
-    expect($xml)->not->toContain('بی-ایندکس')->not->toContain('حذف-شده')->not->toContain('کنونیکال')
+    expect($xml)->not->toContain(rawurlencode('بی-ایندکس'))->not->toContain(rawurlencode('حذف-شده'))->not->toContain(rawurlencode('کنونیکال'))
         ->toContain('<priority>0.9</priority>')->toContain('<changefreq>daily</changefreq>');
 });
 
@@ -61,13 +62,13 @@ it('refreshes the cache when content changes', function (): void {
     $this->get('/sitemap-posts-1.xml');
     sitemapPost('تازه');
 
-    expect($this->get('/sitemap-posts-1.xml')->getContent())->toContain('/fa/insights/تازه');
+    expect($this->get('/sitemap-posts-1.xml')->getContent())->toContain('/fa/insights/'.rawurlencode('تازه'));
 });
 
 it('paginates at 1000 URLs and 404s pages past the end', function (): void {
     expect(SitemapBuilder::PER_PAGE)->toBe(1000);
     $this->get('/sitemap-posts-2.xml')->assertNotFound();
-    $this->get('/sitemap-nope-1.xml')->assertNotFound();
+    $this->get('/sitemap-nope-1.xml')->assertStatus(302); // not a sitemap route: bare-path locale redirect
 });
 
 it('empties the sitemap index when the whole site is noindex', function (): void {
