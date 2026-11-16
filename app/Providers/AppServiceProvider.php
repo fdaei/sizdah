@@ -14,6 +14,7 @@ use App\Models\Translations\PageTranslation;
 use App\Models\Translations\PostTranslation;
 use App\Models\Translations\ProjectTranslation;
 use App\Models\Translations\ServiceTranslation;
+use App\Services\Seo\IndexNow;
 use App\Services\Sitemap\SitemapBuilder;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Section;
@@ -34,6 +35,15 @@ final class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // IndexNow: ping when a published post/project (or its translation:
+        // slug/content edits) is saved. Never throws — a new record is saved
+        // before its translations exist, so it may have no URL yet.
+        foreach ([Post::class, Project::class] as $model) {
+            $model::saved(fn ($m) => IndexNow::submitFor($m));
+        }
+        PostTranslation::saved(fn ($t) => IndexNow::submitFor(Post::query()->find($t->post_id)));
+        ProjectTranslation::saved(fn ($t) => IndexNow::submitFor(Project::query()->find($t->project_id)));
+
         // Sitemaps are cached; any content / SEO / settings write invalidates them.
         foreach ([
             Page::class, Post::class, Project::class, Service::class,

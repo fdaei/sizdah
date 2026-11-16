@@ -13,6 +13,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SitemapController;
+use App\Services\Seo\IndexNow;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,6 +43,12 @@ Route::get('admin/language/{locale}', AdminLocaleController::class)
 
 // SEO endpoints — not locale-prefixed.
 Route::get('robots.txt', [SitemapController::class, 'robots'])->name('robots');
+// IndexNow key verification file (SEO settings -> IndexNow).
+Route::get('{indexNowKey}.txt', function (string $indexNowKey) {
+    abort_unless(IndexNow::key() === $indexNowKey, 404);
+
+    return response($indexNowKey, 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
+})->where('indexNowKey', '[a-f0-9]{32}')->name('indexnow.key');
 Route::get('sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('sitemap-{type}-{page}.xml', [SitemapController::class, 'type'])
     ->where(['type' => 'pages|services|projects|posts', 'page' => '[1-9][0-9]*'])

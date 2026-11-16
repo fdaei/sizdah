@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Pages;
 
 use App\Models\Setting;
+use App\Services\Seo\IndexNow;
 use App\Services\Seo\SeoTitle;
 use App\Support\SiteSettings;
 use Closure;
@@ -89,6 +90,7 @@ final class ManageSeoSettings extends Page implements HasForms
         'seo_verify_bing' => false,
         'seo_verify_yandex' => false,
         'seo_verify_baidu' => false,
+        'seo_indexnow_enabled' => false,
         // Search appearance / indexing
         'seo_noindex_site' => false,
         'seo_noindex_paginated' => false,
@@ -356,6 +358,13 @@ final class ManageSeoSettings extends Page implements HasForms
                 $code('seo_verify_bing', 'Bing Webmaster Tools', 'msvalidate.01'),
                 $code('seo_verify_yandex', 'Yandex Webmaster', 'yandex-verification'),
                 $code('seo_verify_baidu', 'Baidu Webmaster', 'baidu-site-verification'),
+
+                Toggle::make('seo_indexnow_enabled')
+                    ->label('IndexNow — اطلاع فوری به بینگ و یاندکس هنگام انتشار')
+                    ->live()
+                    ->helperText(fn (): HtmlString => new HtmlString(
+                        'کلید به‌طور خودکار ساخته می‌شود و در <span dir="ltr"><a href="'.e(url('/'.IndexNow::ensureKey().'.txt')).'" target="_blank" style="text-decoration:underline">'.e(IndexNow::ensureKey()).'.txt</a></span> قرار دارد. گوگل از IndexNow پشتیبانی نمی‌کند؛ برای گوگل نقشه سایت کافی است.'
+                    )),
             ]);
     }
 
