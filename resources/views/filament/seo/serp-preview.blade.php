@@ -28,7 +28,7 @@
          style="border:1px solid #e5e7eb; border-radius:10px; background:#fff; padding:16px; font-family:Arial, Tahoma, sans-serif; box-shadow:0 1px 2px rgba(0,0,0,.05)">
         <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:#202124; margin-bottom:4px">
             <span style="display:inline-block; width:26px; height:26px; border-radius:50%; background:#f1f3f4"></span>
-            <span dir="ltr" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ $url }}</span>
+            <bdi dir="ltr" style="unicode-bidi:isolate; direction:ltr; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ str_replace('/', ' › ', $url) }}</bdi>
         </div>
         <div style="font-size:20px; line-height:1.3; color:#1a0dab; overflow:hidden"
              :style="mode==='desktop'
