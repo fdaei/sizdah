@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Page;
 use App\Models\TeamMember;
 use App\Services\ContentTransformer;
+use App\Services\Seo\SchemaNodes;
 use App\Services\SeoBuilder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -38,7 +39,9 @@ final class AboutController extends Controller
                 ->map(fn (TeamMember $m): array => ContentTransformer::teamMember($m))
                 ->all(),
 
-            'seo' => SeoBuilder::forPage($page, $request->url()),
+            'seo' => SeoBuilder::forPage($page, $request->url(), extraNodes: SchemaNodes::people(
+                TeamMember::query()->forDisplay()->get(),
+            )),
         ]);
     }
 }

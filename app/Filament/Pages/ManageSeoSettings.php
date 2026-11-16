@@ -83,6 +83,7 @@ final class ManageSeoSettings extends Page implements HasForms
         'seo_kg_price_range' => false,
         'seo_kg_area_served' => true,
         'seo_kg_hours' => false,
+        'seo_schema_reviews' => false,
         // Webmaster tools
         'seo_verify_google' => false,
         'seo_verify_bing' => false,
@@ -305,6 +306,10 @@ final class ManageSeoSettings extends Page implements HasForms
                         TimePicker::make('opens')->label('از')->seconds(false)->required(),
                         TimePicker::make('closes')->label('تا')->seconds(false)->required(),
                     ]),
+
+                Toggle::make('seo_schema_reviews')
+                    ->label('نظرات مشتریان در اسکیما (Testimonials as Review schema)')
+                    ->helperText('پیش‌فرض خاموش. گوگل برای نظرات «سازمان درباره‌ی خودش» ستاره نشان نمی‌دهد و نظرات امتیاز ندارند، پس AggregateRating ساخته نمی‌شود.'),
 
                 Placeholder::make('kg_same_as')
                     ->label('پروفایل‌های اجتماعی (sameAs)')

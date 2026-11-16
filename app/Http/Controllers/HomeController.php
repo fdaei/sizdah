@@ -12,6 +12,7 @@ use App\Models\Project;
 use App\Models\Service;
 use App\Models\Testimonial;
 use App\Services\ContentTransformer;
+use App\Services\Seo\SchemaNodes;
 use App\Services\SeoBuilder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -88,7 +89,10 @@ final class HomeController extends Controller
                 ->map(fn (Faq $f): array => ContentTransformer::faq($f))
                 ->all(),
 
-            'seo' => SeoBuilder::forPage($page, $request->url()),
+            'seo' => SeoBuilder::forPage($page, $request->url(), extraNodes: [
+                ...SchemaNodes::faqPage(Faq::query()->forDisplay()->get(), $request->url()),
+                ...SchemaNodes::reviews(Testimonial::query()->forDisplay()->get()),
+            ]),
         ]);
     }
 }

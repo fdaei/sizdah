@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Models\Project;
 use App\Models\SeoMeta;
 use App\Models\Service;
+use App\Services\Seo\SchemaNodes;
 use App\Services\Seo\SeoAnalyzer;
 use App\Services\Seo\SeoTitle;
 use App\Support\SiteSettings;
@@ -42,7 +43,10 @@ final class SeoBuilder
     /**
      * @return array<string, mixed>
      */
-    public static function forPage(?Page $page, string $canonical, ?string $image = null): array
+    /**
+     * @param  list<array<string, mixed>>  $extraNodes  e.g. SchemaNodes::faqPage(), ::people()
+     */
+    public static function forPage(?Page $page, string $canonical, ?string $image = null, array $extraNodes = []): array
     {
         return self::assemble(
             title: (string) $page?->getTranslation('title'),
@@ -53,6 +57,7 @@ final class SeoBuilder
             meta: $page?->seoFor(),
             legacyTitle: $page?->getTranslation('seo_title'),
             schemaType: self::pageSchemaType($page?->key),
+            extraNodes: $extraNodes,
         );
     }
 
@@ -72,6 +77,10 @@ final class SeoBuilder
             meta: $project->seoFor(),
             legacyTitle: $project->getTranslation('seo_title'),
             schemaType: 'CreativeWork',
+            extra: array_filter([
+                'dateCreated' => $project->year ? (string) $project->year : null,
+                'creator' => ['@id' => rtrim(url('/'), '/').'/#organization'],
+            ]),
             modifiedAt: $project->updated_at?->toIso8601String(),
         );
     }
@@ -113,6 +122,14 @@ final class SeoBuilder
             section: $post->category?->getTranslation('name'),
             tags: $post->tags->map(fn ($t): string => (string) $t->getTranslation('name'))->filter()->values()->all(),
             wordCount: count(SeoAnalyzer::words(SeoAnalyzer::plain((string) $post->getTranslation('content')))),
+            extraNodes: SchemaNodes::videos(
+                (string) $post->getTranslation('content'),
+                $post->url(),
+                (string) $post->getTranslation('title'),
+                $post->getTranslation('excerpt'),
+                $post->cover_path ? self::absoluteUrl(MediaTransformer::url($post->cover_path)) : null,
+                $post->published_at?->toIso8601String(),
+            ),
         );
     }
 
@@ -135,6 +152,8 @@ final class SeoBuilder
         ?string $section = null,
         array $tags = [],
         ?int $wordCount = null,
+        array $extra = [],
+        array $extraNodes = [],
     ): array {
         $locale = app()->getLocale();
         $request = request();
@@ -201,8 +220,12 @@ final class SeoBuilder
                 'about' => $meta?->schema_data['about'] ?? null,
                 'serviceType' => $meta?->schema_data['service_type'] ?? null,
                 'areaServed' => $meta?->schema_data['area_served'] ?? null,
-            ]),
+            ]) + $extra,
         );
+
+        if ($extraNodes !== []) {
+            $schema['@graph'] = [...$schema['@graph'], ...$extraNodes];
+        }
 
         if ($custom = self::customSchema($meta?->custom_schema)) {
             $schema['@graph'] = [...$schema['@graph'], ...$custom];
@@ -301,6 +324,12 @@ final class SeoBuilder
             'about' => $extra['about'] ?? null,
             'serviceType' => $schemaType === 'Service' ? ($extra['serviceType'] ?? null) : null,
             'areaServed' => $schemaType === 'Service' ? ($extra['areaServed'] ?? null) : null,
+            'dateCreated' => $extra['dateCreated'] ?? null,
+            'creator' => $extra['creator'] ?? null,
+            // WebPage-family nodes name their main image explicitly.
+            'primaryImageOfPage' => $image && $type !== 'article' && str_ends_with((string) ($schemaType ?? 'WebPage'), 'Page')
+                ? ['@type' => 'ImageObject', 'url' => $image]
+                : null,
         ]);
 
         if ($type === 'article' && $articleType !== 'None') {
