@@ -8,13 +8,13 @@ use App\Enums\PublicationStatus;
 use App\Filament\Resource;
 use App\Filament\Resources\PageResource\Pages;
 use App\Filament\Resources\ProjectResource\RelationManagers\SectionsRelationManager;
+use App\Filament\Support\Editor\ContentEditor;
 use App\Filament\Support\PublicationFields;
 use App\Filament\Support\Seo\SeoContext;
 use App\Filament\Support\Seo\SeoSection;
 use App\Filament\Support\Seo\SeoTable;
 use App\Filament\Support\TranslatableForm;
 use App\Models\Page;
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -72,12 +72,8 @@ final class PageResource extends Resource
                     ->label('Intro description')
                     ->rows(3),
 
-                RichEditor::make("translations.{$locale}.content")
+                ContentEditor::make("translations.{$locale}.content", config("locales.supported.{$locale}.direction", 'rtl'))
                     ->label('Body content')
-                    ->toolbarButtons([
-                        'bold', 'italic', 'link', 'bulletList', 'orderedList',
-                        'h2', 'h3', 'blockquote', 'undo', 'redo',
-                    ])
                     ->helperText('Used by legal pages. Leave empty for section-driven pages.'),
             ]),
 

@@ -2956,3 +2956,13 @@ ground back. It is the `.surface-glow` stack (20% black wash, brand glow
 -20.03deg, a 16px radius and the 16px inset. The sketched outline and the
 background art stay off. `--glow-angle` moved from an inline style into the
 component's scoped CSS so the mobile rule can override it.
+
+## 2026-11-16 — Rich-text elements with no Figma frame (Tiptap editor)
+
+The body editor moved to Tiptap (WordPress parity, user request) and can now
+emit H1, H4–H6, tables, figures/captions, YouTube/Aparat embeds, blockquotes,
+FAQ `<details>` and code. No frame draws these. Resolution: derived from the
+existing tokens in `.rich-prose` (app.css) — H1 reuses the legal-page H2
+scale (heading-lg), H4–H6 step down through title-md/title-sm at weight 600,
+borders use ink-700, embeds are 16:9 with the image radius. H2/H3 rules are
+untouched. Revisit if the design ever adds these blocks.

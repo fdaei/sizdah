@@ -16,6 +16,7 @@ use App\Models\TeamMember;
 use App\Models\Testimonial;
 use App\Support\JalaliDate;
 use App\Support\Numerals;
+use App\Support\RichContent;
 use Illuminate\Support\Collection;
 
 /**
@@ -218,7 +219,7 @@ final class ContentTransformer
             // Sent back by the lead-magnet form so the right file is emailed.
             'id' => $post->getKey(),
             'subtitle' => (string) $post->getTranslation('subtitle'),
-            'content' => (string) $post->getTranslation('content'),
+            'content' => RichContent::render($post->getTranslation('content')),
             'image' => MediaTransformer::make(
                 $post->cover_path,
                 $post->getTranslation('cover_alt'),
@@ -313,7 +314,7 @@ final class ContentTransformer
             'title' => (string) $section->getTranslation('title'),
             'subtitle' => (string) $section->getTranslation('subtitle'),
             'description' => (string) $section->getTranslation('description'),
-            'content' => (string) $section->getTranslation('content'),
+            'content' => RichContent::render($section->getTranslation('content')),
             'colors' => [
                 'eyebrow' => $section->eyebrow_color,
                 'title' => $section->title_color,

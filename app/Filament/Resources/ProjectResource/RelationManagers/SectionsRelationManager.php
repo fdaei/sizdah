@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Filament\Resources\ProjectResource\RelationManagers;
 
 use App\Enums\SectionType;
+use App\Filament\Support\Editor\ContentEditor;
 use App\Filament\Support\TranslatableForm;
 use App\Models\PageSection;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -127,12 +127,8 @@ final class SectionsRelationManager extends RelationManager
                     ->label('Description')
                     ->rows(3),
 
-                RichEditor::make("translations.{$locale}.content")
+                ContentEditor::make("translations.{$locale}.content", config("locales.supported.{$locale}.direction", 'rtl'))
                     ->label('Rich content')
-                    ->toolbarButtons([
-                        'bold', 'italic', 'link', 'bulletList', 'orderedList',
-                        'h2', 'h3', 'blockquote', 'undo', 'redo',
-                    ])
                     ->visible(fn (Get $get): bool => self::hasRichContent($get('type'))),
 
                 Textarea::make("translations.{$locale}.content")

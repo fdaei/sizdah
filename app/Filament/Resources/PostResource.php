@@ -8,6 +8,7 @@ use App\Enums\PublicationStatus;
 use App\Filament\Resource;
 use App\Filament\Resources\PostResource\Pages;
 use App\Filament\Resources\PostResource\RelationManagers;
+use App\Filament\Support\Editor\ContentEditor;
 use App\Filament\Support\PublicationFields;
 use App\Filament\Support\Seo\SeoContext;
 use App\Filament\Support\Seo\SeoSection;
@@ -18,7 +19,6 @@ use App\Models\PostCategory;
 use App\Models\PostTag;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -71,13 +71,9 @@ final class PostResource extends Resource
                     ->rows(3)
                     ->helperText('Shown on listing cards and used as the SEO description fallback.'),
 
-                RichEditor::make("translations.{$locale}.content")
+                ContentEditor::make("translations.{$locale}.content", config("locales.supported.{$locale}.direction", 'rtl'))
                     ->label('Article body')
-                    ->helperText('Insert [[lead_magnet]] on its own line wherever the Content Direction Checklist should appear.')
-                    ->toolbarButtons([
-                        'bold', 'italic', 'link', 'bulletList', 'orderedList',
-                        'h2', 'h3', 'blockquote', 'codeBlock', 'undo', 'redo',
-                    ]),
+                    ->helperText('Insert [[lead_magnet]] on its own line wherever the Content Direction Checklist should appear.'),
 
                 TextInput::make("translations.{$locale}.cover_alt")
                     ->label('Cover alt text')

@@ -1,0 +1,5 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+/* Tiptap editor (awcodes/filament-tiptap-editor) — requires a custom theme. */
+@import '../../../../vendor/awcodes/filament-tiptap-editor/resources/css/plugin.css';
+
+@config 'tailwind.config.js';

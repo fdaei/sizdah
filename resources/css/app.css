@@ -612,6 +612,92 @@
   }
 
   /*
+   | Elements the Tiptap editor can produce that the Figma frames never draw
+   | (H1/H4–H6, tables, figures, embeds, quotes, FAQ details). Derived from
+   | the existing heading/body tokens — see .figma-sync/GAPS.md (2026-11-16).
+   */
+  .rich-prose > h1 {
+    @apply text-heading-lg text-ink-50;
+    margin-block: 64px 24px;
+  }
+
+  .rich-prose > h4,
+  .rich-prose > h5,
+  .rich-prose > h6 {
+    @apply text-title-md text-ink-50;
+    font-weight: 600;
+    margin-block: 32px 12px;
+  }
+
+  .rich-prose > h6 {
+    @apply text-title-sm;
+  }
+
+  .rich-prose blockquote {
+    @apply border-s-2 border-brand ps-6 text-ink-100;
+    margin-block: 32px;
+  }
+
+  .rich-prose hr {
+    @apply border-ink-700;
+    margin-block: 48px;
+  }
+
+  .rich-prose img {
+    @apply h-auto max-w-full rounded-lg;
+  }
+
+  .rich-prose figure,
+  .rich-prose .rich-embed {
+    margin-block: 40px;
+  }
+
+  .rich-prose figcaption {
+    @apply mt-3 text-center text-title-sm text-ink-300;
+  }
+
+  .rich-prose iframe,
+  .rich-prose video {
+    @apply w-full rounded-lg;
+    aspect-ratio: 16 / 9;
+    border: 0;
+  }
+
+  .rich-prose table {
+    @apply my-10 block w-full overflow-x-auto border-collapse text-start;
+  }
+
+  .rich-prose th,
+  .rich-prose td {
+    @apply border border-ink-700 px-4 py-3 align-top text-title-sm text-ink-200;
+  }
+
+  .rich-prose th {
+    @apply text-ink-50;
+    font-weight: 600;
+  }
+
+  .rich-prose details {
+    @apply border-b border-ink-700 py-4;
+  }
+
+  .rich-prose summary {
+    @apply cursor-pointer text-title-md text-ink-50;
+    font-weight: 600;
+  }
+
+  .rich-prose code {
+    @apply rounded bg-ink-800 px-1.5 py-0.5 text-[0.9em];
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  .rich-prose pre {
+    @apply my-8 overflow-x-auto rounded-lg bg-ink-800 p-4;
+    direction: ltr;
+  }
+
+  /*
    | Article body — Figma 294:7566, the 831-wide copy column on the insights
    | show frame. Re-measured 2026-09-09 against the live nodes: the article
    | sets a tighter scale than the legal pages `.rich-prose` was tuned to.
