@@ -69,3 +69,8 @@ it('demands more text for cornerstone content', function (): void {
     expect(statusOf(SeoAnalyzer::analyze(['content' => $content])['seo']['checks'], 'text_length'))->toBe('good')
         ->and(statusOf(SeoAnalyzer::analyze(['content' => $content, 'cornerstone' => true])['seo']['checks'], 'text_length'))->toBe('bad');
 });
+
+it('flags an H1 inside the body (Yoast single title)', function (): void {
+    expect(statusOf(SeoAnalyzer::analyze(['content' => '<h2>a</h2><p>b</p>'])['seo']['checks'], 'single_title'))->toBe('good')
+        ->and(statusOf(SeoAnalyzer::analyze(['content' => '<h1>a</h1><p>b</p>'])['seo']['checks'], 'single_title'))->toBe('bad');
+});

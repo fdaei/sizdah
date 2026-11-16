@@ -142,6 +142,13 @@ final class SeoAnalyzer
         }
 
         // ── Content checks (independent of keyphrase) ───────────────────
+
+        // Yoast "Single title": the page title is already the H1.
+        $h1 = preg_match_all('/<h1\b/iu', $html);
+        $c[] = $h1 === 0
+            ? self::good('single_title', 'عنوان H1 تکی (Single title): متن H1 اضافه ندارد؛ عنوان صفحه همان H1 است.')
+            : self::bad('single_title', "عنوان H1 تکی (Single title): متن {$h1} عنوان H1 دارد. عنوان صفحه خودش H1 است؛ در متن از H2 تا H6 استفاده کنید.");
+
         $min = $cornerstone ? 900 : 300;
         $c[] = match (true) {
             $wordCount >= $min => self::good('text_length', "طول متن (Text length): {$wordCount} کلمه — عالی است."),
