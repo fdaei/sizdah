@@ -51,7 +51,7 @@ it('renders title, description, canonical, robots and hreflang in the initial HT
         ->toContain('<title inertia>درباره ما — '.config('app.name').'</title>')
         ->toContain('<meta name="description" content="توضیحات متا برای درباره ما" inertia="description">')
         ->toContain('<link rel="canonical" href="'.$url.'" inertia="canonical">')
-        ->toContain('<meta name="robots" content="index, follow" inertia="robots">')
+        ->toContain('<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" inertia="robots">')
         ->toContain('<link rel="alternate" hreflang="fa-IR" href="'.$url.'" inertia="hreflang-fa">')
         ->toContain('<link rel="alternate" hreflang="x-default" href="'.$url.'" inertia="hreflang-x-default">')
         ->toContain('<meta property="og:url" content="'.$url.'" inertia="og:url">');
@@ -65,7 +65,8 @@ it('emits Organization, WebSite and BreadcrumbList JSON-LD', function (): void {
 
     $types = array_column(jsonLd($this->get('/fa/about')->getContent())['@graph'], '@type');
 
-    expect($types)->toContain('Organization', 'WebSite', 'WebPage', 'BreadcrumbList');
+    // About defaults to Yoast's AboutPage page type (a WebPage subtype).
+    expect($types)->toContain('Organization', 'WebSite', 'AboutPage', 'BreadcrumbList');
 });
 
 it('omits BreadcrumbList on the home page', function (): void {
