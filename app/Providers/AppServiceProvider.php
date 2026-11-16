@@ -4,6 +4,17 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Page;
+use App\Models\Post;
+use App\Models\Project;
+use App\Models\SeoMeta;
+use App\Models\Service;
+use App\Models\Setting;
+use App\Models\Translations\PageTranslation;
+use App\Models\Translations\PostTranslation;
+use App\Models\Translations\ProjectTranslation;
+use App\Models\Translations\ServiceTranslation;
+use App\Services\Sitemap\SitemapBuilder;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\Column;
@@ -23,6 +34,17 @@ final class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Sitemaps are cached; any content / SEO / settings write invalidates them.
+        foreach ([
+            Page::class, Post::class, Project::class, Service::class,
+            SeoMeta::class, Setting::class,
+            PostTranslation::class, ProjectTranslation::class,
+            ServiceTranslation::class, PageTranslation::class,
+        ] as $model) {
+            $model::saved(fn () => SitemapBuilder::bust());
+            $model::deleted(fn () => SitemapBuilder::bust());
+        }
+
         Field::configureUsing(
             fn (Field $field): Field => $field->translateLabel(),
         );

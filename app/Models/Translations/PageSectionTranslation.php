@@ -25,5 +25,6 @@ final class PageSectionTranslation extends Model
         'secondary_cta_url',
         'note',
         'image_alt',
+        'focus_keyword',
     ];
 }

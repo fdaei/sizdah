@@ -370,7 +370,7 @@ final class SeoAnalyzer
         return [$internal, $outbound];
     }
 
-    private static function contains(string $haystack, string $needle): bool
+    public static function contains(string $haystack, string $needle): bool
     {
         return $needle !== '' && str_contains(' '.$haystack.' ', ' '.$needle.' ')
             // Persian suffixes (ها، های، ی، ای) attach to the word; accept prefix matches.
@@ -386,7 +386,7 @@ final class SeoAnalyzer
      * @param  list<array{id:string,status:string,text:string}>  $checks
      * @return array{score:int, checks: list<array{id:string,status:string,text:string}>}
      */
-    private static function score(array $checks): array
+    public static function score(array $checks): array
     {
         $points = [self::GOOD => 9, self::OK => 6, self::BAD => 3];
         $sum = array_sum(array_map(fn (array $c): int => $points[$c['status']], $checks));

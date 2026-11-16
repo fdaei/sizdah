@@ -16,7 +16,8 @@ Artisan::command('inspire', function (): void {
 | Run via: php artisan schedule:work  (local)  /  cron (production)
 */
 Schedule::command('sizdah:publish-scheduled')->everyFiveMinutes();
-Schedule::command('sitemap:generate')->dailyAt('03:00');
+// Sitemaps are built on request and cached (App\Services\Sitemap\SitemapBuilder);
+// the former `sitemap:generate` entry pointed at a command that never existed.
 
 // 404 monitor: drop rows with no hit in 90 days (App\Models\NotFoundLog::prunable).
 Schedule::command('model:prune', ['--model' => [NotFoundLog::class]])->daily();

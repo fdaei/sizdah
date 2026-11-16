@@ -59,6 +59,7 @@ final class PageSection extends Model
         'secondary_cta_url',
         'note',
         'image_alt',
+        'focus_keyword',
     ];
 
     protected function casts(): array

@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\Project;
-use App\Models\Service;
+use App\Services\Sitemap\SitemapBuilder;
 use App\Support\SiteSettings;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * XML sitemaps.
  *
- * /sitemap.xml            index listing one child per locale
- * /sitemap-{locale}.xml   every public URL in that locale, with hreflang
- *                         alternates so search engines pair the translations
+ * /sitemap.xml                 index: one child per content type and page
+ * /sitemap-{type}-{n}.xml      up to 1000 URLs (every live locale, hreflang
+ *                              alternates + x-default, lastmod, images)
+ * /sitemap-{locale}.xml        legacy, 301 to the index
  */
 final class SitemapController extends Controller
 {
@@ -39,158 +39,31 @@ final class SitemapController extends Controller
         return response($body, 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
     }
 
-    public function index(): Response
+    public function index(SitemapBuilder $builder): Response
     {
-        $locales = array_keys(config('locales.supported'));
+        $xml = view('sitemap.index', ['sitemaps' => $builder->index()])->render();
 
-        $xml = view('sitemap.index', [
-            'sitemaps' => array_map(
-                fn (string $locale): array => [
-                    'url' => route('sitemap.locale', ['locale' => $locale]),
-                    'lastmod' => now()->toAtomString(),
-                ],
-                $locales,
-            ),
-        ])->render();
-
-        return response($xml, 200, ['Content-Type' => 'application/xml']);
+        return response($xml, 200, ['Content-Type' => 'application/xml; charset=UTF-8']);
     }
 
-    public function locale(string $locale): Response
+    public function type(SitemapBuilder $builder, string $type, int $page): Response
     {
-        if (! array_key_exists($locale, config('locales.supported'))) {
+        $urls = $builder->page($type, $page);
+        if ($urls === null) {
             throw new NotFoundHttpException;
         }
 
-        app()->setLocale($locale);
+        $xml = view('sitemap.urlset', ['urls' => $urls])->render();
 
-        $urls = [];
-
-        // Static routes
-        foreach ([
-            'home' => 1.0,
-            'work.index' => 0.9,
-            'services' => 0.9,
-            'about' => 0.8,
-            'insights.index' => 0.8,
-            'contact' => 0.7,
-            'legal.privacy' => 0.3,
-            'legal.terms' => 0.3,
-        ] as $name => $priority) {
-            $urls[] = [
-                'loc' => route($name, ['locale' => $locale]),
-                // No lastmod: a fake "now" on every fetch teaches crawlers to
-                // ignore the field for the URLs where it is real.
-                'lastmod' => null,
-                'priority' => $priority,
-                'changefreq' => 'weekly',
-                'alternates' => $this->alternatesForRoute($name),
-            ];
-        }
-
-        // Projects
-        Project::query()
-            ->published()
-            ->withTranslations()
-            ->get()
-            ->each(function (Project $project) use (&$urls, $locale): void {
-                $urls[] = [
-                    'loc' => $project->url($locale),
-                    'lastmod' => $project->updated_at?->toAtomString(),
-                    'priority' => 0.7,
-                    'changefreq' => 'monthly',
-                    'alternates' => $this->alternatesForModel($project, 'work.show', 'project'),
-                ];
-            });
-
-        // Service detail pages — live, indexable routes that nothing links
-        // to yet, so the sitemap is their only discovery path.
-        Service::query()
-            ->forDisplay()
-            ->get()
-            ->each(function (Service $service) use (&$urls, $locale): void {
-                $slug = (string) $service->getTranslation('slug', $locale);
-
-                if ($slug === '') {
-                    return;
-                }
-
-                $urls[] = [
-                    'loc' => route('services.show', ['locale' => $locale, 'service' => $slug]),
-                    'lastmod' => $service->updated_at?->toAtomString(),
-                    'priority' => 0.6,
-                    'changefreq' => 'monthly',
-                    'alternates' => [],
-                ];
-            });
-
-        // Posts
-        Post::query()
-            ->published()
-            ->withTranslations()
-            ->get()
-            ->each(function (Post $post) use (&$urls, $locale): void {
-                $urls[] = [
-                    'loc' => $post->url($locale),
-                    'lastmod' => $post->updated_at?->toAtomString(),
-                    'priority' => 0.6,
-                    'changefreq' => 'monthly',
-                    'alternates' => $this->alternatesForModel($post, 'insights.show', 'post'),
-                ];
-            });
-
-        // x-default alongside the per-language alternates (SEO-CHK-02).
-        foreach ($urls as &$url) {
-            if ($url['alternates'] === []) {
-                continue;
-            }
-
-            $default = config('locales.supported.'.config('locales.default').'.html_lang');
-            $match = collect($url['alternates'])->firstWhere('hreflang', $default);
-
-            $url['alternates'][] = [
-                'hreflang' => 'x-default',
-                'href' => $match['href'] ?? $url['alternates'][0]['href'],
-            ];
-        }
-        unset($url);
-
-        $xml = view('sitemap.locale', ['urls' => $urls])->render();
-
-        return response($xml, 200, ['Content-Type' => 'application/xml']);
+        return response($xml, 200, ['Content-Type' => 'application/xml; charset=UTF-8']);
     }
 
     /**
-     * @return array<int, array{hreflang: string, href: string}>
+     * Former per-locale sitemap (may still be registered in Search Console):
+     * permanently moved to the index.
      */
-    private function alternatesForRoute(string $name): array
+    public function legacyLocale(): RedirectResponse
     {
-        return collect(config('locales.supported'))
-            ->map(fn (array $config, string $code): array => [
-                'hreflang' => $config['html_lang'],
-                'href' => route($name, ['locale' => $code]),
-            ])
-            ->values()
-            ->all();
-    }
-
-    /**
-     * @return array<int, array{hreflang: string, href: string}>
-     */
-    private function alternatesForModel(
-        Project|Post $model,
-        string $routeName,
-        string $parameter,
-    ): array {
-        return collect(config('locales.supported'))
-            ->map(fn (array $config, string $code): array => [
-                'hreflang' => $config['html_lang'],
-                'href' => route($routeName, [
-                    'locale' => $code,
-                    $parameter => $model->slugForLocale($code),
-                ]),
-            ])
-            ->values()
-            ->all();
+        return redirect()->route('sitemap', status: 301);
     }
 }

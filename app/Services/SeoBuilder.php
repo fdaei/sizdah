@@ -149,7 +149,8 @@ final class SeoBuilder
 
         $description = $meta?->description
             ?: self::trimDescription($description ?: SiteSettings::get('seo_default_description', $locale, ''));
-        $image = $image ?: SiteSettings::forFrontend($locale)['seo']['defaultImage'];
+        // og:image / twitter:image / JSON-LD image must be absolute URLs.
+        $image = self::absoluteUrl($image ?: SiteSettings::forFrontend($locale)['seo']['defaultImage']);
 
         if ($meta?->canonical_url) {
             $canonical = $meta->canonical_url;
@@ -441,7 +442,16 @@ final class SeoBuilder
             return null;
         }
 
-        return str_starts_with($path, 'http') ? $path : Storage::disk('public')->url($path);
+        return self::absoluteUrl(str_starts_with($path, 'http') ? $path : Storage::disk('public')->url($path));
+    }
+
+    private static function absoluteUrl(?string $url): ?string
+    {
+        if ($url === null || $url === '') {
+            return null;
+        }
+
+        return preg_match('#^https?://#i', $url) ? $url : url('/'.ltrim($url, '/'));
     }
 
     public static function siteNoindex(): bool
