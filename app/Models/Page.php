@@ -103,4 +103,10 @@ final class Page extends Model
     {
         return $query->where('key', $key);
     }
+
+    /** WordPress-style revisions (snapshots taken before each text edit). */
+    public function revisions(): MorphMany
+    {
+        return $this->morphMany(ContentRevision::class, 'revisionable')->latest('id');
+    }
 }

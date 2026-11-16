@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Enums\PublicationStatus;
+use App\Filament\RelationManagers\RevisionsRelationManager;
 use App\Filament\Resource;
 use App\Filament\Resources\PostResource\Pages;
 use App\Filament\Resources\PostResource\RelationManagers;
@@ -278,6 +279,7 @@ final class PostResource extends Resource
     {
         return [
             RelationManagers\LeadMagnetRequestsRelationManager::class,
+            RevisionsRelationManager::class,
         ];
     }
 

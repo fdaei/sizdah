@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Enums\PublicationStatus;
+use App\Filament\RelationManagers\RevisionsRelationManager;
 use App\Filament\Resource;
 use App\Filament\Resources\PageResource\Pages;
 use App\Filament\Resources\ProjectResource\RelationManagers\SectionsRelationManager;
@@ -139,6 +140,7 @@ final class PageResource extends Resource
     {
         return [
             SectionsRelationManager::class,
+            RevisionsRelationManager::class,
         ];
     }
 

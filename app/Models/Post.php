@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Contracts\HasLocalisedSlugs;
 use App\Enums\PublicationStatus;
 use App\Models\Translations\PostTranslation;
+use App\Services\Seo\SeoAnalyzer;
 use App\Traits\HasSeo;
 use App\Traits\HasTranslations;
 use App\Traits\Publishable;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 
@@ -211,7 +213,9 @@ final class Post extends Model implements HasLocalisedSlugs
     public function calculateReadingMinutes(?string $locale = null): int
     {
         $content = (string) $this->getTranslation('content', $locale);
-        $words = str_word_count(strip_tags($content));
+        // str_word_count() only counts Latin letters (Persian text read as ~0
+        // words, so every article showed "1 minute"); use the Unicode-aware counter.
+        $words = count(SeoAnalyzer::words(SeoAnalyzer::plain($content)));
 
         return max(1, (int) ceil($words / 200));
     }
@@ -222,5 +226,11 @@ final class Post extends Model implements HasLocalisedSlugs
     private static function activeLocales(): array
     {
         return array_unique([app()->getLocale(), config('locales.fallback')]);
+    }
+
+    /** WordPress-style revisions (snapshots taken before each text edit). */
+    public function revisions(): MorphMany
+    {
+        return $this->morphMany(ContentRevision::class, 'revisionable')->latest('id');
     }
 }
