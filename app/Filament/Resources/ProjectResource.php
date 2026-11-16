@@ -12,6 +12,9 @@ use App\Filament\Support\TranslatableForm;
 use App\Models\Industry;
 use App\Models\Project;
 use App\Models\Service;
+use App\Filament\Support\Seo\SeoContext;
+use App\Filament\Support\Seo\SeoSection;
+use App\Filament\Support\Seo\SeoTable;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -63,12 +66,6 @@ final class ProjectResource extends Resource
                         );
                     }),
 
-                TextInput::make("translations.{$locale}.slug")
-                    ->label('Slug')
-                    ->required($locale === config('locales.fallback'))
-                    ->maxLength(200)
-                    ->helperText("URL segment for /{$locale}/work/…"),
-
                 TextInput::make("translations.{$locale}.subtitle")
                     ->label('Subtitle')
                     ->maxLength(300),
@@ -94,18 +91,6 @@ final class ProjectResource extends Resource
                     ->label('Cover image alt text')
                     ->maxLength(300)
                     ->helperText('Describes the image for screen readers and SEO.'),
-
-                Section::make('SEO')
-                    ->collapsed()
-                    ->schema([
-                        TextInput::make("translations.{$locale}.seo_title")
-                            ->label('SEO title')
-                            ->maxLength(200),
-                        Textarea::make("translations.{$locale}.seo_description")
-                            ->label('SEO description')
-                            ->rows(2)
-                            ->maxLength(300),
-                    ]),
             ]),
 
             Grid::make(3)->schema([
@@ -186,12 +171,19 @@ final class ProjectResource extends Resource
                         ]),
                 ]),
             ]),
+
+            SeoSection::make(self::seoContext()),
         ]);
+    }
+
+    public static function seoContext(): SeoContext
+    {
+        return new SeoContext(titleField: 'title', slugField: 'slug', contentFields: ['excerpt', 'challenge', 'challenge_points', 'results_summary'], pathPrefix: 'work', descriptionFallback: 'excerpt', slugTable: 'project_translations', slugForeignKey: 'project_id', defaultPageType: 'CreativeWork');
     }
 
     public static function table(Table $table): Table
     {
-        return $table
+        return SeoTable::apply($table
             ->defaultSort('sort_order')
             ->reorderable('sort_order')
             ->columns([
@@ -267,7 +259,7 @@ final class ProjectResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                 ]),
-            ]);
+            ]));
     }
 
     /**
@@ -295,7 +287,7 @@ final class ProjectResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+        return parent::getEloquentQuery()->with('seoMeta')
             ->with(['translations', 'industry.translations'])
             ->withoutGlobalScopes([SoftDeletingScope::class]);
     }

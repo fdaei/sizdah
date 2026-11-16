@@ -7,6 +7,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\TeamMemberResource\Pages;
 use App\Filament\Support\TranslatableForm;
 use App\Models\TeamMember;
+use App\Filament\Support\Seo\SeoContext;
+use App\Filament\Support\Seo\SeoSection;
+use App\Filament\Support\Seo\SeoTable;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -66,12 +69,19 @@ final class TeamMemberResource extends Resource
 
                     Toggle::make('is_active')->label('Active')->default(true),
                 ]),
+
+            SeoSection::make(self::seoContext()),
         ]);
+    }
+
+    public static function seoContext(): SeoContext
+    {
+        return new SeoContext(titleField: 'name', contentFields: ['role'], pathPrefix: 'about', defaultPageType: 'ProfilePage');
     }
 
     public static function table(Table $table): Table
     {
-        return $table
+        return SeoTable::apply($table
             ->defaultSort('sort_order')
             ->reorderable('sort_order')
             ->columns([
@@ -107,7 +117,7 @@ final class TeamMemberResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
-            ]);
+            ]));
     }
 
     public static function getPages(): array
@@ -121,6 +131,6 @@ final class TeamMemberResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with('translations');
+        return parent::getEloquentQuery()->with('seoMeta')->with('translations');
     }
 }

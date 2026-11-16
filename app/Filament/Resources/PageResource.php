@@ -10,6 +10,9 @@ use App\Filament\Resources\ProjectResource\RelationManagers\SectionsRelationMana
 use App\Filament\Support\PublicationFields;
 use App\Filament\Support\TranslatableForm;
 use App\Models\Page;
+use App\Filament\Support\Seo\SeoContext;
+use App\Filament\Support\Seo\SeoSection;
+use App\Filament\Support\Seo\SeoTable;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
@@ -76,25 +79,20 @@ final class PageResource extends Resource
                         'h2', 'h3', 'blockquote', 'undo', 'redo',
                     ])
                     ->helperText('Used by legal pages. Leave empty for section-driven pages.'),
-
-                Section::make('SEO')
-                    ->collapsed()
-                    ->schema([
-                        TextInput::make("translations.{$locale}.seo_title")
-                            ->label('SEO title')
-                            ->maxLength(200),
-                        Textarea::make("translations.{$locale}.seo_description")
-                            ->label('SEO description')
-                            ->rows(2)
-                            ->maxLength(300),
-                    ]),
             ]),
+
+            SeoSection::make(self::seoContext()),
         ]);
+    }
+
+    public static function seoContext(): SeoContext
+    {
+        return new SeoContext(titleField: 'title', contentFields: ['description', 'content'], descriptionFallback: 'description');
     }
 
     public static function table(Table $table): Table
     {
-        return $table
+        return SeoTable::apply($table
             ->columns([
                 Tables\Columns\TextColumn::make('key')
                     ->badge()
@@ -135,7 +133,7 @@ final class PageResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
-            ->bulkActions([]);
+            ->bulkActions([]));
     }
 
     /**
@@ -162,6 +160,6 @@ final class PageResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with('translations');
+        return parent::getEloquentQuery()->with('seoMeta')->with('translations');
     }
 }

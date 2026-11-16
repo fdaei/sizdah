@@ -12,7 +12,9 @@ import { initMotion, killPageAnimations } from './lib/motion'
 const appName = import.meta.env.VITE_APP_NAME ?? 'Sizdah'
 
 createInertiaApp({
-  title: (title) => (title ? `${title} — ${appName}` : appName),
+  // Titles arrive fully rendered (SeoBuilder applies the Yoast-style
+  // %title% %sep% %sitename% template server-side), so never append here.
+  title: (title) => title || appName,
 
   resolve: (name) => {
     const page = resolvePageComponent(

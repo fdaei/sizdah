@@ -9,6 +9,9 @@ use App\Filament\Resources\ServiceResource\Pages;
 use App\Filament\Support\PublicationFields;
 use App\Filament\Support\TranslatableForm;
 use App\Models\Service;
+use App\Filament\Support\Seo\SeoContext;
+use App\Filament\Support\Seo\SeoSection;
+use App\Filament\Support\Seo\SeoTable;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -128,12 +131,19 @@ final class ServiceResource extends Resource
                     ]),
                 ]),
             ]),
+
+            SeoSection::make(self::seoContext()),
         ]);
+    }
+
+    public static function seoContext(): SeoContext
+    {
+        return new SeoContext(titleField: 'title', contentFields: ['description', 'features'], pathPrefix: 'services', descriptionFallback: 'description', defaultPageType: 'Service');
     }
 
     public static function table(Table $table): Table
     {
-        return $table
+        return SeoTable::apply($table
             ->defaultSort('sort_order')
             ->reorderable('sort_order')
             ->columns([
@@ -187,7 +197,7 @@ final class ServiceResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ]));
     }
 
     /**
@@ -204,7 +214,7 @@ final class ServiceResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+        return parent::getEloquentQuery()->with('seoMeta')
             ->with('translations')
             ->withoutGlobalScopes([SoftDeletingScope::class]);
     }

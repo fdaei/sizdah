@@ -25,11 +25,12 @@ const known = [403, 404, 429, 500, 503]
 
 const key = computed(() => (known.includes(props.status) ? String(props.status) : '500'))
 const title = computed(() => t(`errors.${key.value}.title`))
+const appName = import.meta.env.VITE_APP_NAME ?? 'Sizdah'
 const message = computed(() => t(`errors.${key.value}.message`))
 </script>
 
 <template>
-  <Head :title="title" />
+  <Head :title="`${title} — ${appName}`" />
 
   <section class="section-first flex min-h-[874px] flex-col items-center pb-0 text-center">
     <div class="container-sizdah flex flex-col items-center">

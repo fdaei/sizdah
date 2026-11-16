@@ -10,7 +10,6 @@ import { ZiggyVue, type Config } from 'ziggy-js'
 import AppLayout from './Layouts/AppLayout.vue'
 import { installTranslations } from './Composables/useTranslations'
 
-const appName = import.meta.env.VITE_APP_NAME ?? 'Sizdah'
 
 /*
  | One page's render error must not take the renderer down: Node exits on an
@@ -37,7 +36,7 @@ createServer((page) => {
     // Same format as app.ts, but no default: with an empty title Inertia
     // would emit a bare "<title>Sizdah</title>" ahead of the real one from
     // resources/views/partials/seo.blade.php (SeoHead renders nothing in SSR).
-    title: (title) => (title ? `${title} — ${appName}` : ''),
+    title: (title) => title || '',
     resolve: (name) =>
       resolvePageComponent(
         `./Pages/${name}.vue`,

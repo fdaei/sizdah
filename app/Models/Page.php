@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\PublicationStatus;
 use App\Enums\SectionType;
 use App\Models\Translations\PageTranslation;
+use App\Traits\HasSeo;
 use App\Traits\HasTranslations;
 use App\Traits\Publishable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 final class Page extends Model
 {
     use HasFactory;
+    use HasSeo;
     use HasTranslations;
     use Publishable;
 

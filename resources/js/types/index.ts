@@ -80,6 +80,23 @@ export interface SeoMeta {
   modifiedAt?: string | null
   author?: string | null
   noindex?: boolean
+  /** Fully rendered <title> (Yoast-style template already applied server-side). */
+  documentTitle?: string
+  /** Combined meta robots directives. */
+  robots?: string
+  og?: {
+    title: string
+    description: string
+    type: string
+    section?: string | null
+    tags?: string[]
+  }
+  twitter?: {
+    card: 'summary' | 'summary_large_image'
+    title: string
+    description: string
+    image: string | null
+  }
   schema?: Record<string, unknown> | Record<string, unknown>[]
 }
 
