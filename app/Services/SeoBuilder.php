@@ -7,13 +7,13 @@ namespace App\Services;
 use App\Models\Page;
 use App\Models\Post;
 use App\Models\Project;
-use App\Models\Service;
 use App\Models\SeoMeta;
+use App\Models\Service;
 use App\Services\Seo\SeoAnalyzer;
 use App\Services\Seo\SeoTitle;
 use App\Support\SiteSettings;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Builds the SeoMeta payload for every public page type.

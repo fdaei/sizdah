@@ -6,6 +6,7 @@ namespace App\Filament\Support\Seo;
 
 use App\Enums\SchemaArticleType;
 use App\Enums\SchemaPageType;
+use App\Models\SeoMeta;
 use App\Services\Seo\SeoAnalyzer;
 use App\Services\Seo\SeoTitle;
 use Closure;
@@ -25,7 +26,9 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Get;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\HtmlString;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 /**
  * The Yoast-style SEO meta box, added to every content resource:
@@ -375,7 +378,7 @@ final class SeoSection
 
     public static function color(?int $score): string
     {
-        return match (\App\Models\SeoMeta::rating($score)) {
+        return match (SeoMeta::rating($score)) {
             'good' => 'success',
             'ok' => 'warning',
             'bad' => 'danger',
@@ -411,10 +414,10 @@ final class SeoSection
         if (is_array($state)) {
             $state = reset($state);
         }
-        if ($state instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
+        if ($state instanceof TemporaryUploadedFile) {
             return $state->isPreviewable() ? $state->temporaryUrl() : null;
         }
 
-        return is_string($state) && $state !== '' ? \Illuminate\Support\Facades\Storage::disk('public')->url($state) : null;
+        return is_string($state) && $state !== '' ? Storage::disk('public')->url($state) : null;
     }
 }

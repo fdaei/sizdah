@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resource;
 use App\Filament\Resources\IndustryResource\Pages;
-use App\Filament\Support\TranslatableForm;
-use App\Models\Industry;
 use App\Filament\Support\Seo\SeoContext;
 use App\Filament\Support\Seo\SeoSection;
 use App\Filament\Support\Seo\SeoTable;
+use App\Filament\Support\TranslatableForm;
+use App\Models\Industry;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
-use App\Filament\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;

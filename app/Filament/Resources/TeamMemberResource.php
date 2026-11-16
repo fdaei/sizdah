@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resource;
 use App\Filament\Resources\TeamMemberResource\Pages;
-use App\Filament\Support\TranslatableForm;
-use App\Models\TeamMember;
 use App\Filament\Support\Seo\SeoContext;
 use App\Filament\Support\Seo\SeoSection;
 use App\Filament\Support\Seo\SeoTable;
+use App\Filament\Support\TranslatableForm;
+use App\Models\TeamMember;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
-use App\Filament\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;

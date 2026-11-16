@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Models\SeoMeta;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
