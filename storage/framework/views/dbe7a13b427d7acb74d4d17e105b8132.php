@@ -119,7 +119,7 @@ unset($__defined_vars, $__key, $__value); ?>
         close: function () {
             this.isOpen = false
 
-            if (! this.$refs.modalContainer.isConnected) {
+            if (! this.$refs.modalContainer?.isConnected) {
                 return
             }
 
@@ -130,6 +130,10 @@ unset($__defined_vars, $__key, $__value); ?>
 
         open: function () {
             this.$nextTick(() => {
+                if (! this.$refs.modalContainer?.isConnected) {
+                    return
+                }
+
                 this.isOpen = true
 
                 <?php if(FilamentView::hasSpaMode()): ?>
