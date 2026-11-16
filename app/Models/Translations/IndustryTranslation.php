@@ -17,5 +17,4 @@ final class IndustryTranslation extends Model
         'name',
         'slug',
     ];
-
 }

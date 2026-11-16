@@ -18,5 +18,4 @@ final class TeamMemberTranslation extends Model
         'role',
         'photo_alt',
     ];
-
 }

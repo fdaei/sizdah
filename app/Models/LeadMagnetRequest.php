@@ -65,7 +65,7 @@ final class LeadMagnetRequest extends Model
      * when it has one, so a corrected upload reaches readers who got the old
      * one or none.
      *
-     * @return bool  false when there is no file to send
+     * @return bool false when there is no file to send
      */
     public function resend(): bool
     {

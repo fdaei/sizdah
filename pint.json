@@ -1,0 +1,12 @@
+{
+    "preset": "laravel",
+    "exclude": [
+        "bootstrap/cache",
+        "bootstrap/ssr",
+        "storage",
+        "storage_from_zip",
+        "storage_from_zip_20261102",
+        "public",
+        "node_modules"
+    ]
+}

@@ -26,5 +26,4 @@ final class PageSectionTranslation extends Model
         'note',
         'image_alt',
     ];
-
 }

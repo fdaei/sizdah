@@ -9,6 +9,7 @@ use App\Support\NavigationBuilder;
 use App\Support\SiteSettings;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Tighten\Ziggy\Ziggy;
 
 /**
  * Shares the props every page needs: active locale + direction, the header and
@@ -38,18 +39,18 @@ final class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
 
             'locale' => [
-                'current'   => $locale,
+                'current' => $locale,
                 'direction' => $config['direction'],
-                'font'      => $config['font'],
-                'htmlLang'  => $config['html_lang'],
-                'default'   => config('locales.default'),
+                'font' => $config['font'],
+                'htmlLang' => $config['html_lang'],
+                'default' => config('locales.default'),
                 'supported' => collect(config('locales.supported'))
                     ->map(fn (array $c, string $code): array => [
-                        'code'      => $code,
-                        'name'      => $c['name'],
-                        'native'    => $c['native'],
+                        'code' => $code,
+                        'name' => $c['name'],
+                        'native' => $c['native'],
                         'direction' => $c['direction'],
-                        'htmlLang'  => $c['html_lang'],
+                        'htmlLang' => $c['html_lang'],
                     ])
                     ->values()
                     ->all(),
@@ -68,7 +69,7 @@ final class HandleInertiaRequests extends Middleware
 
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
-                'error'   => fn () => $request->session()->get('error'),
+                'error' => fn () => $request->session()->get('error'),
                 // Signed lead-magnet file URL, set by NewsletterController.
                 'download' => fn () => $request->session()->get('download'),
             ],
@@ -76,15 +77,15 @@ final class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user()
                     ? [
-                        'id'    => $request->user()->id,
-                        'name'  => $request->user()->name,
+                        'id' => $request->user()->id,
+                        'name' => $request->user()->name,
                         'email' => $request->user()->email,
                     ]
                     : null,
             ],
 
             'ziggy' => [
-                ...(new \Tighten\Ziggy\Ziggy)->toArray(),
+                ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
         ]);

@@ -16,5 +16,4 @@ final class MenuItemTranslation extends Model
         'locale',
         'label',
     ];
-
 }

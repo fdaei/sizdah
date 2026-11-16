@@ -19,5 +19,4 @@ final class TestimonialTranslation extends Model
         'quote',
         'avatar_alt',
     ];
-
 }

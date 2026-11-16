@@ -146,7 +146,7 @@ final class SitemapController extends Controller
                 continue;
             }
 
-            $default = config("locales.supported.".config('locales.default').'.html_lang');
+            $default = config('locales.supported.'.config('locales.default').'.html_lang');
             $match = collect($url['alternates'])->firstWhere('hreflang', $default);
 
             $url['alternates'][] = [

@@ -24,7 +24,7 @@ final class ListContactSubmissions extends ListRecords
 
             'new' => Tab::make('New')
                 ->modifyQueryUsing(fn (Builder $query): Builder => $query->where('status', SubmissionStatus::New))
-                ->badge(fn (): int => static::getResource()::getModel()::query()->unread()->count()),
+                ->badge(fn (): int => self::getResource()::getModel()::query()->unread()->count()),
 
             'replied' => Tab::make('Replied')
                 ->modifyQueryUsing(fn (Builder $query): Builder => $query->where('status', SubmissionStatus::Replied)),

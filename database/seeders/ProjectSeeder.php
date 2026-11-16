@@ -284,7 +284,7 @@ final class ProjectSeeder extends Seeder
                     'excerpt' => 'Cheshmeh needed a stronger digital identity. one that could communicate trust, simplicity, and brand value across every touchpoint.',
                     'challenge' => 'Cheshmeh had strong services, but its digital presence did not clearly reflect the trust, calmness, and clarity people expect from a beauty clinic.',
                     'challenge_points' => [],
-                    'results_summary' => "The project helped Cheshmeh build a clearer and more consistent digital presence. Through a refined visual direction and strategic content approach, the brand created stronger audience trust and engagement.",
+                    'results_summary' => 'The project helped Cheshmeh build a clearer and more consistent digital presence. Through a refined visual direction and strategic content approach, the brand created stronger audience trust and engagement.',
                 ],
                 'fa' => [
                     'title' => 'کلینیک زیبایی چشمه', 'subtitle' => 'هویتی آرام‌تر و قابل‌اعتمادتر',

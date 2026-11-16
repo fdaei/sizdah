@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 final class LocaleAlternates
 {
     /**
-     * @return array<string, string>  locale code => absolute URL
+     * @return array<string, string> locale code => absolute URL
      */
     public static function for(Request $request): array
     {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Enums\SubmissionStatus;
+use App\Filament\Resource;
 use App\Filament\Resources\ContactSubmissionResource\Pages;
 use App\Models\ContactSubmission;
 use Filament\Forms\Components\Placeholder;
@@ -12,7 +13,6 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
-use App\Filament\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;

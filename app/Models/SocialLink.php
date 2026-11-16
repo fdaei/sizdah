@@ -35,8 +35,8 @@ final class SocialLink extends Model
 
     protected static function booted(): void
     {
-        static::saved(fn () => SiteSettings::flush());
-        static::deleted(fn () => SiteSettings::flush());
+        self::saved(fn () => SiteSettings::flush());
+        self::deleted(fn () => SiteSettings::flush());
     }
 
     public function scopeActive($query)

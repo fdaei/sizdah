@@ -16,5 +16,4 @@ final class ProjectImageTranslation extends Model
         'locale',
         'alt',
     ];
-
 }

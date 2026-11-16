@@ -78,7 +78,7 @@ final class MediaTransformer
             foreach ($points as $point) {
                 $candidate = "{$base}-{$point}.{$format}";
                 if ($disk->exists($candidate)) {
-                    $items[] = self::url($candidate) . " {$point}w";
+                    $items[] = self::url($candidate)." {$point}w";
                 }
             }
             if ($items !== []) {
@@ -90,7 +90,7 @@ final class MediaTransformer
         foreach ($points as $point) {
             $candidate = "{$base}-{$point}.{$extension}";
             if ($disk->exists($candidate)) {
-                $items[] = self::url($candidate) . " {$point}w";
+                $items[] = self::url($candidate)." {$point}w";
             }
         }
         if ($items !== []) {

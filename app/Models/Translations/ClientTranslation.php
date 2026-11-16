@@ -17,5 +17,4 @@ final class ClientTranslation extends Model
         'name',
         'logo_alt',
     ];
-
 }

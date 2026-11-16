@@ -17,5 +17,4 @@ final class PostTagTranslation extends Model
         'name',
         'slug',
     ];
-
 }

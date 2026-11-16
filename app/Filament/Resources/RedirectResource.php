@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resource;
 use App\Filament\Resources\RedirectResource\Pages;
 use App\Models\Redirect;
 use Filament\Forms\Components\Section;
@@ -11,7 +12,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
-use App\Filament\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 

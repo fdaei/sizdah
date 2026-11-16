@@ -33,7 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'locale'          => SetLocale::class,
+            'locale' => SetLocale::class,
             'locale.redirect' => RedirectToLocalisedRoute::class,
         ]);
 
@@ -90,7 +90,7 @@ return Application::configure(basePath: dirname(__DIR__))
              | required"), blanking the whole page. Resolve and set it here
              | too — idempotent when SetLocale already ran on a matched route.
              */
-            $locale = (new SetLocale())->resolve($request);
+            $locale = (new SetLocale)->resolve($request);
             AppFacade::setLocale($locale);
             URL::defaults(['locale' => $locale]);
 

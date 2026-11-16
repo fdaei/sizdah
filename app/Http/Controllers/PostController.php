@@ -10,9 +10,9 @@ use App\Models\PostCategory;
 use App\Services\ContentTransformer;
 use App\Services\SeoBuilder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\Cache;
 
 /**
  * Blog listing (Figma 1353:7935) and article detail (1352:7391).
@@ -90,14 +90,14 @@ final class PostController extends Controller
                 'insights.categories.'.app()->getLocale(),
                 now()->addHour(),
                 fn (): array => PostCategory::query()
-                ->ordered()
-                ->withTranslations()
-                ->get()
-                ->map(fn (PostCategory $c): array => [
-                    'slug' => (string) $c->getTranslation('slug'),
-                    'name' => (string) $c->getTranslation('name'),
-                ])
-                ->all(),
+                    ->ordered()
+                    ->withTranslations()
+                    ->get()
+                    ->map(fn (PostCategory $c): array => [
+                        'slug' => (string) $c->getTranslation('slug'),
+                        'name' => (string) $c->getTranslation('name'),
+                    ])
+                    ->all(),
             ),
 
             'filters' => [

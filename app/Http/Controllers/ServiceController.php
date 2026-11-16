@@ -28,8 +28,7 @@ final class ServiceController extends Controller
      */
     public function show(Request $request, string $locale, string $service): Response
     {
-        $record = Service::query()->forDisplay()->whereHas('translations', fn ($query) =>
-            $query->where('locale', app()->getLocale())->where('slug', $service)
+        $record = Service::query()->forDisplay()->whereHas('translations', fn ($query) => $query->where('locale', app()->getLocale())->where('slug', $service)
         )->firstOrFail();
         $title = (string) $record->getTranslation('title');
         $description = (string) $record->getTranslation('description');

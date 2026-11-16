@@ -17,5 +17,4 @@ final class FaqTranslation extends Model
         'question',
         'answer',
     ];
-
 }

@@ -53,20 +53,20 @@ return [
     'supported' => [
 
         'fa' => [
-            'name'        => 'Persian',
-            'native'      => 'فارسی',
-            'direction'   => 'rtl',
-            'font'        => 'arabic',
-            'html_lang'   => 'fa-IR',
-            'locale'      => 'fa_IR',
-            'flag'        => 'IR',
+            'name' => 'Persian',
+            'native' => 'فارسی',
+            'direction' => 'rtl',
+            'font' => 'arabic',
+            'html_lang' => 'fa-IR',
+            'locale' => 'fa_IR',
+            'flag' => 'IR',
             'date_format' => 'Y/m/d',
             /*
              | Extended Arabic-Indic (U+06F0–U+06F9) — the Persian set. Note
              | this is a DIFFERENT Unicode block from Arabic's (U+0660–U+0669);
              | the two look similar for some digits but must not be swapped.
              */
-            'digits'      => '۰۱۲۳۴۵۶۷۸۹',
+            'digits' => '۰۱۲۳۴۵۶۷۸۹',
         ],
 
     ],
@@ -79,29 +79,29 @@ return [
     'inactive' => [
 
         'en' => [
-            'name'        => 'English',
-            'native'      => 'English',
-            'direction'   => 'ltr',
-            'font'        => 'sans',
-            'html_lang'   => 'en',
-            'locale'      => 'en_US',
-            'flag'        => 'GB',
+            'name' => 'English',
+            'native' => 'English',
+            'direction' => 'ltr',
+            'font' => 'sans',
+            'html_lang' => 'en',
+            'locale' => 'en_US',
+            'flag' => 'GB',
             'date_format' => 'M d, Y',
             // Western Arabic (ASCII) digits — no transliteration needed.
-            'digits'      => null,
+            'digits' => null,
         ],
 
         'ar' => [
-            'name'        => 'Arabic',
-            'native'      => 'العربية',
-            'direction'   => 'rtl',
-            'font'        => 'arabic',
-            'html_lang'   => 'ar',
-            'locale'      => 'ar_OM',
-            'flag'        => 'OM',
+            'name' => 'Arabic',
+            'native' => 'العربية',
+            'direction' => 'rtl',
+            'font' => 'arabic',
+            'html_lang' => 'ar',
+            'locale' => 'ar_OM',
+            'flag' => 'OM',
             'date_format' => 'Y/m/d',
             // Arabic-Indic (U+0660–U+0669) — not the Persian set above.
-            'digits'      => '٠١٢٣٤٥٦٧٨٩',
+            'digits' => '٠١٢٣٤٥٦٧٨٩',
         ],
 
     ],

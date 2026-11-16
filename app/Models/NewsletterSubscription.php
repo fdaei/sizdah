@@ -36,7 +36,7 @@ final class NewsletterSubscription extends Model
 
     protected static function booted(): void
     {
-        static::creating(function (self $subscription): void {
+        self::creating(function (self $subscription): void {
             $subscription->unsubscribe_token ??= Str::random(64);
         });
     }

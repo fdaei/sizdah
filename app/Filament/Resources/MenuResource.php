@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Enums\MenuLocation;
+use App\Filament\Resource;
 use App\Filament\Resources\MenuResource\Pages;
 use App\Filament\Resources\MenuResource\RelationManagers\ItemsRelationManager;
 use App\Models\Menu;
@@ -12,7 +13,6 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use App\Filament\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 

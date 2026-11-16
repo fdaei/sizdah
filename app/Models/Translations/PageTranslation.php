@@ -21,5 +21,4 @@ final class PageTranslation extends Model
         'seo_title',
         'seo_description',
     ];
-
 }
