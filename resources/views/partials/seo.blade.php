@@ -25,10 +25,10 @@
         : null;
 @endphp
 @if ($seo)
-    <title inertia>{{ $seo['title'] ? "{$seo['title']} — {$appName}" : $appName }}</title>
+    <title inertia>{{ $seo['documentTitle'] ?? ($seo['title'] ? "{$seo['title']} — {$appName}" : $appName) }}</title>
     <meta name="description" content="{{ $seo['description'] }}" inertia="description">
     <link rel="canonical" href="{{ $seo['canonical'] }}" inertia="canonical">
-    <meta name="robots" content="{{ ($seo['noindex'] ?? false) ? 'noindex, follow' : 'index, follow' }}" inertia="robots">
+    <meta name="robots" content="{{ $seo['robots'] ?? (($seo['noindex'] ?? false) ? 'noindex, follow' : 'index, follow') }}" inertia="robots">
 
     @if ($alternates)
         @foreach ($alternates as $code => $url)
@@ -37,9 +37,9 @@
         <link rel="alternate" hreflang="x-default" href="{{ $alternates[config('locales.default')] ?? reset($alternates) }}" inertia="hreflang-x-default">
     @endif
 
-    <meta property="og:type" content="{{ $seo['type'] }}" inertia="og:type">
-    <meta property="og:title" content="{{ $seo['title'] }}" inertia="og:title">
-    <meta property="og:description" content="{{ $seo['description'] }}" inertia="og:description">
+    <meta property="og:type" content="{{ $seo['og']['type'] ?? $seo['type'] }}" inertia="og:type">
+    <meta property="og:title" content="{{ $seo['og']['title'] ?? $seo['title'] }}" inertia="og:title">
+    <meta property="og:description" content="{{ $seo['og']['description'] ?? $seo['description'] }}" inertia="og:description">
     <meta property="og:url" content="{{ $seo['canonical'] }}" inertia="og:url">
     <meta property="og:site_name" content="{{ \App\Support\SiteSettings::get('seo_organization_name', $locale, 'Sizdah') }}" inertia="og:site_name">
     <meta property="og:locale" content="{{ str_replace('-', '_', config("locales.supported.{$locale}.html_lang")) }}" inertia="og:locale">
@@ -47,11 +47,11 @@
         <meta property="og:image" content="{{ $seo['image'] }}" inertia="og:image">
     @endif
 
-    <meta name="twitter:card" content="{{ $seo['image'] ? 'summary_large_image' : 'summary' }}" inertia="twitter:card">
-    <meta name="twitter:title" content="{{ $seo['title'] }}" inertia="twitter:title">
-    <meta name="twitter:description" content="{{ $seo['description'] }}" inertia="twitter:description">
-    @if ($seo['image'])
-        <meta name="twitter:image" content="{{ $seo['image'] }}" inertia="twitter:image">
+    <meta name="twitter:card" content="{{ $seo['twitter']['card'] ?? ($seo['image'] ? 'summary_large_image' : 'summary') }}" inertia="twitter:card">
+    <meta name="twitter:title" content="{{ $seo['twitter']['title'] ?? $seo['title'] }}" inertia="twitter:title">
+    <meta name="twitter:description" content="{{ $seo['twitter']['description'] ?? $seo['description'] }}" inertia="twitter:description">
+    @if ($seo['twitter']['image'] ?? $seo['image'])
+        <meta name="twitter:image" content="{{ $seo['twitter']['image'] ?? $seo['image'] }}" inertia="twitter:image">
     @endif
 
     @if ($seo['type'] === 'article')
@@ -61,6 +61,12 @@
         @if ($seo['modifiedAt'] ?? null)
             <meta property="article:modified_time" content="{{ $seo['modifiedAt'] }}" inertia="article:modified_time">
         @endif
+        @if ($seo['og']['section'] ?? null)
+            <meta property="article:section" content="{{ $seo['og']['section'] }}" inertia="article:section">
+        @endif
+        @foreach (($seo['og']['tags'] ?? []) as $i => $tag)
+            <meta property="article:tag" content="{{ $tag }}" inertia="article:tag-{{ $i }}">
+        @endforeach
         @if ($seo['author'] ?? null)
             <meta property="article:author" content="{{ $seo['author'] }}" inertia="article:author">
         @endif

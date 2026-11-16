@@ -37,7 +37,7 @@ createServer((page) => {
     // Same format as app.ts, but no default: with an empty title Inertia
     // would emit a bare "<title>Sizdah</title>" ahead of the real one from
     // resources/views/partials/seo.blade.php (SeoHead renders nothing in SSR).
-    title: (title) => (title ? `${title} — ${appName}` : ''),
+    title: (title) => title || '',
     resolve: (name) =>
       resolvePageComponent(
         `./Pages/${name}.vue`,
