@@ -162,3 +162,13 @@ describe('canonical host redirect', function (): void {
         $this->get('http://10.0.0.5/up')->assertOk();
     });
 });
+
+it('ships only public routes to the browser (no admin routes in Ziggy)', function (): void {
+    seoPage('home', 'خانه');
+
+    $html = $this->get('/fa')->getContent();
+
+    expect($html)->toContain('"insights.show"')
+        ->not->toContain('"filament.')
+        ->not->toContain('"livewire.');
+});
