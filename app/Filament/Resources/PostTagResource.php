@@ -7,6 +7,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PostTagResource\Pages;
 use App\Filament\Support\TranslatableForm;
 use App\Models\PostTag;
+use App\Filament\Support\Seo\SeoContext;
+use App\Filament\Support\Seo\SeoSection;
+use App\Filament\Support\Seo\SeoTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
@@ -46,18 +49,20 @@ final class PostTagResource extends Resource
                             TranslatableForm::slugify($state, $locale),
                         );
                     }),
-
-                TextInput::make("translations.{$locale}.slug")
-                    ->label('Slug')
-                    ->required($locale === config('locales.fallback'))
-                    ->maxLength(150),
             ]),
+
+            SeoSection::make(self::seoContext()),
         ]);
+    }
+
+    public static function seoContext(): SeoContext
+    {
+        return new SeoContext(titleField: 'name', slugField: 'slug', pathPrefix: 'insights/tag', slugTable: 'post_tag_translations', slugForeignKey: 'post_tag_id', defaultPageType: 'CollectionPage');
     }
 
     public static function table(Table $table): Table
     {
-        return $table
+        return SeoTable::apply($table
 
             ->columns([
                 Tables\Columns\TextColumn::make('name')
@@ -81,7 +86,7 @@ final class PostTagResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
-            ]);
+            ]));
     }
 
     public static function getPages(): array
@@ -95,6 +100,6 @@ final class PostTagResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with('translations');
+        return parent::getEloquentQuery()->with('seoMeta')->with('translations');
     }
 }

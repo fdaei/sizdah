@@ -12,6 +12,9 @@ use App\Filament\Support\TranslatableForm;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\PostTag;
+use App\Filament\Support\Seo\SeoContext;
+use App\Filament\Support\Seo\SeoSection;
+use App\Filament\Support\Seo\SeoTable;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\RichEditor;
@@ -59,11 +62,6 @@ final class PostResource extends Resource
                         );
                     }),
 
-                TextInput::make("translations.{$locale}.slug")
-                    ->label('Slug')
-                    ->required($locale === config('locales.fallback'))
-                    ->maxLength(250),
-
                 TextInput::make("translations.{$locale}.subtitle")
                     ->label('Subtitle')
                     ->maxLength(300),
@@ -84,18 +82,6 @@ final class PostResource extends Resource
                 TextInput::make("translations.{$locale}.cover_alt")
                     ->label('Cover alt text')
                     ->maxLength(300),
-
-                Section::make('SEO')
-                    ->collapsed()
-                    ->schema([
-                        TextInput::make("translations.{$locale}.seo_title")
-                            ->label('SEO title')
-                            ->maxLength(200),
-                        Textarea::make("translations.{$locale}.seo_description")
-                            ->label('SEO description')
-                            ->rows(2)
-                            ->maxLength(300),
-                    ]),
             ]),
 
             Grid::make(3)->schema([
@@ -194,12 +180,19 @@ final class PostResource extends Resource
                         ]),
                 ]),
             ]),
+
+            SeoSection::make(self::seoContext()),
         ]);
+    }
+
+    public static function seoContext(): SeoContext
+    {
+        return new SeoContext(titleField: 'title', slugField: 'slug', contentFields: ['content'], pathPrefix: 'insights', descriptionFallback: 'excerpt', isArticle: true, slugTable: 'post_translations', slugForeignKey: 'post_id');
     }
 
     public static function table(Table $table): Table
     {
-        return $table
+        return SeoTable::apply($table
             ->defaultSort('published_at', 'desc')
             ->columns([
                 Tables\Columns\ImageColumn::make('cover_path')
@@ -282,7 +275,7 @@ final class PostResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                 ]),
-            ]);
+            ]));
     }
 
     public static function getRelations(): array
@@ -306,7 +299,7 @@ final class PostResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+        return parent::getEloquentQuery()->with('seoMeta')
             ->with(['translations', 'category.translations', 'author'])
             ->withoutGlobalScopes([SoftDeletingScope::class]);
     }

@@ -7,6 +7,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PostCategoryResource\Pages;
 use App\Filament\Support\TranslatableForm;
 use App\Models\PostCategory;
+use App\Filament\Support\Seo\SeoContext;
+use App\Filament\Support\Seo\SeoSection;
+use App\Filament\Support\Seo\SeoTable;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -47,11 +50,6 @@ final class PostCategoryResource extends Resource
                             TranslatableForm::slugify($state, $locale),
                         );
                     }),
-
-                TextInput::make("translations.{$locale}.slug")
-                    ->label('Slug')
-                    ->required($locale === config('locales.fallback'))
-                    ->maxLength(150),
             ]),
 
             Section::make()
@@ -59,12 +57,19 @@ final class PostCategoryResource extends Resource
                 ->schema([
                     TextInput::make('sort_order')->numeric()->default(0),
                 ]),
+
+            SeoSection::make(self::seoContext()),
         ]);
+    }
+
+    public static function seoContext(): SeoContext
+    {
+        return new SeoContext(titleField: 'name', slugField: 'slug', pathPrefix: 'insights/category', slugTable: 'post_category_translations', slugForeignKey: 'post_category_id', defaultPageType: 'CollectionPage');
     }
 
     public static function table(Table $table): Table
     {
-        return $table
+        return SeoTable::apply($table
             ->defaultSort('sort_order')
             ->reorderable('sort_order')
             ->columns([
@@ -89,7 +94,7 @@ final class PostCategoryResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
-            ]);
+            ]));
     }
 
     public static function getPages(): array
@@ -103,6 +108,6 @@ final class PostCategoryResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with('translations');
+        return parent::getEloquentQuery()->with('seoMeta')->with('translations');
     }
 }
