@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Contracts\HasLocalisedSlugs;
 use App\Enums\PublicationStatus;
 use App\Models\Translations\PostTranslation;
+use App\Traits\HasSeo;
 use App\Traits\HasTranslations;
 use App\Traits\Publishable;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,6 +28,7 @@ use Illuminate\Support\Collection;
 final class Post extends Model implements HasLocalisedSlugs
 {
     use HasFactory;
+    use HasSeo;
     use HasTranslations;
     use Publishable;
     use SoftDeletes;

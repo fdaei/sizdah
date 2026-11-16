@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\PublicationStatus;
 use App\Models\Translations\ServiceTranslation;
+use App\Traits\HasSeo;
 use App\Traits\HasTranslations;
 use App\Traits\Publishable;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,6 +30,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 final class Service extends Model
 {
     use HasFactory;
+    use HasSeo;
     use HasTranslations;
     use Publishable;
     use SoftDeletes;

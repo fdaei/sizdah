@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Translations\PostCategoryTranslation;
+use App\Traits\HasSeo;
 use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 final class PostCategory extends Model
 {
     use HasFactory;
+    use HasSeo;
     use HasTranslations;
 
     protected $fillable = ['sort_order'];

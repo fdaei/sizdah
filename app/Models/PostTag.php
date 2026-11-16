@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Translations\PostTagTranslation;
+use App\Traits\HasSeo;
 use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 final class PostTag extends Model
 {
     use HasFactory;
+    use HasSeo;
     use HasTranslations;
 
     protected $fillable = [];
