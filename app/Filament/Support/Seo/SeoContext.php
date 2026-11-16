@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Support\Seo;
 
+use App\Filament\Support\Editor\ContentEditor;
 use App\Models\SeoMeta;
 use App\Services\Seo\SeoAnalyzer;
 use App\Services\Seo\SeoTitle;
@@ -87,6 +88,10 @@ final class SeoContext
         return collect($this->contentFields)
             ->map(function (string $f) use ($translation): string {
                 $v = $translation[$f] ?? '';
+                // Tiptap holds its live state as a JSON document; analyse the HTML it saves.
+                if (is_array($v) && ($v['type'] ?? null) === 'doc') {
+                    $v = (string) tiptap_converter()->blocks(ContentEditor::BLOCKS)->asHTML($v);
+                }
                 if (is_array($v)) {
                     // Repeater/list fields (e.g. features, challenge_points)
                     $v = '<ul><li>'.implode('</li><li>', array_map(

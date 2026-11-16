@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Filament\Support\Seo\SeoContext;
 use App\Services\Seo\SeoAnalyzer;
 
 function statusOf(array $checks, string $id): ?string
@@ -73,4 +74,17 @@ it('demands more text for cornerstone content', function (): void {
 it('flags an H1 inside the body (Yoast single title)', function (): void {
     expect(statusOf(SeoAnalyzer::analyze(['content' => '<h2>a</h2><p>b</p>'])['seo']['checks'], 'single_title'))->toBe('good')
         ->and(statusOf(SeoAnalyzer::analyze(['content' => '<h1>a</h1><p>b</p>'])['seo']['checks'], 'single_title'))->toBe('bad');
+});
+
+it('analyses the Tiptap JSON document the editor holds while typing', function (): void {
+    $ctx = new SeoContext(contentFields: ['content']);
+    $doc = ['type' => 'doc', 'content' => [
+        ['type' => 'heading', 'attrs' => ['level' => 2], 'content' => [['type' => 'text', 'text' => 'زیرعنوان']]],
+        ['type' => 'paragraph', 'content' => [['type' => 'text', 'text' => 'یک دو سه چهار پنج']]],
+    ]];
+
+    $html = $ctx->content(['content' => $doc]);
+
+    expect($html)->toContain('<h2')->toContain('یک دو سه چهار پنج')
+        ->and(count(SeoAnalyzer::words(SeoAnalyzer::plain($html))))->toBe(6);
 });
