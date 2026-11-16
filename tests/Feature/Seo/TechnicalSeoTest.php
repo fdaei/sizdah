@@ -120,9 +120,10 @@ it('serves robots.txt with an absolute sitemap URL', function (): void {
 it('lists only canonical locale URLs in the sitemap, with x-default', function (): void {
     Project::factory()->published()->create()->setTranslations(['fa' => ['title' => 'پروژه', 'slug' => 'پروژه']]);
 
-    $this->get('/sitemap.xml')->assertOk()->assertSee(url('/sitemap-fa.xml'), false);
+    $this->get('/sitemap.xml')->assertOk()->assertSee(url('/sitemap-pages-1.xml'), false);
+    $this->get('/sitemap-fa.xml')->assertRedirect(url('/sitemap.xml'));
 
-    $xml = $this->get('/sitemap-fa.xml')->assertOk()->getContent();
+    $xml = $this->get('/sitemap-pages-1.xml')->assertOk()->getContent();
 
     expect($xml)
         ->toContain('<loc>'.url('/fa/about').'</loc>')
