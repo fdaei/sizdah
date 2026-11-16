@@ -6,6 +6,7 @@ namespace App\Filament\Support\Seo;
 
 use App\Enums\SchemaArticleType;
 use App\Enums\SchemaPageType;
+use App\Filament\Pages\SeoGuide;
 use App\Models\SeoMeta;
 use App\Services\Seo\SeoAnalyzer;
 use App\Services\Seo\SeoTitle;
@@ -61,7 +62,10 @@ final class SeoSection
             : $perLocale((string) array_key_first($locales));
 
         return Section::make('سئو (Yoast SEO)')
-            ->description('عنوان، توضیحات، تحلیل سئو و خوانایی، شبکه‌های اجتماعی، اسکیما و تنظیمات پیشرفته')
+            ->description(new HtmlString(
+                'عنوان، توضیحات، تحلیل سئو و خوانایی، شبکه‌های اجتماعی، اسکیما و تنظیمات پیشرفته — '
+                .'<a href="'.e(SeoGuide::getUrl()).'" target="_blank" style="text-decoration:underline">راهنمای سئو (SEO guide)</a>'
+            ))
             ->icon('heroicon-o-magnifying-glass-circle')
             ->collapsible()
             ->columnSpanFull()
