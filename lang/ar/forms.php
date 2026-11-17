@@ -60,4 +60,10 @@ return [
         'signoff' => 'مع التحية، فريق :app',
     ],
 
+    'rating_thanks' => 'تم تسجيل تقييمك وسيظهر بعد المراجعة.',
+    'rating_duplicate' => 'لقد قيّمت هذه الخدمة مسبقاً.',
+    'rating_label' => 'قيّم هذه الخدمة',
+    'rating_star' => ':n نجوم',
+    'rating_summary' => 'المتوسط :avg من 5 (:count صوت)',
+
 ];

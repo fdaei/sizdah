@@ -294,6 +294,16 @@ final class SeoSection
                         ->helperText('خالی = کلمه کلیدی کانونی + مرتبط'),
                 ]),
 
+            Select::make("{$p}.schema_data.mode")
+                ->label('حالت اسکیما (Schema output)')
+                ->native(false)
+                ->placeholder('خودکار + سفارشی (پیش‌فرض)')
+                ->options([
+                    'auto' => 'خودکار + سفارشی (Auto)',
+                    'replace' => 'فقط اسکیمای سفارشی (Replace with custom)',
+                    'off' => 'خاموش — هیچ JSON-LD برای این صفحه (Off)',
+                ]),
+
             Textarea::make("{$p}.custom_schema")
                 ->label('اسکیمای سفارشی (Custom JSON-LD)')
                 ->rows(8)

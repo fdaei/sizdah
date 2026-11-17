@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Page;
+use App\Actions\RecordServiceRating;
 use App\Models\Service;
+use App\Models\ServiceRating;
+use Illuminate\Http\RedirectResponse;
 use App\Services\ContentTransformer;
 use App\Services\SeoBuilder;
 use Illuminate\Http\Request;
@@ -34,9 +37,27 @@ final class ServiceController extends Controller
         $description = (string) $record->getTranslation('description');
 
         return Inertia::render('Services/Show', [
-            'service' => ['title' => $title, 'description' => $description, 'features' => $record->getTranslation('features') ?? []],
+            'service' => [
+                'title' => $title,
+                'description' => $description,
+                'features' => $record->getTranslation('features') ?? [],
+                'slug' => $service,
+                'rating' => ServiceRating::summary($record),
+            ],
             'seo' => SeoBuilder::forService($record, $request->url()),
         ]);
+    }
+
+    public function rate(Request $request, string $locale, string $service, RecordServiceRating $record): RedirectResponse
+    {
+        $data = $request->validate(['rating' => ['required', 'integer', 'between:1,5']]);
+
+        $model = Service::query()->forDisplay()->whereHas('translations', fn ($query) => $query->where('locale', app()->getLocale())->where('slug', $service)
+        )->firstOrFail();
+
+        $stored = $record($model, (int) $data['rating'], $request->ip(), $request->userAgent());
+
+        return back()->with('success', __($stored ? 'forms.rating_thanks' : 'forms.rating_duplicate'));
     }
 
     public function __invoke(Request $request): Response

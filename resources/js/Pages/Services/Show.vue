@@ -2,10 +2,20 @@
 import { Link } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
 import SeoHead from '@/Components/SeoHead.vue'
+import StarRating from '@/Components/StarRating.vue'
 import { useTranslations } from '@/Composables/useTranslations'
 import type { SeoMeta } from '@/types'
 
-defineProps<{ service: { title: string; description: string; features: string[] }; seo: SeoMeta }>()
+defineProps<{
+  service: {
+    title: string
+    description: string
+    features: string[]
+    slug: string
+    rating: { average: number; count: number }
+  }
+  seo: SeoMeta
+}>()
 
 const { t } = useTranslations()
 </script>
@@ -19,6 +29,7 @@ const { t } = useTranslations()
       <ul v-if="service.features.length" class="mt-10 list-disc space-y-4 ps-6 text-body-lg text-ink-200">
         <li v-for="feature in service.features" :key="feature">{{ feature }}</li>
       </ul>
+      <StarRating :action="route('services.rate', { service: service.slug })" :summary="service.rating" />
       <nav class="mt-12 flex gap-6">
         <Link :href="route('services')" class="underline">{{ t('work.services') }}</Link>
         <Link :href="route('contact')" class="underline">{{ t('common.start_conversation') }}</Link>

@@ -10,6 +10,7 @@ use App\Models\PostCategory;
 use App\Models\Project;
 use App\Models\SeoMeta;
 use App\Models\Service;
+use App\Models\ServiceRating;
 use App\Services\Seo\SchemaNodes;
 use App\Services\Seo\SeoAnalyzer;
 use App\Services\Seo\SeoTitle;
@@ -120,6 +121,7 @@ final class SeoBuilder
             type: 'website',
             schemaType: 'Service',
             meta: $service->seoFor(),
+            extra: array_filter(['aggregateRating' => ServiceRating::aggregateNode($service)]),
             modifiedAt: $service->updated_at?->toIso8601String(),
             bodyHtml: SchemaNodes::bodyHtml([], [
                 $service->getTranslation('description'),
@@ -289,7 +291,15 @@ final class SeoBuilder
             $schema['@graph'] = [...$schema['@graph'], ...$extraNodes];
         }
 
-        if ($custom = self::customSchema($meta?->custom_schema)) {
+        $custom = self::customSchema($meta?->custom_schema);
+        $schemaMode = $meta?->schema_data['mode'] ?? 'auto';
+
+        // Per-page override (Schema Pro "disable on this page" / "replace").
+        if ($schemaMode === 'off') {
+            $schema = null;
+        } elseif ($schemaMode === 'replace' && $custom !== []) {
+            $schema['@graph'] = $custom;
+        } elseif ($custom !== []) {
             $schema['@graph'] = [...$schema['@graph'], ...$custom];
         }
 
@@ -401,6 +411,8 @@ final class SeoBuilder
             'text' => $type !== 'article' && $schemaType !== 'Service' ? ($extra['body'] ?? null) : null,
             'dateModified' => $type !== 'article' && $schemaType !== 'Service' ? $modifiedAt : null,
             'creator' => $extra['creator'] ?? null,
+            // Only ever built from approved, real ratings (ServiceRating::summary()).
+            'aggregateRating' => $extra['aggregateRating'] ?? null,
             // WebPage-family nodes name their main image explicitly.
             'primaryImageOfPage' => $image && $type !== 'article' && str_ends_with((string) ($schemaType ?? 'WebPage'), 'Page')
                 ? ['@type' => 'ImageObject', 'url' => $image]
