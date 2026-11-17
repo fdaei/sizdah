@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
-import { Link, usePage } from '@inertiajs/vue3'
+import { usePage } from '@inertiajs/vue3'
 import IconClose from '@/Components/Icons/IconClose.vue'
 import BrandLogo from '@/Components/BrandLogo.vue'
 import CtaButton from '@/Components/CtaButton.vue'
 import LanguageSwitcher from '@/Components/LanguageSwitcher.vue'
+import MobileNavTree from './MobileNavTree.vue'
 import type { NavItem, SharedProps } from '@/types'
 
 /**
@@ -70,18 +71,7 @@ watch(
         </div>
 
         <nav :aria-label="$t('common.primary_navigation')">
-          <ul class="flex flex-col gap-2">
-            <li v-for="item in links" :key="item.id">
-              <Link
-                :href="item.url"
-                :target="item.target"
-                class="block rounded-sm py-3 text-title-lg text-ink-200 transition-colors duration-200 ease-brand hover:text-brand"
-                @click="emit('close')"
-              >
-                {{ item.label }}
-              </Link>
-            </li>
-          </ul>
+          <MobileNavTree :items="links" @navigate="emit('close')" />
         </nav>
 
         <div class="mt-auto flex flex-col gap-6">

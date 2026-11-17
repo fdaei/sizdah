@@ -12,6 +12,7 @@ use App\Filament\Support\Seo\SeoTable;
 use App\Filament\Support\TranslatableForm;
 use App\Models\PostCategory;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
@@ -50,6 +51,11 @@ final class PostCategoryResource extends Resource
                             TranslatableForm::slugify($state, $locale),
                         );
                     }),
+
+                Textarea::make("translations.{$locale}.description")
+                    ->label('Description')
+                    ->rows(4)
+                    ->helperText('Intro text on the category page; also the SEO description fallback and analysed content.'),
             ]),
 
             Section::make()
@@ -64,7 +70,7 @@ final class PostCategoryResource extends Resource
 
     public static function seoContext(): SeoContext
     {
-        return new SeoContext(titleField: 'name', slugField: 'slug', pathPrefix: 'insights/category', slugTable: 'post_category_translations', slugForeignKey: 'post_category_id', defaultPageType: 'CollectionPage');
+        return new SeoContext(titleField: 'name', slugField: 'slug', contentFields: ['description'], pathPrefix: 'insights/category', descriptionFallback: 'description', slugTable: 'post_category_translations', slugForeignKey: 'post_category_id', defaultPageType: 'CollectionPage');
     }
 
     public static function table(Table $table): Table

@@ -23,7 +23,7 @@ final class PostCategory extends Model
     protected $fillable = ['sort_order'];
 
     /** @var array<int, string> */
-    protected array $translatable = ['name', 'slug'];
+    protected array $translatable = ['name', 'slug', 'description'];
 
     protected function casts(): array
     {
@@ -38,6 +38,27 @@ final class PostCategory extends Model
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        $locale = app()->getLocale();
+
+        return $this->newQuery()
+            ->whereHas('translations', fn ($q) => $q->where('locale', $locale)->where('slug', (string) $value))
+            ->withTranslations()
+            ->with('seoMeta')
+            ->first();
+    }
+
+    public function url(?string $locale = null, bool $absolute = true): string
+    {
+        $locale ??= app()->getLocale();
+
+        return route('insights.category', [
+            'locale' => $locale,
+            'category' => (string) ($this->getTranslation('slug', $locale) ?? $this->getTranslation('slug', config('locales.fallback'))),
+        ], $absolute);
     }
 
     public function scopeOrdered($query)

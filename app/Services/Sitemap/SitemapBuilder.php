@@ -6,11 +6,13 @@ namespace App\Services\Sitemap;
 
 use App\Models\Page;
 use App\Models\Post;
+use App\Models\PostCategory;
 use App\Models\Project;
 use App\Models\SeoMeta;
 use App\Models\Service;
 use App\Services\MediaTransformer;
 use App\Services\SeoBuilder;
+use App\Support\SiteSettings;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
@@ -27,7 +29,7 @@ final class SitemapBuilder
 {
     public const PER_PAGE = 1000;
 
-    public const TYPES = ['pages', 'services', 'projects', 'posts'];
+    public const TYPES = ['pages', 'services', 'projects', 'posts', 'categories'];
 
     /** Static route => Page key (for SEO meta + lastmod) and default priority. */
     private const STATIC_ROUTES = [
@@ -40,6 +42,66 @@ final class SitemapBuilder
         'legal.privacy' => ['privacy-policy', 0.3],
         'legal.terms' => ['terms', 0.3],
     ];
+
+    /** Persian labels for the admin page. */
+    public const LABELS = ['pages' => 'صفحات اصلی', 'services' => 'خدمات', 'projects' => 'پروژه‌ها', 'posts' => 'مقالات', 'categories' => 'دسته‌بندی مقالات'];
+
+    /** @return list<string> content types switched on in the Sitemap admin page */
+    public static function enabledTypes(): array
+    {
+        $types = SiteSettings::get('sitemap_types');
+
+        return is_array($types) ? array_values(array_intersect(self::TYPES, $types)) : self::TYPES;
+    }
+
+    public static function imagesEnabled(): bool
+    {
+        return (bool) SiteSettings::get('sitemap_images', null, true);
+    }
+
+    public static function stylesheetEnabled(): bool
+    {
+        return (bool) SiteSettings::get('sitemap_stylesheet', null, true);
+    }
+
+    /**
+     * Per-type URL counts for the admin page.
+     *
+     * @return array<string, array{enabled: bool, count: int, files: list<string>}>
+     */
+    public function stats(): array
+    {
+        $enabled = self::enabledTypes();
+        $out = [];
+        foreach (self::TYPES as $type) {
+            $count = count($this->entries($type));
+            $out[$type] = [
+                'enabled' => in_array($type, $enabled, true),
+                'count' => $count,
+                'files' => array_map(
+                    fn (int $p): string => route('sitemap.type', ['type' => $type, 'page' => $p]),
+                    range(1, max(1, (int) ceil($count / self::PER_PAGE))),
+                ),
+            ];
+        }
+
+        return $out;
+    }
+
+    /** @return list<string> every URL currently in the sitemap */
+    public function allUrls(): array
+    {
+        if (SeoBuilder::siteNoindex()) {
+            return [];
+        }
+
+        $urls = [];
+        foreach (self::enabledTypes() as $type) {
+            array_push($urls, ...array_column($this->entries($type), 'loc'));
+        }
+
+        return $urls;
+    }
 
     public static function bust(): void
     {
@@ -57,7 +119,7 @@ final class SitemapBuilder
 
         return $this->cached('index', function (): array {
             $out = [];
-            foreach (self::TYPES as $type) {
+            foreach (self::enabledTypes() as $type) {
                 $entries = $this->entries($type);
                 $pages = (int) ceil(count($entries) / self::PER_PAGE);
                 for ($p = 1; $p <= $pages; $p++) {
@@ -79,7 +141,7 @@ final class SitemapBuilder
      */
     public function page(string $type, int $page): ?array
     {
-        if (! in_array($type, self::TYPES, true) || $page < 1 || SeoBuilder::siteNoindex()) {
+        if (! in_array($type, self::enabledTypes(), true) || $page < 1 || SeoBuilder::siteNoindex()) {
             return null;
         }
 
@@ -98,6 +160,7 @@ final class SitemapBuilder
             'services' => $this->services(),
             'projects' => $this->projects(),
             'posts' => $this->posts(),
+            'categories' => $this->categories(),
         });
     }
 
@@ -140,6 +203,17 @@ final class SitemapBuilder
             $hrefs = $this->locales(fn (string $l): ?string => $p->getTranslation('slug', $l, false) ? $p->url($l) : null);
             $images = $p->cover_path ? [self::absolute(MediaTransformer::url($p->cover_path))] : [];
             array_push($out, ...$this->perLocale($hrefs, $p, $p->updated_at?->toAtomString(), 0.7, 'monthly', $images));
+        });
+
+        return $out;
+    }
+
+    private function categories(): array
+    {
+        $out = [];
+        PostCategory::query()->ordered()->withTranslations()->with('seoMeta')->has('posts')->get()->each(function (PostCategory $c) use (&$out): void {
+            $hrefs = $this->locales(fn (string $l): ?string => $c->getTranslation('slug', $l, false) ? $c->url($l) : null);
+            array_push($out, ...$this->perLocale($hrefs, $c, $c->updated_at?->toAtomString(), 0.5, 'weekly', []));
         });
 
         return $out;
@@ -191,7 +265,7 @@ final class SitemapBuilder
                 'priority' => $meta?->sitemap_priority ?: $priority,
                 'changefreq' => $meta?->sitemap_changefreq ?: $freq,
                 'alternates' => $alternates,
-                'images' => $images,
+                'images' => self::imagesEnabled() ? $images : [],
             ];
         }
 

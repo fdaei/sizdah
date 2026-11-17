@@ -10,6 +10,7 @@ use App\Models\Translations\PostTranslation;
 use App\Services\Seo\SeoAnalyzer;
 use App\Traits\HasSeo;
 use App\Traits\HasTranslations;
+use App\Traits\OptimizesImages;
 use App\Traits\Publishable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -34,6 +35,10 @@ final class Post extends Model implements HasLocalisedSlugs
     use HasTranslations;
     use Publishable;
     use SoftDeletes;
+    use OptimizesImages;
+
+    /** @var list<string> Image columns that get responsive variants. */
+    protected array $optimizedImages = ['cover_path'];
 
     protected $fillable = [
         'post_category_id',

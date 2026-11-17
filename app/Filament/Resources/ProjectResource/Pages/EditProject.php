@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\ProjectResource\Pages;
 
+use App\Filament\Actions\PreviewAction;
 use App\Filament\Concerns\HandlesTranslations;
 use App\Filament\Resources\ProjectResource;
 use Filament\Actions;
@@ -18,12 +19,7 @@ final class EditProject extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('preview')
-                ->icon('heroicon-o-eye')
-                ->color('gray')
-                ->url(fn (): string => $this->getRecord()->url(config('locales.fallback')))
-                ->openUrlInNewTab()
-                ->visible(fn (): bool => $this->getRecord()->isPublished()),
+            PreviewAction::make(),
 
             Actions\DeleteAction::make(),
             Actions\RestoreAction::make(),

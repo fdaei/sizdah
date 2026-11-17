@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Models\Translations\ClientTranslation;
 use App\Traits\HasTranslations;
+use App\Traits\OptimizesImages;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,10 @@ final class Client extends Model
 {
     use HasFactory;
     use HasTranslations;
+    use OptimizesImages;
+
+    /** @var list<string> Image columns that get responsive variants. */
+    protected array $optimizedImages = ['logo_path'];
 
     protected $fillable = [
         'logo_path',

@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Models\Translations\TeamMemberTranslation;
 use App\Traits\HasSeo;
 use App\Traits\HasTranslations;
+use App\Traits\OptimizesImages;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +19,10 @@ final class TeamMember extends Model
     use HasFactory;
     use HasSeo;
     use HasTranslations;
+    use OptimizesImages;
+
+    /** @var list<string> Image columns that get responsive variants. */
+    protected array $optimizedImages = ['photo_path'];
 
     protected $fillable = [
         'photo_path',

@@ -16,5 +16,6 @@ final class PostCategoryTranslation extends Model
         'locale',
         'name',
         'slug',
+        'description',
     ];
 }

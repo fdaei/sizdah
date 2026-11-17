@@ -5,8 +5,10 @@ declare(strict_types=1);
 use App\Enums\PublicationStatus;
 use App\Models\Post;
 use App\Models\Setting;
+use App\Models\User;
 use App\Services\Sitemap\SitemapBuilder;
 use App\Support\SiteSettings;
+use Database\Seeders\RolePermissionSeeder;
 
 function sitemapPost(string $slug, array $seo = [], PublicationStatus $status = PublicationStatus::Published): Post
 {
@@ -85,4 +87,28 @@ it('outputs absolute og:image URLs', function (): void {
 
     expect($this->get('/fa/insights/تصویر')->getContent())
         ->toContain('<meta property="og:image" content="'.url('/storage/posts/c.webp').'"');
+});
+
+it('serves a browser stylesheet and references it from the XML', function (): void {
+    $this->get('/sitemap.xsl')->assertOk()->assertHeader('Content-Type', 'text/xsl; charset=UTF-8');
+    expect($this->get('/sitemap.xml')->getContent())->toContain('<?xml-stylesheet type="text/xsl" href="'.url('/sitemap.xsl').'"?>');
+});
+
+it('drops disabled content types and images per the Sitemap admin settings', function (): void {
+    sitemapPost('یک');
+    Setting::updateOrCreate(['key' => 'sitemap_types'], ['group' => 'seo', 'value' => ['value' => ['pages']], 'is_translatable' => false]);
+    Setting::updateOrCreate(['key' => 'sitemap_images'], ['group' => 'seo', 'value' => ['value' => false], 'is_translatable' => false]);
+    SiteSettings::flush();
+    SitemapBuilder::bust();
+
+    expect($this->get('/sitemap.xml')->getContent())->not->toContain('sitemap-posts-1.xml')->toContain('sitemap-pages-1.xml');
+    $this->get('/sitemap-posts-1.xml')->assertNotFound();
+});
+
+it('lets admins open the Sitemap page', function (): void {
+    $this->seed(RolePermissionSeeder::class);
+    $admin = User::factory()->create();
+    $admin->assignRole('admin');
+
+    $this->actingAs($admin)->get('/admin/sitemap')->assertOk()->assertSee('نقشه سایت')->assertSee(url('/sitemap.xml'));
 });

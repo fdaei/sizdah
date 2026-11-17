@@ -50,8 +50,9 @@ Route::get('{indexNowKey}.txt', function (string $indexNowKey) {
     return response($indexNowKey, 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
 })->where('indexNowKey', '[a-f0-9]{32}')->name('indexnow.key');
 Route::get('sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('sitemap.xsl', [SitemapController::class, 'stylesheet'])->name('sitemap.xsl');
 Route::get('sitemap-{type}-{page}.xml', [SitemapController::class, 'type'])
-    ->where(['type' => 'pages|services|projects|posts', 'page' => '[1-9][0-9]*'])
+    ->where(['type' => 'pages|services|projects|posts|categories', 'page' => '[1-9][0-9]*'])
     ->name('sitemap.type');
 Route::get('sitemap-{locale}.xml', [SitemapController::class, 'legacyLocale'])
     ->where('locale', $localePattern)
@@ -59,7 +60,7 @@ Route::get('sitemap-{locale}.xml', [SitemapController::class, 'legacyLocale'])
 
 Route::prefix('{locale}')
     ->where(['locale' => $localePattern])
-    ->middleware('locale')
+    ->middleware(['locale', 'preview'])
     ->group(function (): void {
 
         // 1 — Home                       Figma 268:2962 (canonical dark)
@@ -81,6 +82,9 @@ Route::prefix('{locale}')
 
         // 6 — Blog listing               Figma 268:4158
         Route::get('insights', [PostController::class, 'index'])->name('insights.index');
+
+        // 6b — Category archive (own SEO meta, canonical, sitemap entry)
+        Route::get('insights/category/{category}', [PostController::class, 'category'])->name('insights.category');
 
         // 7 — Single blog                Figma 285:4590
         Route::get('insights/{post}', [PostController::class, 'show'])->name('insights.show');

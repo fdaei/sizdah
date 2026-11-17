@@ -74,7 +74,7 @@ const filterOptions = computed<FilterOption[]>(() => [
   ...props.categories.map((category) => ({
     value: category.slug,
     label: category.name,
-    href: route('insights.index', { category: category.slug }),
+    href: route('insights.category', { category: category.slug }),
   })),
 ])
 

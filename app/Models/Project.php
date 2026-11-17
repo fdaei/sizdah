@@ -10,6 +10,7 @@ use App\Enums\SectionType;
 use App\Models\Translations\ProjectTranslation;
 use App\Traits\HasSeo;
 use App\Traits\HasTranslations;
+use App\Traits\OptimizesImages;
 use App\Traits\Publishable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,6 +37,10 @@ final class Project extends Model implements HasLocalisedSlugs
     use HasTranslations;
     use Publishable;
     use SoftDeletes;
+    use OptimizesImages;
+
+    /** @var list<string> Image columns that get responsive variants. */
+    protected array $optimizedImages = ['cover_path', 'banner_path', 'before_image_path', 'after_image_path'];
 
     protected $fillable = [
         'industry_id',

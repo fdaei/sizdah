@@ -52,6 +52,15 @@ final class AdminPanelProvider extends PanelProvider
                 'gray' => Color::Slate,
             ])
             ->font('Inter')
+            // Filament's image editor saves crops via canvas.toBlob() with no
+            // quality argument (browser default ≈0.92 → visible JPEG/WebP loss).
+            // Default it to maximum quality inside the admin panel only.
+            ->renderHook(
+                'panels::head.end',
+                fn (): string => '<script>(function(){var t=HTMLCanvasElement.prototype.toBlob;'
+                    .'HTMLCanvasElement.prototype.toBlob=function(cb,type,q){'
+                    .'return t.call(this,cb,type,q===undefined?1:q);};})();</script>',
+            )
             ->maxContentWidth('full')
             ->discoverResources(
                 in: app_path('Filament/Resources'),

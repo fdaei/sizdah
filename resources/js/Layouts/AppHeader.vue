@@ -7,6 +7,7 @@ import CtaButton from '@/Components/CtaButton.vue'
 import LanguageSwitcher from '@/Components/LanguageSwitcher.vue'
 import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
 import doodleUrl from '~img/sizdah/shared/header-doodle.svg'
+import NavSubmenu from './NavSubmenu.vue'
 import type { NavItem, SharedProps } from '@/types'
 
 /**
@@ -39,6 +40,7 @@ const links = computed(() => items.value.filter((item) => !item.isCta))
 const currentUrl = computed(() => page.url)
 
 function isActive(item: NavItem): boolean {
+  if (!item.url) return item.children.some(isActive)
   // page.url includes the locale prefix and any query string.
   const path = currentUrl.value.split('?')[0].replace(/\/$/, '')
   const target = new URL(item.url, 'http://x').pathname.replace(/\/$/, '')
@@ -65,9 +67,11 @@ function isActive(item: NavItem): boolean {
           decoration underneath.
         -->
         <ul class="flex items-baseline gap-6">
-          <li v-for="item in links" :key="item.id">
-            <Link
-              :href="item.url"
+          <li v-for="item in links" :key="item.id" class="group/nav relative">
+            <component
+              :is="item.url ? Link : 'span'"
+              :tabindex="item.url ? undefined : 0"
+              :href="item.url || undefined"
               :target="item.target"
               :aria-current="isActive(item) ? 'page' : undefined"
               class="flex flex-col items-center justify-center px-1 py-1 font-normal transition-colors duration-200 ease-brand"
@@ -101,7 +105,8 @@ function isActive(item: NavItem): boolean {
                 />
               </span>
               <span v-else class="block h-[9.676px] w-[45.276px]" aria-hidden="true" />
-            </Link>
+            </component>
+            <NavSubmenu v-if="item.children.length" :items="item.children" />
           </li>
         </ul>
       </nav>

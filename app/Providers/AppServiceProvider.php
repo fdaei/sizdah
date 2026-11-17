@@ -50,9 +50,21 @@ final class AppServiceProvider extends ServiceProvider
             SeoMeta::class, Setting::class,
             PostTranslation::class, ProjectTranslation::class,
             ServiceTranslation::class, PageTranslation::class,
+            \App\Models\PostCategory::class, \App\Models\Translations\PostCategoryTranslation::class,
         ] as $model) {
             $model::saved(fn () => SitemapBuilder::bust());
             $model::deleted(fn () => SitemapBuilder::bust());
+        }
+
+        // Category chips on /insights are cached per locale.
+        foreach ([\App\Models\PostCategory::class, \App\Models\Translations\PostCategoryTranslation::class] as $model) {
+            $flush = function (): void {
+                foreach (array_keys(config('locales.supported')) as $l) {
+                    \Illuminate\Support\Facades\Cache::forget("insights.categories.{$l}");
+                }
+            };
+            $model::saved($flush);
+            $model::deleted($flush);
         }
 
         Field::configureUsing(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\PageResource\Pages;
 
+use App\Filament\Actions\PreviewAction;
 use App\Filament\Concerns\HandlesTranslations;
 use App\Filament\Resources\PageResource;
 use Filament\Actions;
@@ -18,6 +19,7 @@ final class EditPage extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            PreviewAction::make(),
             Actions\DeleteAction::make(),
         ];
     }

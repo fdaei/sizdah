@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Models\Translations\SectionItemTranslation;
 use App\Traits\HasTranslations;
+use App\Traits\OptimizesImages;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +19,10 @@ final class SectionItem extends Model
 {
     use HasFactory;
     use HasTranslations;
+    use OptimizesImages;
+
+    /** @var list<string> Image columns that get responsive variants. */
+    protected array $optimizedImages = ['image_path'];
 
     protected $fillable = [
         'page_section_id',

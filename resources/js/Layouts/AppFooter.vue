@@ -143,6 +143,17 @@ const contact = computed(() => settings.value.contact)
                   >
                     {{ child.label }}
                   </Link>
+                  <ul v-if="child.children.length" class="mt-2 flex flex-col gap-2 border-s border-ink-800 ps-3">
+                    <li v-for="grand in child.children" :key="grand.id">
+                      <Link
+                        :href="grand.url"
+                        :target="grand.target"
+                        class="text-body-md text-ink-200 transition-colors duration-200 ease-brand hover:text-brand"
+                      >
+                        {{ grand.label }}
+                      </Link>
+                    </li>
+                  </ul>
                 </li>
               </ul>
             </nav>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Enums\PublicationStatus;
+use App\Support\Preview;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
@@ -23,12 +24,23 @@ trait Publishable
 {
     public function scopePublished(Builder $query): Builder
     {
-        return $query
-            ->where('status', PublicationStatus::Published)
-            ->where(function (Builder $q): void {
-                $q->whereNull('published_at')
-                    ->orWhere('published_at', '<=', now());
+        // An admin preview link (App\Support\Preview) unlocks exactly one row
+        // of this model for the current request, whatever its status.
+        $previewKey = Preview::allowedKey(static::class);
+
+        return $query->where(function (Builder $outer) use ($previewKey): void {
+            $outer->where(function (Builder $live): void {
+                $live->where('status', PublicationStatus::Published)
+                    ->where(function (Builder $q): void {
+                        $q->whereNull('published_at')
+                            ->orWhere('published_at', '<=', now());
+                    });
             });
+
+            if ($previewKey !== null) {
+                $outer->orWhere($this->getQualifiedKeyName(), $previewKey);
+            }
+        });
     }
 
     public function scopeDraft(Builder $query): Builder
