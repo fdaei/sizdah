@@ -40,4 +40,6 @@ return [
     'choose_testimonial' => 'Choose testimonial',
     'show_testimonial' => 'Show testimonial :n',
 
+    'play_video' => 'Play video: :title',
+
 ];

@@ -284,11 +284,20 @@ export interface PostSummary {
   image: MediaImage | null
 }
 
+export interface TocItem {
+  id: string
+  text: string
+  level: number
+}
+
 export interface PostDetail extends PostSummary {
   /** Sent back by the lead-magnet form so the article's own file is emailed. */
   id: number
   subtitle: string
   content: string
+  /** Render-time table of contents; empty when disabled or too few headings. */
+  toc: TocItem[]
+  tocCollapsed: boolean
   author: { name: string; email: string | null } | null
   tags: { slug: string; name: string }[]
   related: PostSummary[]

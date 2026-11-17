@@ -46,6 +46,7 @@ final class Post extends Model implements HasLocalisedSlugs
         'status',
         'published_at',
         'is_featured',
+        'toc_enabled',
         'cover_path',
         'reading_minutes',
         'lead_magnet_path',
@@ -71,6 +72,7 @@ final class Post extends Model implements HasLocalisedSlugs
             'status' => PublicationStatus::class,
             'published_at' => 'datetime',
             'is_featured' => 'boolean',
+            'toc_enabled' => 'boolean',
             'reading_minutes' => 'integer',
             'lead_magnet_send_email' => 'boolean',
         ];

@@ -16,4 +16,6 @@ return [
     'copy_link' => 'Copy link',
     'link_copied' => 'Link copied',
 
+    'toc_title' => 'Table of contents',
+
 ];

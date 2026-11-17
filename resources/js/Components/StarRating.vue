@@ -46,6 +46,8 @@ function submit(value: number): void {
     <p v-if="summary.count > 0" class="mt-3 text-body-md text-ink-300">
       {{ t('forms.rating_summary', { avg: summary.average, count: summary.count }) }}
     </p>
-    <p v-if="form.errors.rating" class="mt-2 text-body-md text-red-400" role="alert">{{ form.errors.rating }}</p>
+    <p v-if="form.errors.rating" class="mt-2 text-body-md text-red-400" role="alert">
+      {{ form.errors.rating }}
+    </p>
   </section>
 </template>

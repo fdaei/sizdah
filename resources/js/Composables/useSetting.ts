@@ -14,7 +14,9 @@ export function useSetting<T = unknown>(path: string, fallback?: T): ComputedRef
       .split('.')
       .reduce<unknown>(
         (node, segment) =>
-          node !== null && typeof node === 'object' ? (node as Record<string, unknown>)[segment] : undefined,
+          node !== null && typeof node === 'object'
+            ? (node as Record<string, unknown>)[segment]
+            : undefined,
         page.props.settings,
       )
 
