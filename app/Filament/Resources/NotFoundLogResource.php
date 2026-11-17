@@ -64,6 +64,7 @@ final class NotFoundLogResource extends Resource
                 Tables\Columns\TextColumn::make('hits')->label('تعداد (Hits)')->numeric()->sortable(),
                 Tables\Columns\TextColumn::make('referrer')->label('ارجاع‌دهنده (Referrer)')->limit(50)->placeholder('—')
                     ->tooltip(fn (NotFoundLog $r): ?string => $r->referrer)->extraAttributes(['dir' => 'ltr'])->toggleable(),
+                Tables\Columns\IconColumn::make('is_bot')->label('ربات')->boolean()->sortable(),
                 Tables\Columns\TextColumn::make('user_agent')->label('User agent')->limit(40)->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('last_seen_at')->label('آخرین بار (Last seen)')->since()->sortable(),
                 Tables\Columns\TextColumn::make('created_at')->label('اولین بار')->since()->sortable()->toggleable(isToggledHiddenByDefault: true),
@@ -73,6 +74,8 @@ final class NotFoundLogResource extends Resource
                     ->query(fn ($q) => $q->where('last_seen_at', '>=', now()->subDays(7))),
                 Tables\Filters\Filter::make('with_referrer')->label('دارای ارجاع‌دهنده (لینک شکسته)')
                     ->query(fn ($q) => $q->whereNotNull('referrer')),
+                Tables\Filters\TernaryFilter::make('is_bot')->label('بازدیدکننده')
+                    ->trueLabel('فقط ربات‌ها')->falseLabel('فقط انسان‌ها'),
             ])
             ->actions([
                 Tables\Actions\Action::make('redirect')
