@@ -1,6 +1,7 @@
 # PLAN — Native SEO / CMS feature parity (Rank Math · Yoast · Schema Pro · WP Rocket · TOC Plus)
 
-Status: **draft, awaiting approval** (2026-11-17). Based on a step-zero survey of the repo.
+Status: **implemented** on branch `feat/native-seo-cms` (2026-11-17). User guide: `SEO_FEATURES.md`.
+Page-builder gallery/generic blocks (§1.5) and the Phase 1 seeder were not needed: defaults live in the lang files, so nothing changes until an admin edits.
 
 ## 0. What already exists (do NOT rebuild)
 
@@ -64,5 +65,5 @@ Locale: site is **fa-only by decision** (`config/locales.php`); everything new s
 ## 2. Order & commits
 Phase 1 → 5, one branch (`feat/native-seo-cms`), one commit per phase after tests pass.
 
-## 3. Blockers before starting
+## 3. Blockers before starting (resolved: WIP committed separately as de0173e)
 - **Working tree has ~53 uncommitted modified files on `main`** (Filament resources, models, SEO services, sitemap, routes). These overlap heavily with this plan. They must be committed/stashed by the owner first, otherwise per-phase commits would mix that work in.
