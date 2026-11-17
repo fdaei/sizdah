@@ -30,7 +30,7 @@ final class RedirectResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-path-rounded-square';
 
-    protected static ?string $navigationGroup = 'Advanced';
+    protected static ?string $navigationGroup = 'SEO';
 
     protected static ?string $navigationLabel = 'ریدایرکت‌ها (Redirections)';
 

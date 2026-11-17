@@ -20,10 +20,10 @@ use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Filters\BaseFilter;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use App\Support\UiStrings;
 use Inertia\Inertia;
 
 final class AppServiceProvider extends ServiceProvider
@@ -111,34 +111,6 @@ final class AppServiceProvider extends ServiceProvider
      */
     private function shareTranslations(): void
     {
-        Inertia::share('translations', function (): array {
-            $locale = app()->getLocale();
-
-            $load = function () use ($locale): array {
-                $path = lang_path($locale);
-
-                if (! File::isDirectory($path)) {
-                    return [];
-                }
-
-                $translations = [];
-
-                foreach (File::files($path) as $file) {
-                    if ($file->getExtension() !== 'php') {
-                        continue;
-                    }
-
-                    $translations[$file->getFilenameWithoutExtension()] = require $file->getPathname();
-                }
-
-                return $translations;
-            };
-
-            if ($this->app->environment('local')) {
-                return $load();
-            }
-
-            return cache()->rememberForever("translations.{$locale}", $load);
-        });
+        Inertia::share('translations', fn (): array => UiStrings::tree(app()->getLocale()));
     }
 }

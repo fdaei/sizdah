@@ -31,6 +31,11 @@ return [
     'start_conversation' => 'شروع گفتگو',
     'lets_talk' => 'گفتگو کنیم',
 
+    'choose_project' => 'انتخاب پروژه',
+    'show_item' => 'نمایش :name',
+    'choose_testimonial' => 'انتخاب نظر مشتری',
+    'show_testimonial' => 'نمایش نظر :n',
+
     'empty_projects' => 'هنوز پروژه‌ای برای نمایش وجود ندارد.',
     'empty_posts' => 'هنوز مقاله‌ای منتشر نشده است.',
     'empty_results' => 'موردی با فیلترهای شما مطابقت نداشت.',

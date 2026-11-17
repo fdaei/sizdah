@@ -29,7 +29,7 @@ final class IndustryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $navigationGroup = 'Projects';
+    protected static ?string $navigationGroup = 'Content';
 
     protected static ?string $navigationLabel = 'Project categories';
 

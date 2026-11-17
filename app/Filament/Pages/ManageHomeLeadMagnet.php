@@ -33,7 +33,7 @@ final class ManageHomeLeadMagnet extends Page implements HasForms
 
     protected static ?string $navigationIcon = 'heroicon-o-document-arrow-down';
 
-    protected static ?string $navigationGroup = 'Website setup';
+    protected static ?string $navigationGroup = 'Appearance';
 
     protected static ?int $navigationSort = 4;
 
@@ -51,7 +51,7 @@ final class ManageHomeLeadMagnet extends Page implements HasForms
 
     public static function getNavigationGroup(): ?string
     {
-        return __('admin.navigation.groups.Website setup');
+        return __('admin.navigation.groups.Appearance');
     }
 
     public static function getNavigationLabel(): string

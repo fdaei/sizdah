@@ -7,6 +7,11 @@ return [
     ],
     'navigation' => [
         'groups' => [
+            'Content' => 'محتوا',
+            'SEO' => 'سئو',
+            'Appearance' => 'ظاهر سایت',
+            'Performance' => 'عملکرد',
+            'Settings' => 'تنظیمات',
             'Website content' => 'محتوای سایت',
             'Projects' => 'پروژه‌ها',
             'Articles' => 'مقاله‌ها',

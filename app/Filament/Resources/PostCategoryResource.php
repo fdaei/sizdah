@@ -30,7 +30,7 @@ final class PostCategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-folder';
 
-    protected static ?string $navigationGroup = 'Articles';
+    protected static ?string $navigationGroup = 'Content';
 
     protected static ?string $navigationLabel = 'Article categories';
 

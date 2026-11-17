@@ -29,7 +29,7 @@ final class TeamMemberResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
-    protected static ?string $navigationGroup = 'Website content';
+    protected static ?string $navigationGroup = 'Content';
 
     protected static ?string $navigationLabel = 'Team members';
 

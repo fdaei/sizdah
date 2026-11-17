@@ -342,7 +342,7 @@ const strategyLead = computed(() =>
         </section>
 
         <section v-if="props.project.deliverables.length" class="mt-[187px] flex flex-col gap-[67px]" data-reveal-group>
-          <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">خروجی های پروژه</h2>
+          <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">{{ t('work.outputs') }}</h2>
           <ul class="flex flex-col gap-4">
             <li v-for="(item, index) in props.project.deliverables" :key="`mobile-deliverable-${index}`" class="surface-case-card sketch-frame flex min-h-[146px] flex-col items-start justify-center gap-4 overflow-hidden rounded-lg p-4 text-right" data-reveal>
               <span class="latin-nums text-[32px] font-semibold leading-none text-brand" aria-hidden="true">{{ ordinal(index) }}</span>
@@ -355,7 +355,7 @@ const strategyLead = computed(() =>
         </section>
 
         <section v-if="props.project.showcase.length" class="mt-20 flex flex-col gap-[25px]" data-reveal-group>
-          <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">محتوا های منتخب</h2>
+          <h2 class="text-right text-[24px] font-semibold leading-normal text-brand-50">{{ t('work.showcase') }}</h2>
           <!--
             Same chips and the same `activeTag` state as the desktop showcase,
             so the phone row really filters the gallery below it.

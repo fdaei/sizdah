@@ -255,14 +255,14 @@ onBeforeUnmount(() => {
             />
           </div>
 
-          <div class="mt-5 flex -translate-x-1 items-center justify-center gap-2 lg:hidden" aria-label="انتخاب پروژه">
+          <div class="mt-5 flex -translate-x-1 items-center justify-center gap-2 lg:hidden" :aria-label="t('common.choose_project')">
             <button
               v-for="(project, index) in props.projects"
               :key="`indicator-${project.slug}`"
               type="button"
               class="size-2 rounded-full border transition-all duration-300"
               :class="active === index ? 'border-brand bg-brand' : 'border-ink-500 bg-transparent'"
-              :aria-label="`نمایش ${project.title}`"
+              :aria-label="t('common.show_item', { name: project.title })"
               :aria-current="active === index ? 'true' : undefined"
               @click="active = index"
             />

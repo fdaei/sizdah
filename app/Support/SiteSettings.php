@@ -180,6 +180,7 @@ final class SiteSettings
     {
         Cache::forget(self::CACHE_KEY);
         Cache::forget(self::SOCIAL_CACHE_KEY);
+        UiStrings::flush();
     }
 
     private static function mediaUrl(?string $path): ?string

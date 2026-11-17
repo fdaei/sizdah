@@ -14,7 +14,7 @@ final class SeoGuide extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
-    protected static ?string $navigationGroup = 'Website setup';
+    protected static ?string $navigationGroup = 'SEO';
 
     protected static ?int $navigationSort = 90;
 
@@ -24,7 +24,7 @@ final class SeoGuide extends Page
 
     public static function getNavigationGroup(): ?string
     {
-        return __('admin.navigation.groups.Website setup');
+        return __('admin.navigation.groups.SEO');
     }
 
     public static function getNavigationLabel(): string

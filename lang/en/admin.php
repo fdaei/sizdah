@@ -7,6 +7,11 @@ return [
     ],
     'navigation' => [
         'groups' => [
+            'Content' => 'Content',
+            'SEO' => 'SEO',
+            'Appearance' => 'Appearance',
+            'Performance' => 'Performance',
+            'Settings' => 'Settings',
             'Website content' => 'Website content',
             'Projects' => 'Projects',
             'Articles' => 'Articles',

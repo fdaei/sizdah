@@ -42,7 +42,7 @@ final class ManageSeoSettings extends Page implements HasForms
 
     protected static ?string $navigationIcon = 'heroicon-o-magnifying-glass-circle';
 
-    protected static ?string $navigationGroup = 'Website setup';
+    protected static ?string $navigationGroup = 'SEO';
 
     protected static ?int $navigationSort = 3;
 
@@ -123,7 +123,7 @@ final class ManageSeoSettings extends Page implements HasForms
 
     public static function getNavigationGroup(): ?string
     {
-        return __('admin.navigation.groups.Website setup');
+        return __('admin.navigation.groups.SEO');
     }
 
     public static function getNavigationLabel(): string

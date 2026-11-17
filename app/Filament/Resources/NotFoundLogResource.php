@@ -26,7 +26,7 @@ final class NotFoundLogResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
 
-    protected static ?string $navigationGroup = 'Advanced';
+    protected static ?string $navigationGroup = 'SEO';
 
     protected static ?string $navigationLabel = 'گزارش ۴۰۴ (404 monitor)';
 

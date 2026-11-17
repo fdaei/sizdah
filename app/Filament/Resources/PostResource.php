@@ -43,7 +43,7 @@ final class PostResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
-    protected static ?string $navigationGroup = 'Articles';
+    protected static ?string $navigationGroup = 'Content';
 
     protected static ?int $navigationSort = 1;
 

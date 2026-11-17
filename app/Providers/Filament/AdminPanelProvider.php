@@ -95,18 +95,18 @@ final class AdminPanelProvider extends PanelProvider
                     ->sort(-2),
             ])
             ->navigationGroups([
-                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Website content'))
+                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Content'))
                     ->icon('heroicon-o-document-text'),
-                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Projects'))
-                    ->icon('heroicon-o-briefcase'),
-                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Articles'))
-                    ->icon('heroicon-o-newspaper'),
-                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Website setup'))
-                    ->icon('heroicon-o-globe-alt'),
+                NavigationGroup::make(fn (): string => __('admin.navigation.groups.SEO'))
+                    ->icon('heroicon-o-magnifying-glass'),
+                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Appearance'))
+                    ->icon('heroicon-o-paint-brush'),
+                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Performance'))
+                    ->icon('heroicon-o-bolt'),
+                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Settings'))
+                    ->icon('heroicon-o-cog-6-tooth'),
                 NavigationGroup::make(fn (): string => __('admin.navigation.groups.Messages'))
                     ->icon('heroicon-o-inbox'),
-                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Advanced'))
-                    ->icon('heroicon-o-cog-6-tooth'),
             ])
             ->middleware([
                 EncryptCookies::class,
