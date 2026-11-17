@@ -14,12 +14,14 @@ use App\Models\Translations\PageTranslation;
 use App\Models\Translations\PostTranslation;
 use App\Models\Translations\ProjectTranslation;
 use App\Models\Translations\ServiceTranslation;
+use App\Services\Performance\PageCache;
 use App\Services\Seo\IndexNow;
 use App\Services\Sitemap\SitemapBuilder;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Filters\BaseFilter;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
@@ -43,6 +45,16 @@ final class AppServiceProvider extends ServiceProvider
         }
         PostTranslation::saved(fn ($t) => IndexNow::submitFor(Post::query()->find($t->post_id)));
         ProjectTranslation::saved(fn ($t) => IndexNow::submitFor(Project::query()->find($t->project_id)));
+
+        // Page cache: any model write that can change public output busts it.
+        // Denylist (not allowlist) so a new content model can never serve stale pages.
+        Event::listen(['eloquent.saved: *', 'eloquent.deleted: *'], function (string $event): void {
+            $model = trim(explode(':', $event, 2)[1]);
+
+            if (! in_array($model, PageCache::IGNORED_MODELS, true)) {
+                PageCache::flush();
+            }
+        });
 
         // Sitemaps are cached; any content / SEO / settings write invalidates them.
         foreach ([

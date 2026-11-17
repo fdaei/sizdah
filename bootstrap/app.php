@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use App\Http\Middleware\ApplyRedirects;
+use App\Http\Middleware\CachePublicPages;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\MinifyHtml;
 use App\Http\Middleware\RedirectToCanonicalHost;
 use App\Http\Middleware\RedirectToLocalisedRoute;
 use App\Http\Middleware\ResolvePreview;
@@ -33,6 +35,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(ApplyRedirects::class);
 
         $middleware->web(append: [
+            // Outer → inner: cache wraps minify, so stored pages are already minified.
+            CachePublicPages::class,
+            MinifyHtml::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
