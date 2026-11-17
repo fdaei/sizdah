@@ -14,6 +14,8 @@ use App\Models\SectionItem;
 use App\Models\Service;
 use App\Models\TeamMember;
 use App\Models\Testimonial;
+use App\Services\Content\ArticlePipeline;
+use App\Support\ContentTools;
 use App\Support\JalaliDate;
 use App\Support\Numerals;
 use App\Support\RichContent;
@@ -215,11 +217,23 @@ final class ContentTransformer
      */
     public static function postDetail(Post $post): array
     {
+        $locale = app()->getLocale();
+        $slug = (string) $post->getTranslation('slug');
+        $article = ArticlePipeline::render(
+            RichContent::render($post->getTranslation('content')),
+            $locale,
+            $slug === '' ? null : route('insights.show', ['locale' => $locale, 'post' => $slug]),
+            $post->toc_enabled,
+        );
+
         return array_merge(self::postSummary($post), [
             // Sent back by the lead-magnet form so the right file is emailed.
             'id' => $post->getKey(),
             'subtitle' => (string) $post->getTranslation('subtitle'),
-            'content' => RichContent::render($post->getTranslation('content')),
+            // Render-time TOC ids, auto internal links, lazy media (DB untouched).
+            'content' => $article['html'],
+            'toc' => $article['toc'],
+            'tocCollapsed' => (bool) ContentTools::get('toc_collapsed'),
             'image' => MediaTransformer::make(
                 $post->cover_path,
                 $post->getTranslation('cover_alt'),

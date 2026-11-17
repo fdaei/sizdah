@@ -10,7 +10,7 @@ return [
     'breadcrumbs' => [
         'home' => 'خانه',
         'work' => ['index' => 'نمونه‌کارها'],
-        'insights' => ['index' => 'مقالات'],
+        'insights' => ['index' => 'مقالات', 'category' => 'دسته‌بندی'],
         'services' => 'خدمات',
         'about' => 'درباره ما',
         'contact' => 'تماس با ما',

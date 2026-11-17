@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import BlogCard from '@/Components/BlogCard.vue'
 import ArticleMeta from '@/Components/ArticleMeta.vue'
 import ArticleShare from '@/Components/ArticleShare.vue'
 import LeadMagnetBanner from '@/Components/LeadMagnetBanner.vue'
 import SeoHead from '@/Components/SeoHead.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
+import TocBox from '@/Components/TocBox.vue'
 import { useTranslations } from '@/Composables/useTranslations'
+import { useVideoFacade } from '@/Composables/useVideoFacade'
 import type { PageSectionData, PostDetail, SeoMeta } from '@/types'
 import relatedRuleUrl from '~img/sizdah/insights/related-rule.svg'
 
@@ -50,6 +52,9 @@ const props = defineProps<{
 
 const { t } = useTranslations()
 
+const articleBody = ref<HTMLElement | null>(null)
+useVideoFacade(articleBody)
+
 // The article editor exposes [[lead_magnet]] as an insertion marker. Keep the
 // authored rich text intact while replacing that marker with the actual
 // interactive banner at render time.
@@ -78,7 +83,7 @@ const articleContent = computed(() => {
     even gap-12 this used to run on: the blocks are 88 / 64 / 113 / 72 / 81 /
     224 / 123 apart, so each one carries its own margin instead.
   -->
-  <article class="section-first overflow-x-clip pb-[123px]">
+  <article ref="articleBody" class="section-first overflow-x-clip pb-[123px]">
     <div class="container-sizdah relative isolate flex flex-col">
       <!--
         285:5060 — a 670 track wrapping the 612 column (285:5061) whose title
@@ -149,6 +154,7 @@ const articleContent = computed(() => {
         </div>
 
         <div class="mx-auto w-full max-w-[831px]">
+          <TocBox v-if="props.post.toc?.length" :items="props.post.toc" :collapsed="props.post.tocCollapsed" />
           <!-- eslint-disable-next-line vue/no-v-html -- admin-authored rich text -->
           <div class="rich-prose rich-prose-article figma-article-prose" v-html="articleContent.before" />
         </div>

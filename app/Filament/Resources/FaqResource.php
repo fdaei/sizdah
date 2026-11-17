@@ -26,7 +26,7 @@ final class FaqResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-question-mark-circle';
 
-    protected static ?string $navigationGroup = 'Website content';
+    protected static ?string $navigationGroup = 'Content';
 
     protected static ?int $navigationSort = 5;
 

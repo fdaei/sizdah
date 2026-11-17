@@ -43,7 +43,7 @@ final class PostResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
-    protected static ?string $navigationGroup = 'Articles';
+    protected static ?string $navigationGroup = 'Content';
 
     protected static ?int $navigationSort = 1;
 
@@ -123,6 +123,13 @@ final class PostResource extends Resource
                         Toggle::make('is_featured')
                             ->label('Show as the main article')
                             ->helperText('Displays this article as the large card at the top of the Insights page.'),
+
+                        Select::make('toc_enabled')
+                            ->label('فهرست مطالب (Table of contents)')
+                            ->native(false)
+                            ->placeholder('طبق تنظیمات سراسری')
+                            ->options([1 => 'نمایش داده شود', 0 => 'نمایش داده نشود'])
+                            ->helperText('خالی = طبق «محتوا ← فهرست مطالب و لینک‌سازی».'),
                     ]),
 
                 Grid::make(1)->columnSpan(1)->schema([

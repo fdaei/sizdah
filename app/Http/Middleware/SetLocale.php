@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Support\UiStrings;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
@@ -32,6 +33,7 @@ final class SetLocale
 
         // Carbon drives all human-readable dates (post published_at, etc).
         Carbon::setLocale($locale);
+        UiStrings::applyToTranslator($locale);
 
         // Every route() and url() call inherits the active locale, so links
         // generated in controllers and Ziggy stay inside the current language.

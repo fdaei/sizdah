@@ -10,6 +10,7 @@ use Filament\Forms\ComponentContainer;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -28,7 +29,7 @@ use Illuminate\Support\HtmlString;
  */
 final class WordPressLinkAction extends Action
 {
-    private const REL_FLAGS = ['nofollow', 'sponsored', 'ugc'];
+    private const REL_FLAGS = ['sponsored', 'ugc'];
 
     public static function getDefaultName(): ?string
     {
@@ -51,6 +52,7 @@ final class WordPressLinkAction extends Action
                     'href' => $arguments['href'] ?? '',
                     'id' => $arguments['id'] ?? '',
                     'new_tab' => ($arguments['target'] ?? '') === '_blank',
+                    'follow' => in_array('nofollow', $rel, true) ? 'nofollow' : 'follow',
                     'rel_flags' => array_values(array_intersect($rel, self::REL_FLAGS)),
                 ]);
             })
@@ -75,10 +77,19 @@ final class WordPressLinkAction extends Action
                     Toggle::make('new_tab')
                         ->label('باز شدن در زبانه جدید (Open in new tab)'),
 
-                    CheckboxList::make('rel_flags')
-                        ->label('ویژگی rel لینک (Link rel attributes)')
+                    Radio::make('follow')
+                        ->label('دنبال‌کردن لینک توسط موتور جستجو (follow / nofollow)')
                         ->options([
+                            'follow' => 'follow — گوگل این لینک را دنبال کند و اعتبار منتقل شود',
                             'nofollow' => 'nofollow — گوگل این لینک را دنبال نکند',
+                        ])
+                        ->default('follow')
+                        ->inline()
+                        ->required(),
+
+                    CheckboxList::make('rel_flags')
+                        ->label('ویژگی‌های دیگر rel (Other rel attributes)')
+                        ->options([
                             'sponsored' => 'sponsored — لینک تبلیغاتی / رپورتاژ',
                             'ugc' => 'ugc — محتوای تولیدشده توسط کاربر',
                         ])
@@ -92,6 +103,10 @@ final class WordPressLinkAction extends Action
             ])
             ->action(function (TiptapEditor $component, array $data, array $arguments): void {
                 $rel = array_values(array_intersect((array) ($data['rel_flags'] ?? []), self::REL_FLAGS));
+                // "follow" is the HTML default, so only nofollow is written out.
+                if (($data['follow'] ?? 'follow') === 'nofollow') {
+                    array_unshift($rel, 'nofollow');
+                }
                 if ($data['new_tab'] ?? false) {
                     $rel = [...$rel, 'noopener', 'noreferrer'];
                 }

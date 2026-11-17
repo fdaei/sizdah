@@ -46,6 +46,12 @@ final class SitemapController extends Controller
         return response($xml, 200, ['Content-Type' => 'application/xml; charset=UTF-8']);
     }
 
+    /** Human-readable rendering of the XML in browsers (search engines ignore it). */
+    public function stylesheet(): Response
+    {
+        return response(view('sitemap.xsl')->render(), 200, ['Content-Type' => 'text/xsl; charset=UTF-8']);
+    }
+
     public function type(SitemapBuilder $builder, string $type, int $page): Response
     {
         $urls = $builder->page($type, $page);

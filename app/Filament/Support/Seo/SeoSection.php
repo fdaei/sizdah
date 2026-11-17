@@ -8,6 +8,7 @@ use App\Enums\SchemaArticleType;
 use App\Enums\SchemaPageType;
 use App\Filament\Pages\SeoGuide;
 use App\Models\SeoMeta;
+use App\Services\Seo\OgImageCheck;
 use App\Services\Seo\SeoAnalyzer;
 use App\Services\Seo\SeoTitle;
 use Closure;
@@ -205,7 +206,9 @@ final class SeoSection
             ->directory('seo')
             ->maxSize(5 * 1024)
             ->live()
-            ->helperText('ابعاد پیشنهادی: ۱۲۰۰×۶۳۰ پیکسل.');
+            ->helperText(fn (mixed $state): HtmlString => new HtmlString(
+                e(OgImageCheck::warning(...OgImageCheck::dimensions(self::uploadPath($state))) ?? 'ابعاد پیشنهادی: ۱۲۰۰×۶۳۰ پیکسل.')
+            ));
 
         $preview = fn (string $network): Placeholder => Placeholder::make("seo_{$network}_preview_{$locale}")
             ->label('پیش‌نمایش (Preview)')
@@ -227,6 +230,16 @@ final class SeoSection
                 TextInput::make("{$p}.og_title")->label('عنوان فیسبوک (Facebook title)')->maxLength(250)->live(debounce: 500),
                 Textarea::make("{$p}.og_description")->label('توضیحات فیسبوک (Facebook description)')->rows(2)->maxLength(500)->live(debounce: 500),
                 $image('og_image', 'تصویر فیسبوک (Facebook image)'),
+                Placeholder::make("seo_messenger_preview_{$locale}")
+                    ->label('پیش‌نمایش لینکدین / تلگرام / واتس‌اپ')
+                    ->content(fn (Get $get): HtmlString => new HtmlString(view('filament.seo.messenger-preview', [
+                        'title' => $get("{$p}.og_title")
+                            ?: SeoTitle::render($get("{$p}.title"), (string) $get("translations.{$locale}.{$ctx->titleField}"), $locale),
+                        'description' => $get("{$p}.og_description") ?: $get("{$p}.description") ?: '',
+                        'image' => self::uploadUrl($get("{$p}.og_image")),
+                        'host' => parse_url((string) config('app.url'), PHP_URL_HOST),
+                        'dir' => config("locales.supported.{$locale}.direction"),
+                    ])->render())),
                 Select::make("{$p}.og_type")->label('نوع (og:type)')->native(false)
                     ->placeholder($ctx->isArticle ? 'article (پیش‌فرض)' : 'website (پیش‌فرض)')
                     ->options(['website' => 'website', 'article' => 'article', 'profile' => 'profile']),
@@ -279,6 +292,16 @@ final class SeoSection
                     TextInput::make("{$p}.schema_data.about")->label('موضوع (about)'),
                     TextInput::make("{$p}.schema_data.keywords")->label('کلمات کلیدی (keywords)')
                         ->helperText('خالی = کلمه کلیدی کانونی + مرتبط'),
+                ]),
+
+            Select::make("{$p}.schema_data.mode")
+                ->label('حالت اسکیما (Schema output)')
+                ->native(false)
+                ->placeholder('خودکار + سفارشی (پیش‌فرض)')
+                ->options([
+                    'auto' => 'خودکار + سفارشی (Auto)',
+                    'replace' => 'فقط اسکیمای سفارشی (Replace with custom)',
+                    'off' => 'خاموش — هیچ JSON-LD برای این صفحه (Off)',
                 ]),
 
             Textarea::make("{$p}.custom_schema")
@@ -411,6 +434,18 @@ final class SeoSection
         $value = preg_replace('/[^\p{L}\p{N}]+/u', '-', $value) ?? $value;
 
         return mb_strtolower(trim($value, '-'));
+    }
+
+    private static function uploadPath(mixed $state): ?string
+    {
+        if (is_array($state)) {
+            $state = reset($state);
+        }
+        if ($state instanceof TemporaryUploadedFile) {
+            return $state->getRealPath() ?: null;
+        }
+
+        return is_string($state) && $state !== '' ? Storage::disk('public')->path($state) : null;
     }
 
     private static function uploadUrl(mixed $state): ?string

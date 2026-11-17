@@ -17,4 +17,6 @@ return [
     'copy_link' => 'کپی لینک',
     'link_copied' => 'لینک کپی شد',
 
+    'toc_title' => 'فهرست مطالب',
+
 ];

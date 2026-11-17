@@ -8,6 +8,7 @@ use App\Enums\PublicationStatus;
 use App\Models\Translations\ServiceTranslation;
 use App\Traits\HasSeo;
 use App\Traits\HasTranslations;
+use App\Traits\OptimizesImages;
 use App\Traits\Publishable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -34,6 +35,10 @@ final class Service extends Model
     use HasTranslations;
     use Publishable;
     use SoftDeletes;
+    use OptimizesImages;
+
+    /** @var list<string> Image columns that get responsive variants. */
+    protected array $optimizedImages = ['image_path'];
 
     protected $fillable = [
         'status',

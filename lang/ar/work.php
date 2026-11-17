@@ -22,4 +22,6 @@ return [
     'next_case_study' => 'المشروع التالي',
     'project_details' => 'تفاصيل المشروع',
 
+    'outputs' => 'مخرجات المشروع',
+
 ];

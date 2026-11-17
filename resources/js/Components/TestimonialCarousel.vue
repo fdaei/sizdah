@@ -245,7 +245,7 @@ onBeforeUnmount(() => {
       v-if="loops && !continuous"
       class="mt-6 flex items-center justify-center gap-2"
       role="tablist"
-      aria-label="انتخاب نظر مشتری"
+      :aria-label="$t('common.choose_testimonial')"
     >
       <button
         v-for="(_, index) in props.testimonials"
@@ -253,7 +253,7 @@ onBeforeUnmount(() => {
         type="button"
         role="tab"
         :aria-selected="active === index"
-        :aria-label="`نمایش نظر ${index + 1}`"
+        :aria-label="$t('common.show_testimonial', { n: index + 1 })"
         class="testimonial-dot"
         :class="{ 'is-active': active === index, 'is-paused': paused }"
         @click="goTo(index)"

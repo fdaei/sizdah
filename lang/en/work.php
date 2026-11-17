@@ -27,4 +27,6 @@ return [
     'next_case_study' => 'Next project',
     'project_details' => 'Project details',
 
+    'outputs' => 'Project outputs',
+
 ];

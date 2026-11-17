@@ -1,4 +1,7 @@
 <?php echo '<?xml version="1.0" encoding="UTF-8"?>'."\n"; ?>
+@if (\App\Services\Sitemap\SitemapBuilder::stylesheetEnabled())
+<?php echo '<?xml-stylesheet type="text/xsl" href="'.e(route('sitemap.xsl')).'"?>'."\n"; ?>
+@endif
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 @foreach ($sitemaps as $sitemap)
     <sitemap>

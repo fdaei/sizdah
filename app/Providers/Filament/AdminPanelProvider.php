@@ -52,6 +52,15 @@ final class AdminPanelProvider extends PanelProvider
                 'gray' => Color::Slate,
             ])
             ->font('Inter')
+            // Filament's image editor saves crops via canvas.toBlob() with no
+            // quality argument (browser default ≈0.92 → visible JPEG/WebP loss).
+            // Default it to maximum quality inside the admin panel only.
+            ->renderHook(
+                'panels::head.end',
+                fn (): string => '<script>(function(){var t=HTMLCanvasElement.prototype.toBlob;'
+                    .'HTMLCanvasElement.prototype.toBlob=function(cb,type,q){'
+                    .'return t.call(this,cb,type,q===undefined?1:q);};})();</script>',
+            )
             ->maxContentWidth('full')
             ->discoverResources(
                 in: app_path('Filament/Resources'),
@@ -86,18 +95,18 @@ final class AdminPanelProvider extends PanelProvider
                     ->sort(-2),
             ])
             ->navigationGroups([
-                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Website content'))
+                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Content'))
                     ->icon('heroicon-o-document-text'),
-                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Projects'))
-                    ->icon('heroicon-o-briefcase'),
-                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Articles'))
-                    ->icon('heroicon-o-newspaper'),
-                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Website setup'))
-                    ->icon('heroicon-o-globe-alt'),
+                NavigationGroup::make(fn (): string => __('admin.navigation.groups.SEO'))
+                    ->icon('heroicon-o-magnifying-glass'),
+                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Appearance'))
+                    ->icon('heroicon-o-paint-brush'),
+                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Performance'))
+                    ->icon('heroicon-o-bolt'),
+                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Settings'))
+                    ->icon('heroicon-o-cog-6-tooth'),
                 NavigationGroup::make(fn (): string => __('admin.navigation.groups.Messages'))
                     ->icon('heroicon-o-inbox'),
-                NavigationGroup::make(fn (): string => __('admin.navigation.groups.Advanced'))
-                    ->icon('heroicon-o-cog-6-tooth'),
             ])
             ->middleware([
                 EncryptCookies::class,

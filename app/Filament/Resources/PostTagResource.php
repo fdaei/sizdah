@@ -28,7 +28,7 @@ final class PostTagResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-hashtag';
 
-    protected static ?string $navigationGroup = 'Articles';
+    protected static ?string $navigationGroup = 'Content';
 
     protected static ?string $navigationLabel = 'Article tags';
 

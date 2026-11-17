@@ -35,4 +35,11 @@ return [
     'empty_posts' => 'لم يتم نشر أي مقالات بعد.',
     'empty_results' => 'لا توجد نتائج مطابقة للفلاتر.',
 
+    'choose_project' => 'اختيار المشروع',
+    'show_item' => 'عرض :name',
+    'choose_testimonial' => 'اختيار رأي العميل',
+    'show_testimonial' => 'عرض الرأي :n',
+
+    'play_video' => 'تشغيل الفيديو: :title',
+
 ];

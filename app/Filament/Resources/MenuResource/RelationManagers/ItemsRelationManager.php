@@ -15,6 +15,7 @@ use Filament\Forms\Get;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -69,17 +70,11 @@ final class ItemsRelationManager extends RelationManager
 
                     Select::make('parent_id')
                         ->label('Parent item')
-                        ->options(fn (): array => $this->getOwnerRecord()
-                            ->items()
-                            ->whereNull('parent_id')
-                            ->with('translations')
-                            ->get()
-                            ->mapWithKeys(fn (MenuItem $item): array => [
-                                $item->id => (string) $item->getTranslation('label'),
-                            ])
-                            ->all())
+                        ->placeholder('— None (top level) —')
+                        ->options(fn (?MenuItem $record): array => $this->parentOptions($record))
+                        ->searchable()
                         ->native(false)
-                        ->helperText('Footer columns: set a parent to nest links.'),
+                        ->helperText('Nest under any item to build categories and sub-categories (unlimited depth).'),
                 ]),
 
             Section::make()
@@ -99,12 +94,13 @@ final class ItemsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->defaultSort('sort_order')
+            ->modifyQueryUsing(fn (Builder $query): Builder => $this->orderAsTree($query))
             ->reorderable('sort_order')
+            ->paginated(false)
             ->columns([
                 Tables\Columns\TextColumn::make('label')
-                    ->getStateUsing(fn (MenuItem $record): string => (string) $record->getTranslation('label'))
-                    ->description(fn (MenuItem $record): ?string => $record->parent_id !== null ? '↳ nested' : null)
+                    ->getStateUsing(fn (MenuItem $record): string => str_repeat('— ', $this->depthOf($record)).$record->getTranslation('label'))
+                    ->description(fn (MenuItem $record): ?string => $this->breadcrumbOf($record))
                     ->weight('medium'),
 
                 Tables\Columns\TextColumn::make('route_name')
@@ -120,6 +116,13 @@ final class ItemsRelationManager extends RelationManager
                     ->using(fn (array $data): Model => $this->persist($data)),
             ])
             ->actions([
+                Tables\Actions\CreateAction::make('addChild')
+                    ->label('Add sub-item')
+                    ->icon('heroicon-m-plus')
+                    ->modalHeading('Add sub-item')
+                    ->fillForm(fn (MenuItem $record): array => ['parent_id' => $record->id, 'target' => '_self', 'is_active' => true, 'sort_order' => 0])
+                    ->using(fn (array $data): Model => $this->persist($data)),
+
                 Tables\Actions\EditAction::make()
                     ->mutateRecordDataUsing(function (array $data, MenuItem $record): array {
                         $record->loadMissing('translations');
@@ -133,6 +136,102 @@ final class ItemsRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    /** @var array<int, array{depth: int, path: array<int, string>, position: int, label: string}>|null */
+    private ?array $treeIndex = null;
+
+    /**
+     * Depth-first index of the whole menu (WordPress-style ordering):
+     * every item follows its parent, siblings by sort_order.
+     *
+     * @return array<int, array{depth: int, path: array<int, string>, position: int, label: string}>
+     */
+    private function tree(): array
+    {
+        if ($this->treeIndex !== null) {
+            return $this->treeIndex;
+        }
+
+        $items = $this->getOwnerRecord()->items()->with('translations')->orderBy('sort_order')->orderBy('id')->get();
+        $byParent = $items->groupBy(fn (MenuItem $i): string => (string) $i->parent_id);
+        $index = [];
+        $walk = function (string $parentKey, int $depth, array $path) use (&$walk, &$index, $byParent): void {
+            foreach ($byParent->get($parentKey, []) as $item) {
+                if (isset($index[$item->id])) {
+                    continue; // cycle guard
+                }
+                $label = (string) $item->getTranslation('label');
+                $index[$item->id] = ['depth' => $depth, 'path' => $path, 'position' => count($index), 'label' => $label];
+                $walk((string) $item->id, $depth + 1, [...$path, $label]);
+            }
+        };
+        $walk('', 0, []);
+
+        // Orphans (parent from another menu / missing) go last as roots.
+        foreach ($items as $item) {
+            $index[$item->id] ??= ['depth' => 0, 'path' => [], 'position' => count($index), 'label' => (string) $item->getTranslation('label')];
+        }
+
+        return $this->treeIndex = $index;
+    }
+
+    private function orderAsTree(Builder $query): Builder
+    {
+        $this->treeIndex = null;
+        $tree = $this->tree();
+
+        if ($tree === []) {
+            return $query;
+        }
+
+        $cases = collect($tree)->map(fn (array $n, int $id): string => 'WHEN '.(int) $id.' THEN '.(int) $n['position'])->implode(' ');
+        $table = $query->getModel()->getTable();
+
+        return $query->reorder()->orderByRaw("CASE {$table}.id {$cases} ELSE 999999 END");
+    }
+
+    private function depthOf(MenuItem $record): int
+    {
+        return $this->tree()[$record->id]['depth'] ?? 0;
+    }
+
+    private function breadcrumbOf(MenuItem $record): ?string
+    {
+        $path = $this->tree()[$record->id]['path'] ?? [];
+
+        return $path === [] ? null : implode(' › ', $path);
+    }
+
+    /**
+     * Every item as an indented option, excluding the record itself and its
+     * descendants so a cycle can never be created.
+     *
+     * @return array<int, string>
+     */
+    private function parentOptions(?MenuItem $record): array
+    {
+        $this->treeIndex = null;
+        $tree = $this->tree();
+        $excluded = [];
+
+        if ($record !== null) {
+            $excluded[$record->id] = true;
+            $items = $this->getOwnerRecord()->items()->get(['id', 'parent_id']);
+            do {
+                $added = false;
+                foreach ($items as $item) {
+                    if ($item->parent_id !== null && isset($excluded[$item->parent_id]) && ! isset($excluded[$item->id])) {
+                        $excluded[$item->id] = $added = true;
+                    }
+                }
+            } while ($added);
+        }
+
+        return collect($tree)
+            ->reject(fn (array $n, int $id): bool => isset($excluded[$id]))
+            ->map(fn (array $n): string => str_repeat('— ', $n['depth']).$n['label'])
+            ->all();
     }
 
     /**

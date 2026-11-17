@@ -14,16 +14,18 @@ use App\Models\Translations\PageTranslation;
 use App\Models\Translations\PostTranslation;
 use App\Models\Translations\ProjectTranslation;
 use App\Models\Translations\ServiceTranslation;
+use App\Services\Performance\PageCache;
 use App\Services\Seo\IndexNow;
 use App\Services\Sitemap\SitemapBuilder;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Filters\BaseFilter;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use App\Support\UiStrings;
 use Inertia\Inertia;
 
 final class AppServiceProvider extends ServiceProvider
@@ -44,15 +46,37 @@ final class AppServiceProvider extends ServiceProvider
         PostTranslation::saved(fn ($t) => IndexNow::submitFor(Post::query()->find($t->post_id)));
         ProjectTranslation::saved(fn ($t) => IndexNow::submitFor(Project::query()->find($t->project_id)));
 
+        // Page cache: any model write that can change public output busts it.
+        // Denylist (not allowlist) so a new content model can never serve stale pages.
+        Event::listen(['eloquent.saved: *', 'eloquent.deleted: *'], function (string $event): void {
+            $model = trim(explode(':', $event, 2)[1]);
+
+            if (! in_array($model, PageCache::IGNORED_MODELS, true)) {
+                PageCache::flush();
+            }
+        });
+
         // Sitemaps are cached; any content / SEO / settings write invalidates them.
         foreach ([
             Page::class, Post::class, Project::class, Service::class,
             SeoMeta::class, Setting::class,
             PostTranslation::class, ProjectTranslation::class,
             ServiceTranslation::class, PageTranslation::class,
+            \App\Models\PostCategory::class, \App\Models\Translations\PostCategoryTranslation::class,
         ] as $model) {
             $model::saved(fn () => SitemapBuilder::bust());
             $model::deleted(fn () => SitemapBuilder::bust());
+        }
+
+        // Category chips on /insights are cached per locale.
+        foreach ([\App\Models\PostCategory::class, \App\Models\Translations\PostCategoryTranslation::class] as $model) {
+            $flush = function (): void {
+                foreach (array_keys(config('locales.supported')) as $l) {
+                    \Illuminate\Support\Facades\Cache::forget("insights.categories.{$l}");
+                }
+            };
+            $model::saved($flush);
+            $model::deleted($flush);
         }
 
         Field::configureUsing(
@@ -99,34 +123,6 @@ final class AppServiceProvider extends ServiceProvider
      */
     private function shareTranslations(): void
     {
-        Inertia::share('translations', function (): array {
-            $locale = app()->getLocale();
-
-            $load = function () use ($locale): array {
-                $path = lang_path($locale);
-
-                if (! File::isDirectory($path)) {
-                    return [];
-                }
-
-                $translations = [];
-
-                foreach (File::files($path) as $file) {
-                    if ($file->getExtension() !== 'php') {
-                        continue;
-                    }
-
-                    $translations[$file->getFilenameWithoutExtension()] = require $file->getPathname();
-                }
-
-                return $translations;
-            };
-
-            if ($this->app->environment('local')) {
-                return $load();
-            }
-
-            return cache()->rememberForever("translations.{$locale}", $load);
-        });
+        Inertia::share('translations', fn (): array => UiStrings::tree(app()->getLocale()));
     }
 }

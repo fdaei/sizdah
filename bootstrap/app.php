@@ -3,9 +3,12 @@
 declare(strict_types=1);
 
 use App\Http\Middleware\ApplyRedirects;
+use App\Http\Middleware\CachePublicPages;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\MinifyHtml;
 use App\Http\Middleware\RedirectToCanonicalHost;
 use App\Http\Middleware\RedirectToLocalisedRoute;
+use App\Http\Middleware\ResolvePreview;
 use App\Http\Middleware\SetLocale;
 use App\Models\NotFoundLog;
 use Illuminate\Foundation\Application;
@@ -32,6 +35,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(ApplyRedirects::class);
 
         $middleware->web(append: [
+            // Outer → inner: cache wraps minify, so stored pages are already minified.
+            CachePublicPages::class,
+            MinifyHtml::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
@@ -39,6 +45,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'locale' => SetLocale::class,
             'locale.redirect' => RedirectToLocalisedRoute::class,
+            'preview' => ResolvePreview::class,
         ]);
 
         /*
@@ -55,6 +62,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->prependToPriorityList(
             before: SubstituteBindings::class,
             prepend: SetLocale::class,
+        );
+        // Admin preview links unlock a draft row for route binding too.
+        $middleware->prependToPriorityList(
+            before: SubstituteBindings::class,
+            prepend: ResolvePreview::class,
         );
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -44,7 +44,7 @@ final class ProjectResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
-    protected static ?string $navigationGroup = 'Projects';
+    protected static ?string $navigationGroup = 'Content';
 
     protected static ?int $navigationSort = 1;
 

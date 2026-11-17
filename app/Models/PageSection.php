@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\SectionType;
 use App\Models\Translations\PageSectionTranslation;
 use App\Traits\HasTranslations;
+use App\Traits\OptimizesImages;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -24,6 +25,10 @@ final class PageSection extends Model
 {
     use HasFactory;
     use HasTranslations;
+    use OptimizesImages;
+
+    /** @var list<string> Image columns that get responsive variants. */
+    protected array $optimizedImages = ['image_path'];
 
     protected $fillable = [
         'sectionable_type',

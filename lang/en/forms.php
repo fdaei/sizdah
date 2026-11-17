@@ -60,4 +60,10 @@ return [
         'signoff' => 'Best regards, the :app team',
     ],
 
+    'rating_thanks' => 'Thanks — your rating will appear after review.',
+    'rating_duplicate' => 'You have already rated this service.',
+    'rating_label' => 'Rate this service',
+    'rating_star' => ':n stars',
+    'rating_summary' => 'Average :avg of 5 (:count votes)',
+
 ];

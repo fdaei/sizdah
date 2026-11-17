@@ -35,4 +35,11 @@ return [
     'empty_posts' => 'No articles published yet.',
     'empty_results' => 'Nothing matched your filters.',
 
+    'choose_project' => 'Choose project',
+    'show_item' => 'Show :name',
+    'choose_testimonial' => 'Choose testimonial',
+    'show_testimonial' => 'Show testimonial :n',
+
+    'play_video' => 'Play video: :title',
+
 ];

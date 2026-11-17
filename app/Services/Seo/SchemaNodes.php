@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Services\Seo;
 
 use App\Models\Faq;
+use App\Models\PageSection;
 use App\Models\TeamMember;
 use App\Models\Testimonial;
 use App\Services\MediaTransformer;
+use App\Support\RichContent;
 use App\Support\SiteSettings;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
@@ -85,7 +88,43 @@ final class SchemaNodes
     }
 
     /**
-     * VideoObject for each YouTube / Aparat embed in the body.
+     * The page's full authored content as one HTML string — the source for
+     * articleBody / text and for VideoObject detection. Rich-text fields go
+     * through RichContent so custom blocks (Aparat) render to real embeds.
+     * Sections are only read when already eager-loaded: never a query here.
+     *
+     * @param  list<?string>  $richText  rich-text HTML fields
+     * @param  list<mixed>  $plain  plain-text fields (strings or string lists)
+     */
+    public static function bodyHtml(array $richText = [], array $plain = [], ?Model $owner = null): string
+    {
+        $parts = array_map(fn (?string $html): string => RichContent::render($html), $richText);
+        $parts = [...$parts, ...array_map(self::plainToHtml(...), $plain)];
+
+        if ($owner !== null && $owner->relationLoaded('sections')) {
+            foreach ($owner->getRelation('sections') as $section) {
+                /** @var PageSection $section */
+                $parts[] = self::plainToHtml([$section->getTranslation('title'), $section->getTranslation('subtitle')]);
+                $parts[] = RichContent::render($section->getTranslation('content'));
+
+                if ($section->relationLoaded('items')) {
+                    foreach ($section->getRelation('items') as $item) {
+                        $parts[] = self::plainToHtml([
+                            $item->getTranslation('title'),
+                            $item->getTranslation('description'),
+                            $item->getTranslation('features'),
+                        ]);
+                    }
+                }
+            }
+        }
+
+        return trim(implode("\n", array_filter($parts, fn (string $p): bool => trim($p) !== '')));
+    }
+
+    /**
+     * VideoObject for each YouTube / Aparat embed and each self-hosted
+     * <video> / .mp4 / .webm file in the body.
      *
      * @return list<array<string, mixed>>
      */
@@ -93,7 +132,7 @@ final class SchemaNodes
     {
         $found = [];
 
-        preg_match_all('~(?:youtube(?:-nocookie)?\.com/(?:embed/|watch\?v=)|youtu\.be/)([A-Za-z0-9_-]{11})~', $html, $yt);
+        preg_match_all('~(?:youtube(?:-nocookie)?\.com/(?:embed/|watch\?v=|shorts/)|youtu\.be/)([A-Za-z0-9_-]{11})~', $html, $yt);
         foreach (array_unique($yt[1]) as $id) {
             $found[] = [
                 'embedUrl' => "https://www.youtube.com/embed/{$id}",
@@ -109,16 +148,46 @@ final class SchemaNodes
             ];
         }
 
+        // Self-hosted files: <video src>, <source src>, or a plain link to the file.
+        preg_match_all('~(?:src|href)\s*=\s*["\']([^"\']+\.(?:mp4|webm|ogv|mov|m4v))(?:\?[^"\']*)?["\']~i', $html, $files);
+        preg_match_all('~<video\b[^>]*\bposter\s*=\s*["\']([^"\']+)["\']~i', $html, $posters);
+        foreach (array_values(array_unique($files[1])) as $i => $file) {
+            $found[] = [
+                'contentUrl' => self::absolute(html_entity_decode($file)),
+                'thumbnailUrl' => isset($posters[1][$i]) ? self::absolute(html_entity_decode($posters[1][$i])) : $thumbnail,
+            ];
+        }
+
+        $description = $description ? trim(strip_tags($description)) : null;
+
         return array_values(array_filter(array_map(fn (array $v, int $i): ?array => $v['thumbnailUrl'] ? array_filter([
             '@type' => 'VideoObject',
             '@id' => "{$canonical}#video-".($i + 1),
-            'name' => $name,
+            'name' => count($found) > 1 ? "{$name} — ".($i + 1) : $name,
             'description' => $description ?: $name,
             'thumbnailUrl' => $v['thumbnailUrl'],
             'uploadDate' => $uploadDate,
-            'embedUrl' => $v['embedUrl'],
+            'embedUrl' => $v['embedUrl'] ?? null,
+            'contentUrl' => $v['contentUrl'] ?? null,
+            'inLanguage' => config('locales.supported.'.app()->getLocale().'.html_lang'),
             'isPartOf' => ['@id' => "{$canonical}#main"],
+            'publisher' => ['@id' => rtrim(url('/'), '/').'/#organization'],
         ]) : null, $found, array_keys($found))));
+    }
+
+    /** @param  mixed  $value  string, list of strings, or list of {text|title|label} rows */
+    private static function plainToHtml(mixed $value): string
+    {
+        if (is_array($value)) {
+            return implode("\n", array_map(
+                fn ($v): string => self::plainToHtml(is_array($v) ? ($v['text'] ?? $v['title'] ?? $v['label'] ?? $v) : $v),
+                $value,
+            ));
+        }
+
+        $text = trim((string) $value);
+
+        return $text === '' ? '' : '<p>'.e($text).'</p>';
     }
 
     private static function absolute(?string $url): ?string

@@ -24,7 +24,7 @@ final class SocialLinkResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-link';
 
-    protected static ?string $navigationGroup = 'Website setup';
+    protected static ?string $navigationGroup = 'Appearance';
 
     protected static ?string $navigationLabel = 'Social media links';
 

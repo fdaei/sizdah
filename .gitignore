@@ -25,3 +25,11 @@ yarn-error.log
 /playwright/.cache
 /bootstrap/ssr
 /bootstrap/cache/config.php
+
+# runtime state (never commit)
+/storage/framework/cache/data/
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/views/*.php
+/storage/framework/testing/
+/storage/logs/*.log

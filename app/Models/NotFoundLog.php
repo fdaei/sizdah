@@ -19,15 +19,23 @@ final class NotFoundLog extends Model
 {
     use MassPrunable;
 
-    protected $fillable = ['path_hash', 'path', 'referrer', 'user_agent', 'hits', 'last_seen_at'];
+    protected $fillable = ['path_hash', 'path', 'referrer', 'user_agent', 'is_bot', 'hits', 'last_seen_at'];
 
     protected function casts(): array
     {
-        return ['hits' => 'integer', 'last_seen_at' => 'datetime'];
+        return ['is_bot' => 'boolean', 'hits' => 'integer', 'last_seen_at' => 'datetime'];
     }
 
     /** Static-asset and scanner noise that would only flood the log. */
     private const IGNORE = '#(\.(js|css|map|png|jpe?g|gif|webp|avif|svg|ico|woff2?|ttf|txt|xml|php|asp|aspx|env|ini|sql|bak)$)|(^|/)(wp-|xmlrpc|\.env|\.git|vendor/|phpmyadmin|cgi-bin)#i';
+
+    /** Crawlers, link unfurlers, monitors and HTTP libraries. */
+    private const BOT_UA = '/bot|crawl|spider|slurp|facebookexternalhit|embedly|preview|monitor|curl|wget|python-requests|httpclient|go-http|headless|lighthouse/i';
+
+    public static function isBot(?string $userAgent): bool
+    {
+        return $userAgent === null || trim($userAgent) === '' || preg_match(self::BOT_UA, $userAgent) === 1;
+    }
 
     public static function record(Request $request): void
     {
@@ -53,6 +61,7 @@ final class NotFoundLog extends Model
                 'path' => Str::limit($path, 990, ''),
                 'referrer' => Str::limit((string) $request->headers->get('referer'), 990, '') ?: null,
                 'user_agent' => Str::limit((string) $request->userAgent(), 490, '') ?: null,
+                'is_bot' => self::isBot($request->userAgent()),
                 'hits' => 1,
                 'last_seen_at' => $now,
                 'created_at' => $now,

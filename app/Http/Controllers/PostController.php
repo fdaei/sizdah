@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Models\PostCategory;
 use App\Services\ContentTransformer;
 use App\Services\SeoBuilder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -21,7 +22,37 @@ final class PostController extends Controller
 {
     private const PER_PAGE = 9;
 
-    public function index(Request $request): Response
+    public function index(Request $request): Response|RedirectResponse
+    {
+        // Legacy ?category= filter URLs → the category's own indexable page.
+        $legacy = $request->string('category')->toString();
+        if ($legacy !== '') {
+            $category = (new PostCategory)->resolveRouteBinding($legacy);
+            if ($category !== null) {
+                return redirect()->to($category->url().self::query($request, ['category']), 301);
+            }
+        }
+
+        return $this->listing($request, null);
+    }
+
+    /**
+     * Category archive — same listing, scoped, with the category's own
+     * heading and SEO meta (CollectionPage).
+     */
+    public function category(Request $request, string $locale, PostCategory $category): Response
+    {
+        return $this->listing($request, $category);
+    }
+
+    private static function query(Request $request, array $without): string
+    {
+        $q = http_build_query($request->except($without));
+
+        return $q === '' ? '' : '?'.$q;
+    }
+
+    private function listing(Request $request, ?PostCategory $category): Response
     {
         $page = Page::query()
             ->key('insights')
@@ -29,7 +60,7 @@ final class PostController extends Controller
             ->withContent()
             ->first();
 
-        $categoryFilter = $request->string('category')->toString();
+        $categoryFilter = $category === null ? '' : (string) $category->getTranslation('slug');
         $search = $request->string('q')->toString();
 
         $query = Post::query()->forListing();
@@ -65,10 +96,14 @@ final class PostController extends Controller
         $posts = $query->paginate(self::PER_PAGE)->withQueryString();
 
         return Inertia::render('Insights/Index', [
-            'heading' => [
+            'heading' => $category === null ? [
                 'eyebrow' => (string) $page?->getTranslation('subtitle'),
                 'title' => (string) $page?->getTranslation('title'),
                 'description' => (string) $page?->getTranslation('description'),
+            ] : [
+                'eyebrow' => (string) $page?->getTranslation('title'),
+                'title' => (string) $category->getTranslation('name'),
+                'description' => (string) $category->getTranslation('description'),
             ],
 
             'featured' => $featured === null
@@ -109,7 +144,9 @@ final class PostController extends Controller
                 ? []
                 : ContentTransformer::sectionMap($page->sections),
 
-            'seo' => SeoBuilder::forPage($page, $request->url()),
+            'seo' => $category === null
+                ? SeoBuilder::forPage($page, $request->url())
+                : SeoBuilder::forCategory($category),
         ]);
     }
 

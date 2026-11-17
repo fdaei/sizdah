@@ -6,9 +6,11 @@ namespace App\Services;
 
 use App\Models\Page;
 use App\Models\Post;
+use App\Models\PostCategory;
 use App\Models\Project;
 use App\Models\SeoMeta;
 use App\Models\Service;
+use App\Models\ServiceRating;
 use App\Services\Seo\SchemaNodes;
 use App\Services\Seo\SeoAnalyzer;
 use App\Services\Seo\SeoTitle;
@@ -34,9 +36,13 @@ final class SeoBuilder
     /**
      * Detail route => its listing route, for BreadcrumbList.
      */
+    /** articleBody / text cap — keeps the inline JSON-LD a sane size. */
+    private const BODY_MAX = 30000;
+
     private const PARENT_ROUTES = [
         'work.show' => 'work.index',
         'insights.show' => 'insights.index',
+        'insights.category' => 'insights.index',
         'services.show' => 'services',
     ];
 
@@ -58,6 +64,12 @@ final class SeoBuilder
             legacyTitle: $page?->getTranslation('seo_title'),
             schemaType: self::pageSchemaType($page?->key),
             extraNodes: $extraNodes,
+            modifiedAt: $page?->updated_at?->toIso8601String(),
+            bodyHtml: $page === null ? '' : SchemaNodes::bodyHtml(
+                [$page->getTranslation('content')],
+                [$page->getTranslation('subtitle')],
+                $page,
+            ),
         );
     }
 
@@ -82,6 +94,17 @@ final class SeoBuilder
                 'creator' => ['@id' => rtrim(url('/'), '/').'/#organization'],
             ]),
             modifiedAt: $project->updated_at?->toIso8601String(),
+            bodyHtml: SchemaNodes::bodyHtml(
+                [],
+                [
+                    $project->getTranslation('subtitle'),
+                    $project->getTranslation('excerpt'),
+                    $project->getTranslation('challenge'),
+                    $project->getTranslation('challenge_points'),
+                    $project->getTranslation('results_summary'),
+                ],
+                $project,
+            ),
         );
     }
 
@@ -98,6 +121,34 @@ final class SeoBuilder
             type: 'website',
             schemaType: 'Service',
             meta: $service->seoFor(),
+            extra: array_filter(['aggregateRating' => ServiceRating::aggregateNode($service)]),
+            modifiedAt: $service->updated_at?->toIso8601String(),
+            bodyHtml: SchemaNodes::bodyHtml([], [
+                $service->getTranslation('description'),
+                $service->getTranslation('features'),
+            ]),
+        );
+    }
+
+    /**
+     * Category archive: CollectionPage by default, every field of the
+     * category's SEO tab (title, description, robots, canonical, OG,
+     * Twitter, schema, breadcrumb title) flows through assemble().
+     *
+     * @return array<string, mixed>
+     */
+    public static function forCategory(PostCategory $category): array
+    {
+        return self::assemble(
+            title: (string) $category->getTranslation('name'),
+            description: (string) $category->getTranslation('description'),
+            image: null,
+            canonical: $category->url(),
+            type: 'website',
+            schemaType: 'CollectionPage',
+            meta: $category->seoFor(),
+            modifiedAt: $category->updated_at?->toIso8601String(),
+            bodyHtml: SchemaNodes::bodyHtml([], [$category->getTranslation('description')]),
         );
     }
 
@@ -122,14 +173,7 @@ final class SeoBuilder
             section: $post->category?->getTranslation('name'),
             tags: $post->tags->map(fn ($t): string => (string) $t->getTranslation('name'))->filter()->values()->all(),
             wordCount: count(SeoAnalyzer::words(SeoAnalyzer::plain((string) $post->getTranslation('content')))),
-            extraNodes: SchemaNodes::videos(
-                (string) $post->getTranslation('content'),
-                $post->url(),
-                (string) $post->getTranslation('title'),
-                $post->getTranslation('excerpt'),
-                $post->cover_path ? self::absoluteUrl(MediaTransformer::url($post->cover_path)) : null,
-                $post->published_at?->toIso8601String(),
-            ),
+            bodyHtml: SchemaNodes::bodyHtml([$post->getTranslation('content')]),
         );
     }
 
@@ -154,6 +198,7 @@ final class SeoBuilder
         ?int $wordCount = null,
         array $extra = [],
         array $extraNodes = [],
+        string $bodyHtml = '',
     ): array {
         $locale = app()->getLocale();
         $request = request();
@@ -208,6 +253,24 @@ final class SeoBuilder
         $keywords = $meta?->schema_data['keywords'] ?? null
             ?: implode('، ', array_filter([$meta?->focus_keyword, ...((array) $meta?->secondary_keywords)])) ?: null;
 
+        /*
+         | articleBody / text: the page's whole authored content as plain
+         | text, plus a VideoObject for every embed or video file in it —
+         | on every page type, not just articles.
+         */
+        $body = $bodyHtml === '' ? '' : trim(preg_replace('/[ \t]+/u', ' ', preg_replace('/\s*\n\s*/u', "\n", SeoAnalyzer::plain($bodyHtml)) ?? '') ?? '');
+        if (mb_strlen($body) > self::BODY_MAX) {
+            $body = rtrim(mb_substr($body, 0, self::BODY_MAX - 1)).'…';
+        }
+        if ($type === 'article' && $wordCount === null && $body !== '') {
+            $wordCount = count(SeoAnalyzer::words($body));
+        }
+        if ($bodyHtml !== '') {
+            $extraNodes = [...$extraNodes, ...SchemaNodes::videos(
+                $bodyHtml, $canonical, $title, $description, $image, $publishedAt ?? $modifiedAt,
+            )];
+        }
+
         $schema = self::schema(
             $meta?->schema_data['headline'] ?? null ?: $title, $description, $image, $canonical, $type, $schemaType,
             $publishedAt, $modifiedAt, $author,
@@ -220,6 +283,7 @@ final class SeoBuilder
                 'about' => $meta?->schema_data['about'] ?? null,
                 'serviceType' => $meta?->schema_data['service_type'] ?? null,
                 'areaServed' => $meta?->schema_data['area_served'] ?? null,
+                'body' => $body ?: null,
             ]) + $extra,
         );
 
@@ -227,7 +291,15 @@ final class SeoBuilder
             $schema['@graph'] = [...$schema['@graph'], ...$extraNodes];
         }
 
-        if ($custom = self::customSchema($meta?->custom_schema)) {
+        $custom = self::customSchema($meta?->custom_schema);
+        $schemaMode = $meta?->schema_data['mode'] ?? 'auto';
+
+        // Per-page override (Schema Pro "disable on this page" / "replace").
+        if ($schemaMode === 'off') {
+            $schema = null;
+        } elseif ($schemaMode === 'replace' && $custom !== []) {
+            $schema['@graph'] = $custom;
+        } elseif ($custom !== []) {
             $schema['@graph'] = [...$schema['@graph'], ...$custom];
         }
 
@@ -300,6 +372,15 @@ final class SeoBuilder
             'url' => $home,
             'inLanguage' => $inLanguage,
             'publisher' => ['@id' => $organizationId],
+            // On-site search (insights ?q=) — sitelinks search box.
+            'potentialAction' => [
+                '@type' => 'SearchAction',
+                'target' => [
+                    '@type' => 'EntryPoint',
+                    'urlTemplate' => route('insights.index', ['locale' => $locale]).'?q={search_term_string}',
+                ],
+                'query-input' => 'required name=search_term_string',
+            ],
         ];
 
         $breadcrumbs = self::breadcrumbs($breadcrumbTitle ?? $title, $canonical);
@@ -325,7 +406,13 @@ final class SeoBuilder
             'serviceType' => $schemaType === 'Service' ? ($extra['serviceType'] ?? null) : null,
             'areaServed' => $schemaType === 'Service' ? ($extra['areaServed'] ?? null) : null,
             'dateCreated' => $extra['dateCreated'] ?? null,
+            // schema.org `text` lives on CreativeWork (WebPage & subtypes,
+            // CreativeWork); Service is not one, so its body is its description.
+            'text' => $type !== 'article' && $schemaType !== 'Service' ? ($extra['body'] ?? null) : null,
+            'dateModified' => $type !== 'article' && $schemaType !== 'Service' ? $modifiedAt : null,
             'creator' => $extra['creator'] ?? null,
+            // Only ever built from approved, real ratings (ServiceRating::summary()).
+            'aggregateRating' => $extra['aggregateRating'] ?? null,
             // WebPage-family nodes name their main image explicitly.
             'primaryImageOfPage' => $image && $type !== 'article' && str_ends_with((string) ($schemaType ?? 'WebPage'), 'Page')
                 ? ['@type' => 'ImageObject', 'url' => $image]
@@ -336,12 +423,15 @@ final class SeoBuilder
             $node += array_filter([
                 'articleSection' => $extra['articleSection'] ?? null,
                 'wordCount' => $extra['wordCount'] ?? null,
+                'articleBody' => $extra['body'] ?? null,
             ]);
             $node += array_filter([
                 'headline' => mb_substr($title, 0, 110),
                 'datePublished' => $publishedAt,
                 'dateModified' => $modifiedAt ?? $publishedAt,
-                'author' => $author === null ? null : ['@type' => 'Person', 'name' => $author],
+                'author' => $author === null
+                    ? ['@id' => $organizationId]
+                    : ['@type' => 'Person', 'name' => $author, 'url' => $home],
                 'publisher' => ['@id' => $organizationId],
                 'mainEntityOfPage' => $canonical,
             ]);
