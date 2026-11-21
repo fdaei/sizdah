@@ -75,6 +75,13 @@ final class ItemsRelationManager extends RelationManager
                         ->searchable()
                         ->native(false)
                         ->helperText('Nest under any item to build categories and sub-categories (unlimited depth).'),
+
+                    Select::make('children_source')
+                        ->label('ساخت خودکار زیرمنو از (Generate submenu from)')
+                        ->options(MenuItem::CHILDREN_SOURCES)
+                        ->placeholder('هیچ — فقط آیتم‌های زیرمجموعه')
+                        ->native(false)
+                        ->helperText('مثلاً روی «مقالات»: همهٔ دسته‌ها و زیردسته‌ها خودکار در زیرمنو می‌آیند و با هر تغییر به‌روز می‌شوند.'),
                 ]),
 
             Section::make()

@@ -72,12 +72,15 @@ final class AppServiceProvider extends ServiceProvider
         foreach ([\App\Models\PostCategory::class, \App\Models\Translations\PostCategoryTranslation::class] as $model) {
             $flush = function (): void {
                 foreach (array_keys(config('locales.supported')) as $l) {
-                    \Illuminate\Support\Facades\Cache::forget("insights.categories.{$l}");
+                    \Illuminate\Support\Facades\Cache::forget("insights.categories.v2.{$l}");
                 }
             };
             $model::saved($flush);
             $model::deleted($flush);
         }
+
+        // "Choose from library" on every image upload field.
+        \App\Filament\Support\MediaLibraryPicker::register();
 
         Field::configureUsing(
             fn (Field $field): Field => $field->translateLabel(),

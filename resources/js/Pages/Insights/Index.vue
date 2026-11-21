@@ -59,7 +59,7 @@ const props = defineProps<{
   heading: { eyebrow: string; title: string; description: string }
   featured: PostSummary | null
   posts: PostsPage
-  categories: { slug: string; name: string }[]
+  categories: { slug: string; name: string; parent: string | null }[]
   filters: { category: string | null; q: string | null }
   sections: SectionMap
   seo: SeoMeta
@@ -69,14 +69,63 @@ const { t } = useTranslations()
 
 const finalCta = computed<PageSectionData | undefined>(() => props.sections.final_cta)
 
+/*
+ | Category tree in two chip rows: top-level categories always, then — when
+ | the selected category sits in a branch that has subcategories — that
+ | branch's children (the selected level and the one below it).
+ */
+const bySlug = computed(() => new Map(props.categories.map((c) => [c.slug, c])))
+
+function parentOf(slug: string): string | null {
+  const parent = bySlug.value.get(slug)?.parent ?? null
+  // A parent missing in this locale makes the child top-level.
+  return parent && bySlug.value.has(parent) ? parent : null
+}
+
+function optionFor(slug: string, label: string): FilterOption {
+  return { value: slug, label, href: route('insights.category', { category: slug }) }
+}
+
+/** Root ancestor of the selected category (null when nothing is selected). */
+const activeRoot = computed<string | null>(() => {
+  let slug = props.filters.category
+  for (let i = 0; slug && i < 10; i++) {
+    const parent = parentOf(slug)
+    if (parent === null) return slug
+    slug = parent
+  }
+  return null
+})
+
 const filterOptions = computed<FilterOption[]>(() => [
   { value: null, label: t('common.all'), href: route('insights.index') },
-  ...props.categories.map((category) => ({
-    value: category.slug,
-    label: category.name,
-    href: route('insights.category', { category: category.slug }),
-  })),
+  ...props.categories.filter((c) => parentOf(c.slug) === null).map((c) => optionFor(c.slug, c.name)),
 ])
+
+/** Active chip in the top row: the root of the selected branch. */
+const rootActive = computed(() => activeRoot.value)
+
+/**
+ * Second row: children of the selected category when it has any, otherwise
+ * its siblings; led by an "all of <parent>" chip.
+ */
+const subParent = computed<string | null>(() => {
+  const active = props.filters.category
+  if (!active) return null
+  const hasChildren = props.categories.some((c) => parentOf(c.slug) === active)
+  return hasChildren ? active : parentOf(active)
+})
+
+const subOptions = computed<FilterOption[]>(() => {
+  const parent = subParent.value
+  if (!parent) return []
+  const children = props.categories.filter((c) => parentOf(c.slug) === parent)
+  if (children.length === 0) return []
+  return [
+    optionFor(parent, t('common.all')),
+    ...children.map((c) => optionFor(c.slug, c.name)),
+  ]
+})
 
 // The frame's 2-up row, then everything else 3-up.
 const wide = computed(() => props.posts.data.slice(0, 2))
@@ -116,8 +165,17 @@ const rest = computed(() => props.posts.data.slice(2))
                layout; the wider track keeps the localized labels visible. -->
           <FilterChips
             :options="filterOptions"
-            :active="props.filters.category"
+            :active="rootActive"
             :label="t('blog.categories')"
+            single-line
+          />
+        </div>
+
+        <div v-if="subOptions.length" class="-mt-8 flex w-full justify-center max-md:-mt-6 max-md:justify-start">
+          <FilterChips
+            :options="subOptions"
+            :active="props.filters.category"
+            :label="t('blog.subcategories')"
             single-line
           />
         </div>

@@ -5,7 +5,8 @@ import AppHeader from '@/Layouts/AppHeader.vue'
 import AppFooter from '@/Layouts/AppFooter.vue'
 import MobileMenu from '@/Layouts/MobileMenu.vue'
 import FlashMessages from '@/Components/FlashMessages.vue'
-import type { SharedProps } from '@/types'
+import Breadcrumbs from '@/Components/Breadcrumbs.vue'
+import type { Breadcrumb, SharedProps } from '@/types'
 import siteBackgroundUrl from '~img/sizdah/shared/site-background.webp'
 
 /**
@@ -55,6 +56,13 @@ const nonHomeBackground = computed(() => page.component !== 'Home')
 const workTopBackground = computed(() => page.component === 'Work/Index')
 
 const menuOpen = ref(false)
+
+// Every page passes `seo`; only inner pages carry a trail (Breadcrumbs.vue).
+const breadcrumbs = computed<Breadcrumb[]>(() =>
+  page.component === 'Error'
+    ? []
+    : ((page.props as { seo?: { breadcrumbs?: Breadcrumb[] } }).seo?.breadcrumbs ?? []),
+)
 </script>
 
 <template>
@@ -75,7 +83,8 @@ const menuOpen = ref(false)
       leave-active-class="transition-opacity duration-200 ease-brand"
       leave-to-class="opacity-0"
     >
-      <main id="main" :key="page.url" class="flex-1">
+      <main id="main" :key="page.url" class="relative flex-1">
+        <Breadcrumbs v-if="breadcrumbs.length > 1" :items="breadcrumbs" />
         <slot />
       </main>
     </Transition>

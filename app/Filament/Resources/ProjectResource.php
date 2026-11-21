@@ -87,10 +87,23 @@ final class ProjectResource extends Resource
                     ->label('Results summary')
                     ->rows(3),
 
-                TextInput::make("translations.{$locale}.cover_alt")
-                    ->label('Cover image alt text')
-                    ->maxLength(300)
-                    ->helperText('Describes the image for screen readers and SEO.'),
+                \Filament\Forms\Components\Section::make('متن جایگزین تصاویر (Image alt text)')
+                    ->description('برای صفحه‌خوان‌ها و سئو. اگر خالی بماند، alt همان فایل در کتابخانه رسانه استفاده می‌شود.')
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make("translations.{$locale}.cover_alt")
+                            ->label('تصویر کاور (Cover)')
+                            ->maxLength(300),
+                        TextInput::make("translations.{$locale}.banner_alt")
+                            ->label('بنر نمونه‌کار (Banner)')
+                            ->maxLength(300),
+                        TextInput::make("translations.{$locale}.before_alt")
+                            ->label('تصویر قبل (Before)')
+                            ->maxLength(300),
+                        TextInput::make("translations.{$locale}.after_alt")
+                            ->label('تصویر بعد (After)')
+                            ->maxLength(300),
+                    ]),
             ]),
 
             Grid::make(3)->schema([

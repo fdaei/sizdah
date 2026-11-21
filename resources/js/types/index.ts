@@ -26,7 +26,8 @@ export interface LocaleProp {
 }
 
 export interface NavItem {
-  id: number
+  /** Menu item ID, or "category-{id}" for a generated category entry. */
+  id: number | string
   label: string
   url: string
   target: '_self' | '_blank'
@@ -98,6 +99,16 @@ export interface SeoMeta {
     image: string | null
   }
   schema?: Record<string, unknown> | Record<string, unknown>[]
+  /** Home › … › current page. Empty on Home or when switched off. */
+  breadcrumbs?: Breadcrumb[]
+}
+
+export interface Breadcrumb {
+  name: string
+  /** Relative URL, for Inertia links. */
+  href: string
+  /** Absolute URL (JSON-LD only). */
+  url: string
 }
 
 export interface MediaImage {

@@ -77,8 +77,9 @@ final class PostResource extends Resource
                     ->helperText('Insert [[lead_magnet]] on its own line wherever the Content Direction Checklist should appear.'),
 
                 TextInput::make("translations.{$locale}.cover_alt")
-                    ->label('Cover alt text')
-                    ->maxLength(300),
+                    ->label('متن جایگزین تصویر کاور (Cover alt text)')
+                    ->maxLength(300)
+                    ->helperText('توضیح تصویر برای صفحه‌خوان‌ها و Google Images. اگر خالی بماند، alt همان فایل در کتابخانه رسانه استفاده می‌شود.'),
             ]),
 
             Grid::make(3)->schema([
@@ -88,12 +89,9 @@ final class PostResource extends Resource
                     ->schema([
                         Select::make('post_category_id')
                             ->label('Category')
-                            ->relationship('category')
-                            ->getOptionLabelFromRecordUsing(
-                                fn (PostCategory $record): string => (string) $record->getTranslation('name'),
-                            )
+                            // Full path, so subcategories are distinguishable.
+                            ->options(fn (): array => PostCategoryResource::pathOptions(null))
                             ->searchable()
-                            ->preload()
                             ->native(false),
 
                         Select::make('tags')

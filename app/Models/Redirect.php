@@ -27,6 +27,7 @@ final class Redirect extends Model
     public const STATUSES = [
         301 => '301 — دائمی (Permanent)',
         302 => '302 — موقت (Temporary)',
+        303 => '303 — See Other',
         307 => '307 — موقت، حفظ متد (Temporary Redirect)',
         308 => '308 — دائمی، حفظ متد (Permanent Redirect)',
         410 => '410 — حذف‌شده (Content deleted)',

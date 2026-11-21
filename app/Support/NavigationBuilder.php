@@ -6,6 +6,7 @@ namespace App\Support;
 
 use App\Models\Menu;
 use App\Models\MenuItem;
+use App\Models\PostCategory;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
@@ -49,7 +50,7 @@ final class NavigationBuilder
     private static function build(string $location, string $locale): array
     {
         return Cache::remember(
-            "nav.{$location}.{$locale}",
+            "nav.v2.{$location}.{$locale}",
             self::TTL,
             function () use ($location, $locale): array {
                 $menu = Menu::query()
@@ -85,6 +86,10 @@ final class NavigationBuilder
             ->values()
             ->all();
 
+        if ($item->children_source === 'post_categories') {
+            $children = [...$children, ...self::categoryItems(PostCategory::tree(), $locale)];
+        }
+
         return [
             'id' => $item->id,
             'label' => $item->getTranslation('label', $locale),
@@ -95,11 +100,40 @@ final class NavigationBuilder
         ];
     }
 
+    /**
+     * Category tree as nav items. IDs are prefixed so they never collide with
+     * real menu item IDs (both are used as Vue keys).
+     *
+     * @param  iterable<PostCategory>  $categories
+     * @return list<array<string, mixed>>
+     */
+    private static function categoryItems(iterable $categories, string $locale): array
+    {
+        $items = [];
+
+        foreach ($categories as $category) {
+            if (blank($category->getTranslation('slug', $locale, false))) {
+                continue; // not translated into this locale
+            }
+
+            $items[] = [
+                'id' => 'category-'.$category->id,
+                'label' => (string) $category->getTranslation('name', $locale),
+                'url' => $category->url($locale, false),
+                'target' => '_self',
+                'isCta' => false,
+                'children' => self::categoryItems($category->children, $locale),
+            ];
+        }
+
+        return $items;
+    }
+
     public static function flush(): void
     {
         foreach (array_keys(config('locales.supported')) as $locale) {
-            Cache::forget("nav.header.{$locale}");
-            Cache::forget("nav.footer.{$locale}");
+            Cache::forget("nav.v2.header.{$locale}");
+            Cache::forget("nav.v2.footer.{$locale}");
         }
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models\Translations;
 
+use App\Services\Redirects\SlugRedirector;
+use App\Support\NavigationBuilder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -18,4 +20,12 @@ final class PostCategoryTranslation extends Model
         'slug',
         'description',
     ];
+
+    protected static function booted(): void
+    {
+        self::updating(fn (self $t) => SlugRedirector::handle($t));
+        // Names/slugs feed generated category submenus.
+        self::saved(fn () => NavigationBuilder::flush());
+        self::deleted(fn () => NavigationBuilder::flush());
+    }
 }

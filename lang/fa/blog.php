@@ -13,6 +13,7 @@ return [
     'share' => 'اشتراک‌گذاری این مقاله',
     'related' => 'مقالات مرتبط',
     'categories' => 'دسته‌بندی‌ها',
+    'subcategories' => 'زیردسته‌ها',
     'tags' => 'برچسب‌ها',
     'copy_link' => 'کپی لینک',
     'link_copied' => 'لینک کپی شد',

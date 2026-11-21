@@ -6,6 +6,7 @@ return [
 
     'skip_to_content' => 'Skip to content',
     'primary_navigation' => 'Primary navigation',
+    'breadcrumbs' => 'Breadcrumb',
     'change_language' => 'Change language',
     'open_menu' => 'Open menu',
     'close_menu' => 'Close menu',

@@ -122,16 +122,22 @@ final class PostController extends Controller
             ],
 
             'categories' => Cache::remember(
-                'insights.categories.'.app()->getLocale(),
+                'insights.categories.v2.'.app()->getLocale(),
                 now()->addHour(),
+                // Flat list; `parent` (a slug) lets the page show the
+                // subcategories of the selected branch.
                 fn (): array => PostCategory::query()
                     ->ordered()
                     ->withTranslations()
+                    ->with('parent.translations')
                     ->get()
                     ->map(fn (PostCategory $c): array => [
                         'slug' => (string) $c->getTranslation('slug'),
                         'name' => (string) $c->getTranslation('name'),
+                        'parent' => $c->parent === null ? null : (string) $c->parent->getTranslation('slug'),
                     ])
+                    ->filter(fn (array $c): bool => $c['slug'] !== '')
+                    ->values()
                     ->all(),
             ),
 

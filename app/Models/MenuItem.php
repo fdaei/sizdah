@@ -28,6 +28,7 @@ final class MenuItem extends Model
     protected $fillable = [
         'menu_id',
         'parent_id',
+        'children_source',
         'route_name',
         'route_params',
         'url',
@@ -35,6 +36,11 @@ final class MenuItem extends Model
         'is_cta',
         'sort_order',
         'is_active',
+    ];
+
+    /** Generated submenus: children_source value => admin label. */
+    public const CHILDREN_SOURCES = [
+        'post_categories' => 'دسته‌بندی مقالات با زیردسته‌ها (Article categories)',
     ];
 
     /** @var array<int, string> */

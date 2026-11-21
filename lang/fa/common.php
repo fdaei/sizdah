@@ -6,6 +6,7 @@ return [
 
     'skip_to_content' => 'رفتن به محتوا',
     'primary_navigation' => 'ناوبری اصلی',
+    'breadcrumbs' => 'مسیر صفحه',
     'change_language' => 'تغییر زبان',
     'open_menu' => 'باز کردن منو',
     'close_menu' => 'بستن منو',

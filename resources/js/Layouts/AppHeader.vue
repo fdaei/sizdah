@@ -81,7 +81,19 @@ function isActive(item: NavItem): boolean {
                   : 'text-title-md text-ink-200 hover:text-paper'
               "
             >
-              {{ item.label }}
+              <span class="inline-flex items-center gap-1.5">
+                {{ item.label }}
+                <!-- Signals that hovering/focusing opens a submenu. -->
+                <svg
+                  v-if="item.children.length"
+                  class="size-3 opacity-70 transition-transform duration-200 ease-brand group-hover/nav:rotate-180 group-focus-within/nav:rotate-180"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
               <!--
                 The two states use different nodes, not one asset at two
                 opacities (header item 20:2087):
@@ -106,7 +118,7 @@ function isActive(item: NavItem): boolean {
               </span>
               <span v-else class="block h-[9.676px] w-[45.276px]" aria-hidden="true" />
             </component>
-            <NavSubmenu v-if="item.children.length" :items="item.children" />
+            <NavSubmenu v-if="item.children.length" :items="item.children" :is-active="isActive" />
           </li>
         </ul>
       </nav>

@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Services\Redirects;
 
 use App\Models\Post;
+use App\Models\PostCategory;
 use App\Models\Project;
 use App\Models\Redirect;
+use App\Models\Translations\PostCategoryTranslation;
 use App\Models\Translations\PostTranslation;
 use App\Models\Translations\ProjectTranslation;
 use Illuminate\Database\Eloquent\Model;
+use App\Support\SiteSettings;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -19,6 +22,9 @@ use Illuminate\Support\Facades\Cache;
  * source is the new URL is removed so the new URL can never loop.
  *
  * Hooked from translation models' `updating` event (see bootSlugRedirects()).
+ *
+ * SEO settings → Search appearance: `seo_slug_redirect` (on by default) and
+ * `seo_slug_redirect_status` (301 by default).
  */
 final class SlugRedirector
 {
@@ -26,12 +32,27 @@ final class SlugRedirector
     public const ROUTES = [
         PostTranslation::class => ['post_id', 'insights.show', 'post', Post::class],
         ProjectTranslation::class => ['project_id', 'work.show', 'project', Project::class],
+        PostCategoryTranslation::class => ['post_category_id', 'insights.category', 'category', PostCategory::class],
     ];
+
+    public const STATUSES = [301, 302, 303, 307, 308];
+
+    public static function enabled(): bool
+    {
+        return (bool) SiteSettings::get('seo_slug_redirect', null, true);
+    }
+
+    public static function status(): int
+    {
+        $status = (int) SiteSettings::get('seo_slug_redirect_status', null, 301);
+
+        return in_array($status, self::STATUSES, true) ? $status : 301;
+    }
 
     public static function handle(Model $translation): void
     {
         $config = self::ROUTES[$translation::class] ?? null;
-        if ($config === null || ! $translation->isDirty('slug')) {
+        if ($config === null || ! $translation->isDirty('slug') || ! self::enabled()) {
             return;
         }
 
@@ -43,8 +64,10 @@ final class SlugRedirector
         }
 
         $parent = $parentClass::query()->find($translation->getAttribute($fk));
-        if ($parent === null || ! method_exists($parent, 'isPublished') || ! $parent->isPublished()) {
-            return; // never-published URLs have no inbound links to keep
+        // Never-published URLs have no inbound links to keep. Categories have
+        // no publication state: they are public as soon as they exist.
+        if ($parent === null || (method_exists($parent, 'isPublished') && ! $parent->isPublished())) {
+            return;
         }
 
         $locale = (string) $translation->getAttribute('locale');
@@ -62,7 +85,7 @@ final class SlugRedirector
             [
                 'destination_path' => $to,
                 'match_type' => 'exact',
-                'status_code' => 301,
+                'status_code' => self::status(),
                 'is_active' => true,
                 'origin' => 'auto',
                 'notes' => 'ساخته‌شده خودکار پس از تغییر نامک (Auto: slug changed)',

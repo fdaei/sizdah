@@ -37,6 +37,7 @@ return [
             'menu' => 'Website menus',
             'social_link' => 'Social media links',
             'redirect' => 'ریدایرکت‌ها (Redirections)',
+            'media' => 'کتابخانه رسانه (Media)',
             'user' => 'Admin users',
         ],
     ],
@@ -58,6 +59,7 @@ return [
         'menu' => 'website menu',
         'social_link' => 'social media link',
         'redirect' => 'ریدایرکت (Redirection)',
+        'media' => 'رسانه (Media)',
         'user' => 'admin user',
     ],
     'models_plural' => [
@@ -78,6 +80,7 @@ return [
         'menu' => 'website menus',
         'social_link' => 'social media links',
         'redirect' => 'ریدایرکت‌ها (Redirections)',
+        'media' => 'رسانه‌ها (Media)',
         'user' => 'admin users',
     ],
     /*

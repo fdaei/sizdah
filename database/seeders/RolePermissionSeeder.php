@@ -44,6 +44,7 @@ final class RolePermissionSeeder extends Seeder
         'client',
         'contact_submission',
         'lead_magnet_request',
+        'media',
     ];
 
     /**

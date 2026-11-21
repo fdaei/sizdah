@@ -12,6 +12,7 @@ return [
     'share' => 'شارك هذا المقال',
     'related' => 'مقالات ذات صلة',
     'categories' => 'التصنيفات',
+    'subcategories' => 'الفئات الفرعية',
     'tags' => 'الوسوم',
     'copy_link' => 'نسخ الرابط',
     'link_copied' => 'تم نسخ الرابط',

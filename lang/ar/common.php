@@ -6,6 +6,7 @@ return [
 
     'skip_to_content' => 'تخطَّ إلى المحتوى',
     'primary_navigation' => 'التنقل الرئيسي',
+    'breadcrumbs' => 'مسار التنقل',
     'change_language' => 'تغيير اللغة',
     'open_menu' => 'فتح القائمة',
     'close_menu' => 'إغلاق القائمة',

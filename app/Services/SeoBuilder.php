@@ -89,6 +89,7 @@ final class SeoBuilder
             meta: $project->seoFor(),
             legacyTitle: $project->getTranslation('seo_title'),
             schemaType: 'CreativeWork',
+            extraNodes: self::coverNodes($project->cover_path),
             extra: array_filter([
                 'dateCreated' => $project->year ? (string) $project->year : null,
                 'creator' => ['@id' => rtrim(url('/'), '/').'/#organization'],
@@ -146,6 +147,7 @@ final class SeoBuilder
             canonical: $category->url(),
             type: 'website',
             schemaType: 'CollectionPage',
+            trail: self::categoryTrail($category->ancestors()),
             meta: $category->seoFor(),
             modifiedAt: $category->updated_at?->toIso8601String(),
             bodyHtml: SchemaNodes::bodyHtml([], [$category->getTranslation('description')]),
@@ -171,6 +173,8 @@ final class SeoBuilder
             meta: $post->seoFor(),
             legacyTitle: $post->getTranslation('seo_title'),
             section: $post->category?->getTranslation('name'),
+            extraNodes: self::coverNodes($post->cover_path),
+            trail: $post->category === null ? [] : self::categoryTrail([...$post->category->ancestors(), $post->category]),
             tags: $post->tags->map(fn ($t): string => (string) $t->getTranslation('name'))->filter()->values()->all(),
             wordCount: count(SeoAnalyzer::words(SeoAnalyzer::plain((string) $post->getTranslation('content')))),
             bodyHtml: SchemaNodes::bodyHtml([$post->getTranslation('content')]),
@@ -199,6 +203,7 @@ final class SeoBuilder
         array $extra = [],
         array $extraNodes = [],
         string $bodyHtml = '',
+        array $trail = [],
     ): array {
         $locale = app()->getLocale();
         $request = request();
@@ -271,11 +276,14 @@ final class SeoBuilder
             )];
         }
 
+        // One trail for both the visible breadcrumb and the BreadcrumbList.
+        $breadcrumbs = self::breadcrumbTrail($meta?->breadcrumb_title ?: $title, $canonical, $trail);
+
         $schema = self::schema(
             $meta?->schema_data['headline'] ?? null ?: $title, $description, $image, $canonical, $type, $schemaType,
             $publishedAt, $modifiedAt, $author,
             articleType: $articleType,
-            breadcrumbTitle: $meta?->breadcrumb_title ?: $title,
+            breadcrumbs: $breadcrumbs,
             extra: array_filter([
                 'keywords' => $keywords,
                 'articleSection' => $section,
@@ -331,7 +339,56 @@ final class SeoBuilder
                 'image' => self::media($meta?->twitter_image) ?? $ogImage,
             ],
             'schema' => $schema,
+            // Rendered by resources/js/Components/Breadcrumbs.vue.
+            'breadcrumbs' => $breadcrumbs === null ? [] : array_map(fn (array $c): array => [
+                'name' => $c[0],
+                'href' => self::relative($c[1]),
+                'url' => $c[1],
+            ], $breadcrumbs),
         ];
+    }
+
+    /**
+     * Category chain as middle crumbs: [[name, absolute url], …].
+     *
+     * @param  list<PostCategory>  $categories
+     * @return list<array{0:string, 1:string}>
+     */
+    private static function categoryTrail(array $categories): array
+    {
+        return array_map(
+            fn (PostCategory $c): array => [(string) $c->getTranslation('name'), $c->url()],
+            $categories,
+        );
+    }
+
+    /**
+     * The cover's Media-library node (ImageObject with title, caption, alt,
+     * credit, dimensions) when the file is in the library.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private static function coverNodes(?string $path): array
+    {
+        if ($path === null || $path === '') {
+            return [];
+        }
+
+        $node = \App\Models\Media::query()->where('path', ltrim($path, '/'))->with('translations')->first()?->schema();
+        if ($node === null) {
+            return [];
+        }
+        unset($node['@context']); // inside the page @graph
+
+        return [$node];
+    }
+
+    private static function relative(string $url): string
+    {
+        $path = (string) (parse_url($url, PHP_URL_PATH) ?: '/');
+        $query = parse_url($url, PHP_URL_QUERY);
+
+        return $path.($query ? '?'.$query : '');
     }
 
     /**
@@ -351,7 +408,7 @@ final class SeoBuilder
         ?string $modifiedAt,
         ?string $author,
         ?string $articleType = null,
-        ?string $breadcrumbTitle = null,
+        ?array $breadcrumbs = null,
         array $extra = [],
     ): array {
         $locale = app()->getLocale();
@@ -383,7 +440,7 @@ final class SeoBuilder
             ],
         ];
 
-        $breadcrumbs = self::breadcrumbs($breadcrumbTitle ?? $title, $canonical);
+        $breadcrumbs = $breadcrumbs === null ? null : self::breadcrumbList($breadcrumbs, $canonical);
 
         $node = array_filter([
             '@type' => $type === 'article'
@@ -449,7 +506,14 @@ final class SeoBuilder
      *
      * @return array<string, mixed>|null
      */
-    private static function breadcrumbs(string $title, string $canonical): ?array
+    /**
+     * Home › [section] › [middle…] › current page, or null on Home / when
+     * breadcrumbs are switched off in SEO settings.
+     *
+     * @param  list<array{0:string, 1:string}>  $middle  e.g. the category chain
+     * @return list<array{0:string, 1:string}>|null
+     */
+    private static function breadcrumbTrail(string $title, string $canonical, array $middle = []): ?array
     {
         $name = Route::currentRouteName();
 
@@ -464,8 +528,24 @@ final class SeoBuilder
             $items[] = [__("seo.breadcrumbs.{$parent}"), route($parent)];
         }
 
-        $items[] = [$title, $canonical];
+        // A category page's own entry is the current page, not a middle crumb.
+        foreach ($middle as $crumb) {
+            if ($crumb[1] !== $canonical) {
+                $items[] = $crumb;
+            }
+        }
 
+        $items[] = [strip_tags($title), $canonical];
+
+        return $items;
+    }
+
+    /**
+     * @param  list<array{0:string, 1:string}>  $items
+     * @return array<string, mixed>
+     */
+    private static function breadcrumbList(array $items, string $canonical): array
+    {
         return [
             '@type' => 'BreadcrumbList',
             '@id' => "{$canonical}#breadcrumb",

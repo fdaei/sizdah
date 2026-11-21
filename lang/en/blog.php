@@ -12,6 +12,7 @@ return [
     'share' => 'Share this article',
     'related' => 'Related Articles',
     'categories' => 'Categories',
+    'subcategories' => 'Subcategories',
     'tags' => 'Tags',
     'copy_link' => 'Copy link',
     'link_copied' => 'Link copied',

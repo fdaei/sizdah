@@ -100,6 +100,9 @@ final class ManageSeoSettings extends Page implements HasForms
         // Breadcrumbs
         'seo_breadcrumbs_enabled' => false,
         'seo_breadcrumb_home' => true,
+        // Redirect on slug change
+        'seo_slug_redirect' => false,
+        'seo_slug_redirect_status' => false,
         // robots.txt + code
         'seo_robots_txt' => false,
         'seo_head_code' => false,
@@ -114,6 +117,8 @@ final class ManageSeoSettings extends Page implements HasForms
         'seo_kg_country' => 'IR',
         'seo_noindex_search' => true,
         'seo_breadcrumbs_enabled' => true,
+        'seo_slug_redirect' => true,
+        'seo_slug_redirect_status' => '301',
     ];
 
     public static function canAccess(): bool
@@ -335,11 +340,29 @@ final class ManageSeoSettings extends Page implements HasForms
                 Toggle::make('seo_noindex_post_tag')->label('noindex برای برچسب‌های مقالات (Tags)'),
 
                 Toggle::make('seo_breadcrumbs_enabled')
-                    ->label('بردکرامب در اسکیما (Breadcrumbs schema)')
+                    ->label('بردکرامب در سایت و اسکیما (Breadcrumbs)')
+                    ->helperText('مسیر صفحه بالای همهٔ صفحه‌ها (به‌جز خانه) و BreadcrumbList در اسکیما.')
                     ->live(),
                 ...$this->perLocale('seo_breadcrumb_home', fn (string $p) => TextInput::make($p)
                     ->label('عنوان «خانه» در بردکرامب (Breadcrumb home label)')
                     ->placeholder(__('seo.breadcrumbs.home'))),
+
+                Toggle::make('seo_slug_redirect')
+                    ->label('ریدایرکت خودکار هنگام تغییر نامک (Redirect on slug change)')
+                    ->helperText('وقتی نامک مقاله، نمونه‌کار یا دسته‌بندی منتشرشده عوض شود، آدرس قبلی به آدرس جدید منتقل می‌شود.')
+                    ->live(),
+                Select::make('seo_slug_redirect_status')
+                    ->label('کد وضعیت ریدایرکت (Status code)')
+                    ->options([
+                        '301' => '301 — دائمی، پیشنهادی برای سئو (Permanent)',
+                        '302' => '302 — موقت (Temporary)',
+                        '303' => '303 — See Other',
+                        '307' => '307 — موقت، حفظ متد (Temporary Redirect)',
+                        '308' => '308 — دائمی، حفظ متد (Permanent Redirect)',
+                    ])
+                    ->native(false)
+                    ->selectablePlaceholder(false)
+                    ->visible(fn (Get $get): bool => (bool) $get('seo_slug_redirect')),
             ]);
     }
 

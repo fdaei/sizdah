@@ -7,7 +7,7 @@ import type { NavItem } from '@/types'
 defineProps<{ items: NavItem[]; depth?: number }>()
 const emit = defineEmits<{ navigate: [] }>()
 
-const open = ref<Record<number, boolean>>({})
+const open = ref<Record<number | string, boolean>>({})
 </script>
 
 <template>

@@ -37,6 +37,7 @@ return [
             'menu' => 'منوهای سایت',
             'social_link' => 'لینک شبکه‌های اجتماعی',
             'redirect' => 'ریدایرکت‌ها (Redirections)',
+            'media' => 'کتابخانه رسانه (Media)',
             'user' => 'کاربران پنل',
         ],
     ],
@@ -58,6 +59,7 @@ return [
         'menu' => 'منوی سایت',
         'social_link' => 'لینک شبکه اجتماعی',
         'redirect' => 'ریدایرکت (Redirection)',
+        'media' => 'رسانه (Media)',
         'user' => 'کاربر پنل',
     ],
     'models_plural' => [
@@ -78,6 +80,7 @@ return [
         'menu' => 'منوهای سایت',
         'social_link' => 'لینک‌های شبکه اجتماعی',
         'redirect' => 'ریدایرکت‌ها (Redirections)',
+        'media' => 'رسانه‌ها (Media)',
         'user' => 'کاربران پنل',
     ],
     /*
