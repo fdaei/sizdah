@@ -49,6 +49,26 @@ enum SectionType: string implements HasLabel
     // Legal / rich-text pages
     case RichText = 'rich_text';
 
+    // Generic page-builder blocks — usable on any page, any number of times,
+    // rendered in sort order by SectionBlocks.vue after the page's own layout.
+    case Gallery = 'gallery';
+    case Features = 'features';
+    case CtaBanner = 'cta_banner';
+
+    /** Types rendered by the generic block renderer (ordered, repeatable). */
+    public const BLOCKS = ['rich_text', 'gallery', 'features', 'cta_banner'];
+
+    public function isBlock(): bool
+    {
+        return in_array($this->value, self::BLOCKS, true);
+    }
+
+    /** Blocks whose cards carry an image. */
+    public function hasItemImages(): bool
+    {
+        return in_array($this, [self::Gallery, self::Features], true);
+    }
+
     public function getLabel(): string
     {
         $key = "admin.section_types.{$this->value}";
@@ -99,6 +119,8 @@ enum SectionType: string implements HasLabel
             self::Strategy,
             self::Deliverables,
             self::Results,
+            self::Gallery,
+            self::Features,
         ], true);
     }
 

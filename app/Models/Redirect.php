@@ -90,8 +90,13 @@ final class Redirect extends Model
             }
         });
 
-        self::saved(fn () => Cache::forget(self::CACHE_KEY));
-        self::deleted(fn () => Cache::forget(self::CACHE_KEY));
+        // Void on purpose: a listener returning false (Cache::forget on a cold
+        // key) stops the remaining listeners, incl. the page-cache bust.
+        $flush = function (): void {
+            Cache::forget(self::CACHE_KEY);
+        };
+        self::saved($flush);
+        self::deleted($flush);
     }
 
     public function scopeActive($query)

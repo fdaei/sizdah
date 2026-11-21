@@ -309,6 +309,22 @@ final class SectionsRelationManager extends RelationManager
                             ->helperText('Packages: e.g. "Best for growing brands".'),
                     ]),
 
+                    // Gallery / features cards: image + per-locale alt text.
+                    FileUpload::make('image_path')
+                        ->label('Image')
+                        ->image()
+                        ->imageEditor()
+                        ->directory('sections')
+                        ->disk('public')
+                        ->visible(fn (Get $get): bool => self::sectionType($get('../../type'))?->hasItemImages() ?? false),
+
+                    TranslatableForm::tabs(fn (string $locale): array => [
+                        TextInput::make("translations.{$locale}.image_alt")
+                            ->label('Image alt text')
+                            ->maxLength(300)
+                            ->helperText('Describe the image for screen readers and SEO.'),
+                    ])->visible(fn (Get $get): bool => self::sectionType($get('../../type'))?->hasItemImages() ?? false),
+
                     // `../../type` climbs from the repeater item to the section.
                     Select::make('icon')
                         ->label('Icon')

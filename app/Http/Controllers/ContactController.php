@@ -37,6 +37,9 @@ final class ContactController extends Controller
                 ? []
                 : ContentTransformer::sectionMap($page->sections),
 
+            // Generic page-builder blocks (rich text, gallery, features, CTA), in order.
+            'blocks' => $page === null ? [] : ContentTransformer::blocks($page->sections),
+
             'heading' => [
                 'eyebrow' => (string) $page?->getTranslation('subtitle'),
                 'title' => (string) $page?->getTranslation('title'),

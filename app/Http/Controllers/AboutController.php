@@ -33,6 +33,9 @@ final class AboutController extends Controller
                 ? []
                 : ContentTransformer::sectionMap($page->sections),
 
+            // Generic page-builder blocks (rich text, gallery, features, CTA), in order.
+            'blocks' => $page === null ? [] : ContentTransformer::blocks($page->sections),
+
             'team' => TeamMember::query()
                 ->forDisplay()
                 ->get()

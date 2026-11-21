@@ -43,6 +43,9 @@ final class HomeController extends Controller
                 ? []
                 : ContentTransformer::sectionMap($page->sections),
 
+            // Generic page-builder blocks (rich text, gallery, features, CTA), in order.
+            'blocks' => $page === null ? [] : ContentTransformer::blocks($page->sections),
+
             // Services cloud — Figma 1419:9279
             'services' => Service::query()
                 ->forDisplay()

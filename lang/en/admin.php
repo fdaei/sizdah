@@ -111,6 +111,9 @@ return [
         'showcase' => 'Showcase',
         'results' => 'Project results',
         'rich_text' => 'Free rich text',
+        'gallery' => 'Image gallery',
+        'features' => 'Features',
+        'cta_banner' => 'Call-to-action banner',
     ],
     'section_guide' => [
         'heading' => 'How this section is used',
@@ -138,6 +141,9 @@ return [
         'showcase' => 'The gallery is edited in the project\'s Images tab; this section type is not rendered.',
         'results' => 'Each card: Title = label · Value = number · Icon = tile glyph.',
         'rich_text' => 'Free rich text.',
+        'gallery' => 'Generic block: heading + description · each card: image, alt text, caption (title). Usable on any page, any number of times.',
+        'features' => 'Generic block: heading + description · each card: title, description, optional image.',
+        'cta_banner' => 'Generic block: title · description · primary and secondary button.',
     ],
     'section_icons' => [
         'engagement' => 'Engagement',

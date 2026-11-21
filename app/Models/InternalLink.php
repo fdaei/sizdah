@@ -24,7 +24,10 @@ final class InternalLink extends Model
 
     protected static function booted(): void
     {
-        $flush = fn (self $link) => Cache::forget(self::CACHE_KEY.$link->locale);
+        // Void on purpose: returning false would stop later model listeners.
+        $flush = function (self $link): void {
+            Cache::forget(self::CACHE_KEY.$link->locale);
+        };
         self::saved($flush);
         self::deleted($flush);
     }

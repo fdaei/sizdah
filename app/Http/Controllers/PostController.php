@@ -144,6 +144,9 @@ final class PostController extends Controller
                 ? []
                 : ContentTransformer::sectionMap($page->sections),
 
+            // Generic page-builder blocks (rich text, gallery, features, CTA), in order.
+            'blocks' => $page === null ? [] : ContentTransformer::blocks($page->sections),
+
             'seo' => $category === null
                 ? SeoBuilder::forPage($page, $request->url())
                 : SeoBuilder::forCategory($category),

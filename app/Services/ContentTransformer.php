@@ -380,6 +380,22 @@ final class ContentTransformer
     }
 
     /**
+     * Generic page-builder blocks of a page, in editor order. Unlike
+     * sectionMap() a type may appear any number of times.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public static function blocks(Collection $sections): array
+    {
+        return $sections
+            ->filter(fn (PageSection $s): bool => $s->type->isBlock())
+            ->sortBy('sort_order')
+            ->map(fn (PageSection $s): array => ['id' => $s->getKey()] + self::section($s))
+            ->values()
+            ->all();
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public static function sectionItem(SectionItem $item): array

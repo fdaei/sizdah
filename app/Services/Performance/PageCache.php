@@ -29,6 +29,8 @@ final class PageCache
         \App\Models\LeadMagnetRequest::class,
         \App\Models\ContentRevision::class,
         \App\Models\User::class,
+        // Pending ratings are invisible; ServiceRating busts the cache itself on approval changes.
+        \App\Models\ServiceRating::class,
         \Illuminate\Notifications\DatabaseNotification::class,
     ];
 

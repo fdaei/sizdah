@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Services\Performance\PageCache;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,9 +25,27 @@ final class ServiceRating extends Model
 
     protected static function booted(): void
     {
-        $flush = fn (self $r) => Cache::forget(self::cacheKey((int) $r->service_id));
+        // Must return void: a listener returning false (Cache::forget on a
+        // missing key) stops the model's remaining event listeners.
+        $flush = function (self $r): void {
+            Cache::forget(self::cacheKey((int) $r->service_id));
+        };
         self::saved($flush);
         self::deleted($flush);
+
+        // Public output (average + AggregateRating) only changes when an
+        // approved rating appears, disappears or changes — not on new pending votes.
+        self::saved(function (self $r): void {
+            if ($r->wasChanged('approved_at') || ($r->approved_at !== null && $r->wasChanged('rating'))
+                || ($r->wasRecentlyCreated && $r->approved_at !== null)) {
+                PageCache::flush();
+            }
+        });
+        self::deleted(function (self $r): void {
+            if ($r->approved_at !== null) {
+                PageCache::flush();
+            }
+        });
     }
 
     /** @return BelongsTo<Service, $this> */
