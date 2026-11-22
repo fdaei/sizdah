@@ -29,6 +29,7 @@ rsync -a --relative \
   --exclude='/database/*.sqlite*' \
   --exclude='*.sql' \
   --exclude='/public/hot' \
+  --exclude='/public/install.php' \
   --exclude='/public/storage' \
   app bootstrap config database lang public resources routes vendor \
   artisan composer.json composer.lock "$PACKAGE_ROOT/"
@@ -40,7 +41,6 @@ mkdir -p "$PACKAGE_ROOT/bootstrap/cache" \
   "$PACKAGE_ROOT/storage/framework/sessions" \
   "$PACKAGE_ROOT/storage/framework/views" \
   "$PACKAGE_ROOT/storage/logs"
-rsync -a --safe-links storage/app/public/ "$PACKAGE_ROOT/storage/app/public/"
 cp docs/CPANEL-DEPLOYMENT.md "$PACKAGE_ROOT/DEPLOYMENT.md"
 cp .env.example "$PACKAGE_ROOT/.env.example"
 
@@ -65,13 +65,12 @@ composer check-platform-reqs --no-dev
 php artisan package:discover --ansi
 php artisan filament:assets --ansi
 
-# Package a relative link instead of the development machine's absolute link.
-# Some cPanel extractors require recreating this link after extraction.
-ln -s ../storage/app/public public/storage
+# This archive is an update: preserve the host's storage link and uploaded media.
+rm -rf storage
 
 OUTPUT_DIR="$PROJECT_ROOT/dist/cpanel"
 mkdir -p "$OUTPUT_DIR"
 zip -qry "$PACKAGE_TMP/sizdah-cpanel.zip" .
 mv "$PACKAGE_TMP/sizdah-cpanel.zip" "$OUTPUT_DIR/sizdah-cpanel.zip"
 echo "Upload archive: $OUTPUT_DIR/sizdah-cpanel.zip"
-echo "Configure .env, import the database separately, and point the domain at public/."
+echo "Update existing files in place; preserve .env, storage and public/storage."
