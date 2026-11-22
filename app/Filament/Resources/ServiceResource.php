@@ -33,7 +33,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
  * Services. Figma 1323:7189 (page), 1419:9279 (home cloud).
  *
  * Independently manageable — sortable, publishable, translatable — but there
- * is deliberately no public detail route; the slug is an in-page anchor only.
+ * Services have public detail URLs; their slugs also identify in-page anchors.
  */
 final class ServiceResource extends Resource
 {
@@ -75,12 +75,6 @@ final class ServiceResource extends Resource
                     ->description('Usually you do not need to change these fields.')
                     ->collapsed()
                     ->schema([
-                        TextInput::make("translations.{$locale}.slug")
-                            ->label('Page anchor')
-                            ->required($locale === config('locales.fallback'))
-                            ->maxLength(200)
-                            ->helperText("Used in the page link: /{$locale}/services#slug."),
-
                         TextInput::make("translations.{$locale}.image_alt")
                             ->label('Image description for accessibility')
                             ->helperText('Describe the image briefly for visitors using screen readers.')
@@ -138,7 +132,7 @@ final class ServiceResource extends Resource
 
     public static function seoContext(): SeoContext
     {
-        return new SeoContext(titleField: 'title', contentFields: ['description', 'features'], pathPrefix: 'services', descriptionFallback: 'description', defaultPageType: 'Service');
+        return new SeoContext(titleField: 'title', slugField: 'slug', contentFields: ['description', 'features'], pathPrefix: 'services', descriptionFallback: 'description', slugTable: 'service_translations', slugForeignKey: 'service_id', defaultPageType: 'Service', slugMaxLength: 200);
     }
 
     public static function table(Table $table): Table

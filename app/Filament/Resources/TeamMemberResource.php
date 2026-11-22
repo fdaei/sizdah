@@ -6,13 +6,11 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resource;
 use App\Filament\Resources\TeamMemberResource\Pages;
-use App\Filament\Support\Seo\SeoContext;
-use App\Filament\Support\Seo\SeoSection;
-use App\Filament\Support\Seo\SeoTable;
 use App\Filament\Support\TranslatableForm;
 use App\Models\TeamMember;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -70,18 +68,15 @@ final class TeamMemberResource extends Resource
                     Toggle::make('is_active')->label('Active')->default(true),
                 ]),
 
-            SeoSection::make(self::seoContext()),
+            Placeholder::make('team_seo_info')
+                ->label('سئو')
+                ->content('اعضای فعال در صفحه درباره ما نمایش داده می‌شوند و اطلاعات نام، نقش و تصویر آن‌ها در اسکیمای Person همان صفحه قرار می‌گیرد. تنظیمات سئو از بخش صفحات، صفحه درباره ما مدیریت می‌شود.'),
         ]);
-    }
-
-    public static function seoContext(): SeoContext
-    {
-        return new SeoContext(titleField: 'name', contentFields: ['role'], pathPrefix: 'about', defaultPageType: 'ProfilePage');
     }
 
     public static function table(Table $table): Table
     {
-        return SeoTable::apply($table
+        return $table
             ->defaultSort('sort_order')
             ->reorderable('sort_order')
             ->columns([
@@ -117,7 +112,7 @@ final class TeamMemberResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
-            ]));
+            ]);
     }
 
     public static function getPages(): array

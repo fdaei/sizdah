@@ -53,7 +53,7 @@ final class ClientResource extends Resource
                         ->label('Logo (SVG preferred)')
                         ->directory('clients')
                         ->disk('public')
-                        ->acceptedFileTypes(['image/svg+xml', 'image/png', 'image/webp'])
+                        ->acceptedFileTypes(['image/svg+xml', 'image/png', 'image/webp', 'image/avif'])
                         ->required()
                         ->columnSpanFull(),
 

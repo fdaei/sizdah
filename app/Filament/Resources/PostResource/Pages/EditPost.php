@@ -31,5 +31,6 @@ final class EditPost extends EditRecord
     {
         $record = $this->getRecord();
         $record->updateQuietly(['reading_minutes' => $record->calculateReadingMinutes()]);
+        \App\Services\Sitemap\SitemapBuilder::bust();
     }
 }

@@ -79,7 +79,7 @@ final class PostCategoryResource extends Resource
 
     public static function seoContext(): SeoContext
     {
-        return new SeoContext(titleField: 'name', slugField: 'slug', contentFields: ['description'], pathPrefix: 'insights/category', descriptionFallback: 'description', slugTable: 'post_category_translations', slugForeignKey: 'post_category_id', defaultPageType: 'CollectionPage');
+        return new SeoContext(titleField: 'name', slugField: 'slug', contentFields: ['description'], pathPrefix: 'insights/category', descriptionFallback: 'description', slugTable: 'post_category_translations', slugForeignKey: 'post_category_id', defaultPageType: 'CollectionPage', slugMaxLength: 150);
     }
 
     public static function table(Table $table): Table

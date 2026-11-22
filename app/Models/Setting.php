@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Support\SiteSettings;
+use App\Support\TransactionalCache;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -35,7 +36,7 @@ final class Setting extends Model
 
     protected static function booted(): void
     {
-        self::saved(fn () => SiteSettings::flush());
-        self::deleted(fn () => SiteSettings::flush());
+        self::saved(fn (self $setting) => TransactionalCache::invalidate($setting, SiteSettings::flush(...)));
+        self::deleted(fn (self $setting) => TransactionalCache::invalidate($setting, SiteSettings::flush(...)));
     }
 }

@@ -49,6 +49,17 @@ it('uses a canonical override and strips tracking params from self-canonicals', 
         ->toContain('<link rel="canonical" href="https://example.com/elsewhere" inertia="canonical">');
 });
 
+it('uses the cleaned canonical consistently in metadata and structured data', function (): void {
+    aboutWithMeta(['canonical_url' => url('/fa/about').'?utm_source=test&ref=kept']);
+    $html = $this->get('/fa/about')->getContent();
+    $expected = url('/fa/about').'?ref=kept';
+    $graph = jsonLd($html)['@graph'];
+
+    expect($html)->toContain('href="'.e($expected).'" inertia="canonical"')
+        ->not->toContain('utm_source=test')
+        ->and(collect($graph)->firstWhere('@type', 'AboutPage')['url'])->toBe($expected);
+});
+
 it('outputs social overrides and merges valid custom JSON-LD into the graph', function (): void {
     aboutWithMeta([
         'og_title' => 'عنوان فیسبوک',

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import SectionHeading from '@/Components/SectionHeading.vue'
-import type { PageSectionData, ProjectSummary } from '@/types'
+import type { PageSectionData, ProjectSummary, SharedProps } from '@/types'
 import arrowUrl from '~img/sizdah/shared/cta-arrow.svg'
 import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
-import sidewalkProjectUrl from '~img/sizdah/home/sidewalk-project.jpeg'
+import sidewalkProjectUrl from '~img/sizdah/home/sidewalk-project.webp'
 import projectCategoryUrl from '~img/sizdah/home/project-category.svg'
 import { headingColors } from '@/lib/sectionColors'
 import { useTranslations } from '@/Composables/useTranslations'
@@ -37,6 +37,8 @@ const props = defineProps<{
   section: PageSectionData
   projects: ProjectSummary[]
 }>()
+
+const page = usePage<SharedProps>()
 
 const { t, locale } = useTranslations()
 
@@ -242,7 +244,7 @@ onBeforeUnmount(() => {
             <img
               v-for="(project, index) in props.projects"
               :key="project.slug"
-              :src="project.image?.src ?? sidewalkProjectUrl"
+              :src="project.image?.src ?? page.props.settings.images?.project_fallback ?? sidewalkProjectUrl"
               :srcset="project.image?.srcset"
               :alt="project.image?.alt ?? project.title"
               width="530"

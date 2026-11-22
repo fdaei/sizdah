@@ -11,6 +11,8 @@ use App\Models\SeoMeta;
 use App\Services\Seo\OgImageCheck;
 use App\Services\Seo\SeoAnalyzer;
 use App\Services\Seo\SeoTitle;
+use App\Support\Preview;
+use App\Support\SiteSettings;
 use Closure;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Component;
@@ -122,9 +124,9 @@ final class SeoSection
         return [
             Placeholder::make("seo_serp_{$locale}")
                 ->label('پیش‌نمایش گوگل (Google preview)')
-                ->content(fn (Get $get): HtmlString => new HtmlString(view('filament.seo.serp-preview', [
-                    'title' => SeoTitle::render($get("{$p}.title"), (string) $get("translations.{$locale}.{$ctx->titleField}"), $locale),
-                    'description' => (string) ($get("{$p}.description") ?: ($ctx->descriptionFallback ? strip_tags((string) $get("translations.{$locale}.{$ctx->descriptionFallback}")) : '')),
+                ->content(fn (Get $get, ?Model $record): HtmlString => new HtmlString(view('filament.seo.serp-preview', [
+                    'title' => $ctx->title((array) $get("translations.{$locale}"), (array) $get($p), $locale, $record),
+                    'description' => $ctx->description((array) $get("translations.{$locale}"), (array) $get($p), $locale, $record),
                     'url' => self::previewUrl($ctx, $get, $locale),
                     'dir' => config("locales.supported.{$locale}.direction"),
                 ])->render())),
@@ -141,11 +143,16 @@ final class SeoSection
                     ->label('نامک (Slug)')
                     ->prefix(self::urlPrefix($ctx, $locale))
                     ->required($required)
-                    ->maxLength(250)
+                    ->maxLength($ctx->slugMaxLength)
                     ->live(onBlur: true)
                     ->dehydrateStateUsing(fn (?string $state): ?string => $state === null ? null : self::cleanSlug($state))
                     ->rule(fn (?Model $record): Closure => function (string $attribute, mixed $value, Closure $fail) use ($ctx, $locale, $record): void {
                         if ($ctx->slugTable === null || blank($value)) {
+                            return;
+                        }
+                        if (self::cleanSlug((string) $value) === '') {
+                            $fail('نامک باید حداقل یک حرف یا عدد داشته باشد.');
+
                             return;
                         }
                         $taken = DB::table($ctx->slugTable)
@@ -212,15 +219,15 @@ final class SeoSection
 
         $preview = fn (string $network): Placeholder => Placeholder::make("seo_{$network}_preview_{$locale}")
             ->label('پیش‌نمایش (Preview)')
-            ->content(fn (Get $get): HtmlString => new HtmlString(view('filament.seo.social-preview', [
+            ->content(fn (Get $get, ?Model $record): HtmlString => new HtmlString(view('filament.seo.social-preview', [
                 'network' => $network,
                 'title' => $get("{$p}.{$network}_title") ?: ($network === 'twitter' ? $get("{$p}.og_title") : null)
-                    ?: SeoTitle::render($get("{$p}.title"), (string) $get("translations.{$locale}.{$ctx->titleField}"), $locale),
+                    ?: $ctx->title((array) $get("translations.{$locale}"), (array) $get($p), $locale, $record),
                 'description' => $get("{$p}.{$network}_description") ?: ($network === 'twitter' ? $get("{$p}.og_description") : null)
-                    ?: $get("{$p}.description") ?: '',
-                'image' => self::uploadUrl($get("{$p}.{$network}_image") ?: ($network === 'twitter' ? $get("{$p}.og_image") : null)),
+                    ?: $ctx->description((array) $get("translations.{$locale}"), (array) $get($p), $locale, $record),
+                'image' => self::previewImage($ctx, $get, $locale, $network),
                 'host' => parse_url((string) config('app.url'), PHP_URL_HOST),
-                'card' => $get("{$p}.twitter_card") ?: 'summary_large_image',
+                'card' => $get("{$p}.twitter_card") ?: (self::previewImage($ctx, $get, $locale, 'og') ? SiteSettings::get('seo_default_twitter_card', null, 'summary_large_image') : 'summary'),
                 'dir' => config("locales.supported.{$locale}.direction"),
             ])->render()));
 
@@ -232,11 +239,11 @@ final class SeoSection
                 $image('og_image', 'تصویر فیسبوک (Facebook image)'),
                 Placeholder::make("seo_messenger_preview_{$locale}")
                     ->label('پیش‌نمایش لینکدین / تلگرام / واتس‌اپ')
-                    ->content(fn (Get $get): HtmlString => new HtmlString(view('filament.seo.messenger-preview', [
+                    ->content(fn (Get $get, ?Model $record): HtmlString => new HtmlString(view('filament.seo.messenger-preview', [
                         'title' => $get("{$p}.og_title")
-                            ?: SeoTitle::render($get("{$p}.title"), (string) $get("translations.{$locale}.{$ctx->titleField}"), $locale),
-                        'description' => $get("{$p}.og_description") ?: $get("{$p}.description") ?: '',
-                        'image' => self::uploadUrl($get("{$p}.og_image")),
+                            ?: $ctx->title((array) $get("translations.{$locale}"), (array) $get($p), $locale, $record),
+                        'description' => $get("{$p}.og_description") ?: $ctx->description((array) $get("translations.{$locale}"), (array) $get($p), $locale, $record),
+                        'image' => self::previewImage($ctx, $get, $locale, 'og'),
                         'host' => parse_url((string) config('app.url'), PHP_URL_HOST),
                         'dir' => config("locales.supported.{$locale}.direction"),
                     ])->render())),
@@ -373,7 +380,7 @@ final class SeoSection
             Fieldset::make('نقشه سایت (Sitemap)')->columns(3)->schema([
                 Toggle::make("{$p}.exclude_from_sitemap")->label('حذف از نقشه سایت (Exclude from sitemap)'),
                 Select::make("{$p}.sitemap_priority")->label('اولویت (Priority)')->native(false)->placeholder('خودکار')
-                    ->options(collect(range(10, 1))->mapWithKeys(fn (int $i): array => [(string) ($i / 10) => number_format($i / 10, 1)])->all()),
+                    ->options(collect(range(10, 0))->mapWithKeys(fn (int $i): array => [(string) ($i / 10) => number_format($i / 10, 1)])->all()),
                 Select::make("{$p}.sitemap_changefreq")->label('تناوب تغییر (Change frequency)')->native(false)->placeholder('خودکار')
                     ->options(array_combine($f = ['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'], $f)),
             ]),
@@ -422,6 +429,13 @@ final class SeoSection
 
     private static function previewUrl(SeoContext $ctx, Get $get, string $locale): string
     {
+        if ($ctx->slugField === null && filled($get('key'))) {
+            $pageUrl = Preview::pageUrl((string) $get('key'), $locale);
+            if ($pageUrl !== null) {
+                return preg_replace('~^https?://~i', '', $pageUrl) ?? $pageUrl;
+            }
+        }
+
         $slug = $ctx->slugField ? (string) $get("translations.{$locale}.{$ctx->slugField}") : '';
 
         return rtrim(self::urlPrefix($ctx, $locale).$slug, '/');
@@ -458,5 +472,15 @@ final class SeoSection
         }
 
         return is_string($state) && $state !== '' ? Storage::disk('public')->url($state) : null;
+    }
+
+    private static function previewImage(SeoContext $ctx, Get $get, string $locale, string $network): ?string
+    {
+        $p = "seo.{$locale}";
+        $state = ($network === 'twitter' ? $get("{$p}.twitter_image") : null)
+            ?: $get("{$p}.og_image")
+            ?: ($ctx->imageField ? $get($ctx->imageField) : null);
+
+        return self::uploadUrl($state) ?: self::uploadUrl(SiteSettings::get('seo_default_image', $locale));
     }
 }

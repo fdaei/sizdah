@@ -55,6 +55,7 @@ export interface SiteSettings {
   }
   contactDetails: ContactDetail[]
   socialLinks: SocialLink[]
+  images: Record<string, string | null>
   seo: {
     defaultTitle: string
     defaultDescription: string
@@ -224,6 +225,7 @@ export interface ProjectSummary {
   title: string
   excerpt: string
   industry: string
+  industryUrl: string | null
   url: string
   /** Listing cards reveal these on hover — Figma "project detail" 553:921. */
   services: string[]

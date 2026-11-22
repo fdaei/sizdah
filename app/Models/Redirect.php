@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Services\Redirects\RedirectResolver;
+use App\Support\TransactionalCache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
@@ -93,8 +94,8 @@ final class Redirect extends Model
 
         // Void on purpose: a listener returning false (Cache::forget on a cold
         // key) stops the remaining listeners, incl. the page-cache bust.
-        $flush = function (): void {
-            Cache::forget(self::CACHE_KEY);
+        $flush = function (self $redirect): void {
+            TransactionalCache::invalidate($redirect, fn () => Cache::forget(self::CACHE_KEY));
         };
         self::saved($flush);
         self::deleted($flush);

@@ -52,7 +52,7 @@ Route::get('{indexNowKey}.txt', function (string $indexNowKey) {
 Route::get('sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('sitemap.xsl', [SitemapController::class, 'stylesheet'])->name('sitemap.xsl');
 Route::get('sitemap-{type}-{page}.xml', [SitemapController::class, 'type'])
-    ->where(['type' => 'pages|services|projects|posts|categories', 'page' => '[1-9][0-9]*'])
+    ->where(['type' => 'pages|services|projects|posts|categories|tags|industries', 'page' => '[1-9][0-9]*'])
     ->name('sitemap.type');
 Route::get('sitemap-{locale}.xml', [SitemapController::class, 'legacyLocale'])
     ->where('locale', $localePattern)
@@ -68,6 +68,7 @@ Route::prefix('{locale}')
 
         // 2 — Projects listing           Figma 222:1989
         Route::get('work', [ProjectController::class, 'index'])->name('work.index');
+        Route::get('work/industry/{industry}', [ProjectController::class, 'industry'])->name('work.industry');
 
         // 3 — Single project             Figma 336:5374 ("case study")
         Route::get('work/{project}', [ProjectController::class, 'show'])->name('work.show');
@@ -88,6 +89,7 @@ Route::prefix('{locale}')
 
         // 6b — Category archive (own SEO meta, canonical, sitemap entry)
         Route::get('insights/category/{category}', [PostController::class, 'category'])->name('insights.category');
+        Route::get('insights/tag/{tag}', [PostController::class, 'tag'])->name('insights.tag');
 
         // 7 — Single blog                Figma 285:4590
         Route::get('insights/{post}', [PostController::class, 'show'])->name('insights.show');

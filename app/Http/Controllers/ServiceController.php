@@ -19,8 +19,7 @@ use Inertia\Response;
  * Services page. Figma 308:4492 — the canonical frame; 1323:7189 and
  * 1626:12562 are dead node ids from the superseded generation of the file.
  *
- * Single page, four alternating sections. No detail routes exist in the
- * design — services are still independently manageable in admin.
+ * The listing has alternating sections; each service also has a detail route.
  */
 final class ServiceController extends Controller
 {

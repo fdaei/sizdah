@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Contracts\HasLocalisedSlugs;
 use App\Models\Translations\PostCategoryTranslation;
 use App\Traits\HasSeo;
 use App\Traits\HasTranslations;
@@ -21,7 +22,7 @@ use InvalidArgumentException;
  * Categories form a tree through `parent_id`; the table is small, so tree
  * walks load every category once instead of recursing in SQL.
  */
-final class PostCategory extends Model
+final class PostCategory extends Model implements HasLocalisedSlugs
 {
     use HasFactory;
     use HasSeo;
@@ -152,13 +153,18 @@ final class PostCategory extends Model
             ->first();
     }
 
+    public function slugForLocale(string $locale): string
+    {
+        return (string) ($this->getTranslation('slug', $locale) ?? $this->getTranslation('slug', config('locales.fallback')));
+    }
+
     public function url(?string $locale = null, bool $absolute = true): string
     {
         $locale ??= app()->getLocale();
 
         return route('insights.category', [
             'locale' => $locale,
-            'category' => (string) ($this->getTranslation('slug', $locale) ?? $this->getTranslation('slug', config('locales.fallback'))),
+            'category' => $this->slugForLocale($locale),
         ], $absolute);
     }
 

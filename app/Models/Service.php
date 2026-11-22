@@ -23,8 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * sections; the Home services cloud 1419:9279 renders the `show_on_home`
  * subset as chips.
  *
- * There is deliberately NO public detail route — the design has no such frame.
- * The slug is an in-page anchor (/services#branding) and a filter key only.
+ * The slug identifies the public detail route and the in-page anchor.
  * Services remain independently manageable: sortable, publishable,
  * translatable, soft-deletable, and attachable to Projects.
  */
@@ -100,5 +99,12 @@ final class Service extends Model
     public function anchor(?string $locale = null): string
     {
         return (string) $this->getTranslation('slug', $locale);
+    }
+
+    public function url(?string $locale = null, bool $absolute = true): string
+    {
+        $locale ??= app()->getLocale();
+
+        return route('services.show', ['locale' => $locale, 'service' => $this->getTranslation('slug', $locale)], $absolute);
     }
 }

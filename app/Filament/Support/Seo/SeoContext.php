@@ -8,6 +8,7 @@ use App\Filament\Support\Editor\ContentEditor;
 use App\Models\SeoMeta;
 use App\Services\Seo\SeoAnalyzer;
 use App\Services\Seo\SeoTitle;
+use App\Support\SiteSettings;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -35,6 +36,8 @@ final class SeoContext
         public readonly ?string $slugTable = null,
         public readonly ?string $slugForeignKey = null,
         public readonly string $defaultPageType = 'WebPage',
+        public readonly int $slugMaxLength = 250,
+        public readonly ?string $imageField = null,
     ) {}
 
     /**
@@ -50,12 +53,8 @@ final class SeoContext
         return [
             'keyword' => $keyword,
             'secondary' => (array) ($seo['secondary_keywords'] ?? []),
-            'title' => SeoTitle::render(
-                (string) ($seo['title'] ?? ''),
-                (string) ($translation[$this->titleField] ?? ''),
-                $locale,
-            ),
-            'description' => (string) (($seo['description'] ?? '') ?: ($this->descriptionFallback ? ($translation[$this->descriptionFallback] ?? '') : '')),
+            'title' => $this->title($translation, $seo, $locale, $record),
+            'description' => $this->description($translation, $seo, $locale, $record),
             'slug' => $this->slugField ? (string) ($translation[$this->slugField] ?? '') : '',
             'content' => $this->content($translation),
             'cornerstone' => (bool) ($seo['cornerstone'] ?? false),
@@ -67,6 +66,29 @@ final class SeoContext
                     ->where('seoable_id', $record->getKey())))
                 ->exists(),
         ];
+    }
+
+    public function title(array $translation, array $seo, string $locale, ?Model $record): string
+    {
+        $title = (string) (($translation[$this->titleField] ?? '') ?: SiteSettings::get('seo_default_title', $locale, 'Sizdah'));
+        $legacy = $record !== null && method_exists($record, 'getTranslation') ? $record->getTranslation('seo_title', $locale) : null;
+        $template = ($seo['title'] ?? null) ?: ($legacy ? $legacy.' %sep% %sitename%' : null);
+
+        return SeoTitle::render($template, $title, $locale, $this->isArticle ? 'article' : 'website');
+    }
+
+    public function description(array $translation, array $seo, string $locale, ?Model $record): string
+    {
+        if (! empty($seo['description'])) {
+            return (string) $seo['description'];
+        }
+
+        $legacy = $record !== null && method_exists($record, 'getTranslation') ? $record->getTranslation('seo_description', $locale) : null;
+        $text = (string) ($legacy ?: ($this->descriptionFallback ? ($translation[$this->descriptionFallback] ?? '') : '')
+            ?: SiteSettings::get('seo_default_description', $locale, ''));
+        $text = trim(preg_replace('/\s+/u', ' ', strip_tags($text)) ?? '');
+
+        return mb_strlen($text) <= 155 ? $text : rtrim(mb_substr($text, 0, 154)).'…';
     }
 
     /**

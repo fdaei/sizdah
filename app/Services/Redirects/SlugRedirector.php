@@ -4,13 +4,19 @@ declare(strict_types=1);
 
 namespace App\Services\Redirects;
 
+use App\Models\Industry;
 use App\Models\Post;
 use App\Models\PostCategory;
+use App\Models\PostTag;
 use App\Models\Project;
+use App\Models\Service;
 use App\Models\Redirect;
 use App\Models\Translations\PostCategoryTranslation;
+use App\Models\Translations\PostTagTranslation;
 use App\Models\Translations\PostTranslation;
 use App\Models\Translations\ProjectTranslation;
+use App\Models\Translations\ServiceTranslation;
+use App\Models\Translations\IndustryTranslation;
 use Illuminate\Database\Eloquent\Model;
 use App\Support\SiteSettings;
 use Illuminate\Support\Facades\Cache;
@@ -33,6 +39,9 @@ final class SlugRedirector
         PostTranslation::class => ['post_id', 'insights.show', 'post', Post::class],
         ProjectTranslation::class => ['project_id', 'work.show', 'project', Project::class],
         PostCategoryTranslation::class => ['post_category_id', 'insights.category', 'category', PostCategory::class],
+        PostTagTranslation::class => ['post_tag_id', 'insights.tag', 'tag', PostTag::class],
+        ServiceTranslation::class => ['service_id', 'services.show', 'service', Service::class],
+        IndustryTranslation::class => ['industry_id', 'work.industry', 'industry', Industry::class],
     ];
 
     public const STATUSES = [301, 302, 303, 307, 308];

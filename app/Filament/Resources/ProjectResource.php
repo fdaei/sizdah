@@ -161,7 +161,7 @@ final class ProjectResource extends Resource
                                 ->imageEditor()
                                 ->directory('projects')
                                 ->disk('public')
-                                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp']),
+                                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/avif']),
 
                             FileUpload::make('banner_path')
                                 ->label('Case-study banner')
@@ -191,7 +191,7 @@ final class ProjectResource extends Resource
 
     public static function seoContext(): SeoContext
     {
-        return new SeoContext(titleField: 'title', slugField: 'slug', contentFields: ['excerpt', 'challenge', 'challenge_points', 'results_summary'], pathPrefix: 'work', descriptionFallback: 'excerpt', slugTable: 'project_translations', slugForeignKey: 'project_id', defaultPageType: 'CreativeWork');
+        return new SeoContext(titleField: 'title', slugField: 'slug', contentFields: ['excerpt', 'challenge', 'challenge_points', 'results_summary'], pathPrefix: 'work', descriptionFallback: 'excerpt', slugTable: 'project_translations', slugForeignKey: 'project_id', defaultPageType: 'CreativeWork', slugMaxLength: 200, imageField: 'cover_path');
     }
 
     public static function table(Table $table): Table

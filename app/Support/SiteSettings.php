@@ -47,6 +47,10 @@ final class SiteSettings
 
             'socialLinks' => self::socialLinks(),
 
+            'images' => collect(['home_desktop', 'home_mobile', 'about_hero', 'site_background', 'project_fallback', 'error_404'])
+                ->mapWithKeys(fn (string $key): array => [$key => self::mediaUrl(self::get('image_'.$key, $locale))])
+                ->all(),
+
             'seo' => [
                 'defaultTitle' => self::get('seo_default_title', $locale, 'Sizdah'),
                 'defaultDescription' => self::get('seo_default_description', $locale, ''),
@@ -98,14 +102,12 @@ final class SiteSettings
      */
     public static function all(): array
     {
-        return Cache::remember(
-            self::CACHE_KEY,
-            self::TTL,
-            fn (): array => Setting::query()
+        $load = fn (): array => Setting::query()
                 ->get()
                 ->mapWithKeys(fn (Setting $s): array => [$s->key => $s->value])
-                ->all(),
-        );
+                ->all();
+
+        return TransactionalCache::active() ? $load() : Cache::remember(self::CACHE_KEY, self::TTL, $load);
     }
 
     /**
@@ -113,10 +115,7 @@ final class SiteSettings
      */
     public static function socialLinks(): array
     {
-        return Cache::remember(
-            self::SOCIAL_CACHE_KEY,
-            self::TTL,
-            fn (): array => SocialLink::query()
+        $load = fn (): array => SocialLink::query()
                 ->where('is_active', true)
                 ->orderBy('sort_order')
                 ->get()
@@ -126,8 +125,9 @@ final class SiteSettings
                     'url' => $l->url,
                     'icon' => $l->icon,
                 ])
-                ->all(),
-        );
+                ->all();
+
+        return TransactionalCache::active() ? $load() : Cache::remember(self::SOCIAL_CACHE_KEY, self::TTL, $load);
     }
 
     /**

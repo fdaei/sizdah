@@ -54,6 +54,16 @@ final class Preview
             && self::publicUrl($record) !== null;
     }
 
+    /** Public route for a page-builder key, without preview parameters. */
+    public static function pageUrl(?string $key, ?string $locale = null): ?string
+    {
+        $locale ??= (string) config('locales.fallback');
+
+        return $key !== null && isset(self::PAGE_ROUTES[$key])
+            ? route(self::PAGE_ROUTES[$key], ['locale' => $locale])
+            : null;
+    }
+
     /**
      * Signed, expiring preview URL for the record, or null when it has no public page.
      */
@@ -128,9 +138,7 @@ final class Preview
             $record instanceof Service => filled($record->anchor($locale))
                 ? route('services.show', ['locale' => $locale, 'service' => $record->anchor($locale)])
                 : null,
-            $record instanceof Page => isset(self::PAGE_ROUTES[$record->key])
-                ? route(self::PAGE_ROUTES[$record->key], ['locale' => $locale])
-                : null,
+            $record instanceof Page => self::pageUrl($record->key, $locale),
             default => null,
         };
     }

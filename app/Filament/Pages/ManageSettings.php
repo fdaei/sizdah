@@ -8,6 +8,7 @@ use App\Models\Setting;
 use App\Support\SiteSettings;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
@@ -62,6 +63,12 @@ final class ManageSettings extends Page implements HasForms
         'contact_location' => true,
         'contact_working_with' => true,
         'contact_details' => false,
+        'image_home_desktop' => false,
+        'image_home_mobile' => false,
+        'image_about_hero' => false,
+        'image_site_background' => false,
+        'image_project_fallback' => false,
+        'image_error_404' => false,
     ];
 
     public static function canAccess(): bool
@@ -214,6 +221,15 @@ final class ManageSettings extends Page implements HasForms
                             ])
                             ->columnSpanFull(),
                     ]),
+
+                Section::make('تصاویر ثابت سایت')
+                    ->description('تصاویر پیش‌فرض را اینجا جایگزین کنید. تصاویر محتوایی در بخش مربوط به هر صفحه یا پروژه قابل ویرایش‌اند.')
+                    ->columns(2)
+                    ->schema(array_map(
+                        fn (string $key, string $label): FileUpload => FileUpload::make($key)->label($label)->image()->disk('public')->directory('site-images'),
+                        ['image_home_desktop', 'image_home_mobile', 'image_about_hero', 'image_site_background', 'image_project_fallback', 'image_error_404'],
+                        ['پس‌زمینه صفحه اصلی دسکتاپ', 'پس‌زمینه صفحه اصلی موبایل', 'تصویر بالای درباره ما', 'پس‌زمینه صفحات', 'تصویر پیش‌فرض پروژه', 'تصویر صفحه ۴۰۴'],
+                    )),
 
                 Section::make('SEO')
                     ->description(new HtmlString('عنوان، توضیحات و تصویر پیش‌فرض، نمودار دانش و سایر تنظیمات سئو به «<a href="'.e(ManageSeoSettings::getUrl()).'" style="text-decoration:underline">تنظیمات سئو (SEO settings)</a>» منتقل شده‌اند.')),

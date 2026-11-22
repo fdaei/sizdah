@@ -138,11 +138,21 @@ final class ManageSitemap extends Page implements HasForms
                 ->visible(fn (): bool => IndexNow::enabled())
                 ->requiresConfirmation()
                 ->action(function (): void {
+                    if (! app()->isProduction()) {
+                        Notification::make()->warning()->title('ارسال IndexNow فقط در محیط production انجام می‌شود')->send();
+
+                        return;
+                    }
                     $urls = app(SitemapBuilder::class)->allUrls();
+                    if ($urls === []) {
+                        Notification::make()->warning()->title('آدرسی برای ارسال در نقشه سایت وجود ندارد')->send();
+
+                        return;
+                    }
                     foreach (array_chunk($urls, 10000) as $chunk) {
                         IndexNow::submit($chunk);
                     }
-                    Notification::make()->success()->title(count($urls).' آدرس برای Bing/Yandex ارسال شد')->send();
+                    Notification::make()->success()->title(count($urls).' آدرس برای ارسال به IndexNow آماده شد')->send();
                 }),
         ];
     }

@@ -29,7 +29,7 @@ final class ImageOptimizer
 
     private const QUALITY = ['jpg' => 95, 'webp' => 95, 'avif' => 85];
 
-    private const RASTER = ['jpg', 'jpeg', 'png', 'webp'];
+    private const RASTER = ['jpg', 'jpeg', 'png', 'webp', 'avif'];
 
     public static function isSupported(): bool
     {
@@ -114,7 +114,7 @@ final class ImageOptimizer
     /** @return list<string> */
     private static function formats(string $extension): array
     {
-        $formats = [$extension === 'jpeg' ? 'jpeg' : $extension];
+        $formats = $extension === 'avif' && ! function_exists('imageavif') ? [] : [$extension];
         if (function_exists('imagewebp') && $extension !== 'webp') {
             $formats[] = 'webp';
         }

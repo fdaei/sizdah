@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { Link } from '@inertiajs/vue3'
+import { route } from 'ziggy-js'
 import BlogCard from '@/Components/BlogCard.vue'
 import ArticleMeta from '@/Components/ArticleMeta.vue'
 import ArticleShare from '@/Components/ArticleShare.vue'
@@ -51,6 +53,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useTranslations()
+const tags = computed(() => props.post.tags.filter((tag) => tag.slug && tag.name))
 
 const articleBody = ref<HTMLElement | null>(null)
 useVideoFacade(articleBody)
@@ -188,6 +191,18 @@ const articleContent = computed(() => {
       >
         <LeadMagnetBanner :section="props.leadMagnet" source="article" :post-id="props.post.id" />
       </div>
+
+      <nav v-if="tags.length" :aria-label="t('blog.tags')" class="mx-auto mt-12 flex w-full max-w-[831px] flex-wrap items-center gap-3">
+        <span class="text-sm text-ink-200">{{ t('blog.tags') }}:</span>
+        <Link
+          v-for="tag in tags"
+          :key="tag.slug"
+          :href="route('insights.tag', { tag: tag.slug })"
+          class="rounded-full border border-ink-500 px-4 py-2 text-sm text-ink-50 transition-colors hover:border-brand hover:text-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        >
+          {{ tag.name }}
+        </Link>
+      </nav>
 
       <section v-if="props.post.related.length" class="mt-[81px] flex flex-col gap-12">
         <h2 class="relative w-fit text-display-sm font-semibold text-ink-50">

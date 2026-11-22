@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Head } from '@inertiajs/vue3'
+import { Head, usePage } from '@inertiajs/vue3'
+import type { SharedProps } from '@/types'
 import { route } from 'ziggy-js'
 import CtaButton from '@/Components/CtaButton.vue'
 import { useTranslations } from '@/Composables/useTranslations'
-import lostMapUrl from '~img/sizdah/errors/lost-map.png'
+import lostMapUrl from '~img/sizdah/errors/lost-map.webp'
 
 /**
  * Error page — Figma 266:2825 ("404").
@@ -17,6 +18,7 @@ import lostMapUrl from '~img/sizdah/errors/lost-map.png'
  * status only — every other status gets the same layout without it rather than
  * a picture that contradicts the message.
  */
+const page = usePage<SharedProps>()
 const props = defineProps<{ status: number }>()
 
 const { t } = useTranslations()
@@ -40,7 +42,7 @@ const message = computed(() => t(`errors.${key.value}.message`))
       -->
       <img
         v-if="props.status === 404"
-        :src="lostMapUrl"
+        :src="page.props.settings.images?.error_404 ?? lostMapUrl"
         alt=""
         aria-hidden="true"
         width="725"

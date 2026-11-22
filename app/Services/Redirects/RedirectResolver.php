@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Redirects;
 
 use App\Models\Redirect;
+use App\Support\TransactionalCache;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -46,11 +47,25 @@ final class RedirectResolver
     {
         $seen = [Redirect::normalize($source) => true];
         $current = $destination;
+        $query = null;
 
         for ($i = 0; $i < $max; $i++) {
-            if (preg_match('#^https?://#i', $current) && ! str_starts_with($current, url('/'))) {
-                return $current; // external — chain ends
+            if (preg_match('#^https?://#i', $current)) {
+                $host = parse_url($current, PHP_URL_HOST);
+                $siteHost = parse_url(url('/'), PHP_URL_HOST);
+                if (! is_string($host) || ! is_string($siteHost) || strcasecmp($host, $siteHost) !== 0) {
+                    // Preserve the incoming query if this redirect has no query of its own.
+                    if ($query !== null && parse_url($current, PHP_URL_QUERY) === null) {
+                        [$base, $fragment] = array_pad(explode('#', $current, 2), 2, null);
+
+                        return $base.'?'.$query.($fragment !== null ? '#'.$fragment : '');
+                    }
+
+                    return $current;
+                }
             }
+            $currentQuery = parse_url($current, PHP_URL_QUERY);
+            $query = is_string($currentQuery) ? $currentQuery : $query;
             $key = Redirect::normalize($current);
             if (isset($seen[$key])) {
                 return null; // loop
@@ -59,7 +74,7 @@ final class RedirectResolver
 
             $next = Redirect::query()->active()->where('match_type', 'exact')->where('source_path', $key)->first();
             if ($next === null || in_array($next->status_code, Redirect::GONE, true)) {
-                return $key;
+                return $key.($query !== null ? '?'.$query : '');
             }
             $current = (string) $next->destination_path;
         }
@@ -86,13 +101,15 @@ final class RedirectResolver
      */
     private function map(): array
     {
-        return Cache::rememberForever(Redirect::CACHE_KEY, function (): array {
+        $load = function (): array {
             $rows = Redirect::query()->active()->orderBy('id')->get();
 
             return [
                 'exact' => $rows->where('match_type', '!=', 'regex')->keyBy('source_path')->all(),
                 'regex' => $rows->where('match_type', 'regex')->values()->all(),
             ];
-        });
+        };
+
+        return TransactionalCache::active() ? $load() : Cache::rememberForever(Redirect::CACHE_KEY, $load);
     }
 }

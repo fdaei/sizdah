@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Page;
+use App\Models\Industry;
 use App\Models\Project;
 use App\Models\Service;
 use App\Services\ContentTransformer;
@@ -20,6 +21,16 @@ final class ProjectController extends Controller
 {
     public function index(Request $request): Response
     {
+        return $this->listing($request);
+    }
+
+    public function industry(Request $request, string $locale, Industry $industry): Response
+    {
+        return $this->listing($request, $industry);
+    }
+
+    private function listing(Request $request, ?Industry $industry = null): Response
+    {
         $page = Page::query()
             ->key('work')
             ->published()
@@ -33,6 +44,10 @@ final class ProjectController extends Controller
 
         $query = Project::query()->forListing();
 
+        if ($industry !== null) {
+            $query->where('industry_id', $industry->id);
+        }
+
         if ($serviceFilter !== '') {
             $locale = app()->getLocale();
 
@@ -44,9 +59,9 @@ final class ProjectController extends Controller
 
         return Inertia::render('Work/Index', [
             'heading' => [
-                'eyebrow' => (string) $page?->getTranslation('subtitle'),
-                'title' => (string) $page?->getTranslation('title'),
-                'description' => (string) $page?->getTranslation('description'),
+                'eyebrow' => (string) ($industry ? $page?->getTranslation('title') : $page?->getTranslation('subtitle')),
+                'title' => (string) ($industry?->getTranslation('name') ?? $page?->getTranslation('title')),
+                'description' => $industry ? '' : (string) $page?->getTranslation('description'),
             ],
 
             'projects' => $query
@@ -70,7 +85,7 @@ final class ProjectController extends Controller
                 ? []
                 : ContentTransformer::sectionMap($page->sections),
 
-            'seo' => SeoBuilder::forPage($page, $request->url()),
+            'seo' => $industry ? SeoBuilder::forIndustry($industry) : SeoBuilder::forPage($page, $request->url()),
         ]);
     }
 

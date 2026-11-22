@@ -8,6 +8,8 @@ use App\Models\NotFoundLog;
 use App\Models\Post;
 use App\Models\Redirect;
 use App\Services\Redirects\RedirectResolver;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 beforeEach(function (): void {
     config(['inertia.ssr.enabled' => false]);
@@ -75,10 +77,63 @@ it('shortens a new rule that points at an existing source', function (): void {
     expect($a->destination_path)->toBe('fa/c');
 });
 
+it('preserves destination query strings through exact redirect chains', function (): void {
+    redirectRule(['source_path' => 'fa/b', 'destination_path' => 'fa/c']);
+    $a = redirectRule(['source_path' => 'fa/a', 'destination_path' => 'fa/b?source=campaign']);
+
+    expect($a->destination_path)->toBe('fa/c?source=campaign');
+    $this->get('/fa/a?incoming=ignored')->assertRedirect(url('/fa/c').'?source=campaign');
+});
+
+it('lets the final destination query override an earlier query in a chain', function (): void {
+    redirectRule(['source_path' => 'fa/b', 'destination_path' => 'fa/c?chosen=final']);
+    $a = redirectRule(['source_path' => 'fa/a', 'destination_path' => 'fa/b?chosen=first']);
+
+    expect($a->destination_path)->toBe('fa/c?chosen=final');
+    $this->get('/fa/a')->assertRedirect(url('/fa/c').'?chosen=final');
+});
+
+it('does not treat a host that merely starts with the site host as internal', function (): void {
+    $host = parse_url(url('/'), PHP_URL_HOST);
+    $destination = 'https://'.$host.'.example.org/target?source=external';
+    $redirect = redirectRule(['source_path' => 'fa/external', 'destination_path' => $destination]);
+
+    expect($redirect->destination_path)->toBe($destination);
+    $this->get('/fa/external')->assertRedirect($destination);
+});
+
+it('places a forwarded query before an external fragment', function (): void {
+    redirectRule(['source_path' => 'fa/a', 'destination_path' => 'https://example.org/target#section']);
+
+    $this->get('/fa/a?from=site')->assertRedirect('https://example.org/target?from=site#section');
+});
+
 it('detects loops', function (): void {
     redirectRule(['source_path' => 'fa/b', 'destination_path' => 'fa/a']);
 
     expect(app(RedirectResolver::class)->finalDestination('fa/a', 'fa/b'))->toBeNull();
+});
+
+it('does not retain redirects created in a rolled back transaction', function (): void {
+    $resolver = app(RedirectResolver::class);
+    expect($resolver->match('fa/temporary'))->toBeNull();
+    DB::beginTransaction();
+    redirectRule(['source_path' => 'fa/temporary', 'destination_path' => 'fa/about']);
+    expect($resolver->match('fa/temporary'))->not->toBeNull();
+    DB::rollBack();
+
+    expect($resolver->match('fa/temporary'))->toBeNull();
+});
+
+it('invalidates the redirect map repopulated before a transaction commits', function (): void {
+    $resolver = app(RedirectResolver::class);
+    DB::beginTransaction();
+    redirectRule(['source_path' => 'fa/new-rule', 'destination_path' => 'fa/about']);
+    Cache::forever(Redirect::CACHE_KEY, ['exact' => [], 'regex' => []]);
+    expect($resolver->match('fa/new-rule'))->not->toBeNull();
+    DB::commit();
+
+    expect($resolver->match('fa/new-rule'))->not->toBeNull();
 });
 
 it('creates a 301 automatically when a published post slug changes', function (): void {

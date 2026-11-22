@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\Industry;
 use App\Models\Page;
 use App\Models\Post;
 use App\Models\PostCategory;
+use App\Models\PostTag;
 use App\Models\Project;
 use App\Models\SeoMeta;
 use App\Models\Service;
@@ -41,8 +43,10 @@ final class SeoBuilder
 
     private const PARENT_ROUTES = [
         'work.show' => 'work.index',
+        'work.industry' => 'work.index',
         'insights.show' => 'insights.index',
         'insights.category' => 'insights.index',
+        'insights.tag' => 'insights.index',
         'services.show' => 'services',
     ];
 
@@ -147,10 +151,42 @@ final class SeoBuilder
             canonical: $category->url(),
             type: 'website',
             schemaType: 'CollectionPage',
+            noindex: (bool) SiteSettings::get('seo_noindex_post_category', null, false),
             trail: self::categoryTrail($category->ancestors()),
             meta: $category->seoFor(),
             modifiedAt: $category->updated_at?->toIso8601String(),
             bodyHtml: SchemaNodes::bodyHtml([], [$category->getTranslation('description')]),
+        );
+    }
+
+    /** SEO metadata for a tag archive. */
+    public static function forTag(PostTag $tag): array
+    {
+        return self::assemble(
+            title: (string) $tag->getTranslation('name'),
+            description: null,
+            image: null,
+            canonical: $tag->url(),
+            type: 'website',
+            noindex: (bool) SiteSettings::get('seo_noindex_post_tag', null, false),
+            schemaType: 'CollectionPage',
+            meta: $tag->seoFor(),
+            modifiedAt: $tag->updated_at?->toIso8601String(),
+        );
+    }
+
+    /** SEO metadata for a project category archive. */
+    public static function forIndustry(Industry $industry): array
+    {
+        return self::assemble(
+            title: (string) $industry->getTranslation('name'),
+            description: null,
+            image: null,
+            canonical: $industry->url(),
+            type: 'website',
+            schemaType: 'CollectionPage',
+            meta: $industry->seoFor(),
+            modifiedAt: $industry->updated_at?->toIso8601String(),
         );
     }
 
@@ -248,6 +284,9 @@ final class SeoBuilder
             $noindex = true;
         }
 
+        // Use one cleaned URL everywhere, including JSON-LD and breadcrumbs.
+        $canonical = self::stripTracking($canonical);
+
         // Whole-site "Discourage search engines" (settings) — forced on staging.
         if (self::siteNoindex()) {
             $noindex = true;
@@ -318,7 +357,7 @@ final class SeoBuilder
             'documentTitle' => $documentTitle,
             'description' => $description,
             'image' => $ogImage,
-            'canonical' => self::stripTracking($canonical),
+            'canonical' => $canonical,
             'type' => $type,
             'publishedAt' => $publishedAt,
             'modifiedAt' => $modifiedAt,

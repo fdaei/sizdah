@@ -47,6 +47,8 @@ final class ContentTransformer
             'title' => (string) $project->getTranslation('title'),
             'excerpt' => (string) $project->getTranslation('excerpt'),
             'industry' => (string) ($project->industry?->getTranslation('name') ?? ''),
+            'industryUrl' => $project->industry !== null && filled($project->industry->getTranslation('slug', app()->getLocale(), false))
+                ? $project->industry->url(absolute: false) : null,
             'url' => $project->url(absolute: false),
 
             // Revealed on card hover — Figma "project detail" variant

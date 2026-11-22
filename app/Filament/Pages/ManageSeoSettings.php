@@ -349,7 +349,7 @@ final class ManageSeoSettings extends Page implements HasForms
 
                 Toggle::make('seo_slug_redirect')
                     ->label('ریدایرکت خودکار هنگام تغییر نامک (Redirect on slug change)')
-                    ->helperText('وقتی نامک مقاله، نمونه‌کار یا دسته‌بندی منتشرشده عوض شود، آدرس قبلی به آدرس جدید منتقل می‌شود.')
+                    ->helperText('وقتی نامک مقاله، نمونه‌کار، خدمت، دسته‌بندی یا برچسب عوض شود، آدرس قبلی به آدرس جدید منتقل می‌شود.')
                     ->live(),
                 Select::make('seo_slug_redirect_status')
                     ->label('کد وضعیت ریدایرکت (Status code)')
@@ -429,12 +429,17 @@ final class ManageSeoSettings extends Page implements HasForms
         $state = $this->form->getState();
 
         DB::transaction(function () use ($state): void {
+            $stored = Setting::query()->whereIn('key', array_keys(self::KEYS))->get()->keyBy('key');
             foreach (self::KEYS as $key => $translatable) {
+                $old = $stored->get($key)?->value;
+                $value = $translatable
+                    ? array_replace(is_array($old) ? $old : [], $state[$key] ?? [])
+                    : ['value' => array_key_exists($key, $state) ? $state[$key] : ($old['value'] ?? null)];
                 Setting::updateOrCreate(
                     ['key' => $key],
                     [
                         'group' => 'seo',
-                        'value' => $translatable ? ($state[$key] ?? []) : ['value' => $state[$key] ?? null],
+                        'value' => $value,
                         'is_translatable' => $translatable,
                     ],
                 );

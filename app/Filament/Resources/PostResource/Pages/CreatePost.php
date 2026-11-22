@@ -26,5 +26,6 @@ final class CreatePost extends CreateRecord
     {
         $record = $this->getRecord();
         $record->update(['reading_minutes' => $record->calculateReadingMinutes()]);
+        \App\Services\Sitemap\SitemapBuilder::bust();
     }
 }

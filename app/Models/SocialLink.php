@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Support\SiteSettings;
+use App\Support\TransactionalCache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,8 +36,8 @@ final class SocialLink extends Model
 
     protected static function booted(): void
     {
-        self::saved(fn () => SiteSettings::flush());
-        self::deleted(fn () => SiteSettings::flush());
+        self::saved(fn (self $link) => TransactionalCache::invalidate($link, SiteSettings::flush(...)));
+        self::deleted(fn (self $link) => TransactionalCache::invalidate($link, SiteSettings::flush(...)));
     }
 
     public function scopeActive($query)

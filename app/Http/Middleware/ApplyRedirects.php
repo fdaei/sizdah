@@ -40,8 +40,9 @@ final class ApplyRedirects
 
         $target = (string) $redirect->targetUrl($captures);
         $query = $request->getQueryString();
-        if ($query !== null && ! str_contains($target, '?')) {
-            $target .= '?'.$query;
+        if ($query !== null && parse_url($target, PHP_URL_QUERY) === null) {
+            [$base, $fragment] = array_pad(explode('#', $target, 2), 2, null);
+            $target = $base.'?'.$query.($fragment !== null ? '#'.$fragment : '');
         }
 
         // Never redirect a URL onto itself (misconfigured rule).

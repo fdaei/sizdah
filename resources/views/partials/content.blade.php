@@ -50,6 +50,16 @@
                 @endif
                 @include('partials.content-image', ['image' => $post['image']])
                 <div class="rich-prose">{!! $post['content'] !!}</div>
+                @if (collect($post['tags'] ?? [])->contains(fn ($tag) => ! empty($tag['slug']) && ! empty($tag['name'])))
+                    <nav aria-label="{{ __('blog.tags') }}" class="flex flex-wrap items-center gap-3">
+                        <span>{{ __('blog.tags') }}:</span>
+                        @foreach ($post['tags'] as $tag)
+                            @if (! empty($tag['slug']) && ! empty($tag['name']))
+                                <a class="underline" href="{{ route('insights.tag', ['tag' => $tag['slug']]) }}">{{ $tag['name'] }}</a>
+                            @endif
+                        @endforeach
+                    </nav>
+                @endif
                 @foreach ($post['related'] as $card)
                     @include('partials.content-card', ['card' => $card])
                 @endforeach
@@ -59,7 +69,7 @@
         @if ($project)
             <article class="space-y-6">
                 <p>{{ $project['excerpt'] }}</p>
-                <p>{{ $project['industry'] }} {{ $project['year'] }}</p>
+                <p>@if ($project['industryUrl'] ?? null)<a class="underline" href="{{ $project['industryUrl'] }}">{{ $project['industry'] }}</a>@else{{ $project['industry'] }}@endif {{ $project['year'] }}</p>
                 <p>{{ implode('، ', $project['services']) }}</p>
                 @include('partials.content-image', ['image' => $project['banner'] ?? $project['image']])
                 @if ($project['challenge'])

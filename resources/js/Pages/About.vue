@@ -12,7 +12,7 @@ import type {
   SharedProps,
   TeamMemberItem,
 } from '@/types'
-import heroIllustrationUrl from '~img/sizdah/about/hero-team.webp'
+import heroIllustrationUrl from '~img/sizdah/about/creative-team-sizdah-marketing-kerman.webp'
 import heroScriptUrl from '~img/sizdah/about/hero-script.svg'
 import storyMarkUrl from '~img/sizdah/about/story-mark.svg'
 import pathIconUrl from '~img/sizdah/about/principle-path.svg'
@@ -265,14 +265,11 @@ onBeforeUnmount(() => {
           :height="hero.image.height"
           class="w-full max-md:mx-auto max-md:w-[348px]"
         />
-        <img
+        <div
           v-else
-          :src="heroIllustrationUrl"
-          alt=""
           aria-hidden="true"
-          width="696"
-          height="522"
-          class="w-full max-md:mx-auto max-md:w-[348px]"
+          class="about-hero-illustration w-full max-md:mx-auto max-md:w-[348px]"
+          :style="{ backgroundImage: `url(${page.props.settings.images?.about_hero ?? heroIllustrationUrl})` }"
         />
       </section>
 
@@ -694,5 +691,14 @@ onBeforeUnmount(() => {
 
 .team-carousel.is-dragging {
   cursor: grabbing;
+}
+</style>
+
+<style scoped>
+.about-hero-illustration {
+  aspect-ratio: 690 / 465;
+  background-size: 208.7% auto;
+  background-position: 15.6% 22.5%;
+  background-repeat: no-repeat;
 }
 </style>

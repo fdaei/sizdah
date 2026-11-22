@@ -57,7 +57,7 @@ final class PostTagResource extends Resource
 
     public static function seoContext(): SeoContext
     {
-        return new SeoContext(titleField: 'name', slugField: 'slug', pathPrefix: 'insights/tag', slugTable: 'post_tag_translations', slugForeignKey: 'post_tag_id', defaultPageType: 'CollectionPage');
+        return new SeoContext(titleField: 'name', slugField: 'slug', pathPrefix: 'insights/tag', slugTable: 'post_tag_translations', slugForeignKey: 'post_tag_id', defaultPageType: 'CollectionPage', slugMaxLength: 100);
     }
 
     public static function table(Table $table): Table

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 import SeoHead from '@/Components/SeoHead.vue'
 import CtaButton from '@/Components/CtaButton.vue'
 import { ctaArrow, ctaVariant } from '@/lib/sectionCta'
@@ -15,7 +16,7 @@ import TestimonialCarousel from '@/Components/TestimonialCarousel.vue'
 import InsightsShowcase from '@/Components/InsightsShowcase.vue'
 import FaqAccordion from '@/Components/FaqAccordion.vue'
 import StartTogetherCard from '@/Components/StartTogetherCard.vue'
-import heroDesktopBgUrl from '~img/sizdah/home/hero-bg.jpg'
+import heroDesktopBgUrl from '~img/sizdah/home/hero-bg.webp'
 import heroMobileBgUrl from '~img/sizdah/home/hero-bg-mobile.webp'
 import trustMarkUrl from '~img/sizdah/clients/trust-divider.svg'
 import underlineUrl from '~img/sizdah/shared/nav-underline.svg'
@@ -30,6 +31,7 @@ import type {
   ServiceItem,
   TestimonialItem,
   FaqItem,
+  SharedProps,
 } from '@/types'
 
 /**
@@ -65,6 +67,7 @@ const props = defineProps<{
   seo: SeoMeta
 }>()
 
+const page = usePage<SharedProps>()
 const hero = computed(() => props.sections.hero)
 
 /*
@@ -72,8 +75,8 @@ const hero = computed(() => props.sections.hero)
  | at every width; without one, the desktop/mobile Figma exports are used.
  */
 const heroBackground = computed(() => ({
-  desktop: hero.value?.image?.src ?? heroDesktopBgUrl,
-  mobile: hero.value?.image?.src ?? heroMobileBgUrl,
+  desktop: hero.value?.image?.src ?? page.props.settings.images?.home_desktop ?? heroDesktopBgUrl,
+  mobile: hero.value?.image?.src ?? page.props.settings.images?.home_mobile ?? heroMobileBgUrl,
 }))
 
 /**

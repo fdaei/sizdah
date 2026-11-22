@@ -69,7 +69,7 @@ const breadcrumbs = computed<Breadcrumb[]>(() =>
   <div
     class="site-shell flex min-h-screen-safe flex-col bg-ink-1000"
     :class="{ 'page-wash': washed, 'grid-background': gridBackground, 'non-home-background': nonHomeBackground, 'work-top-background': workTopBackground, 'error-shell': page.component === 'Error' }"
-    :style="{ '--site-background': `url(${siteBackgroundUrl})` }"
+    :style="{ '--site-background': `url(${page.props.settings.images?.site_background ?? siteBackgroundUrl})` }"
   >
     <AppHeader @open-menu="menuOpen = true" />
     <MobileMenu :open="menuOpen" @close="menuOpen = false" />

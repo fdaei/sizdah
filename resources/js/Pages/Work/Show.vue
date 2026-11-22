@@ -282,7 +282,8 @@ const strategyLead = computed(() =>
                    the chip on narrow phones instead of spilling past its frame. -->
               <div class="relative flex min-w-0 flex-col gap-1">
                 <span class="text-[14px] font-medium leading-normal text-ink-50">{{ t(`work.${item.key}`) }}</span>
-                <span class="text-[12px] leading-normal text-ink-200 [overflow-wrap:anywhere]" :class="item.underline && 'underline'">{{ item.value }}</span>
+                <Link v-if="item.key === 'industry' && props.project.industryUrl" :href="props.project.industryUrl" class="text-[12px] leading-normal text-ink-200 underline [overflow-wrap:anywhere]">{{ item.value }}</Link>
+                <span v-else class="text-[12px] leading-normal text-ink-200 [overflow-wrap:anywhere]" :class="item.underline && 'underline'">{{ item.value }}</span>
               </div>
             </div>
           </div>
@@ -501,7 +502,8 @@ const strategyLead = computed(() =>
                 class="latin-nums text-body-md text-ink-200"
                 :class="item.underline && 'underline'"
               >
-                {{ item.value }}
+                <Link v-if="item.key === 'industry' && props.project.industryUrl" :href="props.project.industryUrl" class="underline">{{ item.value }}</Link>
+                <template v-else>{{ item.value }}</template>
               </dd>
             </div>
           </div>

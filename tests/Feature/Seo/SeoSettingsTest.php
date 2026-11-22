@@ -8,6 +8,7 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Support\SiteSettings;
 use Database\Seeders\RolePermissionSeeder;
+use Livewire\Livewire;
 
 beforeEach(function (): void {
     config(['inertia.ssr.enabled' => false]);
@@ -123,4 +124,35 @@ it('lets admins open the SEO settings page', function (): void {
     $admin->assignRole('admin');
 
     $this->actingAs($admin)->get('/admin/seo-settings')->assertOk()->assertSee('تنظیمات سئو');
+});
+
+it('provides an up-to-date guide for the public archives and team schema', function (): void {
+    $this->seed(RolePermissionSeeder::class);
+    $admin = User::factory()->create();
+    $admin->assignRole('admin');
+
+    $this->actingAs($admin)->get('/admin/seo-guide')->assertOk()
+        ->assertSee('دسته‌بندی‌های پروژه آرشیو عمومی دارند')
+        ->assertSee('صفحه سئوی مستقلی ندارند')
+        ->assertDontSee('هنوز صفحه‌ی عمومی ندارند');
+});
+
+it('preserves inactive locale values and hidden redirect settings when saving', function (): void {
+    $this->seed(RolePermissionSeeder::class);
+    $admin = User::factory()->create();
+    $admin->assignRole('admin');
+    $this->actingAs($admin);
+    Setting::updateOrCreate(['key' => 'seo_default_title'], [
+        'group' => 'seo', 'value' => ['fa' => 'قبلی', 'en' => 'English title'], 'is_translatable' => true,
+    ]);
+    seoSetting('seo_slug_redirect_status', '308');
+
+    Livewire::test(ManageSeoSettings::class)
+        ->fillForm(['seo_default_title' => ['fa' => 'جدید'], 'seo_slug_redirect' => false])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect(Setting::where('key', 'seo_default_title')->firstOrFail()->value)
+        ->toMatchArray(['fa' => 'جدید', 'en' => 'English title'])
+        ->and(Setting::where('key', 'seo_slug_redirect_status')->firstOrFail()->value['value'])->toBe('308');
 });

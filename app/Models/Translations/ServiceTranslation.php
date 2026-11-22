@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Translations;
 
+use App\Services\Redirects\SlugRedirector;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,6 +13,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 final class ServiceTranslation extends Model
 {
+    protected static function booted(): void
+    {
+        self::updating(fn (self $translation) => SlugRedirector::handle($translation));
+    }
+
     protected $fillable = [
         'locale',
         'title',

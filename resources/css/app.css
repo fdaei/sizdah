@@ -186,7 +186,7 @@
   .grid-background {
     background-image:
       linear-gradient(-42deg, rgb(248 185 55 / 0) 80%, rgb(248 185 55 / 0.1) 100%),
-      url('/grid1.png');
+      url('../images/sizdah/shared/dark-grid-bg-sizdah-marketing.webp');
     background-repeat: no-repeat;
     background-position: top center;
     background-size: 100% auto;

@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Page;
 use App\Models\Post;
 use App\Models\PostCategory;
+use App\Models\PostTag;
 use App\Services\ContentTransformer;
 use App\Services\SeoBuilder;
 use Illuminate\Http\RedirectResponse;
@@ -45,6 +46,11 @@ final class PostController extends Controller
         return $this->listing($request, $category);
     }
 
+    public function tag(Request $request, string $locale, PostTag $tag): Response
+    {
+        return $this->listing($request, null, $tag);
+    }
+
     private static function query(Request $request, array $without): string
     {
         $q = http_build_query($request->except($without));
@@ -52,7 +58,7 @@ final class PostController extends Controller
         return $q === '' ? '' : '?'.$q;
     }
 
-    private function listing(Request $request, ?PostCategory $category): Response
+    private function listing(Request $request, ?PostCategory $category, ?PostTag $tag = null): Response
     {
         $page = Page::query()
             ->key('insights')
@@ -67,6 +73,10 @@ final class PostController extends Controller
 
         if ($categoryFilter !== '') {
             $query->inCategory($categoryFilter);
+        }
+
+        if ($tag !== null) {
+            $query->whereHas('tags', fn ($q) => $q->where('post_tags.id', $tag->id));
         }
 
         if ($search !== '') {
@@ -85,7 +95,7 @@ final class PostController extends Controller
         // first page — otherwise it would duplicate a grid result.
         $featured = null;
 
-        if ($categoryFilter === '' && $search === '' && $request->integer('page', 1) === 1) {
+        if ($categoryFilter === '' && $tag === null && $search === '' && $request->integer('page', 1) === 1) {
             $featured = Post::query()->forListing()->featured()->first();
 
             if ($featured !== null) {
@@ -96,14 +106,14 @@ final class PostController extends Controller
         $posts = $query->paginate(self::PER_PAGE)->withQueryString();
 
         return Inertia::render('Insights/Index', [
-            'heading' => $category === null ? [
+            'heading' => $category === null && $tag === null ? [
                 'eyebrow' => (string) $page?->getTranslation('subtitle'),
                 'title' => (string) $page?->getTranslation('title'),
                 'description' => (string) $page?->getTranslation('description'),
             ] : [
                 'eyebrow' => (string) $page?->getTranslation('title'),
-                'title' => (string) $category->getTranslation('name'),
-                'description' => (string) $category->getTranslation('description'),
+                'title' => (string) ($category ?? $tag)->getTranslation('name'),
+                'description' => (string) ($category?->getTranslation('description') ?? ''),
             ],
 
             'featured' => $featured === null
@@ -153,9 +163,9 @@ final class PostController extends Controller
             // Generic page-builder blocks (rich text, gallery, features, CTA), in order.
             'blocks' => $page === null ? [] : ContentTransformer::blocks($page->sections),
 
-            'seo' => $category === null
+            'seo' => $tag !== null ? SeoBuilder::forTag($tag) : ($category === null
                 ? SeoBuilder::forPage($page, $request->url())
-                : SeoBuilder::forCategory($category),
+                : SeoBuilder::forCategory($category)),
         ]);
     }
 

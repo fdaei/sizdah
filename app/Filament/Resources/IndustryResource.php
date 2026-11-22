@@ -64,7 +64,7 @@ final class IndustryResource extends Resource
 
     public static function seoContext(): SeoContext
     {
-        return new SeoContext(titleField: 'name', slugField: 'slug', pathPrefix: 'work/industry', slugTable: 'industry_translations', slugForeignKey: 'industry_id', defaultPageType: 'CollectionPage');
+        return new SeoContext(titleField: 'name', slugField: 'slug', pathPrefix: 'work/industry', slugTable: 'industry_translations', slugForeignKey: 'industry_id', defaultPageType: 'CollectionPage', slugMaxLength: 150);
     }
 
     public static function table(Table $table): Table

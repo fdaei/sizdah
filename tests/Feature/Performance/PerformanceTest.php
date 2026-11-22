@@ -10,6 +10,7 @@ use App\Services\Performance\HtmlMinifier;
 use App\Support\Performance;
 use Database\Seeders\RolePermissionSeeder;
 use Livewire\Livewire;
+use Illuminate\Support\Facades\DB;
 
 beforeEach(function (): void {
     config(['inertia.ssr.enabled' => false]);
@@ -58,6 +59,20 @@ it('serves anonymous pages from the page cache and busts it when content changes
     Page::query()->first()->touch();
 
     $this->get('/fa')->assertHeader('X-Page-Cache', 'MISS');
+});
+
+it('does not cache pages rendered from changes that are rolled back', function (): void {
+    perf(['perf_page_cache' => true]);
+    $page = Page::query()->first();
+    $page->setTranslations(['fa' => ['title' => 'عنوان اصلی']]);
+    $this->get('/fa')->assertSee('عنوان اصلی');
+
+    DB::beginTransaction();
+    $page->setTranslations(['fa' => ['title' => 'عنوان موقت']]);
+    $this->get('/fa')->assertSee('عنوان موقت')->assertHeaderMissing('X-Page-Cache');
+    DB::rollBack();
+
+    $this->get('/fa')->assertSee('عنوان اصلی')->assertDontSee('عنوان موقت');
 });
 
 it('never shares a CSRF token through the page cache', function (): void {

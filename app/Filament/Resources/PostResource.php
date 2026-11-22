@@ -189,7 +189,7 @@ final class PostResource extends Resource
 
     public static function seoContext(): SeoContext
     {
-        return new SeoContext(titleField: 'title', slugField: 'slug', contentFields: ['content'], pathPrefix: 'insights', descriptionFallback: 'excerpt', isArticle: true, slugTable: 'post_translations', slugForeignKey: 'post_id');
+        return new SeoContext(titleField: 'title', slugField: 'slug', contentFields: ['content'], pathPrefix: 'insights', descriptionFallback: 'excerpt', isArticle: true, slugTable: 'post_translations', slugForeignKey: 'post_id', imageField: 'cover_path');
     }
 
     public static function table(Table $table): Table

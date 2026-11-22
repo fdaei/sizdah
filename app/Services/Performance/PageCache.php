@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Performance;
 
+use App\Support\TransactionalCache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,6 +45,7 @@ final class PageCache
     public static function isCacheable(Request $request): bool
     {
         return $request->isMethod('GET')
+            && ! TransactionalCache::active()
             && $request->user() === null
             && ! $request->hasHeader('X-Inertia-Partial-Data')
             && ! $request->query->has('preview')
