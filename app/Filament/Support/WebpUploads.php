@@ -8,7 +8,7 @@ use Filament\Forms\Components\FileUpload;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
-/** Store ordinary raster uploads as WebP; keep vectors and animations intact. */
+/** Store JPEG and PNG uploads as WebP; preserve other original formats. */
 final class WebpUploads
 {
     public static function register(): void
@@ -20,7 +20,7 @@ final class WebpUploads
                 }
 
                 $mime = $file->getMimeType();
-                if (in_array($mime, ['image/jpeg', 'image/png', 'image/avif'], true)
+                if (in_array($mime, ['image/jpeg', 'image/png'], true)
                     && function_exists('imagewebp') && function_exists('imagecreatefromstring')) {
                     $image = @imagecreatefromstring($file->get());
                     if ($image !== false) {
