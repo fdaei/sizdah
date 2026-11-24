@@ -123,3 +123,22 @@ it('lets an admin save performance settings and purge the cache', function (): v
 
     expect(Performance::minifyHtml())->toBeTrue();
 });
+
+it('omits admin-only translation groups from public pages', function (): void {
+    $this->get('/fa')->assertOk()->assertInertia(fn ($page) => $page
+        ->has('translations.common')
+        ->has('translations.forms')
+        ->missing('translations.admin')
+        ->missing('translations.validation'));
+});
+
+it('loads only listing fields for article translations', function (): void {
+    $post = \App\Models\Post::factory()->create(['status' => \App\Enums\PublicationStatus::Published, 'published_at' => now()->subDay()]);
+    $post->setTranslations(['fa' => ['title' => 'عنوان آزمایشی', 'slug' => 'test-title', 'excerpt' => 'خلاصه', 'content' => '<p>متن بلند مقاله</p>']]);
+
+    $loaded = \App\Models\Post::query()->forListing()->whereKey($post->id)->firstOrFail();
+    $translation = $loaded->translations->firstWhere('locale', 'fa');
+    expect($translation->getAttribute('title'))->toBe('عنوان آزمایشی')
+        ->and($translation->getAttribute('excerpt'))->toBe('خلاصه')
+        ->and(array_key_exists('content', $translation->getAttributes()))->toBeFalse();
+});

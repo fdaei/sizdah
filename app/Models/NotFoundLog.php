@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
  * 404 monitor row (Rank Math "404 Monitor"): one row per path, hit-counted.
  * Pruned after 90 days without a hit (`model:prune`, scheduled daily).
  */
-final class NotFoundLog extends Model
+class NotFoundLog extends Model
 {
     use MassPrunable;
 
@@ -48,7 +48,7 @@ final class NotFoundLog extends Model
         $hash = sha1($path);
         $now = now();
 
-        $updated = self::query()->where('path_hash', $hash)->update([
+        $updated = static::query()->where('path_hash', $hash)->update([
             'hits' => DB::raw('hits + 1'),
             'last_seen_at' => $now,
             'referrer' => Str::limit((string) $request->headers->get('referer'), 990, '') ?: DB::raw('referrer'),
@@ -56,7 +56,7 @@ final class NotFoundLog extends Model
         ]);
 
         if ($updated === 0) {
-            self::query()->insertOrIgnore([
+            static::query()->insertOrIgnore([
                 'path_hash' => $hash,
                 'path' => Str::limit($path, 990, ''),
                 'referrer' => Str::limit((string) $request->headers->get('referer'), 990, '') ?: null,
@@ -72,6 +72,6 @@ final class NotFoundLog extends Model
 
     public function prunable(): Builder
     {
-        return self::query()->where('last_seen_at', '<', now()->subDays(90));
+        return static::query()->where('last_seen_at', '<', now()->subDays(90));
     }
 }

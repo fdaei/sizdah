@@ -11,6 +11,7 @@ use App\Http\Middleware\RedirectToLocalisedRoute;
 use App\Http\Middleware\ResolvePreview;
 use App\Http\Middleware\SetLocale;
 use App\Models\NotFoundLog;
+use App\Models\ForbiddenLog;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -93,9 +94,9 @@ return Application::configure(basePath: dirname(__DIR__))
             }
 
             // 404 monitor (SEO): never let logging break the error page.
-            if ($status === 404 && $request->isMethod('GET')) {
+            if (in_array($status, [403, 404], true) && $request->isMethod('GET')) {
                 try {
-                    NotFoundLog::record($request);
+                    ($status === 403 ? ForbiddenLog::class : NotFoundLog::class)::record($request);
                 } catch (Throwable) {
                     // ignore
                 }

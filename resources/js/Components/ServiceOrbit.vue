@@ -159,6 +159,8 @@ const nodes = computed(() => {
       <div class="relative mx-auto aspect-[1440/760] w-full max-w-frame" data-reveal>
         <!-- Decorative: the tic-tac-toe hatch above the badge (268:3405). -->
         <img
+          loading="lazy"
+          decoding="async"
           :src="gridDoodleUrl"
           alt=""
           aria-hidden="true"
@@ -173,6 +175,8 @@ const nodes = computed(() => {
           All three were missing from the band.
         -->
         <img
+          loading="lazy"
+          decoding="async"
           :src="crossUrl"
           alt=""
           aria-hidden="true"
@@ -181,6 +185,8 @@ const nodes = computed(() => {
           class="absolute left-[9.58%] top-[40%] w-[1.67%]"
         />
         <img
+          loading="lazy"
+          decoding="async"
           :src="crossUrl"
           alt=""
           aria-hidden="true"
@@ -189,6 +195,8 @@ const nodes = computed(() => {
           class="absolute left-[75.69%] top-[96.84%] w-[1.67%]"
         />
         <img
+          loading="lazy"
+          decoding="async"
           :src="dotsUrl"
           alt=""
           aria-hidden="true"
@@ -199,6 +207,8 @@ const nodes = computed(() => {
 
         <!-- Decorative: the scribble below the badge (268:3420). -->
         <img
+          loading="lazy"
+          decoding="async"
           :src="scribbleUrl"
           alt=""
           aria-hidden="true"
@@ -211,6 +221,8 @@ const nodes = computed(() => {
         <img
           v-for="node in nodes"
           :key="`line-${node.slot.icon}`"
+          loading="lazy"
+          decoding="async"
           :src="node.slot.line.src"
           alt=""
           aria-hidden="true"
@@ -222,8 +234,10 @@ const nodes = computed(() => {
 
         <!-- Hand-drawn badge (268:3040) with the wordmark centred on it. -->
         <div class="absolute left-[39.44%] top-[26.84%] w-[21.11%]">
-          <img :src="centerUrl" alt="" aria-hidden="true" width="304" height="261" class="w-full" />
+          <img loading="lazy" decoding="async" :src="centerUrl" alt="" aria-hidden="true" width="304" height="261" class="w-full" />
           <img
+            loading="lazy"
+            decoding="async"
             :src="wordmarkUrl"
             alt="Lost Level"
             width="100"
@@ -239,6 +253,8 @@ const nodes = computed(() => {
           :style="{ left: node.slot.left, top: node.slot.top, width: node.slot.width }"
         >
           <img
+            loading="lazy"
+            decoding="async"
             :src="node.slot.art"
             alt=""
             aria-hidden="true"
@@ -257,14 +273,19 @@ const nodes = computed(() => {
 
     <!-- Crop the blank heading area out of the supplied mobile composition. -->
     <div class="overflow-hidden lg:hidden">
-      <img
-        :src="mobileHeroUrl"
-        alt=""
-        aria-hidden="true"
-        width="402"
-        height="793"
-        class="-mt-[59.7%] block h-auto w-full"
-      />
+      <picture>
+        <source media="(max-width: 1023px)" :srcset="mobileHeroUrl" />
+        <img
+          src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+          alt=""
+          aria-hidden="true"
+          width="402"
+          height="793"
+          loading="lazy"
+          decoding="async"
+          class="-mt-[59.7%] block h-auto w-full"
+        />
+      </picture>
     </div>
   </section>
 </template>

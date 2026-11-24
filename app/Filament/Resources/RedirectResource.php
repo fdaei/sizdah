@@ -147,16 +147,17 @@ final class RedirectResource extends Resource
                 Tables\Columns\TextColumn::make('match_type')->label('تطبیق')->badge()
                     ->formatStateUsing(fn (string $state): string => $state === 'regex' ? 'Regex' : 'Exact'),
                 Tables\Columns\TextColumn::make('origin')->label('منبع')->badge()->toggleable()
-                    ->formatStateUsing(fn (string $state): string => ['manual' => 'دستی', 'auto' => 'خودکار (تغییر نامک)', 'import' => 'درون‌ریزی', '404' => 'از ۴۰۴'][$state] ?? $state),
+                    ->formatStateUsing(fn (string $state): string => ['manual' => 'دستی', 'auto' => 'خودکار (تغییر نامک)', 'import' => 'درون‌ریزی', '404' => 'از ۴۰۴', '403' => 'از ۴۰۳'][$state] ?? $state),
                 Tables\Columns\TextColumn::make('hits')->label('بازدید (Hits)')->numeric()->sortable(),
                 Tables\Columns\TextColumn::make('last_hit_at')->label('آخرین بازدید')->since()->sortable()->placeholder('—'),
-                Tables\Columns\IconColumn::make('is_active')->label('فعال')->boolean(),
+                Tables\Columns\ToggleColumn::make('is_active')->label('فعال')
+                    ->disabled(fn (Redirect $record): bool => ! (auth()->user()?->can('update', $record) ?? false)),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_active')->label('فعال'),
                 Tables\Filters\SelectFilter::make('status_code')->label('کد')->options(Redirect::STATUSES),
                 Tables\Filters\SelectFilter::make('origin')->label('منبع')
-                    ->options(['manual' => 'دستی', 'auto' => 'خودکار', 'import' => 'درون‌ریزی', '404' => 'از ۴۰۴']),
+                    ->options(['manual' => 'دستی', 'auto' => 'خودکار', 'import' => 'درون‌ریزی', '404' => 'از ۴۰۴', '403' => 'از ۴۰۳']),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

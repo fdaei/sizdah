@@ -20,7 +20,7 @@ use Illuminate\Support\Collection;
  * 404 monitor (Rank Math parity): every missed URL with hits, referrer and
  * last-seen time, and a one-click "create redirect" that removes the row.
  */
-final class NotFoundLogResource extends Resource
+class NotFoundLogResource extends Resource
 {
     protected static ?string $model = NotFoundLog::class;
 
@@ -57,7 +57,7 @@ final class NotFoundLogResource extends Resource
                     ->label('آدرس (URL)')
                     ->searchable()
                     ->limit(70)
-                    ->tooltip(fn (NotFoundLog $r): string => $r->path)
+                    ->tooltip(fn (NotFoundLog $r): string => (string) $r->path)
                     ->url(fn (NotFoundLog $r): string => url('/'.$r->path), shouldOpenInNewTab: true)
                     ->extraAttributes(['dir' => 'ltr'])
                     ->copyable(),
@@ -122,7 +122,7 @@ final class NotFoundLogResource extends Resource
                 'status_code' => $status,
                 'match_type' => 'exact',
                 'is_active' => true,
-                'origin' => '404',
+                'origin' => $record instanceof \App\Models\ForbiddenLog ? '403' : '404',
             ]);
             $record->delete();
             $made++;

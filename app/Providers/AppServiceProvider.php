@@ -187,6 +187,6 @@ final class AppServiceProvider extends ServiceProvider
      */
     private function shareTranslations(): void
     {
-        Inertia::share('translations', fn (): array => UiStrings::tree(app()->getLocale()));
+        Inertia::share('translations', fn (): array => UiStrings::publicTree(app()->getLocale()));
     }
 }

@@ -154,7 +154,7 @@ final class Post extends Model implements HasLocalisedSlugs
         return $query
             ->published()
             ->with([
-                'translations' => fn ($q) => $q->whereIn('locale', $locales),
+                'translations' => fn ($q) => $q->select(['id', 'post_id', 'locale', 'title', 'slug', 'excerpt', 'cover_alt'])->whereIn('locale', $locales),
                 'category.translations' => fn ($q) => $q->whereIn('locale', $locales),
             ])
             ->orderByDesc('published_at');

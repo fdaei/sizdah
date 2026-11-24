@@ -44,6 +44,34 @@ final class SlugRedirector
         IndustryTranslation::class => ['industry_id', 'work.industry', 'industry', Industry::class],
     ];
 
+    /** Content types exposed to editors for automatic redirects. */
+    public const CONTENT_TYPES = [
+        'post' => ['مقاله', PostTranslation::class],
+        'project' => ['پروژه', ProjectTranslation::class],
+        'service' => ['خدمت', ServiceTranslation::class],
+        'post_category' => ['دسته‌بندی مقالات', PostCategoryTranslation::class],
+        'post_tag' => ['برچسب مقالات', PostTagTranslation::class],
+        'industry' => ['دسته‌بندی پروژه‌ها', IndustryTranslation::class],
+    ];
+
+    public static function enabledForItem(string $type, int $id): bool
+    {
+        $disabled = SiteSettings::get('seo_slug_redirect_disabled_items', null, []);
+
+        return ! is_array($disabled) || ! ($disabled[$type.':'.$id] ?? false);
+    }
+
+    public static function typeFor(string $translationClass): ?string
+    {
+        foreach (self::CONTENT_TYPES as $type => [, $class]) {
+            if ($class === $translationClass) {
+                return $type;
+            }
+        }
+
+        return null;
+    }
+
     public const STATUSES = [301, 302, 303, 307, 308];
 
     public static function enabled(): bool
@@ -61,7 +89,8 @@ final class SlugRedirector
     public static function handle(Model $translation): void
     {
         $config = self::ROUTES[$translation::class] ?? null;
-        if ($config === null || ! $translation->isDirty('slug') || ! self::enabled()) {
+        if ($config === null || ! $translation->isDirty('slug') || ! self::enabled()
+            || ! self::enabledForItem((string) self::typeFor($translation::class), (int) $translation->getAttribute($config[0]))) {
             return;
         }
 

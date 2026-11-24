@@ -52,6 +52,12 @@ final class UiStrings
             : Cache::rememberForever(self::cacheKey($locale), $load);
     }
 
+    /** Public Vue pages do not use the admin and validation translation groups. */
+    public static function publicTree(string $locale): array
+    {
+        return array_diff_key(self::tree($locale), array_flip(self::LOCKED_GROUPS));
+    }
+
     /**
      * File defaults for a locale, keyed by group.
      *

@@ -7,6 +7,8 @@ namespace App\Filament\Resources\RedirectResource\Pages;
 use App\Filament\Resources\RedirectResource;
 use App\Filament\Pages\ManageSeoSettings;
 use App\Models\Redirect;
+use App\Models\Setting;
+use App\Support\SiteSettings;
 use App\Services\Redirects\RedirectResolver;
 use App\Services\Redirects\SlugRedirector;
 use Filament\Actions;
@@ -23,6 +25,76 @@ final class ListRedirects extends ListRecords
 {
     protected static string $resource = RedirectResource::class;
 
+    protected static string $view = 'filament.pages.redirect-list';
+
+    public string $contentType = 'service';
+
+    public string $contentSearch = '';
+
+    public int $contentPage = 1;
+
+    public function updatedContentType(): void
+    {
+        $this->contentPage = 1;
+    }
+
+    public function updatedContentSearch(): void
+    {
+        $this->contentPage = 1;
+    }
+
+    public function contentRecords(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        $type = array_key_exists($this->contentType, SlugRedirector::CONTENT_TYPES) ? $this->contentType : 'service';
+        $translation = SlugRedirector::CONTENT_TYPES[$type][1];
+        $model = SlugRedirector::ROUTES[$translation][3];
+        $field = in_array($type, ['post', 'project', 'service'], true) ? 'title' : 'name';
+        $search = trim($this->contentSearch);
+
+        return $model::query()->with('translations')
+            ->when($search !== '', fn ($query) => $query->whereHas('translations', fn ($q) => $q->where($field, 'like', '%'.$search.'%')))
+            ->orderByDesc('id')->paginate(20, ['*'], 'contentPage', max(1, $this->contentPage));
+    }
+
+    public function contentRecordLabel(\Illuminate\Database\Eloquent\Model $record): string
+    {
+        $field = in_array($this->contentType, ['post', 'project', 'service'], true) ? 'title' : 'name';
+
+        return (string) ($record->getTranslation($field, 'fa') ?: '#'.$record->getKey());
+    }
+
+    public function contentRedirectEnabled(int $id): bool
+    {
+        return SlugRedirector::enabledForItem($this->contentType, $id);
+    }
+
+    public function toggleContentRedirect(string $type, int $id): void
+    {
+        abort_unless(auth()->user()?->isAdmin(), 403);
+        abort_unless(array_key_exists($type, SlugRedirector::CONTENT_TYPES), 404);
+        $translation = SlugRedirector::CONTENT_TYPES[$type][1];
+        $model = SlugRedirector::ROUTES[$translation][3];
+        abort_unless($model::query()->whereKey($id)->exists(), 404);
+        $disabled = SiteSettings::get('seo_slug_redirect_disabled_items', null, []);
+        $disabled = is_array($disabled) ? $disabled : [];
+        $key = $type.':'.$id;
+        if (SlugRedirector::enabledForItem($type, $id)) {
+            $disabled[$key] = true;
+        } else {
+            unset($disabled[$key]);
+        }
+        Setting::updateOrCreate(['key' => 'seo_slug_redirect_disabled_items'], [
+            'group' => 'seo', 'value' => ['value' => $disabled], 'is_translatable' => false,
+        ]);
+        SiteSettings::flush();
+        Notification::make()->success()->title('تنظیم ریدایرکت ذخیره شد')->send();
+    }
+
+    public function automaticRedirectEnabled(): bool
+    {
+        return SlugRedirector::enabled();
+    }
+
     /** Accepted header names (ours, Rank Math, "Redirection" plugin, Yoast Premium). */
     private const COLUMNS = [
         'source' => ['source', 'source_path', 'from', 'url', 'old', 'origin'],
@@ -38,7 +110,7 @@ final class ListRedirects extends ListRecords
             ? 'فعال، با کد '.SlugRedirector::status()
             : 'غیرفعال';
 
-        return "ریدایرکت خودکار هنگام تغییر نامک: {$state}. پس از تغییر آدرس محتوای منتشرشده، آدرس قدیمی در زبانه «خودکار» ثبت می‌شود. این قابلیت برای همه خطاهای ۴۰۴ ریدایرکت ایجاد نمی‌کند.";
+        return "ریدایرکت خودکار هنگام تغییر نامک: {$state}. پس از تغییر آدرس محتوای منتشرشده، آدرس قدیمی در زبانه «خودکار» ثبت می‌شود. تنظیم هر محتوا در فهرست زیر قابل تغییر است.";
     }
 
     /** @return array<string, Tab> */

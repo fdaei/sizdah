@@ -33,15 +33,15 @@
     {{-- Self-hosted fonts: resources/css/fonts.css --}}
     <link rel="preconnect" href="{{ config('app.url') }}">
     @if ($config['font'] === 'arabic')
-        <link rel="preload" href="/fonts/vazirmatn/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
-        <link rel="preload" href="/fonts/vazirmatn/Vazirmatn-Medium.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/peyda/Peyda-Regular.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/peyda/Peyda-Bold.woff2" as="font" type="font/woff2" crossorigin>
     @else
         <link rel="preload" href="/fonts/poppins/Poppins-Regular.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/fonts/poppins/Poppins-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
     @endif
     @include('partials.resource-hints')
 
-    @routes
+    {!! app(\Tighten\Ziggy\BladeRouteGenerator::class)->generate() !!}
     @vite(['resources/js/app.ts'])
     @inertiaHead
 

@@ -20,4 +20,4 @@ Schedule::command('sizdah:publish-scheduled')->everyFiveMinutes();
 // the former `sitemap:generate` entry pointed at a command that never existed.
 
 // 404 monitor: drop rows with no hit in 90 days (App\Models\NotFoundLog::prunable).
-Schedule::command('model:prune', ['--model' => [NotFoundLog::class]])->daily();
+Schedule::command('model:prune', ['--model' => [NotFoundLog::class, \App\Models\ForbiddenLog::class]])->daily();
