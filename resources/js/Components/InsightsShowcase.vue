@@ -54,7 +54,7 @@ const rest = computed(() => props.posts.slice(1, 3))
             :alt="lead.image.alt || lead.title"
             width="279"
             height="392"
-            loading="eager"
+            loading="lazy"
             decoding="async"
             class="w-full rounded-lg object-cover max-md:h-[220px] max-md:shrink-0 sm:order-first sm:w-[279px] sm:shrink-0"
           />
@@ -124,7 +124,7 @@ const rest = computed(() => props.posts.slice(1, 3))
                 :alt="post.image.alt || post.title"
                 width="188"
                 height="188"
-                loading="eager"
+                loading="lazy"
                 decoding="async"
                 class="size-[120px] shrink-0 rounded-lg object-cover max-md:size-[80px] sm:size-[188px]"
               />

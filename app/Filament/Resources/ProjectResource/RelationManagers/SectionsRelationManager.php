@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\ProjectResource\RelationManagers;
 
 use App\Enums\SectionType;
+use App\Support\RichContent;
 use App\Filament\Support\Editor\ContentEditor;
 use App\Filament\Support\TranslatableForm;
 use App\Models\PageSection;
@@ -132,6 +133,7 @@ final class SectionsRelationManager extends RelationManager
                     ->visible(fn (Get $get): bool => self::hasRichContent($get('type'))),
 
                 Textarea::make("translations.{$locale}.content")
+                    ->formatStateUsing(fn (?string $state): string => RichContent::plain($state))
                     ->label('Content')
                     ->rows(3)
                     ->visible(fn (Get $get): bool => self::sectionType($get('type')) !== null

@@ -5,6 +5,11 @@ declare(strict_types=1);
 namespace App\Filament\Pages;
 
 use App\Models\Setting;
+use App\Models\Media;
+use App\Services\Media\MediaUsage;
+use App\Services\ImageOptimizer;
+use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Locked;
 use App\Support\SiteSettings;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Repeater;
@@ -48,6 +53,10 @@ final class ManageSettings extends Page implements HasForms
     /** @var array<string, mixed> */
     public array $data = [];
 
+    /** @var list<int> Image IDs captured when the confirmation opens. */
+    #[Locked]
+    public array $unusedImageIds = [];
+
     /**
      * key => translatable?
      *
@@ -63,6 +72,21 @@ final class ManageSettings extends Page implements HasForms
         'contact_location' => true,
         'contact_working_with' => true,
         'contact_details' => false,
+        'image_top_home_desktop' => false,
+        'image_top_home_tablet' => false,
+        'image_top_home_mobile' => false,
+        'image_top_work_desktop' => false,
+        'image_top_work_tablet' => false,
+        'image_top_work_mobile' => false,
+        'image_top_services_desktop' => false,
+        'image_top_services_tablet' => false,
+        'image_top_services_mobile' => false,
+        'image_top_insights_desktop' => false,
+        'image_top_insights_tablet' => false,
+        'image_top_insights_mobile' => false,
+        'image_top_about_desktop' => false,
+        'image_top_about_tablet' => false,
+        'image_top_about_mobile' => false,
         'image_home_desktop' => false,
         'image_home_mobile' => false,
         'image_about_hero' => false,
@@ -117,13 +141,17 @@ final class ManageSettings extends Page implements HasForms
         return $form
             ->statePath('data')
             ->schema([
-                Section::make('Brand')
+                Tabs::make('settings')->columnSpanFull()->persistTabInQueryString('settings-tab')->tabs([
+                Tabs\Tab::make($this->label('اطلاعات سایت', 'Site information'))->icon('heroicon-o-building-storefront')->schema([
+                Section::make($this->label('معرفی سایت', 'Site identity'))
                     ->schema([
                         $this->translatableInput('site_name', 'Site name'),
                         $this->translatableInput('tagline', 'Tagline'),
                         $this->translatableTextarea('footer_description', 'Footer description'),
                     ]),
 
+                ]),
+                Tabs\Tab::make($this->label('اطلاعات تماس', 'Contact details'))->icon('heroicon-o-phone')->schema([
                 Section::make($this->label('اطلاعات تماس', 'Contact details'))
                     ->description($this->label('موارد کارت تماس را اضافه، حذف و با کشیدن جابه‌جا کنید. برای اینستاگرام یا شبکه‌های دیگر، نوع و آدرس لینک را انتخاب کنید.', 'Add, remove, and drag to reorder the contact-card items. Choose a type and link for Instagram or other networks.'))
                     ->columns(2)
@@ -222,7 +250,9 @@ final class ManageSettings extends Page implements HasForms
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('تصاویر ثابت سایت')
+                ]),
+                Tabs\Tab::make($this->label('تصاویر عمومی', 'General images'))->icon('heroicon-o-photo')->schema([
+                Section::make($this->label('تصاویر عمومی سایت', 'General site images'))
                     ->description('تصاویر پیش‌فرض را اینجا جایگزین کنید. تصاویر محتوایی در بخش مربوط به هر صفحه یا پروژه قابل ویرایش‌اند.')
                     ->columns(2)
                     ->schema(array_map(
@@ -231,8 +261,26 @@ final class ManageSettings extends Page implements HasForms
                         ['پس‌زمینه صفحه اصلی دسکتاپ', 'پس‌زمینه صفحه اصلی موبایل', 'تصویر بالای درباره ما', 'پس‌زمینه صفحات', 'تصویر پیش‌فرض پروژه', 'تصویر صفحه ۴۰۴'],
                     )),
 
+                ]),
+                Tabs\Tab::make($this->label('پس‌زمینه صفحات', 'Page backgrounds'))->id('page-backgrounds')->icon('heroicon-o-device-phone-mobile')->schema([
+                Section::make($this->label('پس‌زمینه بالای صفحات', 'Page top backgrounds'))
+                    ->description($this->label('برای هر صفحه تصویر جداگانه در اندازه‌های دسکتاپ، تبلت و موبایل انتخاب کنید. در صورت خالی بودن، تصویر موجود استفاده می‌شود.', 'Choose a separate image for each page and screen size. Existing backgrounds are used when no image is selected.'))
+                    ->schema([Tabs::make('background_pages')->columnSpanFull()->tabs(array_map(
+                        fn (string $page, string $label): Tabs\Tab => Tabs\Tab::make($label)->columns(3)->schema(array_map(
+                            fn (string $size, string $sizeLabel): FileUpload => FileUpload::make("image_top_{$page}_{$size}")->label($sizeLabel)->image()->disk('public')->directory('site-images'),
+                            ['desktop', 'tablet', 'mobile'],
+                            [$this->label('دسکتاپ', 'Desktop'), $this->label('تبلت', 'Tablet'), $this->label('موبایل', 'Mobile')],
+                        )),
+                        ['home', 'work', 'services', 'insights', 'about'],
+                        [$this->label('صفحه اصلی', 'Home'), $this->label('پروژه‌ها', 'Projects'), $this->label('خدمات', 'Services'), $this->label('مقالات', 'Articles'), $this->label('درباره ما', 'About')],
+                    ))]),
+                ]),
+
+                Tabs\Tab::make($this->label('سئو', 'SEO'))->icon('heroicon-o-magnifying-glass')->schema([
                 Section::make('SEO')
                     ->description(new HtmlString('عنوان، توضیحات و تصویر پیش‌فرض، نمودار دانش و سایر تنظیمات سئو به «<a href="'.e(ManageSeoSettings::getUrl()).'" style="text-decoration:underline">تنظیمات سئو (SEO settings)</a>» منتقل شده‌اند.')),
+                ]),
+                ]),
             ]);
     }
 
@@ -261,8 +309,55 @@ final class ManageSettings extends Page implements HasForms
 
         Notification::make()
             ->success()
-            ->title('Settings saved')
+            ->title($this->label('تنظیمات ذخیره شد', 'Settings saved'))
             ->send();
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('cleanUnusedImages')
+                ->label($this->label('پاک‌سازی تصاویر بدون استفاده', 'Clean up unused images'))
+                ->icon('heroicon-o-trash')
+                ->color('danger')
+                ->requiresConfirmation()
+                ->modalHeading($this->label('حذف تصاویر بدون استفاده', 'Delete unused images'))
+                ->modalSubmitActionLabel($this->label('حذف تصاویر فهرست‌شده', 'Delete listed images'))
+                ->mountUsing(function (): void {
+                    $this->unusedImageIds = Media::query()->where('type', 'image')->get()
+                        ->filter(fn (Media $media): bool => (auth()->user()?->can('delete', $media) ?? false)
+                            && MediaUsage::find($media) === [])
+                        ->modelKeys();
+                })
+                ->modalDescription(function (): HtmlString {
+                    $files = Media::query()->whereIn('id', $this->unusedImageIds)->orderBy('id')->get(['name', 'path']);
+                    $list = $files->map(fn (Media $media): string => '<li dir="ltr">'.e($media->path).'</li>')->implode('');
+                    $description = 'تصاویر ثبت‌شده در کتابخانه که در محتوای سایت، تنظیمات یا سئو استفاده نشده‌اند: '.$files->count().' فایل. این فایل‌ها و نسخه‌های بهینه‌شده‌شان از فضای هاست حذف می‌شوند. پیش از تأیید فهرست را بررسی کنید.';
+
+                    return new HtmlString('<p>'.e($description).'</p><ul style="max-height:16rem;overflow:auto;list-style:disc;padding-inline-start:1.5rem">'.$list.'</ul>');
+                })
+                ->action(function (): void {
+                    $deleted = 0;
+                    $skipped = 0;
+                    $disk = Storage::disk(Media::DISK);
+                    foreach (Media::query()->whereIn('id', $this->unusedImageIds)->where('type', 'image')->cursor() as $media) {
+                        if (! (auth()->user()?->can('delete', $media) ?? false) || MediaUsage::find($media) !== []) {
+                            $skipped++;
+                            continue;
+                        }
+                        if ($disk->exists($media->path) && ! $disk->delete($media->path)) {
+                            $skipped++;
+                            continue;
+                        }
+                        ImageOptimizer::purge($media->path);
+                        $media->delete();
+                        $deleted++;
+                    }
+                    $this->unusedImageIds = [];
+                    Notification::make()->success()->title("{$deleted} تصویر حذف شد")
+                        ->body($skipped ? "{$skipped} تصویر به دلیل استفاده یا خطای حذف حفظ شد." : null)->send();
+                }),
+        ];
     }
 
     /**

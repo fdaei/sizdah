@@ -6,15 +6,14 @@ namespace App\Support;
 
 /**
  * Typed accessor for the admin-managed performance settings
- * (Filament: عملکرد → تنظیمات عملکرد). Every option is off/empty by default
- * so a fresh install behaves exactly as before.
+ * (Filament: عملکرد → تنظیمات عملکرد). Explicit saved settings override defaults.
  */
 final class Performance
 {
     /** @var array<string, mixed> key => default */
     public const DEFAULTS = [
         'perf_minify_html' => false,
-        'perf_page_cache' => false,
+        'perf_page_cache' => true,
         'perf_page_cache_ttl' => 3600,
         'perf_lazy_media' => true,
         'perf_video_facade' => true,

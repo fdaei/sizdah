@@ -4,9 +4,19 @@ declare(strict_types=1);
 
 namespace App\Services\Performance;
 
+use App\Http\Middleware\HandleInertiaRequests;
+use App\Models\ContactSubmission;
+use App\Models\ContentRevision;
+use App\Models\LeadMagnetRequest;
+use App\Models\NewsletterSubscription;
+use App\Models\NotFoundLog;
+use App\Models\ServiceRating;
+use App\Models\User;
 use App\Support\TransactionalCache;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -24,20 +34,27 @@ final class PageCache
 {
     /** Writes to these never change public output, so they don't bust the cache. */
     public const IGNORED_MODELS = [
-        \App\Models\NotFoundLog::class,
-        \App\Models\ContactSubmission::class,
-        \App\Models\NewsletterSubscription::class,
-        \App\Models\LeadMagnetRequest::class,
-        \App\Models\ContentRevision::class,
-        \App\Models\User::class,
+        NotFoundLog::class,
+        ContactSubmission::class,
+        NewsletterSubscription::class,
+        LeadMagnetRequest::class,
+        ContentRevision::class,
+        User::class,
         // Pending ratings are invisible; ServiceRating busts the cache itself on approval changes.
-        \App\Models\ServiceRating::class,
-        \Illuminate\Notifications\DatabaseNotification::class,
+        ServiceRating::class,
+        DatabaseNotification::class,
     ];
 
     private const VERSION_KEY = 'page_cache.version';
 
     private const CSRF_PLACEHOLDER = '__PAGE_CACHE_CSRF__';
+
+    /** Only public content pages; admin, downloads and future routes opt in explicitly. */
+    private const PUBLIC_ROUTES = [
+        'home', 'work.index', 'work.industry', 'work.show', 'services', 'services.show',
+        'about', 'insights.index', 'insights.category', 'insights.tag', 'insights.show',
+        'contact', 'legal.privacy', 'legal.terms',
+    ];
 
     /** Headers worth replaying; everything else (cookies!) is regenerated per request. */
     private const KEEP_HEADERS = ['content-type', 'x-inertia', 'vary', 'link', 'content-language', 'x-robots-tag'];
@@ -45,6 +62,7 @@ final class PageCache
     public static function isCacheable(Request $request): bool
     {
         return $request->isMethod('GET')
+            && in_array($request->route()?->getName(), self::PUBLIC_ROUTES, true)
             && ! TransactionalCache::active()
             && $request->user() === null
             && ! $request->hasHeader('X-Inertia-Partial-Data')
@@ -61,14 +79,15 @@ final class PageCache
             $request->fullUrl(),
             $request->header('X-Inertia') ? 'inertia' : 'html',
             (string) $request->header('X-Inertia-Version'),
+            (string) app(HandleInertiaRequests::class)->version($request),
         ]);
 
         return 'page_cache.'.self::version().'.'.sha1($variant);
     }
 
-    public static function get(Request $request): ?Response
+    public static function get(Request $request, ?string $key = null): ?Response
     {
-        $hit = Cache::get(self::key($request));
+        $hit = Cache::get($key ?? self::key($request));
 
         if (! is_array($hit)) {
             return null;
@@ -84,7 +103,7 @@ final class PageCache
         return $response;
     }
 
-    public static function put(Request $request, Response $response, int $ttl): void
+    public static function put(Request $request, Response $response, int $ttl, ?string $key = null): void
     {
         if ($response->getStatusCode() !== 200 || $response->headers->has('Set-Cookie') && self::setsAppCookies($response)) {
             return;
@@ -101,7 +120,7 @@ final class PageCache
             ->only(self::KEEP_HEADERS)
             ->all();
 
-        Cache::put(self::key($request), [
+        Cache::put($key ?? self::key($request), [
             'content' => str_replace($token, self::CSRF_PLACEHOLDER, $content),
             'status' => 200,
             'headers' => $headers,
@@ -112,12 +131,12 @@ final class PageCache
 
     public static function flush(): void
     {
-        Cache::forever(self::VERSION_KEY, self::version() + 1);
+        Cache::forever(self::VERSION_KEY, (string) Str::uuid());
     }
 
-    private static function version(): int
+    private static function version(): string
     {
-        return (int) Cache::get(self::VERSION_KEY, 1);
+        return (string) Cache::get(self::VERSION_KEY, '1');
     }
 
     /** Responses that set cookies beyond session/XSRF are personalised — never cache. */

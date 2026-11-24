@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import TestimonialCard from '@/Components/TestimonialCard.vue'
-import { MOTION } from '@/lib/motion'
+import { MOTION } from '@/lib/motionConfig'
 import type { TestimonialItem } from '@/types'
 
 /**

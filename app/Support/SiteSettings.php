@@ -47,7 +47,7 @@ final class SiteSettings
 
             'socialLinks' => self::socialLinks(),
 
-            'images' => collect(['home_desktop', 'home_mobile', 'about_hero', 'site_background', 'project_fallback', 'error_404'])
+            'images' => collect(['home_desktop', 'home_mobile', 'about_hero', 'site_background', 'project_fallback', 'error_404', 'top_home_desktop', 'top_home_tablet', 'top_home_mobile', 'top_work_desktop', 'top_work_tablet', 'top_work_mobile', 'top_services_desktop', 'top_services_tablet', 'top_services_mobile', 'top_insights_desktop', 'top_insights_tablet', 'top_insights_mobile', 'top_about_desktop', 'top_about_tablet', 'top_about_mobile'])
                 ->mapWithKeys(fn (string $key): array => [$key => self::mediaUrl(self::get('image_'.$key, $locale))])
                 ->all(),
 

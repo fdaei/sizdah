@@ -10,7 +10,6 @@ use App\Models\Media;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -18,10 +17,8 @@ use Illuminate\Support\Str;
  * FileUpload in the panel by AppServiceProvider, so an editor can reuse a
  * file from the Media library instead of uploading it again.
  *
- * The chosen file is *copied* into the field's own directory: the record
- * then owns its file, and deleting it from the library can never break the
- * record. The copy is registered in the library with the original's SEO
- * metadata, so its alt keeps working as the fallback.
+ * The field references the existing public-disk file directly, so its name,
+ * metadata, and library entry remain shared across all uses.
  */
 final class MediaLibraryPicker
 {
@@ -52,25 +49,10 @@ final class MediaLibraryPicker
                     }),
             ])
             ->action(function (array $data, FileUpload $component): void {
-                $media = Media::query()->with('translations')->findOrFail($data['media']);
-                $disk = Storage::disk($component->getDiskName());
-                $directory = trim((string) $component->getDirectory(), '/');
-                $copy = ($directory !== '' ? $directory.'/' : '').Str::ulid().'.'.pathinfo($media->path, PATHINFO_EXTENSION);
-
-                $disk->put($copy, Storage::disk(Media::DISK)->get($media->path));
-
-                if ($component->getDiskName() === Media::DISK) {
-                    $clone = Media::register($copy, auth()->id());
-                    foreach ($media->translations as $t) {
-                        $clone->translations()->updateOrCreate(
-                            ['locale' => $t->locale],
-                            $t->only(['title', 'alt', 'caption', 'description']),
-                        );
-                    }
-                }
+                $media = Media::query()->where('type', 'image')->findOrFail($data['media']);
 
                 $state = $component->isMultiple() ? (array) $component->getState() : [];
-                $state[(string) Str::uuid()] = $copy;
+                $state[(string) Str::uuid()] = $media->path;
                 $component->state($state);
             });
     }
@@ -78,6 +60,10 @@ final class MediaLibraryPicker
     /** Image fields only, and never the library's own upload field. */
     private static function appliesTo(FileUpload $component): bool
     {
+        if ($component->getDiskName() !== Media::DISK) {
+            return false;
+        }
+
         $livewire = $component->getLivewire();
         if ($livewire instanceof CreateMedia || $livewire instanceof EditMedia) {
             return false;

@@ -75,8 +75,9 @@ const hero = computed(() => props.sections.hero)
  | at every width; without one, the desktop/mobile Figma exports are used.
  */
 const heroBackground = computed(() => ({
-  desktop: hero.value?.image?.src ?? page.props.settings.images?.home_desktop ?? heroDesktopBgUrl,
-  mobile: hero.value?.image?.src ?? page.props.settings.images?.home_mobile ?? heroMobileBgUrl,
+  desktop: page.props.settings.images?.top_home_desktop ?? hero.value?.image?.src ?? page.props.settings.images?.home_desktop ?? heroDesktopBgUrl,
+  tablet: page.props.settings.images?.top_home_tablet ?? page.props.settings.images?.top_home_desktop ?? hero.value?.image?.src ?? page.props.settings.images?.home_desktop ?? heroDesktopBgUrl,
+  mobile: page.props.settings.images?.top_home_mobile ?? page.props.settings.images?.home_mobile ?? heroMobileBgUrl,
 }))
 
 /**
@@ -205,6 +206,7 @@ onBeforeUnmount(() => {
     class="home-hero relative overflow-hidden bg-top bg-no-repeat pt-[188px] pb-12 sm:pb-16 lg:pt-[172px] max-md:min-h-[619px] lg:min-h-[783px] lg:pb-24"
     :style="{
       '--hero-bg-desktop': `url(${heroBackground.desktop})`,
+      '--hero-bg-tablet': `url(${heroBackground.tablet})`,
       '--hero-bg-mobile': `url(${heroBackground.mobile})`,
     }"
   >
@@ -510,10 +512,16 @@ onBeforeUnmount(() => {
   background-size: 100% auto;
 }
 
+@media (min-width: 768px) and (max-width: 1023px) {
+  .home-hero { background-image: var(--hero-bg-tablet) !important; }
+}
+
+@media (max-width: 767px) { .home-hero { background-image: var(--hero-bg-mobile); } }
+
 /* The mobile header/menu is active below the lg breakpoint (1024px). */
 @media (max-width: 1023px) {
   .home-hero {
-    background-image: var(--hero-bg-mobile) !important;
+    background-image: var(--hero-bg-mobile);
     /*
      * AppHeader is fixed on mobile (32px top padding + the 60px logo +
      * 24px bottom padding). Keep the hero artwork below that chrome instead

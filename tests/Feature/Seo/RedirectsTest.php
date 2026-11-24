@@ -184,3 +184,16 @@ it('imports redirects from CSV (headers from WordPress plugins too)', function (
         ->and(Redirect::query()->where('source_path', 'fa/two')->value('status_code'))->toBe(410)
         ->and(Redirect::query()->where('match_type', 'regex')->value('destination_path'))->toBe('fa/$1');
 });
+
+it('skips imported redirects that would create a loop', function (): void {
+    $csv = tempnam(sys_get_temp_dir(), 'csv');
+    file_put_contents($csv, "source,target,code\n/old,/new,301\n/new,/old,301\n/self,/self,301\n");
+
+    try {
+        expect(ListRedirects::import($csv))->toBe([1, 0, 2]);
+        $this->get('/old')->assertStatus(301)->assertRedirect(url('/new'));
+        expect(Redirect::query()->count())->toBe(1);
+    } finally {
+        unlink($csv);
+    }
+});

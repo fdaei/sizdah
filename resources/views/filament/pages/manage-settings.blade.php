@@ -4,7 +4,7 @@
 
         <div class="mt-6 flex justify-end gap-3">
             <x-filament::button type="submit">
-                Save changes
+                {{ app()->getLocale() === 'fa' ? 'ذخیره تغییرات' : 'Save changes' }}
             </x-filament::button>
         </div>
     </form>

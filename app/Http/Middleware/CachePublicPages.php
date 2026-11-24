@@ -19,12 +19,16 @@ final class CachePublicPages
             return $next($request);
         }
 
-        if ($hit = PageCache::get($request)) {
+        // Keep the generation captured before rendering: a concurrent edit can
+        // invalidate it while the response is being built.
+        $key = PageCache::key($request);
+
+        if ($hit = PageCache::get($request, $key)) {
             return $hit;
         }
 
         $response = $next($request);
-        PageCache::put($request, $response, Performance::pageCacheTtl());
+        PageCache::put($request, $response, Performance::pageCacheTtl(), $key);
 
         return $response;
     }

@@ -11,6 +11,7 @@ use App\Support\SiteSettings;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -94,6 +95,8 @@ final class ManagePerformance extends Page implements HasForms
             ->reorderable(false);
 
         return $form->statePath('data')->schema([
+            Tabs::make('performance')->columnSpanFull()->tabs([
+            Tabs\Tab::make('کش و فشرده‌سازی')->schema([
             Section::make('کش و فشرده‌سازی')->columns(2)->schema([
                 Toggle::make('perf_page_cache')->label('کش صفحات (Page cache)')->live()
                     ->helperText('صفحات عمومی برای بازدیدکنندگان مهمان از کش سرو می‌شوند. با ذخیره هر محتوا یا تنظیم، خودکار پاک می‌شود.'),
@@ -102,12 +105,16 @@ final class ManagePerformance extends Page implements HasForms
                 Toggle::make('perf_minify_html')->label('فشرده‌سازی HTML (Minify)')
                     ->helperText('کامنت‌ها و فاصله‌های اضافه حذف می‌شود؛ pre، textarea، script و style دست‌نخورده می‌مانند. CSS/JS توسط Vite فشرده می‌شوند.'),
             ]),
+            ]),
+            Tabs\Tab::make('بارگذاری رسانه')->schema([
             Section::make('بارگذاری تنبل (Lazy load)')->columns(2)->schema([
                 Toggle::make('perf_lazy_media')->label('Lazy load تصاویر و iframeهای محتوا')
                     ->helperText('loading="lazy" و decoding="async" به تصاویر و iframeهای متن مقاله اضافه می‌شود.'),
                 Toggle::make('perf_video_facade')->label('نمای جایگزین ویدیو (YouTube facade)')
                     ->helperText('تا قبل از کلیک فقط تصویر بندانگشتی بارگذاری می‌شود.'),
             ]),
+            ]),
+            Tabs\Tab::make('بارگذاری پیشاپیش')->schema([
             Section::make('Preload / Preconnect / Prefetch')->schema([
                 $urlList('perf_preconnect', 'Preconnect', 'دامنه‌های خارجی که زود به آن‌ها وصل می‌شویم (مثلاً CDN یا Google Tag Manager).'),
                 $urlList('perf_dns_prefetch', 'DNS prefetch', 'دامنه‌هایی که فقط DNS آن‌ها از قبل resolve شود.'),
@@ -120,6 +127,8 @@ final class ManagePerformance extends Page implements HasForms
                         TextInput::make('type')->label('MIME')->placeholder('font/woff2')->maxLength(50)->extraInputAttributes(['dir' => 'ltr']),
                     ]),
                 $urlList('perf_prefetch', 'Prefetch', 'صفحات یا فایل‌هایی که احتمالاً بازدیدکننده بعداً به آن‌ها می‌رود.'),
+            ]),
+            ]),
             ]),
         ]);
     }

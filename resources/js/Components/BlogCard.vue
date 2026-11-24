@@ -50,7 +50,7 @@ const props = withDefaults(
             :alt="props.post.image.alt"
             :width="props.post.image.width"
             :height="props.post.image.height"
-            loading="eager"
+            loading="lazy"
             decoding="async"
             class="size-full object-cover transition-transform duration-500 ease-brand group-hover:scale-105"
           />

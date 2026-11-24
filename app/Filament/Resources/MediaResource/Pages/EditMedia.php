@@ -20,7 +20,11 @@ final class EditMedia extends EditRecord
     {
         return [
             Actions\DeleteAction::make()
-                ->visible(fn (Media $record): bool => $record->isLibraryFile())
+                ->before(function (Media $record, Actions\DeleteAction $action): void {
+                    if (! MediaResource::canRemoveFile($record)) {
+                        $action->halt();
+                    }
+                })
                 ->after(fn (Media $record) => MediaResource::deleteFiles($record)),
         ];
     }

@@ -8,6 +8,8 @@ use App\Filament\Resource;
 use App\Filament\Resources\MediaResource\Pages;
 use App\Filament\Support\TranslatableForm;
 use App\Models\Media;
+use App\Services\Media\MediaUsage;
+use Filament\Notifications\Notification;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
@@ -223,28 +225,65 @@ final class MediaResource extends Resource
                 Tables\Actions\EditAction::make()->iconButton(),
                 Tables\Actions\DeleteAction::make()
                     ->iconButton()
-                    // Files uploaded through a content field belong to that record.
-                    ->visible(fn (Media $record): bool => $record->isLibraryFile())
+                    ->before(function (Media $record, Tables\Actions\DeleteAction $action): void {
+                        if (! self::canRemoveFile($record)) {
+                            $action->halt();
+                        }
+                    })
                     ->after(fn (Media $record) => self::deleteFiles($record)),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make()
-                    ->action(fn ($records) => $records
-                        ->filter(fn (Media $m): bool => $m->isLibraryFile() && (auth()->user()?->can('delete', $m) ?? false))
-                        ->each(function (Media $m): void {
-                            self::deleteFiles($m);
-                            $m->delete();
-                        })),
+                Tables\Actions\BulkAction::make('deleteUnused')
+                    ->label('حذف فایل‌های انتخاب‌شده')
+                    ->icon('heroicon-o-trash')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->deselectRecordsAfterCompletion()
+                    ->action(function ($records): void {
+                        $blocked = [];
+                        foreach ($records as $media) {
+                            if (! (auth()->user()?->can('delete', $media) ?? false)) {
+                                $blocked[] = $media->name.' — مجوز حذف ندارید';
+                                continue;
+                            }
+                            $uses = MediaUsage::find($media);
+                            if ($uses !== []) {
+                                $blocked[] = $media->name.': '.implode(' ؛ ', $uses);
+                                continue;
+                            }
+                            $media->delete();
+                            self::deleteFiles($media);
+                        }
+                        if ($blocked !== []) {
+                            Notification::make()->danger()->persistent()->title('برخی فایل‌ها حذف نشدند')
+                                ->body(implode(' | ', $blocked))->send();
+                        } else {
+                            Notification::make()->success()->title('فایل‌های انتخاب‌شده حذف شدند')->send();
+                        }
+                    }),
             ]);
+    }
+
+    public static function canRemoveFile(Media $media): bool
+    {
+        $uses = MediaUsage::find($media);
+        if ($uses === []) {
+            return true;
+        }
+
+        Notification::make()->danger()->persistent()->title('این فایل در حال استفاده است و حذف نشد')
+            ->body(implode(' ؛ ', $uses))->send();
+
+        return false;
     }
 
     public static function deleteFiles(Media $media): void
     {
         $disk = Storage::disk(Media::DISK);
-        foreach (array_filter([$media->path, $media->poster_path]) as $file) {
+        foreach (array_filter([$media->path]) as $file) {
             \App\Services\ImageOptimizer::purge($file); // responsive variants
         }
-        $disk->delete(array_filter([$media->path, $media->poster_path]));
+        $disk->delete(array_filter([$media->path]));
     }
 
     private static function preview(?Media $record): HtmlString

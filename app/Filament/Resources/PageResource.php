@@ -17,6 +17,7 @@ use App\Filament\Support\Seo\SeoTable;
 use App\Filament\Support\TranslatableForm;
 use App\Models\Page;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -46,6 +47,8 @@ final class PageResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
+            Tabs::make('editor')->columnSpanFull()->tabs([
+            Tabs\Tab::make('اطلاعات و انتشار (Details)')->schema([
             Section::make()
                 ->columns(2)
                 ->schema([
@@ -59,6 +62,8 @@ final class PageResource extends Resource
 
             PublicationFields::section(),
 
+            ]),
+            Tabs\Tab::make('محتوا (Content)')->schema([
             TranslatableForm::tabs(fn (string $locale): array => [
                 TextInput::make("translations.{$locale}.title")
                     ->label('Title')
@@ -78,7 +83,11 @@ final class PageResource extends Resource
                     ->helperText('Used by legal pages. Leave empty for section-driven pages.'),
             ]),
 
+            ]),
+            Tabs\Tab::make('سئو (SEO)')->schema([
             SeoSection::make(self::seoContext()),
+            ]),
+            ]),
         ]);
     }
 

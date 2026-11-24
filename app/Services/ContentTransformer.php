@@ -330,7 +330,9 @@ final class ContentTransformer
             'title' => (string) $section->getTranslation('title'),
             'subtitle' => (string) $section->getTranslation('subtitle'),
             'description' => (string) $section->getTranslation('description'),
-            'content' => RichContent::render($section->getTranslation('content')),
+            'content' => in_array($section->type, [SectionType::RichText, SectionType::Story], true)
+                ? RichContent::render($section->getTranslation('content'))
+                : RichContent::plain($section->getTranslation('content')),
             'colors' => [
                 'eyebrow' => $section->eyebrow_color,
                 'title' => $section->title_color,

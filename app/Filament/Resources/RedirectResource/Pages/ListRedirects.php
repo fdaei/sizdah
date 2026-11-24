@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace App\Filament\Resources\RedirectResource\Pages;
 
 use App\Filament\Resources\RedirectResource;
+use App\Filament\Pages\ManageSeoSettings;
 use App\Models\Redirect;
 use App\Services\Redirects\RedirectResolver;
+use App\Services\Redirects\SlugRedirector;
 use Filament\Actions;
 use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Components\Tab;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -28,10 +32,36 @@ final class ListRedirects extends ListRecords
         'active' => ['active', 'is_active', 'enabled', 'status_active'],
     ];
 
+    public function getSubheading(): ?string
+    {
+        $state = SlugRedirector::enabled()
+            ? 'فعال، با کد '.SlugRedirector::status()
+            : 'غیرفعال';
+
+        return "ریدایرکت خودکار هنگام تغییر نامک: {$state}. پس از تغییر آدرس محتوای منتشرشده، آدرس قدیمی در زبانه «خودکار» ثبت می‌شود. این قابلیت برای همه خطاهای ۴۰۴ ریدایرکت ایجاد نمی‌کند.";
+    }
+
+    /** @return array<string, Tab> */
+    public function getTabs(): array
+    {
+        return [
+            'all' => Tab::make('همه'),
+            'automatic' => Tab::make('خودکار (تغییر نامک)')
+                ->badge(fn (): int => Redirect::query()->where('origin', 'auto')->count())
+                ->modifyQueryUsing(fn (Builder $query): Builder => $query->where('origin', 'auto')),
+        ];
+    }
+
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()->label('ریدایرکت جدید (Add new)'),
+
+            Actions\Action::make('redirectSettings')
+                ->label('تنظیمات ریدایرکت خودکار')
+                ->icon('heroicon-o-cog-6-tooth')
+                ->color('gray')
+                ->url(fn (): string => ManageSeoSettings::getUrl()),
 
             Actions\Action::make('export')
                 ->label('خروجی CSV (Export)')
@@ -126,7 +156,9 @@ final class ListRedirects extends ListRecords
                 $key = $match === 'regex' ? $source : Redirect::normalize($source);
                 if ($match === 'regex' && RedirectResolver::delimit($key) === null
                     || ($destination === '' && ! in_array($status, Redirect::GONE, true))
-                    || ($match === 'exact' && ($key === '' || str_starts_with($key, 'admin')))) {
+                    || ($match === 'exact' && ($key === '' || str_starts_with($key, 'admin')))
+                    || ($match === 'exact' && ! in_array($status, Redirect::GONE, true)
+                        && app(RedirectResolver::class)->finalDestination($key, $destination) === null)) {
                     $skipped++;
 
                     continue;

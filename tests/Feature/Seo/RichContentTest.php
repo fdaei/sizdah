@@ -29,3 +29,18 @@ it('renders an Aparat block as a lazy iframe', function (): void {
         ->toContain('loading="lazy"')
         ->toContain('<p>قبل</p>');
 });
+
+it('recovers plain text from legacy editor documents', function (): void {
+    $document = json_encode(['type' => 'doc', 'content' => [
+        ['type' => 'paragraph', 'content' => [
+            ['type' => 'text', 'text' => 'فکر می‌کنیم،'],
+            ['type' => 'hardBreak'],
+            ['type' => 'text', 'text' => 'می‌سازیم'],
+        ]],
+        ['type' => 'paragraph', 'content' => [['type' => 'text', 'text' => 'متن دوم']]],
+    ]]);
+
+    expect(RichContent::plain($document))->toBe("فکر می‌کنیم،\nمی‌سازیم\nمتن دوم")
+        ->and(RichContent::plain('متن ساده'))->toBe('متن ساده')
+        ->and(RichContent::plain('{"other":true}'))->toBe('{"other":true}');
+});

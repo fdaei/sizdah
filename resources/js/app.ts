@@ -7,7 +7,19 @@ import { ZiggyVue } from 'ziggy-js'
 
 import AppLayout from './Layouts/AppLayout.vue'
 import { installTranslations } from './Composables/useTranslations'
-import { initMotion, killPageAnimations } from './lib/motion'
+
+let motionGeneration = 0
+let motion: typeof import('./lib/motion') | undefined
+
+async function initPageMotion(): Promise<void> {
+  const generation = ++motionGeneration
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('reduced-motion')
+    return
+  }
+  motion ??= await import('./lib/motion')
+  if (generation === motionGeneration) motion.initMotion()
+}
 
 const appName = import.meta.env.VITE_APP_NAME ?? 'Sizdah'
 
@@ -46,7 +58,7 @@ createInertiaApp({
     // this before mount meant the first page had no reveal targets; initialize
     // after Vue has rendered so Chrome's responsive/inspect view gets the same
     // motion as a normal viewport.
-    initMotion()
+    void initPageMotion()
   },
 
   progress: {
@@ -64,12 +76,13 @@ createInertiaApp({
  | and re-initialise once the new page has painted.
  */
 router.on('before', () => {
-  killPageAnimations()
+  motionGeneration++
+  motion?.killPageAnimations()
 })
 
 router.on('navigate', () => {
   // Wait for the new DOM to be laid out before measuring scroll positions.
   requestAnimationFrame(() => {
-    requestAnimationFrame(() => initMotion())
+    requestAnimationFrame(() => void initPageMotion())
   })
 })

@@ -55,6 +55,16 @@ const gridBackground = computed(() => gridPages.includes(page.component))
 const nonHomeBackground = computed(() => page.component !== 'Home')
 const workTopBackground = computed(() => page.component === 'Work/Index')
 
+const topBackgroundStyles = computed(() => {
+  const key = ({ 'Work/Index': 'work', Services: 'services', 'Insights/Index': 'insights', About: 'about' } as Record<string, string>)[page.component]
+  if (!key) return {}
+  const images = page.props.settings.images ?? {}
+  const desktop = images[`top_${key}_desktop`]
+  const tablet = images[`top_${key}_tablet`] ?? desktop
+  const mobile = images[`top_${key}_mobile`] ?? tablet
+  return Object.fromEntries(Object.entries({ desktop, tablet, mobile }).filter(([, url]) => url).map(([size, url]) => [`--top-bg-${size}`, `url(${JSON.stringify(url)})`]))
+})
+
 const menuOpen = ref(false)
 
 // Every page passes `seo`; only inner pages carry a trail (Breadcrumbs.vue).
@@ -69,7 +79,7 @@ const breadcrumbs = computed<Breadcrumb[]>(() =>
   <div
     class="site-shell flex min-h-screen-safe flex-col bg-ink-1000"
     :class="{ 'page-wash': washed, 'grid-background': gridBackground, 'non-home-background': nonHomeBackground, 'work-top-background': workTopBackground, 'error-shell': page.component === 'Error' }"
-    :style="{ '--site-background': `url(${page.props.settings.images?.site_background ?? siteBackgroundUrl})` }"
+    :style="{ '--site-background': `url(${page.props.settings.images?.site_background ?? siteBackgroundUrl})`, ...topBackgroundStyles }"
   >
     <AppHeader @open-menu="menuOpen = true" />
     <MobileMenu :open="menuOpen" @close="menuOpen = false" />
@@ -94,6 +104,16 @@ const breadcrumbs = computed<Breadcrumb[]>(() =>
 </template>
 
 <style scoped>
+.site-shell.grid-background {
+  background-image: var(--top-bg-mobile, var(--top-bg-tablet, var(--top-bg-desktop, linear-gradient(-42deg, rgb(248 185 55 / 0) 80%, rgb(248 185 55 / 0.1) 100%), url('../../images/sizdah/shared/dark-grid-bg-sizdah-marketing.webp'))));
+}
+@media (min-width: 768px) {
+  .site-shell.grid-background { background-image: var(--top-bg-tablet, var(--top-bg-desktop, linear-gradient(-42deg, rgb(248 185 55 / 0) 80%, rgb(248 185 55 / 0.1) 100%), url('../../images/sizdah/shared/dark-grid-bg-sizdah-marketing.webp'))); }
+}
+@media (min-width: 1024px) {
+  .site-shell.grid-background { background-image: var(--top-bg-desktop, linear-gradient(-42deg, rgb(248 185 55 / 0) 80%, rgb(248 185 55 / 0.1) 100%), url('../../images/sizdah/shared/dark-grid-bg-sizdah-marketing.webp')); }
+}
+
 .non-home-background:not(.grid-background) {
   background-image: var(--site-background) !important;
   background-position: top center;

@@ -36,6 +36,9 @@ final class HomeController extends Controller
             ->withContent()
             ->first();
 
+        $faqs = Faq::query()->forDisplay()->get();
+        $testimonials = Testimonial::query()->forDisplay()->get();
+
         return Inertia::render('Home', [
             // Editorial blocks: hero, lead magnet, packages, final CTA, and the
             // eyebrow/title/subtitle of every other section.
@@ -71,9 +74,7 @@ final class HomeController extends Controller
                 ->all(),
 
             // Reviews marquee — Figma 1419:9243
-            'testimonials' => Testimonial::query()
-                ->forDisplay()
-                ->get()
+            'testimonials' => $testimonials
                 ->map(fn (Testimonial $t): array => ContentTransformer::testimonial($t))
                 ->all(),
 
@@ -86,15 +87,13 @@ final class HomeController extends Controller
                 ->all(),
 
             // FAQ accordion — Figma 1419:9272
-            'faqs' => Faq::query()
-                ->forDisplay()
-                ->get()
+            'faqs' => $faqs
                 ->map(fn (Faq $f): array => ContentTransformer::faq($f))
                 ->all(),
 
             'seo' => SeoBuilder::forPage($page, $request->url(), extraNodes: [
-                ...SchemaNodes::faqPage(Faq::query()->forDisplay()->get(), $request->url()),
-                ...SchemaNodes::reviews(Testimonial::query()->forDisplay()->get()),
+                ...SchemaNodes::faqPage($faqs, $request->url()),
+                ...SchemaNodes::reviews($testimonials),
             ]),
         ]);
     }

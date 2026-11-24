@@ -21,6 +21,7 @@ use App\Models\PostTag;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -50,6 +51,8 @@ final class PostResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
+            Tabs::make('editor')->columnSpanFull()->tabs([
+            Tabs\Tab::make('محتوا (Content)')->schema([
             TranslatableForm::tabs(fn (string $locale): array => [
                 TextInput::make("translations.{$locale}.title")
                     ->label('Title')
@@ -82,6 +85,8 @@ final class PostResource extends Resource
                     ->helperText('توضیح تصویر برای صفحه‌خوان‌ها و Google Images. اگر خالی بماند، alt همان فایل در کتابخانه رسانه استفاده می‌شود.'),
             ]),
 
+            ]),
+            Tabs\Tab::make('جزئیات و تصاویر (Details & media)')->schema([
             Grid::make(3)->schema([
                 Section::make('Details')
                     ->columnSpan(2)
@@ -183,7 +188,11 @@ final class PostResource extends Resource
                 ]),
             ]),
 
+            ]),
+            Tabs\Tab::make('سئو (SEO)')->schema([
             SeoSection::make(self::seoContext()),
+            ]),
+            ]),
         ]);
     }
 
