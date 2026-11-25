@@ -49,27 +49,37 @@ for (const path of pages) {
   })
 }
 
-test('selecting another project shows its image inside the showcase frame', async ({ page }) => {
+test('each project selection shows only its own image inside the showcase frame', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await visit(page, '/fa')
 
   const showcase = page.locator('[data-site="Components/ProjectShowcase"]')
   const frame = showcase.locator('[data-on-touchstart="startSwipe"]')
-  const mobileControl = showcase.locator('button[data-arg-index="1"]')
+  const mobileControls = showcase.locator('button[data-arg-index]')
+  const desktopControls = showcase.locator('[data-on-mouseenter="active = index"]')
+  const useMobileControls = await mobileControls.first().isVisible()
+  const controls = useMobileControls ? mobileControls : desktopControls
+  const slides = frame.locator('img[data-slide-index]')
+  const count = await controls.count()
 
-  if (await mobileControl.isVisible()) {
-    await mobileControl.click()
-    await expect(mobileControl).toHaveAttribute('aria-current', 'true')
-  } else {
-    await showcase.locator('[data-on-mouseenter="active = index"][data-arg-index="1"]').hover()
+  expect(count).toBeGreaterThan(1)
+  await expect(slides).toHaveCount(count)
+  await expect(showcase.locator('img[data-slide-index]')).toHaveCount(count)
+
+  for (let index = 0; index < count; index += 1) {
+    const control = controls.nth(index)
+    if (useMobileControls) {
+      await control.click()
+      await expect(control).toHaveAttribute('aria-current', 'true')
+    } else {
+      await control.hover()
+    }
+
+    const selectedImage = frame.locator(`img[data-slide-index="${index}"].opacity-100`)
+    await expect(frame.locator('img.opacity-100')).toHaveCount(1)
+    await expect(selectedImage).toHaveCSS('opacity', '1')
+    await expect(selectedImage).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 0)')
   }
-
-  const firstImage = frame.locator('img[data-slide-index="0"]')
-  const selectedImage = frame.locator('img[data-slide-index="1"]')
-  await expect(firstImage).toHaveCSS('opacity', '0')
-  await expect(selectedImage).toHaveCSS('opacity', '1')
-  await expect(selectedImage).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 0)')
-  await expect(showcase.locator('img[data-slide-index="1"]')).toHaveCount(1)
 })
 
 /**
