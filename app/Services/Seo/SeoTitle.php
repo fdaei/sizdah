@@ -29,7 +29,11 @@ final class SeoTitle
                 ?: self::DEFAULT_TEMPLATE);
         }
 
-        $page = (int) request()?->integer('page', 1);
+        $page = request()->routeIs('insights.index', 'insights.category', 'insights.tag')
+            ? max(1, request()->integer('page', 1)) : 1;
+        if ($page > 1 && ! str_contains($template, '%page%')) {
+            $template .= ' %sep% '.__('seo.pagination_title', ['page' => $page]);
+        }
 
         $out = strtr($template, [
             '%title%' => $title,

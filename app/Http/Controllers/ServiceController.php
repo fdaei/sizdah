@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Page;
 use App\Actions\RecordServiceRating;
+use App\Models\Page;
 use App\Models\Service;
 use App\Models\ServiceRating;
-use Illuminate\Http\RedirectResponse;
 use App\Services\ContentTransformer;
 use App\Services\SeoBuilder;
+use App\View\PublicPage;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 
 /**
  * Services page. Figma 308:4492 — the canonical frame; 1323:7189 and
@@ -28,19 +27,16 @@ final class ServiceController extends Controller
      * positionally, so without it `$service` received the {locale} segment
      * ("fa") and every service detail URL 404'd.
      */
-    public function show(Request $request, string $locale, string $service): Response
+    public function show(Request $request, string $locale, string $service): PublicPage
     {
         $record = Service::query()->forDisplay()->whereHas('translations', fn ($query) => $query->where('locale', app()->getLocale())->where('slug', $service)
         )->firstOrFail();
         $title = (string) $record->getTranslation('title');
         $description = (string) $record->getTranslation('description');
 
-        return Inertia::render('Services/Show', [
+        return PublicPage::render('Services/Show', [
             'service' => [
-                'title' => $title,
-                'description' => $description,
-                'features' => $record->getTranslation('features') ?? [],
-                'slug' => $service,
+                ...ContentTransformer::service($record),
                 'rating' => ServiceRating::summary($record),
             ],
             'seo' => SeoBuilder::forService($record, $request->url()),
@@ -59,7 +55,7 @@ final class ServiceController extends Controller
         return back()->with('success', __($stored ? 'forms.rating_thanks' : 'forms.rating_duplicate'));
     }
 
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request): PublicPage
     {
         $page = Page::query()
             ->key('services')
@@ -67,7 +63,7 @@ final class ServiceController extends Controller
             ->withContent()
             ->first();
 
-        return Inertia::render('Services', [
+        return PublicPage::render('Services', [
             'heading' => [
                 'eyebrow' => (string) $page?->getTranslation('subtitle'),
                 'title' => (string) $page?->getTranslation('title'),

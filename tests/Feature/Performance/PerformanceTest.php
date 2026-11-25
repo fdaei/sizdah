@@ -2,15 +2,21 @@
 
 declare(strict_types=1);
 
+use App\Enums\PublicationStatus;
 use App\Filament\Pages\ManagePerformance;
+use App\Models\Client;
 use App\Models\Page;
+use App\Models\Post;
 use App\Models\Setting;
 use App\Models\User;
+use App\Services\ContentTransformer;
 use App\Services\Performance\HtmlMinifier;
 use App\Support\Performance;
 use Database\Seeders\RolePermissionSeeder;
-use Livewire\Livewire;
+use Illuminate\Foundation\Vite;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Livewire\Livewire;
 
 beforeEach(function (): void {
     config(['inertia.ssr.enabled' => false]);
@@ -124,21 +130,53 @@ it('lets an admin save performance settings and purge the cache', function (): v
     expect(Performance::minifyHtml())->toBeTrue();
 });
 
-it('omits admin-only translation groups from public pages', function (): void {
-    $this->get('/fa')->assertOk()->assertInertia(fn ($page) => $page
-        ->has('translations.common')
-        ->has('translations.forms')
-        ->missing('translations.admin')
-        ->missing('translations.validation'));
+it('renders Persian UI on the server without sending a translation dictionary', function (): void {
+    $this->get('/fa')->assertOk()->assertViewHas('page', fn ($page) => ! isset($page['props']['translations']) && $page['props']['locale']['current'] === 'fa');
 });
 
 it('loads only listing fields for article translations', function (): void {
-    $post = \App\Models\Post::factory()->create(['status' => \App\Enums\PublicationStatus::Published, 'published_at' => now()->subDay()]);
+    $post = Post::factory()->create(['status' => PublicationStatus::Published, 'published_at' => now()->subDay()]);
     $post->setTranslations(['fa' => ['title' => 'عنوان آزمایشی', 'slug' => 'test-title', 'excerpt' => 'خلاصه', 'content' => '<p>متن بلند مقاله</p>']]);
 
-    $loaded = \App\Models\Post::query()->forListing()->whereKey($post->id)->firstOrFail();
+    $loaded = Post::query()->forListing()->whereKey($post->id)->firstOrFail();
     $translation = $loaded->translations->firstWhere('locale', 'fa');
     expect($translation->getAttribute('title'))->toBe('عنوان آزمایشی')
         ->and($translation->getAttribute('excerpt'))->toBe('خلاصه')
         ->and(array_key_exists('content', $translation->getAttributes()))->toBeFalse();
+});
+
+it('discovers the native enhancement module and responsive hero in the initial HTML', function (): void {
+    $vite = app(Vite::class);
+    $html = $this->get('/fa')->assertOk()->getContent();
+    $module = $vite->asset('resources/js/site.ts');
+    $art = json_decode(file_get_contents(resource_path('views/site/assets.json')), true);
+    expect($html)->toContain($module)
+        ->toContain('as="image" href="'.$art['sizdah/home/hero-bg-mobile.webp'].'" media="(max-width:767px)" fetchpriority="high"')
+        ->toContain('Peyda-SemiBold.woff2" as="font"')
+        ->not->toContain('data-page=')->not->toContain('window.Ziggy');
+});
+
+it('preloads CMS hero overrides with the same responsive precedence as Vue', function (): void {
+    foreach (['top_home_mobile' => 'mobile.avif', 'top_home_tablet' => 'tablet.avif', 'top_home_desktop' => 'desktop.avif'] as $key => $file) {
+        Setting::query()->create(['key' => 'image_'.$key, 'group' => 'images', 'is_translatable' => true, 'value' => ['fa' => $file]]);
+    }
+    $html = $this->get('/fa')->assertOk()->getContent();
+    foreach (['mobile', 'tablet', 'desktop'] as $size) {
+        $url = url(Storage::disk('public')->url($size.'.avif'));
+        expect($html)->toContain('as="image" href="'.$url.'"');
+    }
+    $this->get('/fa')->assertHeader('X-Page-Cache', 'HIT');
+});
+
+it('does not send broken client upload URLs to the browser', function (): void {
+    Storage::fake('public');
+    $client = Client::query()->create(['logo_path' => 'clients/missing.svg']);
+    $client->setTranslations(['fa' => ['name' => 'کلینیک پارس']]);
+
+    expect(ContentTransformer::client($client)['logo'])->toBeNull();
+    Storage::disk('public')->put('clients/present.svg', '<svg/>');
+    $client->logo_path = 'clients/present.svg';
+    expect(ContentTransformer::client($client)['logo'])->toEndWith('/storage/clients/present.svg');
+    $client->logo_path = 'https://cdn.example.com/client.svg';
+    expect(ContentTransformer::client($client)['logo'])->toBe('https://cdn.example.com/client.svg');
 });

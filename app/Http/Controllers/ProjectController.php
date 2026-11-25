@@ -4,32 +4,31 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Page;
 use App\Models\Industry;
+use App\Models\Page;
 use App\Models\Project;
 use App\Models\Service;
 use App\Services\ContentTransformer;
 use App\Services\SeoBuilder;
+use App\View\PublicPage;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 
 /**
  * Projects listing (Figma 1362:7198) and case-study detail (1323:7541).
  */
 final class ProjectController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request): PublicPage
     {
         return $this->listing($request);
     }
 
-    public function industry(Request $request, string $locale, Industry $industry): Response
+    public function industry(Request $request, string $locale, Industry $industry): PublicPage
     {
         return $this->listing($request, $industry);
     }
 
-    private function listing(Request $request, ?Industry $industry = null): Response
+    private function listing(Request $request, ?Industry $industry = null): PublicPage
     {
         $page = Page::query()
             ->key('work')
@@ -57,7 +56,7 @@ final class ProjectController extends Controller
             );
         }
 
-        return Inertia::render('Work/Index', [
+        return PublicPage::render('Work/Index', [
             'heading' => [
                 'eyebrow' => (string) ($industry ? $page?->getTranslation('title') : $page?->getTranslation('subtitle')),
                 'title' => (string) ($industry?->getTranslation('name') ?? $page?->getTranslation('title')),
@@ -89,14 +88,16 @@ final class ProjectController extends Controller
         ]);
     }
 
-    public function show(string $locale, Project $project): Response
+    public function show(string $locale, Project $project): PublicPage
     {
         // Route-model binding already filtered to published + active locale.
         $project->loadMissing([
             'industry.translations',
             'services.translations',
             'images.translations',
+            'sections' => fn ($query) => $query->where('is_visible', true),
             'sections.translations',
+            'sections.items' => fn ($query) => $query->where('is_visible', true),
             'sections.items.translations',
         ]);
 
@@ -105,7 +106,7 @@ final class ProjectController extends Controller
         // one authored on the Work page.
         $workPage = Page::query()->key('work')->published()->withContent()->first();
 
-        return Inertia::render('Work/Show', [
+        return PublicPage::render('Work/Show', [
             'project' => ContentTransformer::projectDetail($project),
 
             'finalCta' => $workPage === null

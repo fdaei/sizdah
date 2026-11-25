@@ -7,6 +7,13 @@ declare(strict_types=1);
  */
 return [
 
+    'pagination_title' => 'صفحهٔ :page',
+    'archive_descriptions' => [
+        'category' => 'مقالات :name در :site.',
+        'tag' => 'مقالات با برچسب :name در :site.',
+        'industry' => 'نمونه‌کارهای :name در :site.',
+    ],
+
     'breadcrumbs' => [
         'home' => 'خانه',
         'work' => ['index' => 'نمونه‌کارها'],

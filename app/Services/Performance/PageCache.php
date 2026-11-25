@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services\Performance;
 
-use App\Http\Middleware\HandleInertiaRequests;
 use App\Models\ContactSubmission;
 use App\Models\ContentRevision;
 use App\Models\LeadMagnetRequest;
@@ -65,6 +64,7 @@ final class PageCache
             && in_array($request->route()?->getName(), self::PUBLIC_ROUTES, true)
             && ! TransactionalCache::active()
             && $request->user() === null
+            && ! $request->hasHeader('X-Inertia')
             && ! $request->hasHeader('X-Inertia-Partial-Data')
             && ! $request->query->has('preview')
             && ! $request->session()->has('success')
@@ -79,7 +79,7 @@ final class PageCache
             $request->fullUrl(),
             $request->header('X-Inertia') ? 'inertia' : 'html',
             (string) $request->header('X-Inertia-Version'),
-            (string) app(HandleInertiaRequests::class)->version($request),
+            \App\View\PublicPage::version(),
         ]);
 
         return 'page_cache.'.self::version().'.'.sha1($variant);

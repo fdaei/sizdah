@@ -25,11 +25,9 @@ use Filament\Tables\Columns\Column;
 use Filament\Tables\Filters\BaseFilter;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use App\Support\UiStrings;
 use App\Support\TransactionalCache;
-use Inertia\Inertia;
 
 final class AppServiceProvider extends ServiceProvider
 {
@@ -163,30 +161,12 @@ final class AppServiceProvider extends ServiceProvider
         // Remove Livewire's default 12 MB temporary-upload ceiling.
         config()->set('livewire.temporary_file_upload.rules', ['required', 'file']);
 
-        // Vite prefetches lazily-loaded chunks once the page is idle.
-        Vite::prefetch(concurrency: 3);
-
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
             // Canonical, hreflang, sitemap and OG URLs always use APP_URL's
             // host, never whichever host (e.g. www.) the request came in on.
             URL::forceRootUrl(config('app.url'));
         }
-
-        $this->shareTranslations();
     }
 
-    /**
-     * Expose the active locale's PHP translation files to the frontend.
-     *
-     * Read by resources/js/Composables/useTranslations.ts, so Vue components
-     * and Blade resolve identical strings from one source of truth.
-     *
-     * Cached per-locale in production; re-read on every request in local so
-     * editing a lang file shows up without clearing anything.
-     */
-    private function shareTranslations(): void
-    {
-        Inertia::share('translations', fn (): array => UiStrings::publicTree(app()->getLocale()));
-    }
 }

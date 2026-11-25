@@ -6,6 +6,8 @@ use App\Filament\Pages\ManageUiStrings;
 use App\Models\Page;
 use App\Models\User;
 use App\Support\UiStrings;
+use App\View\Site;
+use Database\Seeders\RolePermissionSeeder;
 use Livewire\Livewire;
 
 beforeEach(function (): void {
@@ -15,17 +17,14 @@ beforeEach(function (): void {
 
 it('serves lang-file defaults when nothing is overridden', function (): void {
     $this->get('/fa')->assertOk()
-        ->assertInertia(fn ($page) => $page->where('translations.common.read_more', 'ادامه مطلب'));
+        ->assertViewHas('page', fn ($page) => ! isset($page['props']['translations']));
+    expect(Site::t('common.read_more'))->toBe('ادامه مطلب');
 });
 
-it('applies admin overrides to the Inertia translations prop and to __()', function (): void {
+it('applies admin overrides to native PHP translations without a browser dictionary', function (): void {
     UiStrings::save('fa', ['common.read_more' => 'بیشتر بخوانید']);
 
-    $this->get('/fa')->assertOk()
-        ->assertInertia(fn ($page) => $page
-            ->where('translations.common.read_more', 'بیشتر بخوانید')
-            // Siblings in the same group are untouched.
-            ->where('translations.common.view_all', 'مشاهده همه'));
+    $this->get('/fa')->assertOk()->assertViewHas('page', fn ($page) => ! isset($page['props']['translations']));
 
     expect(__('common.read_more'))->toBe('بیشتر بخوانید')
         ->and(__('common.view_all'))->toBe('مشاهده همه');
@@ -44,7 +43,7 @@ it('drops empty values, unknown keys, defaults and locked groups', function (): 
 });
 
 it('lets an admin edit strings from the panel', function (): void {
-    $this->seed(\Database\Seeders\RolePermissionSeeder::class);
+    $this->seed(RolePermissionSeeder::class);
     $admin = User::factory()->create();
     $admin->assignRole('admin');
 

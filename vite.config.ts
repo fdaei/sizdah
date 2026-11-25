@@ -1,12 +1,11 @@
 import { defineConfig } from 'vite'
 import laravel from 'laravel-vite-plugin'
-import vue from '@vitejs/plugin-vue'
 import path from 'node:path'
 
 export default defineConfig({
   plugins: [
     laravel({
-      input: ['resources/js/app.ts', 'resources/css/filament/admin/theme.css'],
+      input: ['resources/js/site.ts', 'resources/css/filament/admin/theme.css'],
       refresh: [
         'resources/views/**',
         'routes/**',
@@ -15,14 +14,7 @@ export default defineConfig({
       ],
     }),
 
-    vue({
-      template: {
-        transformAssetUrls: {
-          base: null,
-          includeAbsolute: false,
-        },
-      },
-    }),
+
   ],
 
   resolve: {
@@ -33,6 +25,9 @@ export default defineConfig({
   },
 
   build: {
+    // The initial HTML must be able to preload both bundled hero images.
+    // Keep the other small icons eligible for inlining.
+    assetsInlineLimit: (filePath) => /hero-bg(?:-mobile)?\.webp$/.test(filePath) ? false : undefined,
     // Long-cached hashed assets; the manifest tells Laravel what to emit.
     rollupOptions: {
       // Keep the SSR bundle compatible with Vite's externalized dependencies.

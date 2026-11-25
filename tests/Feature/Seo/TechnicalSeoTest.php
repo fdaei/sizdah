@@ -52,8 +52,7 @@ it('renders title, description, canonical, robots and hreflang in the initial HT
         ->toContain('<meta name="description" content="توضیحات متا برای درباره ما" inertia="description">')
         ->toContain('<link rel="canonical" href="'.$url.'" inertia="canonical">')
         ->toContain('<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" inertia="robots">')
-        ->toContain('<link rel="alternate" hreflang="fa-IR" href="'.$url.'" inertia="hreflang-fa">')
-        ->toContain('<link rel="alternate" hreflang="x-default" href="'.$url.'" inertia="hreflang-x-default">')
+        ->not->toContain('hreflang=')
         ->toContain('<meta property="og:url" content="'.$url.'" inertia="og:url">');
 
     expect(substr_count($html, '<title'))->toBe(1)
@@ -94,10 +93,8 @@ it('returns a real 404 with noindex for unknown URLs and missing slugs', functio
         ->assertSee('<meta name="robots" content="noindex, follow" inertia="robots">', false);
 })->with(['/fa/does-not-exist', '/fa/work/does-not-exist', '/fa/insights/does-not-exist', '/fa/services/does-not-exist']);
 
-it('shares the full prop set with error pages so SSR can render them', function (): void {
-    $props = $this->get('/fa/work/does-not-exist', ['X-Inertia' => 'true'])->json('props');
-
-    expect($props)->toHaveKeys(['locale', 'flash', 'ziggy', 'navigation', 'settings']);
+it('renders a native error page with the same shared layout', function (): void {
+    $this->get('/fa/work/does-not-exist')->assertNotFound()->assertViewHas('page', fn ($page) => isset($page['props']['locale'], $page['props']['flash'], $page['props']['navigation'], $page['props']['settings']));
 });
 
 it('serves service detail pages', function (): void {
@@ -163,12 +160,7 @@ describe('canonical host redirect', function (): void {
     });
 });
 
-it('ships only public routes to the browser (no admin routes in Ziggy)', function (): void {
-    seoPage('home', 'خانه');
-
-    $html = $this->get('/fa')->getContent();
-
-    expect($html)->toContain('"insights.show"')
-        ->not->toContain('"filament.')
-        ->not->toContain('"livewire.');
+it('does not ship a JavaScript route table to the browser', function (): void {
+    seoPage('home');
+    expect($this->get('/fa')->getContent())->not->toContain('const Ziggy=')->not->toContain('filament.admin');
 });

@@ -10,11 +10,10 @@ use App\Models\PostCategory;
 use App\Models\PostTag;
 use App\Services\ContentTransformer;
 use App\Services\SeoBuilder;
+use App\View\PublicPage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Inertia\Inertia;
-use Inertia\Response;
 
 /**
  * Blog listing (Figma 1353:7935) and article detail (1352:7391).
@@ -23,7 +22,7 @@ final class PostController extends Controller
 {
     private const PER_PAGE = 9;
 
-    public function index(Request $request): Response|RedirectResponse
+    public function index(Request $request): PublicPage|RedirectResponse
     {
         // Legacy ?category= filter URLs → the category's own indexable page.
         $legacy = $request->string('category')->toString();
@@ -41,12 +40,12 @@ final class PostController extends Controller
      * Category archive — same listing, scoped, with the category's own
      * heading and SEO meta (CollectionPage).
      */
-    public function category(Request $request, string $locale, PostCategory $category): Response
+    public function category(Request $request, string $locale, PostCategory $category): PublicPage
     {
         return $this->listing($request, $category);
     }
 
-    public function tag(Request $request, string $locale, PostTag $tag): Response
+    public function tag(Request $request, string $locale, PostTag $tag): PublicPage
     {
         return $this->listing($request, null, $tag);
     }
@@ -58,7 +57,7 @@ final class PostController extends Controller
         return $q === '' ? '' : '?'.$q;
     }
 
-    private function listing(Request $request, ?PostCategory $category, ?PostTag $tag = null): Response
+    private function listing(Request $request, ?PostCategory $category, ?PostTag $tag = null): PublicPage
     {
         $page = Page::query()
             ->key('insights')
@@ -95,17 +94,20 @@ final class PostController extends Controller
         // first page — otherwise it would duplicate a grid result.
         $featured = null;
 
-        if ($categoryFilter === '' && $tag === null && $search === '' && $request->integer('page', 1) === 1) {
-            $featured = Post::query()->forListing()->featured()->first();
+        if ($categoryFilter === '' && $tag === null && $search === '') {
+            $featuredPost = Post::query()->forListing()->featured()->first();
 
-            if ($featured !== null) {
-                $query->whereKeyNot($featured->getKey());
+            if ($featuredPost !== null) {
+                // Exclude it on every page so page 2 cannot repeat page 1's
+                // last grid item when the featured card disappears.
+                $query->whereKeyNot($featuredPost->getKey());
+                $featured = $request->integer('page', 1) === 1 ? $featuredPost : null;
             }
         }
 
         $posts = $query->paginate(self::PER_PAGE)->withQueryString();
 
-        return Inertia::render('Insights/Index', [
+        return PublicPage::render('Insights/Index', [
             'heading' => $category === null && $tag === null ? [
                 'eyebrow' => (string) $page?->getTranslation('subtitle'),
                 'title' => (string) $page?->getTranslation('title'),
@@ -169,7 +171,7 @@ final class PostController extends Controller
         ]);
     }
 
-    public function show(string $locale, Post $post): Response
+    public function show(string $locale, Post $post): PublicPage
     {
         $post->loadMissing([
             'category.translations',
@@ -184,7 +186,7 @@ final class PostController extends Controller
             ? []
             : ContentTransformer::sectionMap($home->sections);
 
-        return Inertia::render('Insights/Show', [
+        return PublicPage::render('Insights/Show', [
             'post' => ContentTransformer::postDetail($post),
 
             'leadMagnet' => $homeSections['lead_magnet'] ?? null,

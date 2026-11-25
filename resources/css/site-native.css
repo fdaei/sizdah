@@ -1,0 +1,6 @@
+/* Native rendering has no framework to apply v-show before the first paint. */
+[hidden] { display: none !important; }
+.testimonial-viewport { container-type: inline-size; --testimonial-columns: 1; }
+.testimonial-viewport .testimonial-set > li { flex: 0 0 calc((100cqw - 26px * (var(--testimonial-columns) - 1)) / var(--testimonial-columns)); width: calc((100cqw - 26px * (var(--testimonial-columns) - 1)) / var(--testimonial-columns)); }
+@media (min-width: 640px) { .testimonial-viewport { --testimonial-columns: 2; } }
+@media (min-width: 1024px) { .testimonial-viewport { --testimonial-columns: 4; } [data-site="Components/TestimonialCarousel"] [role="tablist"] { display: none; } }

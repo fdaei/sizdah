@@ -7,6 +7,13 @@ declare(strict_types=1);
  */
 return [
 
+    'pagination_title' => 'Page :page',
+    'archive_descriptions' => [
+        'category' => ':name articles on :site.',
+        'tag' => 'Articles tagged :name on :site.',
+        'industry' => ':name projects by :site.',
+    ],
+
     'breadcrumbs' => [
         'home' => 'Home',
         'work' => ['index' => 'Work'],

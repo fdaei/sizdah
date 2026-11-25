@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 return [
-    // Shared PHP hosting does not run the optional Node renderer. Blade
-    // supplies the initial content; Vue mounts the interactive site in-browser.
+    // Public pages use native Blade. This retained adapter is only for legacy PHP integrations.
+    'testing' => ['ensure_pages_exist' => false],
     'ssr' => [
-        'enabled' => (bool) env('INERTIA_SSR_ENABLED', false),
+        'enabled' => false,
         'url' => env('INERTIA_SSR_URL', 'http://127.0.0.1:13714'),
         'ensure_bundle_exists' => true,
     ],

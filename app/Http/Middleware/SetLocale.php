@@ -62,36 +62,6 @@ final class SetLocale
      */
     public function resolve(Request $request): string
     {
-        $supported = array_keys(config('locales.supported'));
-
-        $fromRoute = $request->route('locale');
-
-        if (is_string($fromRoute) && in_array($fromRoute, $supported, true)) {
-            // Route middleware normally runs after StartSession, but this
-            // method is also called from the exception renderer for requests
-            // that matched no route at all. In that path there is no session
-            // store attached to the request.
-            if ($request->hasSession()) {
-                $request->session()->put('locale', $fromRoute);
-            }
-
-            return $fromRoute;
-        }
-
-        $fromSession = $request->hasSession()
-            ? $request->session()->get('locale')
-            : null;
-
-        if (is_string($fromSession) && in_array($fromSession, $supported, true)) {
-            return $fromSession;
-        }
-
-        $fromHeader = $request->getPreferredLanguage($supported);
-
-        if (is_string($fromHeader) && in_array($fromHeader, $supported, true)) {
-            return $fromHeader;
-        }
-
-        return config('locales.default');
+        return 'fa';
     }
 }

@@ -7,9 +7,8 @@ namespace App\Http\Controllers;
 use App\Models\Page;
 use App\Services\SeoBuilder;
 use App\Support\RichContent;
+use App\View\PublicPage;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -18,17 +17,17 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final class LegalController extends Controller
 {
-    public function privacy(Request $request): Response
+    public function privacy(Request $request): PublicPage
     {
         return $this->render('privacy-policy', $request);
     }
 
-    public function terms(Request $request): Response
+    public function terms(Request $request): PublicPage
     {
         return $this->render('terms', $request);
     }
 
-    private function render(string $key, Request $request): Response
+    private function render(string $key, Request $request): PublicPage
     {
         $page = Page::query()
             ->key($key)
@@ -40,7 +39,7 @@ final class LegalController extends Controller
             throw new NotFoundHttpException;
         }
 
-        return Inertia::render('Legal', [
+        return PublicPage::render('Legal', [
             'title' => (string) $page->getTranslation('title'),
             // Figma 1031:2201 — the intro paragraph beside the title. Seeded
             // on every legal page but previously never handed to the view.

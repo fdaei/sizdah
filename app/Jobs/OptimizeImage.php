@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Services\ImageOptimizer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -20,10 +19,7 @@ final class OptimizeImage implements ShouldQueue
 
     public function handle(): void
     {
-        if ($this->previous !== null && $this->previous !== $this->path) {
-            ImageOptimizer::purge($this->previous);
-        }
-
-        ImageOptimizer::optimize($this->path);
+        // Old jobs may still be waiting during deployment. Leave uploads and
+        // legacy files untouched; public delivery now uses the original file.
     }
 }

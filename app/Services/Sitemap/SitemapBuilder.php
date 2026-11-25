@@ -203,7 +203,8 @@ final class SitemapBuilder
 
                 return $slug === '' ? null : route('services.show', ['locale' => $l, 'service' => $slug]);
             });
-            array_push($out, ...$this->perLocale($hrefs, $s, $s->updated_at?->toAtomString(), 0.6, 'monthly', []));
+            $images = $s->image_path ? [self::absolute(MediaTransformer::url($s->image_path))] : [];
+            array_push($out, ...$this->perLocale($hrefs, $s, $s->updated_at?->toAtomString(), 0.6, 'monthly', $images));
         });
 
         return $out;

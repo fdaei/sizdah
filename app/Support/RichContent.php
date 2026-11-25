@@ -16,10 +16,10 @@ use App\Filament\Support\Editor\ContentEditor;
 final class RichContent
 {
     /** Recover plain text from documents saved by older versions of the editor. */
-    public static function plain(?string $value): string
+    public static function plain(string|array|null $value): string
     {
-        $value = (string) $value;
-        $document = json_decode($value, true);
+        $document = is_array($value) ? $value : json_decode((string) $value, true);
+        $value = is_array($value) ? json_encode($value, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) : (string) $value;
         if (! is_array($document) || ($document['type'] ?? null) !== 'doc' || ! is_array($document['content'] ?? null)) {
             return $value;
         }

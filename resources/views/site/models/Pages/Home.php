@@ -1,0 +1,34 @@
+<?php
+// PHP presentation data migrated from resources/js/Pages/Home.vue; no JavaScript runs on the server.
+$input = \App\View\Site::defaults([], $input);
+$v = \App\View\Site::context($input, $page);
+$v['heroDesktopBgUrl'] = '/site/images/sizdah/home/hero-bg-7155087946.webp';
+$v['heroMobileBgUrl'] = '/site/images/sizdah/home/hero-bg-mobile-e99e076e7c.webp';
+$v['trustMarkUrl'] = '/site/images/sizdah/clients/trust-divider-d331806ec6.svg';
+$v['underlineUrl'] = '/site/images/sizdah/shared/nav-underline-4611dcc1ea.svg';
+$v['heroNoteArrowUrl'] = '/site/images/sizdah/shared/hero-note-icon-c0c3e4c385.svg';
+$v['page'] = $page;
+$v['hero'] = (function() use (&$v) { return \App\View\Site::get(\App\View\Site::get(($v['props'] ?? null), 'sections'), 'hero'); })();
+$v['heroBackground'] = (function() use (&$v) { return ['desktop' => (((\App\View\Site::get(\App\View\Site::get(\App\View\Site::get(\App\View\Site::get(($v['page'] ?? null), 'props'), 'settings'), 'images'), 'top_home_desktop') ?? \App\View\Site::get(\App\View\Site::get(($v['hero'] ?? null), 'image'), 'src')) ?? \App\View\Site::get(\App\View\Site::get(\App\View\Site::get(\App\View\Site::get(($v['page'] ?? null), 'props'), 'settings'), 'images'), 'home_desktop')) ?? ($v['heroDesktopBgUrl'] ?? null)), 'tablet' => ((((\App\View\Site::get(\App\View\Site::get(\App\View\Site::get(\App\View\Site::get(($v['page'] ?? null), 'props'), 'settings'), 'images'), 'top_home_tablet') ?? \App\View\Site::get(\App\View\Site::get(\App\View\Site::get(\App\View\Site::get(($v['page'] ?? null), 'props'), 'settings'), 'images'), 'top_home_desktop')) ?? \App\View\Site::get(\App\View\Site::get(($v['hero'] ?? null), 'image'), 'src')) ?? \App\View\Site::get(\App\View\Site::get(\App\View\Site::get(\App\View\Site::get(($v['page'] ?? null), 'props'), 'settings'), 'images'), 'home_desktop')) ?? ($v['heroDesktopBgUrl'] ?? null)), 'mobile' => ((\App\View\Site::get(\App\View\Site::get(\App\View\Site::get(\App\View\Site::get(($v['page'] ?? null), 'props'), 'settings'), 'images'), 'top_home_mobile') ?? \App\View\Site::get(\App\View\Site::get(\App\View\Site::get(\App\View\Site::get(($v['page'] ?? null), 'props'), 'settings'), 'images'), 'home_mobile')) ?? ($v['heroMobileBgUrl'] ?? null))]; })();
+$v['kpi'] = (function() use (&$v) { return \App\View\Site::get(\App\View\Site::get(($v['props'] ?? null), 'sections'), 'kpi'); })();
+$v['trustProof'] = (function() use (&$v) { return \App\View\Site::get(\App\View\Site::get(($v['props'] ?? null), 'sections'), 'trust_proof'); })();
+$v['servicesCloud'] = (function() use (&$v) { return \App\View\Site::get(\App\View\Site::get(($v['props'] ?? null), 'sections'), 'services_cloud'); })();
+$v['leadMagnet'] = (function() use (&$v) { return \App\View\Site::get(\App\View\Site::get(($v['props'] ?? null), 'sections'), 'lead_magnet'); })();
+$v['projectsShowcase'] = (function() use (&$v) { return \App\View\Site::get(\App\View\Site::get(($v['props'] ?? null), 'sections'), 'projects_showcase'); })();
+$v['process'] = (function() use (&$v) { return \App\View\Site::get(\App\View\Site::get(($v['props'] ?? null), 'sections'), 'process'); })();
+$v['whyUs'] = (function() use (&$v) { return \App\View\Site::get(\App\View\Site::get(($v['props'] ?? null), 'sections'), 'why_us'); })();
+$v['reviews'] = (function() use (&$v) { return \App\View\Site::get(\App\View\Site::get(($v['props'] ?? null), 'sections'), 'reviews'); })();
+$v['insights'] = (function() use (&$v) { return \App\View\Site::get(\App\View\Site::get(($v['props'] ?? null), 'sections'), 'insights'); })();
+$v['faq'] = (function() use (&$v) { return \App\View\Site::get(\App\View\Site::get(($v['props'] ?? null), 'sections'), 'faq'); })();
+$v['finalCta'] = (function() use (&$v) { return \App\View\Site::get(\App\View\Site::get(($v['props'] ?? null), 'sections'), 'final_cta'); })();
+$v['CLIENT_LOOP_SECONDS'] = 32;
+$v['clientTrack'] = null;
+$v['clientDragging'] = false;
+$v['clientPosition'] = 0;
+$v['clientLoopWidth'] = 0;
+$v['clientPointerId'] = null;
+$v['clientLastX'] = 0;
+$v['clientHovered'] = false;
+$v['clientLastTime'] = 0;
+$v['clientResize'] = null;
+\App\View\Site::prepare('Pages/Home', $v);

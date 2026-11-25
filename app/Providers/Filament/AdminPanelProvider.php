@@ -9,7 +9,6 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
@@ -27,7 +26,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
  * Admin panel at /admin.
  *
  * Deliberately NOT locale-prefixed. The panel language is stored separately
- * in the session, while the content it edits remains trilingual.
+ * by the Persian-only site configuration.
  *
  * Access is gated by User::canAccessPanel() (admin | editor) and then
  * per-resource by the policies in app/Policies.
@@ -80,20 +79,7 @@ final class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
             ])
-            ->userMenuItems([
-                MenuItem::make()
-                    ->label(__('admin.language.english'))
-                    ->icon('heroicon-o-language')
-                    ->url(fn (): string => route('admin.locale', ['locale' => 'en']))
-                    ->visible(fn (): bool => app()->getLocale() !== 'en')
-                    ->sort(-2),
-                MenuItem::make()
-                    ->label(__('admin.language.persian'))
-                    ->icon('heroicon-o-language')
-                    ->url(fn (): string => route('admin.locale', ['locale' => 'fa']))
-                    ->visible(fn (): bool => app()->getLocale() !== 'fa')
-                    ->sort(-2),
-            ])
+
             ->navigationGroups([
                 NavigationGroup::make(fn (): string => __('admin.navigation.groups.Content'))
                     ->icon('heroicon-o-document-text'),

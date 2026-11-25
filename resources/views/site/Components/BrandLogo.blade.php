@@ -1,0 +1,3 @@
+{{-- Native PHP template preserving resources/js/Components/BrandLogo.vue's markup and responsive classes. --}}
+@php(require resource_path('views/site/models/Components/BrandLogo.php'))
+<img<?php echo  \App\View\Site::attributes(['src' => ($v['src'] ?? null), 'alt' => ($v['title'] ?? null), 'width' => ($v['width'] ?? null), 'height' => ($v['height'] ?? null), 'style' => ['width' => ('' . \App\View\Site::text(($v['width'] ?? null)) . 'px'), 'height' => ('' . \App\View\Site::text(($v['height'] ?? null)) . 'px')], 'decoding' => 'async'], $attributes, 'data-v-a358e864', 'Components/BrandLogo') ; ?>>

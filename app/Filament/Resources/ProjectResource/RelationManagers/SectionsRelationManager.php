@@ -133,7 +133,7 @@ final class SectionsRelationManager extends RelationManager
                     ->visible(fn (Get $get): bool => self::hasRichContent($get('type'))),
 
                 Textarea::make("translations.{$locale}.content")
-                    ->formatStateUsing(fn (?string $state): string => RichContent::plain($state))
+                    ->formatStateUsing(fn (string|array|null $state): string => RichContent::plain($state))
                     ->label('Content')
                     ->rows(3)
                     ->visible(fn (Get $get): bool => self::sectionType($get('type')) !== null

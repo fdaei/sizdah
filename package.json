@@ -4,10 +4,9 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vue-tsc --noEmit && vite build",
+        "build": "tsc --noEmit && vite build",
         "build:cpanel": "bash scripts/package-cpanel.sh",
-        "build:ssr": "vite build --ssr resources/js/ssr.ts --outDir bootstrap/ssr",
-        "typecheck": "vue-tsc --noEmit",
+        "typecheck": "tsc --noEmit",
         "lint": "eslint resources/js",
         "format": "prettier --write resources/js",
         "test:e2e": "playwright test",
@@ -15,18 +14,13 @@
         "test:e2e:parspack": "HEADED=1 playwright test --config=playwright.parspack.config.ts"
     },
     "devDependencies": {
-        "@inertiajs/vue3": "^2.3.28",
         "@playwright/test": "^1.49.0",
         "@tailwindcss/forms": "^0.5.11",
         "@tailwindcss/typography": "^0.5.20",
         "@types/node": "^22.10.0",
-        "@vitejs/plugin-vue": "^5.2.1",
-        "@vue/eslint-config-typescript": "^14.1.4",
-        "@vue/server-renderer": "^3.5.43",
         "autoprefixer": "^10.6.2",
         "concurrently": "^9.1.0",
         "eslint": "^10.8.0",
-        "eslint-plugin-vue": "^10.10.0",
         "laravel-vite-plugin": "^1.1.1",
         "postcss": "^8.5.33",
         "postcss-nesting": "^14.0.3",
@@ -35,16 +29,10 @@
         "tailwindcss-logical": "^3.0.1",
         "typescript": "^5.7.2",
         "vite": "^6.0.3",
-        "vue-tsc": "^3.3.8"
+        "typescript-eslint": "^8.48.0"
     },
     "dependencies": {
-        "@vueuse/core": "^12.0.0",
-        "axios": "^1.7.9",
-        "build": "^0.1.4",
         "flag-icons": "^7.5.0",
-        "gsap": "^3.12.5",
-        "swiper": "^14.0.6",
-        "vue": "^3.5.13",
-        "ziggy-js": "^2.4.2"
+        "gsap": "^3.12.5"
     }
 }

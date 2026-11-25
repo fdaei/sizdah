@@ -1,0 +1,3 @@
+{{-- Native PHP template preserving resources/js/Components/Eyebrow.vue's markup and responsive classes. --}}
+@php(require resource_path('views/site/models/Components/Eyebrow.php'))
+<?php echo  \App\View\Site::element(($v['as'] ?? null), ['class' => ['eyebrow eyebrow--dot', [(\App\View\Site::truth((($v['size'] ?? null) === 'lg')) ? 'eyebrow--lg' : null), (\App\View\Site::truth((($v['markerRing'] ?? null) === 'ink')) ? 'eyebrow--dot-ink' : null)]]], $page, function() use ($v, $page) { ob_start(); ?><?php echo e(($v['text'] ?? null)); ?><?php return ob_get_clean(); }, $attributes, 'data-v-b39ab064', 'Components/Eyebrow') ; ?>

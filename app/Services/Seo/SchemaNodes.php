@@ -104,11 +104,17 @@ final class SchemaNodes
         if ($owner !== null && $owner->relationLoaded('sections')) {
             foreach ($owner->getRelation('sections') as $section) {
                 /** @var PageSection $section */
-                $parts[] = self::plainToHtml([$section->getTranslation('title'), $section->getTranslation('subtitle')]);
+                if ($section->is_visible === false) {
+                    continue;
+                }
+                $parts[] = self::plainToHtml([$section->getTranslation('title'), $section->getTranslation('subtitle'), $section->getTranslation('description')]);
                 $parts[] = RichContent::render($section->getTranslation('content'));
 
                 if ($section->relationLoaded('items')) {
                     foreach ($section->getRelation('items') as $item) {
+                        if ($item->is_visible === false) {
+                            continue;
+                        }
                         $parts[] = self::plainToHtml([
                             $item->getTranslation('title'),
                             $item->getTranslation('description'),

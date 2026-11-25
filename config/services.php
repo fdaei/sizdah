@@ -27,8 +27,8 @@ return [
      | Google Tag Manager + Google Analytics 4 (gtag.js), rendered by
      | resources/views/partials/analytics-*.blade.php on every page. Off outside
      | production so local/test traffic never reaches the live property; an
-     | empty ID drops that snippet. If a GA4 tag is ever added inside the GTM
-     | container, clear GOOGLE_ANALYTICS_ID — otherwise page views count twice.
+     | empty ID drops that snippet. GTM takes precedence when both IDs are
+     | configured: its container owns GA4, avoiding duplicate downloads/views.
      */
     'google' => [
         'analytics_enabled' => (bool) env('GOOGLE_ANALYTICS_ENABLED', env('APP_ENV', 'production') === 'production'),

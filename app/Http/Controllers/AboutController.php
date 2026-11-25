@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\SectionType;
 use App\Models\Page;
 use App\Models\TeamMember;
 use App\Services\ContentTransformer;
 use App\Services\Seo\SchemaNodes;
 use App\Services\SeoBuilder;
+use App\View\PublicPage;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 
 /**
  * About page. Figma 908:1576 (desktop) / 1557:12225 (mobile).
@@ -20,7 +20,7 @@ use Inertia\Response;
  */
 final class AboutController extends Controller
 {
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request): PublicPage
     {
         $page = Page::query()
             ->key('about')
@@ -28,7 +28,10 @@ final class AboutController extends Controller
             ->withContent()
             ->first();
 
-        return Inertia::render('About', [
+        $team = $page?->sections->contains('type', SectionType::Team)
+            ? TeamMember::query()->forDisplay()->get() : collect();
+
+        return PublicPage::render('About', [
             'sections' => $page === null
                 ? []
                 : ContentTransformer::sectionMap($page->sections),
@@ -36,15 +39,11 @@ final class AboutController extends Controller
             // Generic page-builder blocks (rich text, gallery, features, CTA), in order.
             'blocks' => $page === null ? [] : ContentTransformer::blocks($page->sections),
 
-            'team' => TeamMember::query()
-                ->forDisplay()
-                ->get()
+            'team' => $team
                 ->map(fn (TeamMember $m): array => ContentTransformer::teamMember($m))
                 ->all(),
 
-            'seo' => SeoBuilder::forPage($page, $request->url(), extraNodes: SchemaNodes::people(
-                TeamMember::query()->forDisplay()->get(),
-            )),
+            'seo' => SeoBuilder::forPage($page, $request->url(), extraNodes: SchemaNodes::people($team)),
         ]);
     }
 }

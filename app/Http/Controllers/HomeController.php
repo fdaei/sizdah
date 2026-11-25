@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\SectionType;
 use App\Models\Client;
 use App\Models\Faq;
 use App\Models\Page;
@@ -14,9 +15,8 @@ use App\Models\Testimonial;
 use App\Services\ContentTransformer;
 use App\Services\Seo\SchemaNodes;
 use App\Services\SeoBuilder;
+use App\View\PublicPage;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 
 /**
  * Home page. Figma 1419:9192 (desktop) / 1419:9191 (mobile).
@@ -28,7 +28,7 @@ use Inertia\Response;
  */
 final class HomeController extends Controller
 {
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request): PublicPage
     {
         $page = Page::query()
             ->key('home')
@@ -36,18 +36,17 @@ final class HomeController extends Controller
             ->withContent()
             ->first();
 
-        $faqs = Faq::query()->forDisplay()->get();
-        $testimonials = Testimonial::query()->forDisplay()->get();
+        $faqs = $page?->sections->contains('type', SectionType::Faq)
+            ? Faq::query()->forDisplay()->get() : collect();
+        $testimonials = $page?->sections->contains('type', SectionType::Reviews)
+            ? Testimonial::query()->forDisplay()->get() : collect();
 
-        return Inertia::render('Home', [
+        return PublicPage::render('Home', [
             // Editorial blocks: hero, lead magnet, packages, final CTA, and the
             // eyebrow/title/subtitle of every other section.
             'sections' => $page === null
                 ? []
                 : ContentTransformer::sectionMap($page->sections),
-
-            // Generic page-builder blocks (rich text, gallery, features, CTA), in order.
-            'blocks' => $page === null ? [] : ContentTransformer::blocks($page->sections),
 
             // Services cloud — Figma 1419:9279
             'services' => Service::query()

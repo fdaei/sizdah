@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\NewsletterSubscriptionRequest;
 use App\Models\LeadMagnetRequest;
 use App\Services\SubmissionHandler;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
@@ -24,9 +25,13 @@ final class NewsletterController extends Controller
         private readonly SubmissionHandler $handler,
     ) {}
 
-    public function __invoke(NewsletterSubscriptionRequest $request): RedirectResponse
+    public function __invoke(NewsletterSubscriptionRequest $request): RedirectResponse|JsonResponse
     {
         [$wasNew, $leadRequest] = $this->handler->handleNewsletter($request);
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => $wasNew ? __('forms.newsletter.success') : __('forms.newsletter.already'), 'download' => $this->downloadUrl($leadRequest)]);
+        }
 
         return back()
             ->with('success', $wasNew ? __('forms.newsletter.success') : __('forms.newsletter.already'))

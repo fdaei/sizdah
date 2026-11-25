@@ -13,13 +13,7 @@ final class SetAdminLocale
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $locale = (string) $request->session()->get('admin_locale', 'en');
-
-        if (! in_array($locale, ['en', 'fa'], true)) {
-            $locale = 'en';
-        }
-
-        App::setLocale($locale);
+        App::setLocale('fa');
 
         return $next($request);
     }

@@ -7,6 +7,13 @@ declare(strict_types=1);
  */
 return [
 
+    'pagination_title' => 'الصفحة :page',
+    'archive_descriptions' => [
+        'category' => 'مقالات :name في :site.',
+        'tag' => 'مقالات بوسم :name في :site.',
+        'industry' => 'مشاريع :name لدى :site.',
+    ],
+
     'breadcrumbs' => [
         'home' => 'الرئيسية',
         'work' => ['index' => 'أعمالنا'],

@@ -1,7 +1,10 @@
+> نسخهٔ فعلی: تمام صفحات عمومی با PHP/Blade رندر می‌شوند و سایت فقط فارسی است.
+> Vue/Inertia و SSR مبتنی بر Node در سایت عمومی اجرا نمی‌شوند؛ Node فقط ابزار build
+> روی سیستم توسعه است. راهنمای مهاجرت: [NATIVE-PHP-20261125](docs/NATIVE-PHP-20261125.md).
+
 # Sizdah Marketing
 
-Multilingual (EN/FA/AR) marketing website — Laravel 11 · Inertia 2 · Vue 3 ·
-TypeScript · Tailwind · Filament 3.
+Persian marketing website — Laravel 12 · Blade/PHP · TypeScript · Tailwind · Filament 3.
 
 Built against the `SahraMarketing` Figma file, page `User interface` (`1:2`).
 See `docs/FIGMA-AUDIT.md` for the full design audit and

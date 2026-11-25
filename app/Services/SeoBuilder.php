@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Industry;
+use App\Models\Media;
 use App\Models\Page;
 use App\Models\Post;
 use App\Models\PostCategory;
@@ -16,6 +17,7 @@ use App\Models\ServiceRating;
 use App\Services\Seo\SchemaNodes;
 use App\Services\Seo\SeoAnalyzer;
 use App\Services\Seo\SeoTitle;
+use App\Support\RichContent;
 use App\Support\SiteSettings;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -60,7 +62,8 @@ final class SeoBuilder
     {
         return self::assemble(
             title: (string) $page?->getTranslation('title'),
-            description: $page?->getTranslation('seo_description') ?: $page?->getTranslation('description'),
+            description: $page?->getTranslation('seo_description') ?: $page?->getTranslation('description')
+                ?: RichContent::plain($page?->getTranslation('content')),
             image: $image,
             canonical: $canonical,
             type: 'website',
@@ -121,7 +124,7 @@ final class SeoBuilder
         return self::assemble(
             title: (string) $service->getTranslation('title'),
             description: (string) $service->getTranslation('description'),
-            image: null,
+            image: $service->image_path ? MediaTransformer::url($service->image_path) : null,
             canonical: $canonical,
             type: 'website',
             schemaType: 'Service',
@@ -146,7 +149,10 @@ final class SeoBuilder
     {
         return self::assemble(
             title: (string) $category->getTranslation('name'),
-            description: (string) $category->getTranslation('description'),
+            description: $category->getTranslation('description') ?: __('seo.archive_descriptions.category', [
+                'name' => $category->getTranslation('name'),
+                'site' => SiteSettings::get('site_name', app()->getLocale(), config('app.name')),
+            ]),
             image: null,
             canonical: $category->url(),
             type: 'website',
@@ -164,7 +170,10 @@ final class SeoBuilder
     {
         return self::assemble(
             title: (string) $tag->getTranslation('name'),
-            description: null,
+            description: __('seo.archive_descriptions.tag', [
+                'name' => $tag->getTranslation('name'),
+                'site' => SiteSettings::get('site_name', app()->getLocale(), config('app.name')),
+            ]),
             image: null,
             canonical: $tag->url(),
             type: 'website',
@@ -180,7 +189,10 @@ final class SeoBuilder
     {
         return self::assemble(
             title: (string) $industry->getTranslation('name'),
-            description: null,
+            description: __('seo.archive_descriptions.industry', [
+                'name' => $industry->getTranslation('name'),
+                'site' => SiteSettings::get('site_name', app()->getLocale(), config('app.name')),
+            ]),
             image: null,
             canonical: $industry->url(),
             type: 'website',
@@ -270,9 +282,11 @@ final class SeoBuilder
          | self-canonical so page 2+ stays indexable; on-site search results
          | are noindex so ?q= can't mint an unbounded URL space.
          */
-        $pageNumber = $request->integer('page', 1);
+        $pageNumber = $request->routeIs('insights.index', 'insights.category', 'insights.tag')
+            ? max(1, $request->integer('page', 1)) : 1;
 
-        if ($pageNumber > 1 && $canonical === $request->url()) {
+        if ($pageNumber > 1 && self::stripTracking($canonical) === $request->url()) {
+            $canonical = self::stripTracking($canonical);
             $canonical .= '?page='.$pageNumber;
         }
 
@@ -413,7 +427,7 @@ final class SeoBuilder
             return [];
         }
 
-        $node = \App\Models\Media::query()->where('path', ltrim($path, '/'))->with('translations')->first()?->schema();
+        $node = Media::query()->where('path', ltrim($path, '/'))->with('translations')->first()?->schema();
         if ($node === null) {
             return [];
         }
@@ -527,7 +541,7 @@ final class SeoBuilder
                 'dateModified' => $modifiedAt ?? $publishedAt,
                 'author' => $author === null
                     ? ['@id' => $organizationId]
-                    : ['@type' => 'Person', 'name' => $author, 'url' => $home],
+                    : ['@type' => 'Person', 'name' => $author],
                 'publisher' => ['@id' => $organizationId],
                 'mainEntityOfPage' => $canonical,
             ]);

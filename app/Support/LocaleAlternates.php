@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Support;
 
 use App\Contracts\HasLocalisedSlugs;
+use App\Models\Page;
+use App\Models\Service;
+use App\Services\SeoBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,11 +40,45 @@ final class LocaleAlternates
 
         $name = $route->getName();
         $params = $route->parameters();
+        $pageKey = [
+            'home' => 'home', 'about' => 'about', 'contact' => 'contact',
+            'services' => 'services', 'work.index' => 'work', 'insights.index' => 'insights',
+            'legal.privacy' => 'privacy-policy', 'legal.terms' => 'terms',
+        ][$name] ?? null;
+        $page = $pageKey === null ? null : Page::query()->key($pageKey)->published()
+            ->with(['translations', 'seoMeta'])->first();
+
+        // Service detail routes currently resolve their slug in the controller.
+        // Resolve it here too so another language never inherits the current slug.
+        if ($name === 'services.show' && is_string($params['service'] ?? null)) {
+            $service = Service::query()->forDisplay()->whereHas('translations', fn ($query) => $query
+                ->where('locale', app()->getLocale())->where('slug', $params['service']))->first();
+            if ($service !== null) {
+                $params['service'] = $service;
+            }
+        }
+
+        foreach ($params as $param) {
+            if ($param instanceof HasLocalisedSlugs || $param instanceof Service) {
+                // Listing scopes load only the current/fallback language. Read
+                // real translations before deciding which alternatives exist.
+                $param->load(['translations', 'seoMeta']);
+            }
+        }
 
         $alternates = [];
 
         foreach ($supported as $locale) {
-            $alternates[$locale] = self::buildUrl($name, $params, $locale, $request);
+            $url = self::buildUrl($name, $params, $locale, $request);
+            if ($page !== null && (blank($page->getTranslation('title', $locale, false))
+                || $page->seoFor($locale)?->robots_index === false
+                || (filled($canonical = $page->seoFor($locale)?->canonical_url)
+                    && SeoBuilder::stripTracking($canonical) !== $url))) {
+                continue;
+            }
+            if ($url !== null) {
+                $alternates[$locale] = $url;
+            }
         }
 
         return $alternates;
@@ -55,7 +92,7 @@ final class LocaleAlternates
         array $params,
         string $locale,
         Request $request,
-    ): string {
+    ): ?string {
         // Unnamed route (rare — fallback pages): swap the first segment.
         if ($name === null || ! Route::has($name)) {
             $segments = $request->segments();
@@ -68,8 +105,12 @@ final class LocaleAlternates
 
         foreach ($params as $key => $value) {
             // Route-model-bound parameter that carries per-locale slugs.
-            if ($value instanceof HasLocalisedSlugs) {
-                $translated[$key] = $value->slugForLocale($locale);
+            if ($value instanceof HasLocalisedSlugs || $value instanceof Service) {
+                $slug = $value->getTranslation('slug', $locale, false);
+                if (blank($slug) || $value->seoFor($locale)?->robots_index === false) {
+                    return null;
+                }
+                $translated[$key] = $slug;
 
                 continue;
             }
@@ -81,6 +122,20 @@ final class LocaleAlternates
 
         $translated['locale'] = $locale;
 
-        return route($name, $translated, absolute: true);
+        $url = route($name, $translated, absolute: true);
+        foreach ($params as $value) {
+            if (($value instanceof HasLocalisedSlugs || $value instanceof Service)
+                && filled($canonical = $value->seoFor($locale)?->canonical_url)
+                && rtrim(SeoBuilder::stripTracking($canonical), '/') !== rtrim($url, '/')) {
+                return null;
+            }
+        }
+
+        // Page 2 must link to page 2 in the other language, not to page 1.
+        if ($request->routeIs('insights.index', 'insights.category', 'insights.tag') && $request->integer('page', 1) > 1) {
+            $url .= '?page='.$request->integer('page');
+        }
+
+        return $url;
     }
 }

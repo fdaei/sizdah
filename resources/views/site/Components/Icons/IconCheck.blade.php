@@ -1,0 +1,3 @@
+{{-- Native PHP template preserving resources/js/Components/Icons/IconCheck.vue's markup and responsive classes. --}}
+@php(require resource_path('views/site/models/Components/Icons/IconCheck.php'))
+<svg<?php echo  \App\View\Site::attributes(['viewBox' => '0 0 24 24', 'fill' => 'none', 'stroke' => 'currentColor', 'stroke-width' => '1.5', 'stroke-linecap' => 'round', 'stroke-linejoin' => 'round', 'xmlns' => 'http://www.w3.org/2000/svg', 'aria-hidden' => 'true', 'focusable' => 'false'], $attributes, 'data-v-ba95a8c4', 'Components/Icons/IconCheck') ; ?>><path<?php echo  \App\View\Site::attributes(['d' => 'M4.2 12.8C6 14.4 7.9 16.3 9.6 18.6C12.4 13.6 15.9 8.6 19.9 4.9'], [], 'data-v-ba95a8c4', null) ; ?>></path></svg>

@@ -1,0 +1,3 @@
+{{-- Native PHP template preserving resources/js/Components/SparkMark.vue's markup and responsive classes. --}}
+@php(require resource_path('views/site/models/Components/SparkMark.php'))
+<img<?php echo  \App\View\Site::attributes(['src' => ($v['sparkUrl'] ?? null), 'alt' => ($v['title'] ?? null), 'ariaHidden' => (\App\View\Site::truth(($v['title'] ?? null)) ? null : 'true'), 'width' => ($v['width'] ?? null), 'height' => ($v['height'] ?? null), 'style' => ['width' => ('' . \App\View\Site::text(($v['width'] ?? null)) . 'px'), 'height' => ('' . \App\View\Site::text(($v['height'] ?? null)) . 'px')], 'class' => 'max-w-none', 'decoding' => 'async'], $attributes, 'data-v-9ba1bf5f', 'Components/SparkMark') ; ?>>

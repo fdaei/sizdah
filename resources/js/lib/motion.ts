@@ -33,6 +33,8 @@ function buildReveals(): void {
   const groups = gsap.utils.toArray<HTMLElement>('[data-reveal-group]')
 
   groups.forEach((group) => {
+    // Delayed setup must never hide content the visitor is already reading.
+    if (group.getBoundingClientRect().top < window.innerHeight) return
     const children = Array.from(group.children) as HTMLElement[]
 
     children.forEach((child) => child.classList.add('will-reveal'))
@@ -50,6 +52,7 @@ function buildReveals(): void {
   const singles = gsap.utils.toArray<HTMLElement>('[data-reveal]')
 
   singles.forEach((element) => {
+    if (element.getBoundingClientRect().top < window.innerHeight) return
     element.classList.add('will-reveal')
 
     gsap.to(element, {
@@ -73,6 +76,7 @@ function buildCounters(): void {
   const counters = gsap.utils.toArray<HTMLElement>('[data-counter]')
 
   counters.forEach((element) => {
+    if (element.getBoundingClientRect().top < window.innerHeight) return
     const raw = element.dataset.counter ?? ''
     const digits = raw.match(/[\d۰-۹٠-٩]+/)
 

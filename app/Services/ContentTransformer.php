@@ -20,6 +20,7 @@ use App\Support\JalaliDate;
 use App\Support\Numerals;
 use App\Support\RichContent;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Maps Eloquent models onto the DTO shapes declared in
@@ -308,9 +309,15 @@ final class ContentTransformer
      */
     public static function client(Client $client): array
     {
+        $path = $client->logo_path;
+        // Missing uploads should use the bundled mark / client name rather
+        // than downloading an entire HTML error page for an <img>.
+        $hasLogo = filled($path) && (preg_match('#^https?://#i', $path)
+            || Storage::disk('public')->exists($path));
+
         return [
             'name' => (string) $client->getTranslation('name'),
-            'logo' => MediaTransformer::url($client->logo_path),
+            'logo' => $hasLogo ? MediaTransformer::url($path) : null,
             'url' => $client->website_url,
         ];
     }

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Enums\PublicationStatus;
+use App\Enums\SectionType;
 use App\Models\Faq;
 use App\Models\Post;
 use App\Models\Setting;
@@ -21,7 +22,7 @@ function graphTypes(string $html): array
 }
 
 it('adds FAQPage from active FAQs on the home page', function (): void {
-    seoPage('home', 'خانه');
+    seoPage('home', 'خانه')->sections()->create(['type' => SectionType::Faq, 'is_visible' => true]);
     $faq = Faq::query()->create(['is_active' => true, 'sort_order' => 1]);
     $faq->setTranslations(['fa' => ['question' => 'هزینه چقدر است؟', 'answer' => 'بستگی به پروژه دارد.']]);
 
@@ -36,7 +37,7 @@ it('adds FAQPage from active FAQs on the home page', function (): void {
 });
 
 it('adds Person nodes for the team on the about page, linked to the organization', function (): void {
-    seoPage('about', 'درباره ما');
+    seoPage('about', 'درباره ما')->sections()->create(['type' => SectionType::Team, 'is_visible' => true]);
     $m = TeamMember::query()->create(['is_active' => true, 'sort_order' => 1]);
     $m->setTranslations(['fa' => ['name' => 'سارا', 'role' => 'مدیر هنری']]);
 
@@ -48,7 +49,7 @@ it('adds Person nodes for the team on the about page, linked to the organization
 });
 
 it('emits testimonial Reviews only when the toggle is on, never AggregateRating', function (): void {
-    seoPage('home', 'خانه');
+    seoPage('home', 'خانه')->sections()->create(['type' => SectionType::Reviews, 'is_visible' => true]);
     $t = Testimonial::query()->create(['is_active' => true, 'sort_order' => 1]);
     $t->setTranslations(['fa' => ['author_name' => 'علی', 'quote' => 'عالی بود']]);
 

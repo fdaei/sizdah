@@ -13,23 +13,39 @@
     <meta name="google-site-verification" content="{{ $searchConsoleVerification }}">
 @endif
 @if (config('services.google.analytics_enabled'))
-    @if ($gtmId)
-        <!-- Google Tag Manager -->
-        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer',@json($gtmId));</script>
-        <!-- End Google Tag Manager -->
-    @endif
-    @if ($gaId)
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
+    @if ($gtmId || $gaId)
         <script>
+        (function () {
+            if (window.sizdahAnalyticsScheduled) return;
+            window.sizdahAnalyticsScheduled = true;
             window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', @json($gaId));
+            var loaded = false, timer;
+            var events = ['pointerdown', 'keydown', 'scroll'];
+            @if (! $gtmId)
+                window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+                window.gtag('js', new Date());
+                window.gtag('config', @json($gaId));
+            @endif
+            function loadAnalytics() {
+                if (loaded) return;
+                loaded = true;
+                clearTimeout(timer);
+                events.forEach(function (event) { window.removeEventListener(event, loadAnalytics); });
+                var script = document.createElement('script');
+                script.async = true;
+                @if ($gtmId)
+                    window.dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+                    script.src = 'https://www.googletagmanager.com/gtm.js?id=' + @json($gtmId);
+                @else
+                    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + @json($gaId);
+                @endif
+                document.head.appendChild(script);
+            }
+            events.forEach(function (event) { window.addEventListener(event, loadAnalytics, {passive: true}); });
+            function afterLoad() { if (!loaded) timer = setTimeout(loadAnalytics, 3000); }
+            if (document.readyState === 'complete') afterLoad();
+            else window.addEventListener('load', afterLoad, {once: true});
+        })();
         </script>
     @endif
 @endif

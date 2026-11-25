@@ -10,10 +10,10 @@ use App\Models\Service;
 use App\Services\ContentTransformer;
 use App\Services\SeoBuilder;
 use App\Services\SubmissionHandler;
+use App\View\PublicPage;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 
 /**
  * Contact page. Figma 1363:8934 (desktop) / 1494:9544 (mobile).
@@ -24,7 +24,7 @@ final class ContactController extends Controller
         private readonly SubmissionHandler $handler,
     ) {}
 
-    public function create(Request $request): Response
+    public function create(Request $request): PublicPage
     {
         $page = Page::query()
             ->key('contact')
@@ -32,7 +32,7 @@ final class ContactController extends Controller
             ->withContent()
             ->first();
 
-        return Inertia::render('Contact', [
+        return PublicPage::render('Contact', [
             'sections' => $page === null
                 ? []
                 : ContentTransformer::sectionMap($page->sections),
@@ -60,9 +60,13 @@ final class ContactController extends Controller
         ]);
     }
 
-    public function store(ContactSubmissionRequest $request): RedirectResponse
+    public function store(ContactSubmissionRequest $request): RedirectResponse|JsonResponse
     {
         $this->handler->handleContact($request);
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => __('forms.contact.success')]);
+        }
 
         return back()->with('success', __('forms.contact.success'));
     }

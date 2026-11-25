@@ -1,0 +1,337 @@
+
+.site-shell.grid-background[data-v-1e3972c0] {
+  background-image: var(--top-bg-mobile, var(--top-bg-tablet, var(--top-bg-desktop, linear-gradient(-42deg, rgb(248 185 55 / 0) 80%, rgb(248 185 55 / 0.1) 100%), url(/site/images/sizdah/shared/dark-grid-bg-sizdah-marketing-5afdd544b9.webp))));
+}
+@media (min-width: 768px) {
+.site-shell.grid-background[data-v-1e3972c0] { background-image: var(--top-bg-tablet, var(--top-bg-desktop, linear-gradient(-42deg, rgb(248 185 55 / 0) 80%, rgb(248 185 55 / 0.1) 100%), url(/site/images/sizdah/shared/dark-grid-bg-sizdah-marketing-5afdd544b9.webp)));
+}
+}
+@media (min-width: 1024px) {
+.site-shell.grid-background[data-v-1e3972c0] { background-image: var(--top-bg-desktop, linear-gradient(-42deg, rgb(248 185 55 / 0) 80%, rgb(248 185 55 / 0.1) 100%), url(/site/images/sizdah/shared/dark-grid-bg-sizdah-marketing-5afdd544b9.webp));
+}
+}
+.non-home-background[data-v-1e3972c0]:not(.grid-background) {
+  background-image: var(--site-background) !important;
+  background-position: top center;
+  background-repeat: repeat-y;
+  background-size: 100% auto;
+}
+@media (min-width: 768px) {
+.site-shell.work-top-background[data-v-1e3972c0] {
+    background-repeat: no-repeat;
+    background-size: 100% 800px;
+}
+}
+@media (max-width: 767px) {
+.site-shell.non-home-background[data-v-1e3972c0]:not(.grid-background) {
+    background-image: var(--site-background) !important;
+    background-position: top center;
+    background-repeat: repeat-y;
+    background-size: 100% auto;
+}
+}
+
+
+/* Set here rather than inline so the mobile rule below can override it. */
+.featured-post-card[data-v-dcc193d6] {
+  --glow-angle: -20.03deg;
+}
+@media (max-width: 767px) {
+.featured-post-card[data-v-dcc193d6] {
+    --glow-angle: 317deg;
+    border-radius: 16px;
+}
+.featured-post-card[data-v-dcc193d6]::after {
+    content: none;
+}
+}
+
+
+.testimonial-set[data-v-2cb2af9b] >  li {
+  flex: 0 0 var(--testimonial-card);
+  width: var(--testimonial-card);
+}
+.testimonial-viewport.is-looping[data-v-2cb2af9b] {
+  cursor: grab;
+  /* Vertical swipes still scroll the page; horizontal ones drive the row. */
+  touch-action: pan-y;
+}
+.testimonial-viewport.is-dragging[data-v-2cb2af9b] {
+  cursor: grabbing;
+}
+
+/* Soft edges while the row drifts, so cards slide in rather than appear cut. */
+.testimonial-viewport.is-continuous[data-v-2cb2af9b] {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+}
+.testimonial-dot-fill[data-v-2cb2af9b] {
+@apply absolute inset-y-0 start-0 rounded-full bg-brand;
+  animation: testimonial-dot-fill-2cb2af9b var(--2cb2af9b-dwell) linear forwards;
+}
+.testimonial-dot.is-paused .testimonial-dot-fill[data-v-2cb2af9b] {
+  animation-play-state: paused;
+}
+@keyframes testimonial-dot-fill-2cb2af9b {
+from {
+    width: 0;
+}
+to {
+    width: 100%;
+}
+}
+@media (prefers-reduced-motion: reduce) {
+.testimonial-dot-fill[data-v-2cb2af9b] {
+    animation: none;
+    width: 100%;
+}
+}
+
+
+.team-carousel-track[data-v-ccc37d3d] {
+  will-change: transform;
+}
+@media (max-width: 767px) {
+  /*
+   | Sections stack in normal flow on mobile. They used to be pinned at fixed
+   | `top` offsets inside a 3689px box, so any block whose copy ran longer than
+   | its reserved height (the story, at 360px wide) slid under the next one.
+   | The margins below keep the mobile frame's rhythm between blocks.
+   */
+.about-page[data-v-ccc37d3d] {
+    padding-bottom: 158px;
+}
+.about-page > .container-sizdah[data-v-ccc37d3d] {
+    gap: 0;
+}
+
+  /*
+   | Mobile type scale. The desktop sizes come straight off the 1440 frame, but
+   | carried down to a 390px phone they flattened the hierarchy (a 28px h1 over
+   | a 26px subline) and set running Persian copy at 20-22px on 1.25 leading.
+   | Below `md` the page follows Home's mobile tiers instead: 28px section
+   | heads, 16px body, 14px card copy, and 1.7-1.8 leading for Persian text.
+   */
+.about-hero[data-v-ccc37d3d] {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+.about-hero > div[data-v-ccc37d3d]:first-child {
+    gap: 16px;
+}
+.about-hero h1[data-v-ccc37d3d] {
+    font-size: 32px;
+    line-height: 1.4;
+}
+.about-hero > div:first-child > p[data-v-ccc37d3d]:nth-of-type(1) {
+    font-size: 22px;
+    line-height: 1.6;
+}
+.about-hero > div:first-child > p[data-v-ccc37d3d]:nth-of-type(2) {
+    font-size: 16px;
+    line-height: 1.8;
+}
+.about-hero > img[data-v-ccc37d3d] {
+    width: 100%;
+    max-width: 348px;
+    height: auto;
+}
+.about-story[data-v-ccc37d3d] {
+    margin-top: 72px;
+}
+.about-story > div[data-v-ccc37d3d] {
+    gap: 24px;
+}
+.about-story .about-story-heading img[data-v-ccc37d3d] {
+    width: 44px;
+    height: 44px;
+}
+.about-story > div > div[data-v-ccc37d3d]:last-child {
+    gap: 16px;
+}
+.about-story > div > div:last-child > p[data-v-ccc37d3d] {
+    font-size: 18px;
+    line-height: 1.8;
+}
+.about-story .rich-prose[data-v-ccc37d3d] p {
+    font-size: 16px;
+    line-height: 1.8;
+}
+.about-story .rich-prose[data-v-ccc37d3d] p + p {
+    margin-block-start: 16px;
+}
+.about-think[data-v-ccc37d3d],
+  .about-team[data-v-ccc37d3d] {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-top: 72px;
+}
+.about-think > div[data-v-ccc37d3d]:first-child,
+  .about-team > div[data-v-ccc37d3d]:first-child {
+    gap: 12px;
+}
+.about-think > div:first-child > p[data-v-ccc37d3d],
+  .about-team > div:first-child > p[data-v-ccc37d3d] {
+    font-size: 16px;
+    line-height: 1.8;
+}
+.about-think > ul[data-v-ccc37d3d] {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.about-think > ul > li[data-v-ccc37d3d] {
+    padding: 24px;
+    gap: 20px;
+}
+.about-think > ul > li > img[data-v-ccc37d3d] {
+    width: 32px;
+    height: 32px;
+}
+.about-think > ul > li > div[data-v-ccc37d3d] {
+    gap: 8px;
+}
+.about-think > ul > li h3[data-v-ccc37d3d] {
+    font-size: 18px;
+    line-height: 1.5;
+}
+.about-think > ul > li p[data-v-ccc37d3d] {
+    font-size: 14px;
+    line-height: 1.7;
+}
+.about-team .team-carousel-list > li > div[data-v-ccc37d3d] {
+    padding: 12px;
+    gap: 2px;
+}
+.about-team .team-carousel-list > li > div > p[data-v-ccc37d3d]:first-child {
+    font-size: 18px;
+    line-height: 1.5;
+}
+.about-team .team-carousel-list > li > div > p[data-v-ccc37d3d]:last-child {
+    font-size: 14px;
+    line-height: 1.6;
+}
+.about-team .team-carousel-list[data-v-ccc37d3d] {
+    gap: 16px;
+    padding-inline-end: 16px;
+}
+.about-team .team-carousel-list > li[data-v-ccc37d3d] {
+    width: 173px;
+}
+.about-team .team-carousel-list > li img[data-v-ccc37d3d] {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    margin-inline: auto;
+}
+.about-cta[data-v-ccc37d3d] {
+    margin-top: 71px;
+    padding: 32px 16px;
+}
+.about-cta > div.relative[data-v-ccc37d3d] {
+    align-items: center;
+    gap: 24px;
+}
+.about-cta > div.relative > div[data-v-ccc37d3d] {
+    align-items: center;
+    gap: 32px;
+    text-align: center;
+}
+.about-cta > div.relative > div > div[data-v-ccc37d3d],
+  .about-cta > div.relative > div > div > div[data-v-ccc37d3d] {
+    align-items: center;
+}
+.about-cta > div.relative > div > div > div[data-v-ccc37d3d] {
+    text-align: center;
+}
+.about-cta[data-v-ccc37d3d] h2 {
+    font-size: 24px;
+    line-height: 1.5;
+}
+.about-cta[data-v-ccc37d3d] h2 + p {
+    font-size: 16px;
+    line-height: 1.8;
+}
+.about-cta[data-v-ccc37d3d] p.text-body-lg {
+    font-size: 14px;
+    line-height: 1.7;
+}
+.about-cta[data-v-ccc37d3d] img[width='592'] {
+    width: 322px;
+    max-width: 322px;
+    transform: translateY(-13px);
+}
+.about-cta[data-v-ccc37d3d] a {
+    align-self: flex-start;
+    width: 100px;
+    padding: 12px 0;
+    font-size: 16px;
+    line-height: 22px;
+}
+.about-cta[data-v-ccc37d3d] a > img {
+    display: none;
+}
+}
+
+/* Vertical page scroll stays native on touch; horizontal swipes drag the row. */
+.team-carousel.is-draggable[data-v-ccc37d3d] {
+  cursor: grab;
+  touch-action: pan-y;
+}
+.team-carousel.is-dragging[data-v-ccc37d3d] {
+  cursor: grabbing;
+}
+
+
+.about-hero-illustration[data-v-ccc37d3d] {
+  aspect-ratio: 690 / 465;
+  background-size: 208.7% auto;
+  background-position: 15.6% 22.5%;
+  background-repeat: no-repeat;
+}
+
+
+.home-hero[data-v-773d381b] {
+  background-image: var(--hero-bg-desktop);
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+.home-hero[data-v-773d381b] { background-image: var(--hero-bg-tablet) !important;
+}
+}
+@media (max-width: 767px) {
+.home-hero[data-v-773d381b] { background-image: var(--hero-bg-mobile);
+}
+}
+
+/* The mobile header/menu is active below the lg breakpoint (1024px). */
+@media (max-width: 1023px) {
+.home-hero[data-v-773d381b] {
+    background-image: var(--hero-bg-mobile);
+    /*
+     * AppHeader is fixed on mobile (32px top padding + the 60px logo +
+     * 24px bottom padding). Keep the hero artwork below that chrome instead
+     * of letting it show through the translucent navigation bar.
+     */
+    background-position: center 116px;
+    background-size: 100% auto;
+}
+}
+
+
+@media (max-width: 767px) {
+  /* Keep the hand-drawn number badge inside the narrow mobile content track. */
+.service-number-ring[data-v-06b00045] {
+    width: 76px;
+    height: 51px;
+    inset-inline-start: -18px !important;
+}
+.service-number[data-v-06b00045] {
+    font-size: 32px;
+    line-height: 72px;
+}
+}

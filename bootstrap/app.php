@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Http\Middleware\ApplyRedirects;
 use App\Http\Middleware\CachePublicPages;
-use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\MinifyHtml;
 use App\Http\Middleware\RedirectToCanonicalHost;
 use App\Http\Middleware\RedirectToLocalisedRoute;
@@ -20,7 +19,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Facades\App as AppFacade;
 use Illuminate\Support\Facades\URL;
-use Inertia\Inertia;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -39,7 +37,6 @@ return Application::configure(basePath: dirname(__DIR__))
             // Outer → inner: cache wraps minify, so stored pages are already minified.
             CachePublicPages::class,
             MinifyHtml::class,
-            HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
 
@@ -129,13 +126,14 @@ return Application::configure(basePath: dirname(__DIR__))
              | the Node SSR process. Every later request was served as an
              | empty app shell until it was restarted (SEO audit SEO-DEV-02).
              */
-            if ($request->hasSession()) {
-                Inertia::share(app(HandleInertiaRequests::class)->share($request));
-            }
 
-            return inertia('Error', ['status' => $status])
-                ->toResponse($request)
-                ->setStatusCode($status);
+
+            $errorResponse = \App\View\PublicPage::render('Error', ['status' => $status])->toResponse($request);
+
+            // Old open tabs must complete their full-page upgrade even when
+            // the requested URL is a 404. Preserve the Inertia reload response.
+            return $errorResponse->getStatusCode() === 409
+                ? $errorResponse : $errorResponse->setStatusCode($status);
         });
     })
     ->create();

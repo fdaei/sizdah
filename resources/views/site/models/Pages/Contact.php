@@ -1,0 +1,34 @@
+<?php
+// PHP presentation data migrated from resources/js/Pages/Contact.vue; no JavaScript runs on the server.
+$input = \App\View\Site::defaults([], $input);
+$v = \App\View\Site::context($input, $page);
+$v['phoneIconUrl'] = '/site/images/sizdah/contact/contact-phone-93ea5fe7c3.svg';
+$v['locationIconUrl'] = '/site/images/sizdah/contact/contact-location-450c832910.svg';
+$v['emailIconUrl'] = '/site/images/sizdah/contact/contact-email-be68503931.svg';
+$v['workingWithIconUrl'] = '/site/images/sizdah/home/kpi-retention-58db3a0e12.svg';
+$v['instagramIconUrl'] = '/site/images/sizdah/social/instagram-b9f41a9667.svg';
+$v['linkedinIconUrl'] = '/site/images/sizdah/social/linkedin-a0911e96e7.svg';
+$v['telegramIconUrl'] = '/site/images/sizdah/social/telegram-4b632d736d.svg';
+$v['whatsappIconUrl'] = '/site/images/sizdah/social/whatsapp-e9a3792e63.svg';
+$v['detailRuleUrl'] = '/site/images/sizdah/insights/related-rule-ecc7ae7fbe.svg';
+$v['pushpinUrl'] = '/site/images/sizdah/contact/pushpin-b485121e91.svg';
+$v['brandFieldUrl'] = '/site/images/sizdah/contact/field-brand-c35adcbccd.svg';
+$v['userFieldUrl'] = '/site/images/sizdah/contact/field-user-8e6750959b.svg';
+$v['serviceFieldUrl'] = '/site/images/sizdah/contact/field-service-53b4b09eab.svg';
+$v['caretUrl'] = '/site/images/sizdah/contact/field-caret-1ac2d92769.svg';
+$v['wordmarkUrl'] = '/site/images/sizdah/shared/wordmark-inline-3b66b2ea3e.svg';
+$v['followSwooshUrl'] = '/site/images/sizdah/contact/follow-swoosh-0df3938130.svg';
+$v['detailIcon'] = function($l_detail = null) use (&$v) {return (\App\View\Site::get(($v['detailIcons'] ?? null), \App\View\Site::get($l_detail, 'icon')) ?? \App\View\Site::get(($v['detailIcons'] ?? null), 'link')); };
+$v['usesLatinDirection'] = function($l_detail = null) use (&$v) {return \App\View\Site::method(['phone', 'whatsapp', 'email'], 'includes', [\App\View\Site::get($l_detail, 'type')]); };
+$v['t'] = fn ($key, $params = []) => \App\View\Site::t($key, $params); $v['locale'] = app()->getLocale();
+$v['page'] = $page;
+$v['socialLinks'] = (function() use (&$v) { return \App\View\Site::get(\App\View\Site::get(\App\View\Site::get(($v['page'] ?? null), 'props'), 'settings'), 'socialLinks'); })();
+$v['detailIcons'] = ['phone' => ($v['phoneIconUrl'] ?? null), 'whatsapp' => ($v['whatsappIconUrl'] ?? null), 'email' => ($v['emailIconUrl'] ?? null), 'location' => ($v['locationIconUrl'] ?? null), 'collaboration' => ($v['workingWithIconUrl'] ?? null), 'instagram' => ($v['instagramIconUrl'] ?? null), 'telegram' => ($v['telegramIconUrl'] ?? null), 'linkedin' => ($v['linkedinIconUrl'] ?? null), 'link' => ($v['workingWithIconUrl'] ?? null)];
+$v['details'] = (function() use (&$v) { return \App\View\Site::get(\App\View\Site::get(\App\View\Site::get(($v['page'] ?? null), 'props'), 'settings'), 'contactDetails'); })();
+$v['form'] = array_merge(['brand_name' => '', 'name' => '', 'service_ids' => [], 'phone' => '', 'message' => '', 'website' => '', 'form_started_at' => floor(((microtime(true) * 1000) / 1000))], ['errors' => [], 'processing' => false, 'recentlySuccessful' => false, 'wasSuccessful' => false]);
+$v['servicesOpen'] = false;
+$v['selectedServices'] = (function() use (&$v) { return \App\View\Site::method(\App\View\Site::method(\App\View\Site::get(($v['props'] ?? null), 'services'), 'filter', [function($l_service = null) use (&$v) { return \App\View\Site::method(\App\View\Site::get(($v['form'] ?? null), 'service_ids'), 'includes', [\App\View\Site::get($l_service, 'id')]); }]), 'map', [function($l_service = null) use (&$v) { return \App\View\Site::get($l_service, 'title'); }]); })();
+$v['selectedCountry'] = ($v['defaultCountry'] ?? null);
+$v['phoneNumber'] = '';
+$v['fieldClass'] = 'w-full min-w-0 rounded-lg border-3 border-brand-200 bg-white/80 p-3 text-body-md text-ink-1000 placeholder:text-ink-600 focus:border-brand-200 focus:bg-white/80 focus:outline-none focus:ring-0 focus:ring-offset-0';
+\App\View\Site::prepare('Pages/Contact', $v);

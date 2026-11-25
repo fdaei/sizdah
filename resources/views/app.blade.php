@@ -18,7 +18,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    {{-- GTM wants to be as high in <head> as possible --}}
+    {{-- Tracking is queued here and loaded after the initial page load. --}}
     @include('partials.analytics-head')
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -34,7 +34,7 @@
     <link rel="preconnect" href="{{ config('app.url') }}">
     @if ($config['font'] === 'arabic')
         <link rel="preload" href="/fonts/peyda/Peyda-Regular.woff2" as="font" type="font/woff2" crossorigin>
-        <link rel="preload" href="/fonts/peyda/Peyda-Bold.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/peyda/Peyda-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
     @else
         <link rel="preload" href="/fonts/poppins/Poppins-Regular.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/fonts/poppins/Poppins-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
@@ -42,7 +42,7 @@
     @include('partials.resource-hints')
 
     {!! app(\Tighten\Ziggy\BladeRouteGenerator::class)->generate() !!}
-    @vite(['resources/js/app.ts'])
+    @include('partials.page-assets')
     @inertiaHead
 
     {{-- Title, description, canonical, robots, hreflang, OG, JSON-LD — in the

@@ -9,7 +9,7 @@ beforeEach(function (): void {
     Page::factory()->create(['key' => 'home']);
 });
 
-it('renders GTM and GA4 snippets when analytics is enabled', function (): void {
+it('lets GTM own GA4 when both IDs are configured and defers its download', function (): void {
     config([
         'services.google.analytics_enabled' => true,
         'services.google.tag_manager_id' => 'GTM-TPQ229H9',
@@ -19,14 +19,28 @@ it('renders GTM and GA4 snippets when analytics is enabled', function (): void {
     $html = $this->get('/fa')->assertOk()->getContent();
 
     expect($html)
-        ->toContain("'dataLayer',\"GTM-TPQ229H9\"")
+        ->toContain('googletagmanager.com/gtm.js?id=\' + "GTM-TPQ229H9"')
         ->toContain('googletagmanager.com/ns.html?id=GTM-TPQ229H9')
-        ->toContain('googletagmanager.com/gtag/js?id=G-2P5DDJGQH3')
-        ->toContain("gtag('config', \"G-2P5DDJGQH3\")");
+        ->not->toContain('gtag/js')
+        ->toContain('setTimeout(loadAnalytics, 3000)')
+        ->not->toContain('<script async src="https://www.googletagmanager.com');
 
     // GTM head snippet before </head>, noscript iframe inside <body>
     expect(strpos($html, 'gtm.js'))->toBeLessThan(strpos($html, '</head>'))
         ->and(strpos($html, 'ns.html?id='))->toBeGreaterThan(strpos($html, '<body'));
+});
+
+it('loads standalone GA4 when no GTM container is configured', function (): void {
+    config([
+        'services.google.analytics_enabled' => true,
+        'services.google.tag_manager_id' => null,
+        'services.google.analytics_id' => 'G-TEST123',
+    ]);
+
+    expect($this->get('/fa')->assertOk()->getContent())
+        ->toContain('googletagmanager.com/gtag/js?id=\' + "G-TEST123"')
+        ->toContain('window.gtag(\'config\', "G-TEST123")')
+        ->not->toContain('gtm.js')->not->toContain('ns.html');
 });
 
 it('renders no tracking snippets when analytics is disabled', function (): void {
