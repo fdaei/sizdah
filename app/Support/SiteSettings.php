@@ -107,7 +107,7 @@ final class SiteSettings
                 ->mapWithKeys(fn (Setting $s): array => [$s->key => $s->value])
                 ->all();
 
-        return TransactionalCache::active() ? $load() : Cache::remember(self::CACHE_KEY, self::TTL, $load);
+        return TransactionalCache::active() ? $load() : Cache::memo()->remember(self::CACHE_KEY, self::TTL, $load);
     }
 
     /**
@@ -178,7 +178,7 @@ final class SiteSettings
 
     public static function flush(): void
     {
-        Cache::forget(self::CACHE_KEY);
+        Cache::memo()->forget(self::CACHE_KEY);
         Cache::forget(self::SOCIAL_CACHE_KEY);
         UiStrings::flush();
         \App\Services\Performance\PageCache::flush();

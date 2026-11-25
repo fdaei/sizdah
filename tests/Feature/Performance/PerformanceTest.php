@@ -153,7 +153,7 @@ it('discovers the native enhancement module and responsive hero in the initial H
     expect($html)->toContain($module)
         ->toContain('as="image" href="'.$art['sizdah/home/hero-bg-mobile.webp'].'" media="(max-width:767px)" fetchpriority="high"')
         ->toContain('Peyda-SemiBold.woff2" as="font"')
-        ->not->toContain('data-page=')->not->toContain('window.Ziggy');
+        ->not->toContain('data-page=', 'window.Ziggy', '/css/filament/', '/js/filament/', '/livewire/');
 });
 
 it('preloads CMS hero overrides with the same responsive precedence as Vue', function (): void {
