@@ -49,6 +49,29 @@ for (const path of pages) {
   })
 }
 
+test('selecting another project shows its image inside the showcase frame', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await visit(page, '/fa')
+
+  const showcase = page.locator('[data-site="Components/ProjectShowcase"]')
+  const frame = showcase.locator('[data-on-touchstart="startSwipe"]')
+  const mobileControl = showcase.locator('button[data-arg-index="1"]')
+
+  if (await mobileControl.isVisible()) {
+    await mobileControl.click()
+    await expect(mobileControl).toHaveAttribute('aria-current', 'true')
+  } else {
+    await showcase.locator('[data-on-mouseenter="active = index"][data-arg-index="1"]').hover()
+  }
+
+  const firstImage = frame.locator('img[data-slide-index="0"]')
+  const selectedImage = frame.locator('img[data-slide-index="1"]')
+  await expect(firstImage).toHaveCSS('opacity', '0')
+  await expect(selectedImage).toHaveCSS('opacity', '1')
+  await expect(selectedImage).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 0)')
+  await expect(showcase.locator('img[data-slide-index="1"]')).toHaveCount(1)
+})
+
 /**
  * Replaces `.scratch-navbar.mjs`, a one-off script that opened a page and
  * printed console errors. Same check, but it runs on every route at every

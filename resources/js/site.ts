@@ -483,7 +483,8 @@ for (const root of all<HTMLElement>('[data-site="Components/ProjectShowcase"]'))
   }[]
   let active = 0,
     touchX = 0
-  const slides = all<HTMLImageElement>('img[data-slide-index]', root)
+  const swipe = root.querySelector<HTMLElement>('[data-on-touchstart="startSwipe"]')
+  const slides = swipe ? all<HTMLImageElement>('img[data-slide-index]', swipe) : []
   const select = (index: number) => {
     if (!projects.length) return
     active = (index + projects.length) % projects.length
@@ -498,12 +499,15 @@ for (const root of all<HTMLElement>('[data-site="Components/ProjectShowcase"]'))
         off = (el.dataset.activeOff ?? '').split(/\s+/).filter(Boolean)
       for (const cls of [...on, ...off]) el.classList.remove(cls)
       for (const cls of ownIndex === active ? on : off) el.classList.add(cls)
+      if (el.matches('button[data-arg-index]')) {
+        if (ownIndex === active) el.setAttribute('aria-current', 'true')
+        else el.removeAttribute('aria-current')
+      }
     }
-    slides.forEach((slide, i) => {
-      slide.style.transform = `translateX(${(i - active) * 100}%)`
-      slide.classList.toggle('opacity-100', i === active)
-      slide.classList.toggle('opacity-0', i !== active)
-    })
+    for (const slide of slides) {
+      const index = Number(slide.dataset.slideIndex)
+      slide.style.transform = `translateX(${(index - active) * 100}%)`
+    }
     for (const el of all<HTMLElement>('[data-show="active === index"]', root))
       el.hidden = Number(el.closest<HTMLElement>('[data-index]')?.dataset.index) !== active
     const project = projects[active]
@@ -530,7 +534,6 @@ for (const root of all<HTMLElement>('[data-site="Components/ProjectShowcase"]'))
     el.addEventListener('mouseenter', activate)
     el.addEventListener('focusin', activate)
   }
-  const swipe = root.querySelector<HTMLElement>('[data-on-touchstart="startSwipe"]')
   swipe?.addEventListener('touchstart', (e) => (touchX = e.changedTouches[0].clientX), {
     passive: true,
   })
