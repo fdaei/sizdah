@@ -66,6 +66,31 @@ it('uses the same original project image in initial HTML and browser data', func
         ->and($page['props']['projects'][0]['image'])->not->toHaveKey('srcset');
 })->with(['Mozilla/5.0', 'Mozilla/5.0 Chrome-Lighthouse']);
 
+it('serves matching prepared sizes for home slides and falls back when the upload changes', function (): void {
+    $this->withoutVite();
+    $disk = Storage::disk('public');
+    $path = 'projects/cover.avif';
+    $original = 'editor-prepared AVIF';
+    $disk->put($path, $original);
+    $public = $disk->path('public-root');
+    $this->app->usePublicPath($public);
+
+    $asset = 'site/images/project-showcase/'.hash('sha256', $original).'-530.avif';
+    $disk->put('public-root/'.$asset, 'prepared carousel crop');
+    $project = Project::factory()->published()->create(['cover_path' => $path]);
+    $project->setTranslations(['fa' => ['title' => 'پروژه', 'slug' => 'cover', 'cover_alt' => 'عکس']]);
+    $home = \App\Models\Page::factory()->create(['key' => 'home']);
+    $home->sections()->create(['type' => \App\Enums\SectionType::ProjectsShowcase, 'is_visible' => true]);
+
+    $this->get('/fa')->assertOk()->assertSee('src="/storage/'.$path.'"', false)
+        ->assertSee('srcset="/'.$asset.' 530w"', false)
+        ->assertSee('sizes="auto, (min-width: 1024px) 530px,', false);
+    expect(MediaTransformer::make($path, 'عکس', 'project.cover'))->not->toHaveKey('srcset');
+
+    $disk->put($path, 'replacement image');
+    expect(MediaTransformer::make($path, 'عکس', 'project.home'))->not->toHaveKey('srcset');
+});
+
 it('does not queue image processing when media or project images are saved', function (): void {
     Queue::fake();
     $path = 'projects/seo-cover.png';

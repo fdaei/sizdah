@@ -41,7 +41,7 @@ final class ContentTransformer
     /**
      * @return array<string, mixed>
      */
-    public static function projectSummary(Project $project): array
+    public static function projectSummary(Project $project, string $imageContext = 'project.cover'): array
     {
         return [
             'slug' => $project->slugForLocale(app()->getLocale()),
@@ -63,7 +63,7 @@ final class ContentTransformer
             'image' => MediaTransformer::make(
                 $project->cover_path,
                 $project->getTranslation('cover_alt'),
-                'project.cover',
+                $imageContext,
             ),
         ];
     }

@@ -62,7 +62,7 @@ final class HomeController extends Controller
                 ->forListing()
                 ->limit(5)
                 ->get()
-                ->map(fn (Project $p): array => ContentTransformer::projectSummary($p))
+                ->map(fn (Project $p): array => ContentTransformer::projectSummary($p, 'project.home'))
                 ->all(),
 
             // Trust proof — Figma 1419:9205

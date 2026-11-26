@@ -20,11 +20,12 @@ final class MediaTransformer
 {
     /**
      * Legacy variant widths, retained for cleanup and media-library indexing.
-     * Public images always use the original upload, without responsive copies.
      *
      * @var list<int>
      */
     public const BREAKPOINTS = [400, 560, 736, 1200, 1600, 2400];
+
+    private const HOME_PROJECT_WIDTHS = [320, 400, 530, 800, 1060];
 
     /**
      * Intrinsic dimensions per usage context, taken from the design.
@@ -33,6 +34,7 @@ final class MediaTransformer
      */
     private const DIMENSIONS = [
         'project.cover' => [448, 448],      // 1362:7211 square card
+        'project.home' => [530, 663],       // home carousel
         'project.banner' => [1203, 624],     // 1323:7605 case-study banner
         'project.showcase' => [400, 500],    // content showcase item
         'project.beforeafter' => [560, 360],
@@ -48,7 +50,7 @@ final class MediaTransformer
     ];
 
     /**
-     * @return array{src: string, alt: string, width: int, height: int}|null
+     * @return array{src: string, alt: string, width: int, height: int, srcset?: string, sizes?: string}|null
      */
     public static function make(
         ?string $path,
@@ -66,12 +68,42 @@ final class MediaTransformer
 
         [$width, $height] = self::DIMENSIONS[$context] ?? self::DIMENSIONS['section'];
 
-        return [
+        $image = [
             'src' => self::url($path),
             'alt' => $alt ?? '',
             'width' => $width,
             'height' => $height,
         ];
+
+        if ($context === 'project.home' && ($srcset = self::homeProjectSrcset($path)) !== null) {
+            $image['srcset'] = $srcset;
+            $image['sizes'] = 'auto, (min-width: 1024px) 530px, (min-width: 768px) calc(100vw - 80px), calc(100vw - 40px)';
+        }
+
+        return $image;
+    }
+
+    private static function homeProjectSrcset(string $path): ?string
+    {
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return null;
+        }
+
+        $disk = Storage::disk('public');
+        if (! $disk->fileExists($path) || ! ($checksum = $disk->checksum($path, ['checksum_algo' => 'sha256']))) {
+            return null;
+        }
+
+        // Prepared crops belong to this exact upload, including after an upload is replaced.
+        $candidates = [];
+        foreach (self::HOME_PROJECT_WIDTHS as $width) {
+            $asset = "site/images/project-showcase/{$checksum}-{$width}.avif";
+            if (is_file(public_path($asset))) {
+                $candidates[] = "/{$asset} {$width}w";
+            }
+        }
+
+        return $candidates === [] ? null : implode(', ', $candidates);
     }
 
     /**
