@@ -82,6 +82,28 @@ test('each project selection shows only its own image inside the showcase frame'
   }
 })
 
+test('loads the compact Persian fonts and fetches extended glyphs on demand', async ({ page }) => {
+  await visit(page, '/fa')
+
+  const fonts = await page.evaluate(async () => {
+    await document.fonts.load('400 16px Lahzeh', '۱۴۰۲')
+    await document.fonts.ready
+    return performance.getEntriesByType('resource').map((entry) => new URL(entry.name).pathname)
+  })
+  expect(fonts).toContain('/fonts/lahzeh/LahzehFaNum-Regular-Digits.woff2')
+  expect(fonts).not.toContain('/fonts/lahzeh/LahzehFaNum-Regular.woff2')
+  expect(fonts).toContain('/fonts/peyda/Peyda-Regular-Core.woff2')
+
+  const extended = await page.evaluate(async () => {
+    const faces = await document.fonts.load('400 16px Peyda', 'Ā')
+    return (
+      faces.some((face) => face.status === 'loaded') &&
+      performance.getEntriesByType('resource').some((entry) => entry.name.endsWith('/Peyda-Regular.woff2'))
+    )
+  })
+  expect(extended).toBe(true)
+})
+
 /**
  * Replaces `.scratch-navbar.mjs`, a one-off script that opened a page and
  * printed console errors. Same check, but it runs on every route at every

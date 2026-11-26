@@ -13,8 +13,8 @@
     <link rel="alternate icon" href="/favicon.ico?v=3" sizes="any">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3">
     @if ($config['font'] === 'arabic')
-        <link rel="preload" href="/fonts/peyda/Peyda-Regular.woff2" as="font" type="font/woff2" crossorigin>
-        <link rel="preload" href="/fonts/peyda/Peyda-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/peyda/Peyda-Regular-Core.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/peyda/Peyda-SemiBold-Core.woff2" as="font" type="font/woff2" crossorigin>
     @endif
     @if ($page['component'] === 'Home')
         @php
