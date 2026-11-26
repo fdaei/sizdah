@@ -21,7 +21,8 @@ use Illuminate\Support\Facades\Route;
 | Public routes
 |--------------------------------------------------------------------------
 |
-| Every public route is locale-prefixed. Route names are locale-agnostic
+| Public content routes use a locale prefix, with a direct homepage at /.
+| Route names are locale-agnostic
 | ("home", "work.show") — the {locale} parameter is supplied automatically by
 | URL::defaults() in App\Http\Middleware\SetLocale, so route('work.show', $p)
 | stays inside the visitor's current language without extra arguments.
@@ -57,6 +58,10 @@ Route::get('sitemap-{type}-{page}.xml', [SitemapController::class, 'type'])
 Route::get('sitemap-{locale}.xml', [SitemapController::class, 'legacyLocale'])
     ->where('locale', $localePattern)
     ->name('sitemap.locale');
+
+Route::get('/', HomeController::class)
+    ->middleware(['locale', 'preview'])
+    ->name('home.root');
 
 Route::prefix('{locale}')
     ->where(['locale' => $localePattern])
@@ -118,10 +123,9 @@ Route::prefix('{locale}')
     });
 
 /*
-| Bare-path fallback: /about -> /fa/about, / -> /fa (config locales.default)
+| Bare-path fallback: /about -> /fa/about (config locales.default)
 | Registered last so it never shadows a real localised route.
 */
 Route::middleware('locale.redirect')->group(function (): void {
-    Route::get('/', fn () => null);
     Route::get('/{any}', fn () => null)->where('any', '.*');
 });

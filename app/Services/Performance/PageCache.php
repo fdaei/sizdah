@@ -50,7 +50,7 @@ final class PageCache
 
     /** Only public content pages; admin, downloads and future routes opt in explicitly. */
     private const PUBLIC_ROUTES = [
-        'home', 'work.index', 'work.industry', 'work.show', 'services', 'services.show',
+        'home', 'home.root', 'work.index', 'work.industry', 'work.show', 'services', 'services.show',
         'about', 'insights.index', 'insights.category', 'insights.tag', 'insights.show',
         'contact', 'legal.privacy', 'legal.terms',
     ];

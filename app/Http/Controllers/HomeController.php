@@ -16,7 +16,6 @@ use App\Services\ContentTransformer;
 use App\Services\Seo\SchemaNodes;
 use App\Services\SeoBuilder;
 use App\View\PublicPage;
-use Illuminate\Http\Request;
 
 /**
  * Home page. Figma 1419:9192 (desktop) / 1419:9191 (mobile).
@@ -28,8 +27,9 @@ use Illuminate\Http\Request;
  */
 final class HomeController extends Controller
 {
-    public function __invoke(Request $request): PublicPage
+    public function __invoke(): PublicPage
     {
+        $canonical = route('home', ['locale' => app()->getLocale()]);
         $page = Page::query()
             ->key('home')
             ->published()
@@ -90,8 +90,8 @@ final class HomeController extends Controller
                 ->map(fn (Faq $f): array => ContentTransformer::faq($f))
                 ->all(),
 
-            'seo' => SeoBuilder::forPage($page, $request->url(), extraNodes: [
-                ...SchemaNodes::faqPage($faqs, $request->url()),
+            'seo' => SeoBuilder::forPage($page, $canonical, extraNodes: [
+                ...SchemaNodes::faqPage($faqs, $canonical),
                 ...SchemaNodes::reviews($testimonials),
             ]),
         ]);

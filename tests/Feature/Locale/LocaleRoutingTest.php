@@ -4,8 +4,17 @@ declare(strict_types=1);
 
 use App\Models\Page;
 
-it('redirects a bare path to the default locale', function (): void {
-    $this->get('/')->assertRedirect('/fa');
+it('serves the Persian homepage at the root with the same canonical URL', function (): void {
+    Page::factory()->create(['key' => 'home'])->setTranslations([
+        'fa' => ['title' => 'صفحهٔ اصلی'],
+    ]);
+
+    foreach (['/', '/fa'] as $path) {
+        $this->get($path)->assertOk()
+            ->assertHeader('Content-Language', 'fa-IR')
+            ->assertSee('dir="rtl"', false)
+            ->assertSee('rel="canonical" href="'.url('/fa').'"', false);
+    }
 });
 
 it('redirects a bare path to a previously selected locale via session', function (): void {
